@@ -1,0 +1,55 @@
+paths:
+  frequency_root: /inspire/hdd/project/chemicalreaction/luxinyu-240207020178/hpc/mols/freq
+  nmr_root: /inspire/hdd/project/chemicalreaction/luxinyu-240207020178/hpc/mols/nmr
+  output_dir: datasets
+  manifest_cache_dir: cache/manifest
+  report_dir: reports
+  parsed_output: artifacts/processed/openspec.pickle
+  nmr_output: artifacts/processed/openspec_nmr.pickle
+
+datasets:
+  frequency:
+    - nist_ir
+    - pah
+    - pcqm4mv2
+    - qm9
+    - rxn
+    - sdbs
+    - wiley_ir
+    - wiley_raman
+    - peptide
+    - zinc_v1
+    - zinc_v2
+  nmr:
+    - nist_ir
+    - pah
+    - pcqm4mv2
+    - qm9
+    - rxn
+    - sdbs
+    - wiley_ir
+    - wiley_raman
+    - peptide
+    - zinc_v1
+    - zinc_v2
+
+runtime:
+  workers: 0  # 0 means use all available CPU cores
+  hash_files: true
+  show_rdkit_warnings: false
+  manifest_incremental: true
+  manifest_min_file_age_seconds: 300
+  manifest_audit_all_records: false
+  write_compatibility_json: true
+
+processing:
+  frequency_scaling_factor: 0.965
+  ir_broadening_sigma_cm-1: 20.0
+  raman_broadening_sigma_cm-1: 12.0
+  nmr_broadening_sigma: 0.05
+
+splits:
+  seed: 2025
+  train: 0.8
+  validation: 0.1
+  test: 0.1

@@ -1,0 +1,228 @@
+{
+  "align_molecules": 1030780,
+  "trajectory_frames": 32333251,
+  "computational_fidelity": {
+    "QM9S": {
+      "level": 4,
+      "category": "Hybrid / TZ",
+      "protocol": "B3LYP/def-TZVP"
+    },
+    "QMe14S": {
+      "level": 4,
+      "category": "Hybrid / TZ",
+      "protocol": "B3LYP/TZVP"
+    },
+    "ChEMBL IR/Raman": {
+      "level": 3,
+      "category": "GGA / DZ",
+      "protocol": "PBEPBE/6-31G"
+    },
+    "SQuIRL": {
+      "level": 6,
+      "category": "RSH / aug-TZ",
+      "protocol": "\u03c9B97X-D/aug-cc-pVTZ IR"
+    },
+    "Multimodal Spec.": {
+      "level": 1,
+      "category": "Classical / empirical",
+      "protocol": "GAFF/LAMMPS IR; MestReNova NMR; predicted MS/MS"
+    },
+    "SpecX Large": {
+      "level": 2,
+      "category": "Mixed- fidelity",
+      "protocol": "GAFF/LAMMPS IR; MestReNova NMR; DFT Raman; TD-DFT UV; CFM-ID MS/MS"
+    },
+    "OpenMolSpec": {
+      "level": 5,
+      "category": "Hybrid / TZ + diffuse",
+      "protocol": "B3LYP-D3(BJ)/6-311+G(d,p) vibration; OPBE/6-311+G(2d,p) NMR"
+    }
+  },
+  "spectroscopic_modality_coverage": {
+    "modalities": [
+      "IR",
+      "Raman",
+      "NMR",
+      "MS",
+      "UV\u2013Vis"
+    ],
+    "symbol_meaning": {
+      "\u25cf": "quantum-calculated",
+      "\u25cb": "classical/predicted",
+      "\u25d0": "partial coverage",
+      "\u2013": "unavailable"
+    },
+    "datasets": {
+      "QM9S": {
+        "IR": "\u25cf",
+        "Raman": "\u25cf",
+        "NMR": "\u2013",
+        "MS": "\u2013",
+        "UV\u2013Vis": "\u2013"
+      },
+      "QMe14S": {
+        "IR": "\u25cf",
+        "Raman": "\u25cf",
+        "NMR": "\u25d0",
+        "MS": "\u2013",
+        "UV\u2013Vis": "\u2013"
+      },
+      "ChEMBL IR/Raman": {
+        "IR": "\u25cf",
+        "Raman": "\u25cf",
+        "NMR": "\u2013",
+        "MS": "\u2013",
+        "UV\u2013Vis": "\u2013"
+      },
+      "SQuIRL": {
+        "IR": "\u25cf",
+        "Raman": "\u2013",
+        "NMR": "\u2013",
+        "MS": "\u2013",
+        "UV\u2013Vis": "\u2013"
+      },
+      "Multimodal Spec.": {
+        "IR": "\u25cb",
+        "Raman": "\u2013",
+        "NMR": "\u25cb",
+        "MS": "\u25cb",
+        "UV\u2013Vis": "\u2013"
+      },
+      "SpecX Large": {
+        "IR": "\u25cb",
+        "Raman": "\u25cf",
+        "NMR": "\u25cb",
+        "MS": "\u25cb",
+        "UV\u2013Vis": "\u25cb"
+      },
+      "OpenMolSpec": {
+        "IR": "\u25cf",
+        "Raman": "\u25cf",
+        "NMR": "\u25cf",
+        "MS": "\u2013",
+        "UV\u2013Vis": "\u2013"
+      }
+    }
+  },
+  "total_atom_count": {
+    "count": 1030780,
+    "median": 29.0,
+    "mean": 28.978318360852946,
+    "p99.9": 79.0,
+    "maximum": 240,
+    "display_cutoff": 79
+  },
+  "scaffold_occupancy": {
+    "cyclic_molecules": 898484,
+    "unique_cyclic_scaffolds": 131257,
+    "singleton_scaffolds": 86105,
+    "singleton_scaffold_fraction": 0.6560031084056469,
+    "median_occupancy": 1.0,
+    "mean_occupancy": 6.845227302162932,
+    "maximum_occupancy": 75476,
+    "acyclic_molecules_excluded": 132296,
+    "occupancy_buckets": {
+      "1": {
+        "scaffolds": 86105,
+        "scaffold_fraction": 0.6560031084056469,
+        "molecules": 86105,
+        "molecule_fraction": 0.09583364867933096
+      },
+      "2\u20135": {
+        "scaffolds": 32357,
+        "scaffold_fraction": 0.2465163762694561,
+        "molecules": 89279,
+        "molecule_fraction": 0.09936626584335391
+      },
+      "6\u201310": {
+        "scaffolds": 6667,
+        "scaffold_fraction": 0.05079348149051098,
+        "molecules": 49961,
+        "molecule_fraction": 0.05560588725007902
+      },
+      "11\u2013100": {
+        "scaffolds": 5552,
+        "scaffold_fraction": 0.04229869645047502,
+        "molecules": 147159,
+        "molecule_fraction": 0.1637858882295066
+      },
+      ">100": {
+        "scaffolds": 576,
+        "scaffold_fraction": 0.004388337383910953,
+        "molecules": 525980,
+        "molecule_fraction": 0.5854083099977295
+      }
+    }
+  },
+  "element_prevalence": {
+    "H": 0.9995673179533945,
+    "B": 0.0005384272104619803,
+    "C": 0.9999495527658666,
+    "N": 0.8201255360018627,
+    "O": 0.8550175595180349,
+    "F": 0.12220648440986437,
+    "Si": 0.001351403791303673,
+    "P": 0.004388909369603601,
+    "S": 0.2031131764295,
+    "Cl": 0.07318147422340364,
+    "Br": 0.024567803022953492,
+    "As": 8.731252061545625e-06,
+    "Se": 7.761112943596111e-06,
+    "Ge": 5.820834707697084e-06
+  },
+  "functional_group_prevalence": {
+    "molecules": 1030780,
+    "invalid_smiles": 0,
+    "counting_rule": "non-exclusive molecule-level SMARTS presence",
+    "smarts": {
+      "Aromatic": "[a;r]",
+      "Carbonyl": "[CX3]=[OX1]",
+      "Amine": "[NX3;!$([N][C,S,P]=[O,S,N]);!$([N+])]",
+      "Ether": "[OD2;!$([O][C,S,P]=O)]([#6])[#6]",
+      "Amide": "[NX3][CX3](=[OX1])",
+      "Halogen": "[F,Cl,Br,I]",
+      "Hydroxyl": "[OX2H;!$([O][C,S,P]=O)]",
+      "Ester": "[CX3](=[OX1])[OX2][#6]",
+      "Carboxylic acid": "[CX3](=[OX1])[OX2H1]",
+      "Nitrile": "[CX2]#[NX1]",
+      "Sulfonyl": "[SX4](=[OX1])(=[OX1])",
+      "Nitro": "[$([NX3+](=O)[O-]),$([NX3](=O)=O)]",
+      "Thiol": "[SX2H]",
+      "Phosphoryl": "[PX4](=[OX1])"
+    },
+    "counts": {
+      "Aromatic": 546443,
+      "Carbonyl": 567562,
+      "Amine": 294549,
+      "Ether": 287068,
+      "Amide": 371637,
+      "Halogen": 211106,
+      "Hydroxyl": 222958,
+      "Ester": 119430,
+      "Carboxylic acid": 33902,
+      "Nitrile": 104416,
+      "Sulfonyl": 33764,
+      "Nitro": 15234,
+      "Thiol": 6622,
+      "Phosphoryl": 3513
+    },
+    "prevalence": {
+      "Aromatic": 0.5301257300296862,
+      "Carbonyl": 0.5506140980616621,
+      "Amine": 0.2857535070529114,
+      "Ether": 0.2784958963115311,
+      "Amide": 0.36053959137740355,
+      "Halogen": 0.2048021886338501,
+      "Hydroxyl": 0.21630027745978772,
+      "Ester": 0.11586371485671046,
+      "Carboxylic acid": 0.032889656376724426,
+      "Nitrile": 0.10129804613981645,
+      "Sulfonyl": 0.03275577717844739,
+      "Nitro": 0.014779099322842895,
+      "Thiol": 0.006424261239061682,
+      "Phosphoryl": 0.0034080987213566424
+    }
+  },
+  "figure": "/inspire/hdd/global_user/luxinyu-240207020178/openMolSpec/docs/figures/openmolspec_align_overview.png",
+  "pdf": "/inspire/hdd/global_user/luxinyu-240207020178/openMolSpec/docs/figures/openmolspec_align_overview.pdf"
+}

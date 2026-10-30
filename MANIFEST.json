@@ -1,0 +1,62 @@
+{
+  "bundle": "openmolspec-studio-portable",
+  "created_at": "2026-09-21T05:59:37.122287+00:00",
+  "source_root": ".",
+  "runtime_assets": {
+    "dedipole_checkpoint": {
+      "path": "runs/openmolspec-v1-ks1000k/structure2response/equiformer-v3/dedipole-direct-r5/seed-624/2026-09-17-13-40-e326e8/artifacts/equiformer_v3_structure2response_best.pt",
+      "bytes": 213959331,
+      "sha256": "f9b7c5dfcecc55b04e15d2ed905da86a08bd5a6f3bc0a54693437b938fb3f26d"
+    },
+    "depolar_checkpoint": {
+      "path": "runs/openmolspec-v1-ks1000k/structure2response/equiformer-v3/depolar-direct-r5/seed-624/2026-09-17-13-40-10c124/artifacts/equiformer_v3_structure2response_best.pt",
+      "bytes": 213962787,
+      "sha256": "e288edafaf5b20a646187cbc85052fd7883eff34f1a662304f5576049f8a2b48"
+    },
+    "gap_checkpoint": {
+      "path": "runs/openmolspec-v1-ks1000k/spectrum2property/vib2conf/ir-raman-hc-gap-shared-pooling-v2/seed-624/2026-09-15-09-47-d5e16a/artifacts/vib2conf_spectrum2property_best.pt",
+      "bytes": 95854821,
+      "sha256": "7bbe651ee5c42894f8a3e490bb8d1bc3601df032a00f0c55332b4e8ae8bad412"
+    },
+    "generation_checkpoint": {
+      "path": "runs/openmolspec-v1-ks1000k/spectrum2structure/vib2mol/ir-raman-hc-generation-v1/seed-624/2026-09-16-07-00-d369d0/artifacts/vib2mol/checkpoints/openspec/ir-raman-kekule_smiles/vib2mol/2026-09-16-21-21-88e3a8/best_acc.pth",
+      "bytes": 619732462,
+      "sha256": "978aae6864104e4581d814a964cbcb04b7207eaa0b74946d3c5a0f886d54db06"
+    },
+    "generation_predictions": {
+      "path": "runs/vib2mol/2026-09-16-06-43-4dbf87/generation_predictions.jsonl",
+      "bytes": 13849570,
+      "sha256": "81398602447b94cdcb98e0768b7cac24c7370fd98326f54ba6ce186367129548"
+    },
+    "hessian_hi_checkpoint": {
+      "path": "runs/openmolspec-v1-ks1000k/structure2hessian/equiformer-v3/hi-direct-r5/seed-624/2026-09-11-03-08-666539/artifacts/equiformer_v3_structure2hessian_best.pt",
+      "bytes": 71852137,
+      "sha256": "6ab36626e9fcdd1c4d475f570f38ed416d96e897656314bf8940af2cf6a0aa76"
+    },
+    "hessian_hij_checkpoint": {
+      "path": "runs/openmolspec-v1-ks1000k/structure2hessian/equiformer-v3/hij-direct-r5/seed-624/2026-09-11-03-08-1d420e/artifacts/equiformer_v3_structure2hessian_best.pt",
+      "bytes": 79429054,
+      "sha256": "7f2a32d96cc51da0e7741b8b1fe95924debc53f3bc55d87a64b044ac65a50589"
+    },
+    "nmr_checkpoint": {
+      "path": "runs/openmolspec-v1-ks1000k/structure2nmr/equiformer-v3/hc-shifts-r5/seed-624/2026-09-17-07-29-962b91/artifacts/equiformer_v3_structure2nmr_best.pt",
+      "bytes": 213846200,
+      "sha256": "ad633165216ef31684a5638b2a7418295e88dda2339047ef8aaf4684d7b6b81c"
+    },
+    "nmr_normalizer": {
+      "path": "runs/vib2mol/2026-09-16-06-43-4dbf87/nmr_normalizer.json",
+      "bytes": 242,
+      "sha256": "66ccb19a38dc2e348ad45c1335a8436c8eba01e171700cce3dfdc38ba2404c2a"
+    },
+    "retrieval_checkpoint": {
+      "path": "runs/openmolspec-v1-ks1000k/spectrum2structure/vib2mol/ir-raman-hc-generation-v1/seed-624/2026-09-16-07-00-d369d0/artifacts/vib2mol/checkpoints/openspec/ir-raman-kekule_smiles/vib2mol/2026-09-16-07-01-8e4216/best_recall.pth",
+      "bytes": 619734149,
+      "sha256": "e81cb178991742a6686b2d31ea191381cc5951aa15f8f7ddeb93c5473b0c0cf1"
+    },
+    "spectrum_lmdb": {
+      "path": "benchmark_data/release_v1_ks200k_hc_nmr_minmax/vib2mol/openspec_test.lmdb",
+      "bytes": 251424768,
+      "sha256": "736a234607992865136b23b3d091b26323936f08377362a196fe97ceb3bdb6a1"
+    }
+  }
+}

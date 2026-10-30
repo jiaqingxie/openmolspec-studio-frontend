@@ -1,0 +1,38 @@
+release:
+  release_id: openmolspec-20260830-v1
+  dataset_version: "1.0.0"
+  output_dir: builds/openmolspec-20260830/release-v1
+  status: frozen-candidate
+  splits:
+    seed: 2025
+    align_train_count: 1000000
+    validation_count: 10390
+    test_count: 20390
+  export:
+    format: parquet+hdf5
+    compression: lzf
+    workers: 4
+    frequency_shard_size: 10000
+    nmr_shard_size: 10000
+    trajectory_shard_size: 25000
+
+inputs:
+  manifest: builds/openmolspec-20260830/datasets/openspec_manifest.parquet
+  frequency_report: reports/extraction/processing_report.parquet
+  nmr_report: builds/openmolspec-20260830/reports/nmr/processing_report.parquet
+  frequency_pickle: artifacts/processed/openspec.pickle
+  nmr_pickle: builds/openmolspec-20260830/openspec_nmr.pickle
+  descriptors: reports/analysis/chemical_descriptors.parquet
+  trajectory_reports: reports/opt_trajectories/summary.json
+  trajectory_pickles:
+    - trajectory_outputs/openspec_nist_ir_opt_trajectories.pickle
+    - trajectory_outputs/openspec_pah_opt_trajectories.pickle
+    - trajectory_outputs/openspec_pcqm4mv2_opt_trajectories.pickle
+    - trajectory_outputs/openspec_qm9_opt_trajectories.pickle
+    - trajectory_outputs/openspec_rxn_opt_trajectories.pickle
+    - trajectory_outputs/openspec_sdbs_opt_trajectories.pickle
+    - trajectory_outputs/openspec_wiley_ir_opt_trajectories.pickle
+    - trajectory_outputs/openspec_wiley_raman_opt_trajectories.pickle
+    - trajectory_outputs/openspec_peptide_opt_trajectories.pickle
+    - trajectory_outputs/openspec_zinc_v1_opt_trajectories.pickle
+    - trajectory_outputs/openspec_zinc_v2_opt_trajectories.pickle

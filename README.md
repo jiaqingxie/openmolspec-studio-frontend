@@ -1,0 +1,36 @@
+# OpenMolSpec Studio
+
+这是一个可直接运行的 OpenMolSpec Streamlit 工作台。前端、OpenMolSpec Python
+源码、模型 checkpoint、理论测试集和 Vib2Mol 缓存都位于同一个仓库根目录；入口是
+`app.py`。
+
+## 安装与启动
+
+运行：
+
+```bash
+./setup.sh
+./start.sh
+```
+
+也可以直接使用 Streamlit 命令启动：
+
+```bash
+.venv/bin/streamlit run app.py
+```
+
+应用默认自动检测运行设备：有 CUDA 时使用 `cuda:0`，否则回退到 CPU。CPU 模式会对
+Vib2Mol 检索和生成使用随包提供的缓存路径。也可以显式指定设备：
+
+```bash
+OPENMOLSPEC_DEVICE=cpu ./start.sh
+OPENMOLSPEC_DEVICE=cuda:1 ./start.sh
+```
+
+模型与数据默认从仓库根目录发现；如需使用其他位置，可设置 `OPENMOLSPEC_ROOT`。
+`MANIFEST.json` 记录 portable 包包含的运行资产，`SHA256SUMS` 可用于校验文件。
+
+应用提供构象到 IR/Raman/H/C NMR、光谱到结构检索、光谱到 HOMO–LUMO gap，
+以及 Vib2Mol 结构生成四个工作流。输入格式、推理路径和模型说明见
+[`docs/studio_guide.md`](docs/studio_guide.md)，OpenMolSpec 核心项目的详细说明见
+[`docs/openmolspec_core.md`](docs/openmolspec_core.md)。

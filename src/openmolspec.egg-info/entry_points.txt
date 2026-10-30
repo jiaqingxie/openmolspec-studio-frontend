@@ -1,0 +1,2 @@
+[console_scripts]
+openmolspec = openmolspec.cli:main
