@@ -1,0 +1,13 @@
+.git
+.venv
+.env
+.env.*
+!.env.example
+.openmolspec
+**/node_modules
+**/.next
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.code-review-graph
+artifacts

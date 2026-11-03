@@ -48,14 +48,17 @@ class ModelPreloadTests(unittest.TestCase):
         service = OpenMolSpecService(empty_assets(), device="cuda:0")
         with (
             patch("torch.cuda.is_available", return_value=True),
-            patch.object(service, "_load_theoretical_models") as load_theoretical,
+            patch.object(service, "_load_tensor_model") as load_tensor,
             patch.object(service, "_load_nmr") as load_nmr,
             patch.object(service, "_load_gap") as load_gap,
             patch.object(service, "_load_vib2mol") as load_vib2mol,
         ):
             loaded = service.preload()
 
-        load_theoretical.assert_called_once_with()
+        self.assertEqual(
+            [call.args[0] for call in load_tensor.call_args_list],
+            ["Hi", "Hij", "dedipole", "depolar"],
+        )
         load_nmr.assert_called_once_with()
         load_gap.assert_called_once_with()
         self.assertEqual(load_vib2mol.call_args_list[0].args, (1,))

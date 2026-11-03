@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
-export OPENMOLSPEC_ROOT="${OPENMOLSPEC_ROOT:-$ROOT}"
-exec "$ROOT/.venv/bin/streamlit" run "$ROOT/app.py" "$@"
+if [[ ! -x "$ROOT/.venv/bin/python" ]]; then
+  echo "请先运行 ./setup.sh 安装项目依赖。" >&2
+  exit 1
+fi
+exec "$ROOT/.venv/bin/python" "$ROOT/scripts/dev.py" "$@"

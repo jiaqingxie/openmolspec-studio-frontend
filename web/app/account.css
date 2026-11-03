@@ -1,0 +1,294 @@
+.molspec-shell .account-nav {
+  padding-bottom: 15px;
+}
+.integration-link,
+.account-trigger,
+.account-menu-actions button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  text-align: left;
+  color: #405a3c;
+  background: transparent;
+  border: 0;
+  border-radius: 9px;
+  padding: 8px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.integration-link {
+  font-size: 12px;
+  font-weight: 600;
+}
+.integration-link:hover,
+.account-trigger:hover,
+.account-menu-actions button:hover {
+  background: #e4ecdf;
+}
+.molspec-shell .account-trigger {
+  padding: 7px 6px;
+}
+.account-menu {
+  position: relative;
+}
+.account-trigger:focus-visible,
+.account-menu-actions button:focus-visible {
+  outline: 2px solid #83a382;
+  outline-offset: -2px;
+}
+.account-menu summary::-webkit-details-marker {
+  display: none;
+}
+.account-trigger-copy {
+  display: grid;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.molspec-shell .account-trigger-copy strong {
+  color: #405a3c;
+  font-size: 12px;
+}
+.molspec-shell .account-trigger-copy > span {
+  color: #526a4c;
+  font-size: 10px;
+}
+.account-menu[open] summary > svg:last-child {
+  transform: rotate(180deg);
+}
+.account-menu-actions {
+  position: absolute;
+  z-index: 2;
+  inset-inline: 0;
+  bottom: calc(100% + 4px);
+  padding: 4px;
+  border: 1px solid #dce5d4;
+  border-radius: 10px;
+  background: #f7faf4;
+  box-shadow: 0 6px 20px #21372012;
+}
+.account-menu-actions button,
+.account-menu-actions p {
+  font-size: 12px;
+}
+@media (min-width: 701px) {
+  .sidebar-collapsed .account-nav {
+    display: none;
+  }
+}
+.account-panel {
+  display: grid;
+  gap: 13px;
+  padding: 18px 22px 22px;
+  color: #40543a;
+}
+.account-panel p {
+  margin: 0;
+}
+.account-actions,
+.account-balances,
+.copy-action {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.account-actions label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+}
+.account-actions input,
+.account-actions select {
+  padding: 7px 9px;
+  border: 1px solid #bdcbb4;
+  border-radius: 8px;
+  background: #fff;
+  color: #324b30;
+}
+form.account-actions {
+  align-items: flex-end;
+}
+.account-balances {
+  margin: 0;
+  align-items: stretch;
+}
+.account-balances > div {
+  background: #edf3e8;
+  padding: 10px 15px;
+  border-radius: 10px;
+}
+.account-balances dd {
+  margin: 4px 0 0;
+  font-weight: 650;
+}
+.account-table-scroll {
+  overflow: auto;
+}
+.account-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 12px;
+}
+.account-table :is(th, td) {
+  padding: 9px 7px;
+  border-bottom: 1px solid #dce5d4;
+  vertical-align: top;
+}
+.account-table th {
+  background: #edf3e8;
+}
+.account-table td:first-child {
+  min-width: 106px;
+}
+.account-table pre {
+  white-space: pre-wrap;
+}
+.account-token,
+.account-secret {
+  display: grid;
+  justify-items: start;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid #dce5d4;
+  border-radius: 11px;
+}
+.account-token span,
+.copy-action span {
+  font-size: 12px;
+}
+.account-secret {
+  background: #edf3e8;
+}
+.account-secret code {
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+
+.mcp-guide {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 22px clamp(16px, 5vw, 48px) 44px;
+  color: #31482d;
+}
+.mcp-guide nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 19px;
+}
+.mcp-guide nav :is(a, span),
+.mcp-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.mcp-guide nav span {
+  font-weight: 650;
+}
+.mcp-guide a {
+  color: #3c6733;
+  text-underline-offset: 3px;
+}
+.mcp-guide header {
+  padding: clamp(22px, 6vw, 44px);
+  border-radius: 20px;
+  background: #e9f0e3;
+}
+.mcp-eyebrow {
+  font-size: 13px;
+  font-weight: 650;
+}
+.mcp-guide h1 {
+  font-size: clamp(26px, 7vw, 44px);
+  margin: 13px 0;
+  line-height: 1.15;
+}
+.mcp-guide h2 {
+  font-size: 22px;
+  margin: 0 0 10px;
+}
+.mcp-guide h3 {
+  font-size: 18px;
+  margin: 20px 0 8px;
+}
+.mcp-guide h4 {
+  font-size: 15px;
+  margin-bottom: 0;
+}
+.mcp-guide p,
+.mcp-guide li {
+  line-height: 1.65;
+}
+.mcp-guide li + li {
+  margin-top: 6px;
+}
+.mcp-guide > section {
+  padding: 24px 0;
+  border-bottom: 1px solid #dce5d4;
+}
+.mcp-targets,
+.mcp-clients {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.mcp-targets legend {
+  padding: 0 0 6px;
+  font-size: 12px;
+}
+.mcp-targets label {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 7px 10px;
+  border: 1px solid #d4dfcc;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.mcp-targets input {
+  accent-color: #547747;
+}
+.mcp-targets small {
+  color: #516c4c;
+}
+.mcp-url {
+  display: block;
+  margin-top: 12px;
+  overflow-wrap: anywhere;
+}
+.mcp-clients button[aria-pressed="true"] {
+  background: #e4ecdf;
+  border-color: #79916c;
+}
+.mcp-config {
+  margin: 12px 0;
+  border: 1px solid #dce5d4;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f0f4ec;
+}
+.mcp-config > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+}
+.mcp-config pre {
+  overflow: auto;
+  margin: 0;
+  padding: 12px;
+  border-top: 1px solid #dce5d4;
+}
+.mcp-footnote {
+  font-size: 13px;
+}

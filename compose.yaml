@@ -1,0 +1,73 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: ${OPENMOLSPEC_POSTGRES_USER:-molspec}
+      POSTGRES_PASSWORD: ${OPENMOLSPEC_POSTGRES_PASSWORD:?Set the local PostgreSQL password in .env}
+      POSTGRES_DB: ${OPENMOLSPEC_POSTGRES_DB:-molspec}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 2s
+      timeout: 3s
+      retries: 15
+    restart: unless-stopped
+  web:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.web
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      OPENMOLSPEC_API_URL: http://api:8000
+    depends_on:
+      - api
+    restart: unless-stopped
+  api:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.api
+    environment:
+      OPENMOLSPEC_DATABASE_URL: ${OPENMOLSPEC_COMPOSE_DATABASE_URL:?Set the container PostgreSQL DSN in .env}
+      OPENMOLSPEC_INTERNAL_KEY: ${OPENMOLSPEC_INTERNAL_KEY:?Set a shared private key in .env}
+      OPENMOLSPEC_CHEMISTRY_URL: http://chemistry:8001
+      OPENMOLSPEC_ENV: ${OPENMOLSPEC_ENV:-production}
+      OPENMOLSPEC_MOCK_SSO: ${OPENMOLSPEC_MOCK_SSO:-0}
+      OPENMOLSPEC_SESSION_HOURS: ${OPENMOLSPEC_SESSION_HOURS:-24}
+      OPENMOLSPEC_FREE_CREDITS: ${OPENMOLSPEC_FREE_CREDITS:-20}
+      OPENMOLSPEC_CREDIT_RULE_VERSION: ${OPENMOLSPEC_CREDIT_RULE_VERSION:-v2}
+      OPENMOLSPEC_MCP_LOCAL_URL: ${OPENMOLSPEC_MCP_LOCAL_URL:-http://127.0.0.1:3000/api/mcp}
+      OPENMOLSPEC_MCP_CLOUD_URL: ${OPENMOLSPEC_MCP_CLOUD_URL:-}
+      OPENMOLSPEC_ALLOWED_ORIGINS: ${OPENMOLSPEC_ALLOWED_ORIGINS:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENMOLSPEC_LLM_MODEL: ${OPENMOLSPEC_LLM_MODEL:-}
+    volumes:
+      - ./.openmolspec:/app/.openmolspec
+    depends_on:
+      postgres:
+        condition: service_healthy
+      chemistry:
+        condition: service_started
+    restart: unless-stopped
+  chemistry:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile.chemistry
+    environment:
+      OPENMOLSPEC_DATABASE_URL: ${OPENMOLSPEC_COMPOSE_DATABASE_URL:?Set the container PostgreSQL DSN in .env}
+      OPENMOLSPEC_INTERNAL_KEY: ${OPENMOLSPEC_INTERNAL_KEY:?Set a shared private key in .env}
+      OPENMOLSPEC_FREE_CREDITS: ${OPENMOLSPEC_FREE_CREDITS:-20}
+      OPENMOLSPEC_CREDIT_RULE_VERSION: ${OPENMOLSPEC_CREDIT_RULE_VERSION:-v2}
+      OPENMOLSPEC_ROOT: /models
+      OPENMOLSPEC_DEVICE: ${OPENMOLSPEC_DEVICE:-cpu}
+    volumes:
+      - ${OPENMOLSPEC_ROOT:-.}:/models:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres-data:

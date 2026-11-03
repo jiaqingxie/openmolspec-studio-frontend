@@ -1,0 +1,12 @@
+FROM python:3.12-slim
+WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 libxrender1 libxext6 libglib2.0-0 && rm -rf /var/lib/apt/lists/*
+COPY pyproject.toml README.md requirements.txt requirements-services.txt ./
+COPY src ./src
+RUN pip install --no-cache-dir -e . -r requirements.txt -r requirements-services.txt
+COPY openmolspec_ui ./openmolspec_ui
+COPY services/__init__.py services/credits.py ./services/
+COPY services/chemistry ./services/chemistry
+ENV PYTHONUNBUFFERED=1
+EXPOSE 8001
+CMD ["uvicorn", "services.chemistry.app:app", "--host", "0.0.0.0", "--port", "8001"]

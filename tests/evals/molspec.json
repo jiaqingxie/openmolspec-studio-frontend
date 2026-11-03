@@ -1,0 +1,15 @@
+[
+  {"id":"inspect-ethanol","prompt":"请用分子检查工具验证 CCO，告诉我分子式和分子量。","tool":"inspect_molecule","formula":"C2H6O"},
+  {"id":"predict","prompt":"请预测 SMILES CCO 的理论 IR 和 Raman 光谱，保留谱图供下一轮分析。","tool":"predict_spectra","capability":"predict_spectra","job":true},
+  {"id":"retrieve","prompt":"用上一轮预测的 IR 光谱检索候选分子，请直接引用已有谱图。","tool":"retrieve_candidates","capability":"retrieve","job":true,"followup":true},
+  {"id":"generate","prompt":"用已有的乙醇理论 IR 光谱推测可能的结构，注明候选来源。","tool":"generate_candidates","capability":"generate","job":true,"followup":true},
+  {"id":"gap","prompt":"用已有的乙醇理论 IR 光谱估算 HOMO–LUMO 能隙，注明单位。","tool":"predict_gap","capability":"predict_gap","job":true,"followup":true},
+  {"id":"upload-retrieve","prompt":"先检查刚上传 IR 数据的单位、范围和适用性，再检索候选分子。","tool":"retrieve_candidates","capability":"retrieve","job":true,"upload_prediction":true},
+  {"id":"invalid-smiles","prompt":"请用分子检查工具判断这个 SMILES 是否有效，并说明怎么更正：C1(","tool":"inspect_molecule","tool_error":true},
+  {"id":"unknown-unit","prompt":"先检查附件的数据单位和适用性，并告诉我如何补齐信息。","tool":"inspect_spectrum","ineligible":true,"input":{"content":"400,0\n1000,1\n4000,0","axis_unit":"unknown","domain":"theoretical"}},
+  {"id":"partial-axis","prompt":"请检查附件能否用于模型计算，如果不行说明需要补充什么。","tool":"inspect_spectrum","ineligible":true,"input":{"content":"800,0\n1000,1\n1500,0","axis_unit":"cm^-1","domain":"theoretical"}},
+  {"id":"experimental-domain","prompt":"检查这个实验谱图是否适用于当前模型，说明原因。","tool":"inspect_spectrum","ineligible":true,"input":{"content":"400,0\n1000,1\n4000,0","axis_unit":"cm^-1","domain":"experimental"}},
+  {"id":"formula-only","prompt":"请预测分子式 C2H6O 的光谱，我目前只有分子式。","no_calculation":true,"reply_terms":["SMILES","结构"]},
+  {"id":"missing-input","prompt":"请根据光谱估算能隙，我还没提供谱图。","no_calculation":true,"reply_terms":["谱图","光谱"]},
+  {"id":"missing-model","prompt":"检查当前的光谱预测能力。如果模型不可用，请说明缺少什么。","tool":"get_capabilities","missing_capability":"predict_spectra","reply_terms":["缺少","不可用","未安装","缺失"]}
+]

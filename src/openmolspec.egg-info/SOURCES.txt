@@ -61,11 +61,14 @@ tests/test_benchmark_experiment.py
 tests/test_benchmark_prepare.py
 tests/test_benchmark_registry.py
 tests/test_benchmark_training.py
+tests/test_chemistry.py
+tests/test_config.py
 tests/test_dedup_splits.py
 tests/test_equiformer_targets.py
 tests/test_extract_labels.py
 tests/test_hessian_benchmark.py
 tests/test_hessian_physics.py
+tests/test_inference.py
 tests/test_internal_validation.py
 tests/test_kennard_stone_selection.py
 tests/test_multimodal_properties.py
@@ -78,6 +81,7 @@ tests/test_release.py
 tests/test_response_benchmark.py
 tests/test_schema.py
 tests/test_shared_spectroscopy.py
+tests/test_spectra.py
 tests/test_spectroscopy_factories.py
 tests/test_spectrum_normalization.py
 tests/test_spectrum_properties.py
@@ -86,6 +90,7 @@ tests/test_step_training.py
 tests/test_structure_nmr_data.py
 tests/test_structure_nmr_training.py
 tests/test_subset_vib2mol.py
+tests/test_theoretical.py
 tests/test_vib2mol_contrastive.py
 tests/test_vib2mol_evaluation.py
 tests/test_vib2mol_lifecycle.py

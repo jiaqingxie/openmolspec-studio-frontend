@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.next/
+node_modules/
+.env
+.env.local
+.env.*.local
+.openmolspec/
+.superpowers/
+coverage/
+*.tsbuildinfo
+web/test-results/
+web/playwright-report/
+artifacts/

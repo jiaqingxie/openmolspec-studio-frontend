@@ -7,7 +7,7 @@ name = "openmolspec"
 version = "1.0.0"
 description = "OpenMolSpec data processing, validation, and release toolkit"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11,<3.13"
 dependencies = [
     "numpy>=1.26",
     "pandas>=2.0",
@@ -27,3 +27,6 @@ openmolspec = "openmolspec.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
