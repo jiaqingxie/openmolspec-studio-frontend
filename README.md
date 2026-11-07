@@ -1,36 +1,49 @@
-# OpenMolSpec Studio
+# OpenMolSpec Tool Gallery
 
-这是一个可直接运行的 OpenMolSpec Streamlit 工作台。前端、OpenMolSpec Python
-源码、模型 checkpoint、理论测试集和 Vib2Mol 缓存都位于同一个仓库根目录；入口是
-`app.py`。
+Web frontend for the OpenMolSpec Studio tool gallery: four trained checkpoints exposed as
+one-click tools (structure → IR/Raman/NMR, spectral retrieval, spectrum → HOMO–LUMO gap,
+spectrum → structure generation). Bootstrap 5 UI + FastAPI inference server, no chat, no
+accounts, no MCP.
 
-## 安装与启动
+## Layout
 
-运行：
-
-```bash
-./setup.sh
-./start.sh
+```
+pages/ components/ lib/ styles/ public/   Next.js 16 app (static export)
+server.py                                 FastAPI server wrapping openmolspec_ui
+openmolspec_ui/                           Inference layer (unchanged from the portable studio)
+run_web.sh                                Cluster launcher (uvicorn, port 8501)
 ```
 
-也可以直接使用 Streamlit 命令启动：
+## Develop (local, demo data)
 
-```bash
-.venv/bin/streamlit run app.py
+```sh
+npm install
+npm run dev        # http://127.0.0.1:3001 — falls back to demo data when the API is offline
 ```
 
-应用默认自动检测运行设备：有 CUDA 时使用 `cuda:0`，否则回退到 CPU。CPU 模式会对
-Vib2Mol 检索和生成使用随包提供的缓存路径。也可以显式指定设备：
+## Deploy (cluster)
 
-```bash
-OPENMOLSPEC_DEVICE=cpu ./start.sh
-OPENMOLSPEC_DEVICE=cuda:1 ./start.sh
+```sh
+npm run build                                  # emits static site to out/
+rsync -a out/ server.py run_web.sh <host>:<gallery-dir>/
+# on the host (needs OPENMOLSPEC_ROOT pointing at the portable studio assets):
+tmux new-session -d 'cd <gallery-dir> && ./run_web.sh > web.log 2>&1'
 ```
 
-模型与数据默认从仓库根目录发现；如需使用其他位置，可设置 `OPENMOLSPEC_ROOT`。
-`MANIFEST.json` 记录 portable 包包含的运行资产，`SHA256SUMS` 可用于校验文件。
+`run_web.sh` reads:
 
-应用提供构象到 IR/Raman/H/C NMR、光谱到结构检索、光谱到 HOMO–LUMO gap，
-以及 Vib2Mol 结构生成四个工作流。输入格式、推理路径和模型说明见
-[`docs/studio_guide.md`](docs/studio_guide.md)，OpenMolSpec 核心项目的详细说明见
-[`docs/openmolspec_core.md`](docs/openmolspec_core.md)。
+- `OPENMOLSPEC_ROOT` — portable studio root (checkpoints, src, benchmark_data). Default:
+  `/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable`
+- `PYTHON` — interpreter with torch/rdkit/lmdb. Default: the shared studio venv.
+- `PORT` — default 8501.
+
+Access from a laptop: `ssh -L 8501:127.0.0.1:8501 <host>` → http://localhost:8501
+
+## Notes
+
+- Fonts: IBM Plex Sans / Mono via `next/font/google`, self-hosted at build time — no
+  runtime dependency on Google.
+- The spectrum LMDB is copied to `/tmp` on first start: shared storage does not support
+  the mmap mode lmdb needs.
+- Molecule previews use mol blocks; candidate structures are rendered server-side by RDKit
+  at `/api/render?smiles=`.

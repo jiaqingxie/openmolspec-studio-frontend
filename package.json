@@ -1,0 +1,32 @@
+{
+  "name": "openmolspec-gallery-web",
+  "version": "3.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack --hostname 127.0.0.1 --port 3001",
+    "build": "next build --webpack",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "3dmol": "2.5.5",
+    "acorn": "8.19.0",
+    "bootstrap": "^5.3.8",
+    "ketcher-core": "3.18.0",
+    "ketcher-react": "3.18.0",
+    "ketcher-standalone": "3.18.0",
+    "lucide-react": "0.545.0",
+    "next": "16.4.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-is": "18.3.1",
+    "recharts": "3.10.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.14",
+    "@types/node": "24.10.1",
+    "@types/react": "18.3.31",
+    "@types/react-dom": "18.3.7",
+    "tailwindcss": "4.1.14",
+    "typescript": "5.9.3"
+  }
+}
