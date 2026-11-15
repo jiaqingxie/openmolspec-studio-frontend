@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "release": "1.0.0",
+  "started_at": "2026-11-15T09:59:14.376346+00:00",
+  "purpose": "pipeline_smoke_evaluation",
+  "limit": 8,
+  "device": "cpu",
+  "python": "3.13.5",
+  "torch": "2.14.0+cu130",
+  "training_performed": false,
+  "results": [
+    {
+      "task": "vibrational.gap.ir",
+      "title": "IR → HOMO–LUMO gap",
+      "backend": "studio_gap",
+      "domain": "computed",
+      "dataset_name": null,
+      "metrics": {
+        "mae_ev": 1.2461922423695064,
+        "rmse_ev": 1.7404516076505903,
+        "examples": 8
+      },
+      "sample_ids": [
+        "NISTIR-10077",
+        "NISTIR-10139",
+        "NISTIR-1019",
+        "NISTIR-10288",
+        "NISTIR-10293",
+        "NISTIR-10335",
+        "NISTIR-10474",
+        "NISTIR-10482"
+      ],
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/benchmark_data/release_v1_ks200k_hc_nmr_minmax/vib2mol/openspec_test.lmdb",
+        "sha256": "736a234607992865136b23b3d091b26323936f08377362a196fe97ceb3bdb6a1"
+      },
+      "checkpoint": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/runs/openmolspec-v1-ks1000k/spectrum2property/vib2conf/ir-raman-hc-gap-shared-pooling-v2/seed-624/2026-09-15-09-47-d5e16a/artifacts/vib2conf_spectrum2property_best.pt",
+        "sha256": "7bbe651ee5c42894f8a3e490bb8d1bc3601df032a00f0c55332b4e8ae8bad412"
+      },
+      "given_nmr": false,
+      "unit": "eV",
+      "input_gap_unit": "hartree",
+      "sampling": "first_labeled_records_in_lmdb_order",
+      "status": "passed",
+      "elapsed_seconds": 6.667
+    },
+    {
+      "task": "vibrational.gap.raman",
+      "title": "RAMAN → HOMO–LUMO gap",
+      "backend": "studio_gap",
+      "domain": "computed",
+      "dataset_name": null,
+      "metrics": {
+        "mae_ev": 2.6068424745259833,
+        "rmse_ev": 2.637152489042361,
+        "examples": 8
+      },
+      "sample_ids": [
+        "NISTIR-10077",
+        "NISTIR-10139",
+        "NISTIR-1019",
+        "NISTIR-10288",
+        "NISTIR-10293",
+        "NISTIR-10335",
+        "NISTIR-10474",
+        "NISTIR-10482"
+      ],
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/benchmark_data/release_v1_ks200k_hc_nmr_minmax/vib2mol/openspec_test.lmdb",
+        "sha256": "736a234607992865136b23b3d091b26323936f08377362a196fe97ceb3bdb6a1"
+      },
+      "checkpoint": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/runs/openmolspec-v1-ks1000k/spectrum2property/vib2conf/ir-raman-hc-gap-shared-pooling-v2/seed-624/2026-09-15-09-47-d5e16a/artifacts/vib2conf_spectrum2property_best.pt",
+        "sha256": "7bbe651ee5c42894f8a3e490bb8d1bc3601df032a00f0c55332b4e8ae8bad412"
+      },
+      "given_nmr": false,
+      "unit": "eV",
+      "input_gap_unit": "hartree",
+      "sampling": "first_labeled_records_in_lmdb_order",
+      "status": "passed",
+      "elapsed_seconds": 0.37
+    },
+    {
+      "task": "vibrational.gap.ir_raman",
+      "title": "IR_RAMAN → HOMO–LUMO gap",
+      "backend": "studio_gap",
+      "domain": "computed",
+      "dataset_name": null,
+      "metrics": {
+        "mae_ev": 1.104321138095635,
+        "rmse_ev": 1.233242879422255,
+        "examples": 8
+      },
+      "sample_ids": [
+        "NISTIR-10077",
+        "NISTIR-10139",
+        "NISTIR-1019",
+        "NISTIR-10288",
+        "NISTIR-10293",
+        "NISTIR-10335",
+        "NISTIR-10474",
+        "NISTIR-10482"
+      ],
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/benchmark_data/release_v1_ks200k_hc_nmr_minmax/vib2mol/openspec_test.lmdb",
+        "sha256": "736a234607992865136b23b3d091b26323936f08377362a196fe97ceb3bdb6a1"
+      },
+      "checkpoint": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/runs/openmolspec-v1-ks1000k/spectrum2property/vib2conf/ir-raman-hc-gap-shared-pooling-v2/seed-624/2026-09-15-09-47-d5e16a/artifacts/vib2conf_spectrum2property_best.pt",
+        "sha256": "7bbe651ee5c42894f8a3e490bb8d1bc3601df032a00f0c55332b4e8ae8bad412"
+      },
+      "given_nmr": false,
+      "unit": "eV",
+      "input_gap_unit": "hartree",
+      "sampling": "first_labeled_records_in_lmdb_order",
+      "status": "passed",
+      "elapsed_seconds": 0.373
+    }
+  ],
+  "counts": {
+    "passed": 3
+  },
+  "elapsed_seconds": 7.415,
+  "completed_at": "2026-11-15T09:59:21.793039+00:00"
+}

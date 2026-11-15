@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "release": "1.0.0",
+  "started_at": "2026-11-15T10:00:56.234252+00:00",
+  "purpose": "pipeline_smoke_evaluation",
+  "limit": 4,
+  "device": "cpu",
+  "python": "3.13.5",
+  "torch": "2.14.0+cu130",
+  "training_performed": false,
+  "results": [
+    {
+      "task": "vibrational.retrieval",
+      "title": "IR / Raman → 结构检索",
+      "backend": "vib2mol_retrieval",
+      "domain": "computed",
+      "dataset_name": null,
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/benchmark_data/release_v1_ks200k_hc_nmr_minmax/vib2mol/openspec_test.lmdb",
+        "sha256": "736a234607992865136b23b3d091b26323936f08377362a196fe97ceb3bdb6a1"
+      },
+      "sample_ids": [
+        "CCCCc1cc2ccccc2c(OCCN(C)C)n1",
+        "N#CSCSc1nc2ccccc2s1",
+        "CC12CCC(=O)C=C1CCC1C2CCC2(C)C(C(=O)CO)CCC12",
+        "N#CCc1ccccc1Oc1ccccc1"
+      ],
+      "given_nmr": false,
+      "given_formula": false,
+      "inference_mode": "direct_checkpoint",
+      "sampling": "first_distinct_canonical_structures_in_lmdb_order",
+      "checkpoint": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/runs/openmolspec-v1-ks1000k/spectrum2structure/vib2mol/ir-raman-hc-generation-v1/seed-624/2026-09-16-07-00-d369d0/artifacts/vib2mol/checkpoints/openspec/ir-raman-kekule_smiles/vib2mol/2026-09-16-07-01-8e4216/best_recall.pth",
+        "sha256": "e81cb178991742a6686b2d31ea191381cc5951aa15f8f7ddeb93c5473b0c0cf1"
+      },
+      "metrics": {
+        "recall_at_1": 0.5,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 0.7083333333333333,
+        "queries": 4,
+        "candidate_pool": 4,
+        "unique_candidates": 4,
+        "tie_policy": "stable_candidate_order"
+      },
+      "reverse_metrics": {
+        "recall_at_1": 0.75,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 0.875,
+        "queries": 4,
+        "candidate_pool": 4,
+        "unique_candidates": 4,
+        "tie_policy": "stable_candidate_order"
+      },
+      "status": "passed",
+      "elapsed_seconds": 78.217
+    },
+    {
+      "task": "vibrational.generation",
+      "title": "IR / Raman → SMILES",
+      "backend": "vib2mol_generation",
+      "domain": "computed",
+      "dataset_name": null,
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/benchmark_data/release_v1_ks200k_hc_nmr_minmax/vib2mol/openspec_test.lmdb",
+        "sha256": "736a234607992865136b23b3d091b26323936f08377362a196fe97ceb3bdb6a1"
+      },
+      "sample_ids": [
+        "CCCCc1cc2ccccc2c(OCCN(C)C)n1",
+        "N#CSCSc1nc2ccccc2s1",
+        "CC12CCC(=O)C=C1CCC1C2CCC2(C)C(C(=O)CO)CCC12",
+        "N#CCc1ccccc1Oc1ccccc1"
+      ],
+      "given_nmr": false,
+      "given_formula": false,
+      "inference_mode": "direct_checkpoint",
+      "sampling": "first_distinct_canonical_structures_in_lmdb_order",
+      "checkpoint": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/runs/openmolspec-v1-ks1000k/spectrum2structure/vib2mol/ir-raman-hc-generation-v1/seed-624/2026-09-16-07-00-d369d0/artifacts/vib2mol/checkpoints/openspec/ir-raman-kekule_smiles/vib2mol/2026-09-16-21-21-88e3a8/best_acc.pth",
+        "sha256": "978aae6864104e4581d814a964cbcb04b7207eaa0b74946d3c5a0f886d54db06"
+      },
+      "metrics": {
+        "valid_rate": 1.0,
+        "exact_rate": 0.0,
+        "examples": 4
+      },
+      "beam_size": 3,
+      "ranking": "raw_beam_top_1_without_reranking",
+      "predictions": [
+        {
+          "reference": "CCCCc1cc2ccccc2c(OCCN(C)C)n1",
+          "raw_top_1": "N1=NN2N=NN=C2N1",
+          "canonical_top_1": "n1nc2[nH]nnn2n1"
+        },
+        {
+          "reference": "N#CSCSc1nc2ccccc2s1",
+          "raw_top_1": "N1=NN=NN1N1N=NN=N1",
+          "canonical_top_1": "n1nnn(-n2nnnn2)n1"
+        },
+        {
+          "reference": "CC12CCC(=O)C=C1CCC1C2CCC2(C)C(C(=O)CO)CCC12",
+          "raw_top_1": "N1=NN2N=NN=C2N1",
+          "canonical_top_1": "n1nc2[nH]nnn2n1"
+        },
+        {
+          "reference": "N#CCc1ccccc1Oc1ccccc1",
+          "raw_top_1": "N#C",
+          "canonical_top_1": "C#N"
+        }
+      ],
+      "status": "passed",
+      "elapsed_seconds": 5.405
+    },
+    {
+      "task": "spectroscopy.reranking",
+      "title": "谱图 + 候选结构 → 重排",
+      "backend": "vib2mol_reranking",
+      "domain": "experimental",
+      "dataset_name": null,
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/benchmark_data/release_v1_ks200k_hc_nmr_minmax/vib2mol/openspec_test.lmdb",
+        "sha256": "736a234607992865136b23b3d091b26323936f08377362a196fe97ceb3bdb6a1"
+      },
+      "sample_ids": [
+        "CCCCc1cc2ccccc2c(OCCN(C)C)n1",
+        "N#CSCSc1nc2ccccc2s1",
+        "CC12CCC(=O)C=C1CCC1C2CCC2(C)C(C(=O)CO)CCC12",
+        "N#CCc1ccccc1Oc1ccccc1"
+      ],
+      "given_nmr": false,
+      "given_formula": false,
+      "inference_mode": "direct_checkpoint",
+      "sampling": "first_distinct_canonical_structures_in_lmdb_order",
+      "checkpoint": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/runs/openmolspec-v1-ks1000k/spectrum2structure/vib2mol/ir-raman-hc-generation-v1/seed-624/2026-09-16-07-00-d369d0/artifacts/vib2mol/checkpoints/openspec/ir-raman-kekule_smiles/vib2mol/2026-09-16-07-01-8e4216/best_recall.pth",
+        "sha256": "e81cb178991742a6686b2d31ea191381cc5951aa15f8f7ddeb93c5473b0c0cf1"
+      },
+      "metrics": {
+        "recall_at_1": 0.25,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 0.5208333333333333,
+        "queries": 4,
+        "candidate_pool": 4,
+        "unique_candidates": 4,
+        "tie_policy": "stable_candidate_order",
+        "top_1_hit_rate": 0.25
+      },
+      "ranking": "itm_positive_probability",
+      "status": "passed",
+      "elapsed_seconds": 1.369
+    }
+  ],
+  "counts": {
+    "passed": 3
+  },
+  "elapsed_seconds": 85.113,
+  "completed_at": "2026-11-15T10:02:21.350210+00:00"
+}

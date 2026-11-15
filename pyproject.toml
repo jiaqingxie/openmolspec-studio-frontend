@@ -24,6 +24,11 @@ dependencies = [
 
 [project.scripts]
 openmolspec = "openmolspec.cli:main"
+openmolspec-bench = "openmolspec_bench.__main__:main"
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["src", "."]
+include = ["openmolspec", "openmolspec.*", "openmolspec_ui", "openmolspec_bench", "spec2struct_fork"]
+
+[tool.setuptools.package-data]
+spec2struct_fork = ["assets/mol_tokenizer/*"]

@@ -1,0 +1,1434 @@
+{
+  "schema_version": 1,
+  "release": "1.0.0",
+  "started_at": "2026-11-15T10:00:58.461384+00:00",
+  "purpose": "pipeline_smoke_evaluation",
+  "limit": 32,
+  "device": "cpu",
+  "python": "3.10.18",
+  "torch": "2.6.0+cu124",
+  "training_performed": false,
+  "results": [
+    {
+      "task": "nmr.forward.1H",
+      "title": "结构 → 1H 峰列表",
+      "backend": "nmrnet_predictions",
+      "domain": "experimental",
+      "dataset_name": "nmrspec_test",
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.13414263433412102,
+            "matched_peak_rmse_ppm": 0.23681643380742615,
+            "peak_count_mae": 10.21875,
+            "matched_fraction": 0.5192430632770222,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 32,
+          "sample_ids": [
+            "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+            "CCOC(=O)C1=C(C)NC(C)C(C)(C(=O)[O-])C1c1ccc(-c2ccccc2)cc1",
+            "COc1ccccc1-n1nnc2ccccc21",
+            "CCCCCCOc1cc2ccccc2c(B(O)O)c1OCCCCCC",
+            "CCOP(=O)(CC(CP(=O)(OCC)OCC)C(=O)c1ccc(C)cc1C)OCC",
+            "CC[C@H]1c2c(n(Cc3ccccc3)c3c(C)cccc23)CC[C@@H]1C=O",
+            "CCN(CC)c1nc2ccccc2c2ccccc12",
+            "CC1=C2CCCCCCCCCCC2OC1=O",
+            "C=CCC(C(=O)OC)(c1cccc(Cl)c1)c1cn(C)c2ccccc12",
+            "Cc1cc(C[C@H](C(=O)c2nccn2C(C)C)c2ccc(F)cc2)cc(C)c1O",
+            "O=C1C[C@@H](c2cccc([N+](=O)[O-])c2)SC(c2ccccc2)=N1",
+            "COc1cccc(N[C@H](C(=O)O)C(C)C)c1",
+            "COC(=O)[C@@]12N=NC[C@@H]1CN(Cc1ccccc1)[C@@H]2C",
+            "Fc1ccc2c(ccn2Cc2ccc(C3COC(c4c(F)cccc4F)=N3)cc2)c1",
+            "Cc1cnn(C2CCc3ccccc32)c1",
+            "Cc1ccc(-c2nn(-c3ccccc3)cc2C(Cc2onc(C)c2[N+](=O)[O-])C[N+](=O)[O-])cc1",
+            "C[C@H]1CCc2ccccc2N1",
+            "Cc1c(/C=C/[N+](=O)[O-])cc([N+](=O)[O-])c(Cl)c1[N+](=O)[O-]",
+            "O=C(c1ccccc1)c1cn(Cc2ccccc2)c2cc(Br)cc([N+](=O)[O-])c12",
+            "Nc1cccc(C(=O)c2ccccc2)c1",
+            "CC(C)(C)OC(=O)N[C@H](CCC(=O)c1ccccc1)c1c[nH]c2cc(Cl)ccc12",
+            "CCOC(=O)C(OS(=O)(=O)c1ccc2ccccc2c1)c1ccc(F)cc1",
+            "CC(C)CC(/C=C/c1ccccc1)CO",
+            "CC(C)(C)C1=CC(=Cc2ccc(Cl)cc2)C=C(C(C)(C)C)C1=O",
+            "Cc1ccc(S(=O)(=O)N2C[C@@H](O)[C@@H](C(=O)c3ccc(F)cc3)[C@@H]3CC(=O)C=C[C@]32C)cc1",
+            "COC(=O)C[C@@H]1C[C@@H]([N+](=O)[O-])[C@@H](c2ccc(C)cc2)[C@H]1C=O",
+            "Cc1ccc(/C=C/C(O)(CCCCCO)c2ccccc2)cc1",
+            "O=C1/C(=C(/c2ccccc2)c2c(OC3CCCCC3)ccc3ccccc23)Cc2ccccc21",
+            "Cc1c(C(=O)OCc2ccccc2)c2ccccc2n1-c1ccccn1",
+            "FC(F)(F)C1(C#Cc2ccsc2)CNCC1c1ccccc1",
+            "COC(=O)c1cc(-c2ccccc2)n(N)c1C",
+            "O=C1c2sccc2[C@H]2[C@H]([C@H]3O[C@@H]2c2cc(Br)c(Br)cc23)N1c1cccc2cccnc12"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrspec_test_H/fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "7d8318124c159bade3d7e00e5487f102090fad0712810ea58ae044eb52a7d2a1"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrspec_test_H/fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "9ac0101ab5aa9f6519566161fcf105fa26122cef5733361f90749155f87e1ef1"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrspec_test_H/fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "53eeda79475d98ac9b119806c4ca61d36d274bbd65d251e20b6d64b33db527bf"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrspec_test_H/fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "c45641aa9a2d03633020fdb46c8b5abc6ad8f815178f727ddfc3ea6c12e611a5"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrspec_test_H/fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "781af1f99605246cbf83dc9df8a03508a8b76a96b1b654fe6e70235564d5d307"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/nmrspec_test_H/valid.lmdb",
+            "sha256": "ee06e5ac0007428d0adef210beed56707b7f15fe8e0a75286ec772eb02b08415"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.07699339577171921,
+            "matched_peak_rmse_ppm": 0.1638748144986357,
+            "peak_count_mae": 10.21875,
+            "matched_fraction": 0.5192430632770222,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 32,
+          "sample_ids": [
+            "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+            "CCOC(=O)C1=C(C)NC(C)C(C)(C(=O)[O-])C1c1ccc(-c2ccccc2)cc1",
+            "COc1ccccc1-n1nnc2ccccc21",
+            "CCCCCCOc1cc2ccccc2c(B(O)O)c1OCCCCCC",
+            "CCOP(=O)(CC(CP(=O)(OCC)OCC)C(=O)c1ccc(C)cc1C)OCC",
+            "CC[C@H]1c2c(n(Cc3ccccc3)c3c(C)cccc23)CC[C@@H]1C=O",
+            "CCN(CC)c1nc2ccccc2c2ccccc12",
+            "CC1=C2CCCCCCCCCCC2OC1=O",
+            "C=CCC(C(=O)OC)(c1cccc(Cl)c1)c1cn(C)c2ccccc12",
+            "Cc1cc(C[C@H](C(=O)c2nccn2C(C)C)c2ccc(F)cc2)cc(C)c1O",
+            "O=C1C[C@@H](c2cccc([N+](=O)[O-])c2)SC(c2ccccc2)=N1",
+            "COc1cccc(N[C@H](C(=O)O)C(C)C)c1",
+            "COC(=O)[C@@]12N=NC[C@@H]1CN(Cc1ccccc1)[C@@H]2C",
+            "Fc1ccc2c(ccn2Cc2ccc(C3COC(c4c(F)cccc4F)=N3)cc2)c1",
+            "Cc1cnn(C2CCc3ccccc32)c1",
+            "Cc1ccc(-c2nn(-c3ccccc3)cc2C(Cc2onc(C)c2[N+](=O)[O-])C[N+](=O)[O-])cc1",
+            "C[C@H]1CCc2ccccc2N1",
+            "Cc1c(/C=C/[N+](=O)[O-])cc([N+](=O)[O-])c(Cl)c1[N+](=O)[O-]",
+            "O=C(c1ccccc1)c1cn(Cc2ccccc2)c2cc(Br)cc([N+](=O)[O-])c12",
+            "Nc1cccc(C(=O)c2ccccc2)c1",
+            "CC(C)(C)OC(=O)N[C@H](CCC(=O)c1ccccc1)c1c[nH]c2cc(Cl)ccc12",
+            "CCOC(=O)C(OS(=O)(=O)c1ccc2ccccc2c1)c1ccc(F)cc1",
+            "CC(C)CC(/C=C/c1ccccc1)CO",
+            "CC(C)(C)C1=CC(=Cc2ccc(Cl)cc2)C=C(C(C)(C)C)C1=O",
+            "Cc1ccc(S(=O)(=O)N2C[C@@H](O)[C@@H](C(=O)c3ccc(F)cc3)[C@@H]3CC(=O)C=C[C@]32C)cc1",
+            "COC(=O)C[C@@H]1C[C@@H]([N+](=O)[O-])[C@@H](c2ccc(C)cc2)[C@H]1C=O",
+            "Cc1ccc(/C=C/C(O)(CCCCCO)c2ccccc2)cc1",
+            "O=C1/C(=C(/c2ccccc2)c2c(OC3CCCCC3)ccc3ccccc23)Cc2ccccc21",
+            "Cc1c(C(=O)OCc2ccccc2)c2ccccc2n1-c1ccccn1",
+            "FC(F)(F)C1(C#Cc2ccsc2)CNCC1c1ccccc1",
+            "COC(=O)c1cc(-c2ccccc2)n(N)c1C",
+            "O=C1c2sccc2[C@H]2[C@H]([C@H]3O[C@@H]2c2cc(Br)c(Br)cc23)N1c1cccc2cccnc12"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrspec_test_H/cv_seed_42_fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "5398702fdce4224456404aeb04cfa8024ea93cc11b4b5fbbf4a9d39c2805c9a6"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrspec_test_H/cv_seed_42_fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "dabc9c92bdcb23da21cfb146e22a834dac84de1b3b06a3e68f96888453e64322"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrspec_test_H/cv_seed_42_fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "02f2c781c4fcaff5dcbf6956437529c64d9717c3b4c9e795c702770454c3809c"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrspec_test_H/cv_seed_42_fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "549c7ba08afa8cc3e9dbd3e51976705b16a11270f8e9c7c1a3fbf83de6d752ea"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrspec_test_H/cv_seed_42_fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "385de21875409a3f73e706293495904c284c5a708e433e900cd39904dac54b3f"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/nmrspec_test_H/valid.lmdb",
+            "sha256": "ee06e5ac0007428d0adef210beed56707b7f15fe8e0a75286ec772eb02b08415"
+          }
+        }
+      ],
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/OpenMolSpec/data/align_eval/nmrspec_test/test.jsonl",
+        "sha256": "256ca2d733db0103e99aad5855bc66b73e3a0bd2117ce2bd3204b63eff0f67a2"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "solvent_filter": "none; retain recorded reference peaks",
+      "domain_verification": "legacy_dataset_source_not_independently_reaudited",
+      "split_leakage_audit": "not_performed_by_this_smoke_run",
+      "status": "passed",
+      "elapsed_seconds": 3.652
+    },
+    {
+      "task": "nmr.forward.1H",
+      "title": "结构 → 1H 峰列表",
+      "backend": "nmrnet_predictions",
+      "domain": "experimental",
+      "dataset_name": "patent_test_10k",
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.2691200683990773,
+            "matched_peak_rmse_ppm": 0.5308687779393774,
+            "peak_count_mae": 24.75862068965517,
+            "matched_fraction": 0.2947374416128153,
+            "examples": 29,
+            "scored_examples": 29,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 29,
+          "sample_ids": [
+            "C#CCN[C@H](C)CCCCC.C#CCN[C@H](C)CCCCC.Cl",
+            "CC1=Cc2ccccc2[CH]1[Zr+2]([CH]1C(C)=Cc2ccccc21)=[Si](C)C.[Cl-].[Cl-]",
+            "CC1=Cc2ccccc2[CH]1[Zr+2]([CH]1C(C)=Cc2ccccc21)=[Si](C)C.Cc1ccc([O-])c(C)c1.[Cl-]",
+            "COc1cc2c(cc1OC)[CH]([Zr+2]([CH]1C=Cc3cc(OC)c(OC)cc31)=[Si](C)C)C=C2.[Cl-].[Cl-]",
+            "CC1(COc2cnccc2C#N)CCO1.CC1(COc2cnccc2C#N)CCO1",
+            "CCCCCCCCOCC1CO1.CCCCCCCCOCC1CO1",
+            "CC1=C[CH]([Zr+]([CH]2C=C(C(C)C)c3ccccc32)[SiH](C)C)c2ccccc21.CC1=C[CH]([Zr+]([CH]2C=C(C(C)C)c3ccccc32)[SiH](C)C)c2ccccc21.[Cl-].[Cl-]",
+            "CC(C)C1=C[CH]([Zr+]([CH]2C=Cc3ccccc32)[SiH](C)C)c2ccccc21.CC(C)C1=C[CH]([Zr+]([CH]2C=Cc3ccccc32)[SiH](C)C)c2ccccc21.[Cl-].[Cl-]",
+            "CC1=Cc2c(C)cc(C)cc2[CH]1[Zr+2]([CH]1C(C)=Cc2c(C)cc(C)cc21)=[Si](C)C.[Cl-].[Cl-]",
+            "CC1=Cc2cc(C)c(C)cc2[CH]1[Zr+2]([CH]1C(C)=Cc2cc(C)c(C)cc21)=[Si](C)C.[Cl-].[Cl-]",
+            "CC(C)C1=Cc2ccccc2[CH]1[Zr+2]([CH]1C(C(C)C)=Cc2ccccc21)=[Si](C)C.[Cl-].[Cl-]",
+            "CC(C)c1cccc(C(C)C)c1[O][Nb-]([Cl])([Cl])([Cl])[O]c1c(C(C)C)cccc1C(C)C",
+            "CCCCCCCCCCCC(=O)O.CCCCCCCCCCCC(=O)O.OCC1CCC(CO)O1",
+            "O=S(=O)([O-])[O-].O=[N+]([O-])c1ccc2c(c1)[I+]c1ccccc1-2.O=[N+]([O-])c1ccc2c(c1)[I+]c1ccccc1-2",
+            "Oc1ccccc1C=C1C=CC=CC1[NH][Ti+]([NH]C1C=CC=CC1=Cc1ccccc1O)[CH]1C=CC=C1.[Cl-]",
+            "O=C([O-])CSC1CCN(c2ccc(Cl)c(C(F)(F)F)c2)C1.O=C([O-])CSC1CCN(c2ccc(Cl)c(C(F)(F)F)c2)C1.[Ca+2]",
+            "O=C([O-])COC1CCN(c2ccc(Cl)c(C(F)(F)F)c2)C1.O=C([O-])COC1CCN(c2ccc(Cl)c(C(F)(F)F)c2)C1.[Ca+2]",
+            "O=C([O-])COC1CCN(c2cc(C(F)(F)F)ccc2F)C1.O=C([O-])COC1CCN(c2cc(C(F)(F)F)ccc2F)C1.[Ca+2]",
+            "O=C([O-])COC1CCN(c2ccccc2C(F)(F)F)C1.O=C([O-])COC1CCN(c2ccccc2C(F)(F)F)C1.[Ca+2]",
+            "O=C([O-])COC1CCN(c2cccc(C(F)(F)F)c2)C1.O=C([O-])COC1CCN(c2cccc(C(F)(F)F)c2)C1.[Ca+2]",
+            "OB1OCc2cc(Oc3ccc(-c4nnn[nH]4)cc3)ccc21.OB1OCc2cc(Oc3ccc(-n4cnnn4)cc3)ccc21",
+            "COc1cc2c(CBr)nc(OC(C)=O)c([N+](=O)[O-])c2cc1OC.COc1cc2c(CBr)nc(OC(C)=O)c([N+](=O)[O-])c2cc1OC.O",
+            "O=C([O-])CSC1CCN(c2ccc(C(F)(F)F)cc2C(F)(F)F)C1.O=C([O-])CSC1CCN(c2ccc(C(F)(F)F)cc2C(F)(F)F)C1.[Ca+2]",
+            "O=C([O-])COC1CCN(c2ccc(C(F)(F)F)cc2C(F)(F)F)C1.O=C([O-])COC1CCN(c2ccc(C(F)(F)F)cc2C(F)(F)F)C1.[Ca+2]",
+            "COc1cc2c(C)nc(O)c(NC(C)=O)c2cc1OC.COc1cc2c(C)nc(O)c(NC(C)=O)c2cc1OC.O",
+            "CCCC(C)C1=C[CH]([Zr+]([CH]2C=C(C)c3ccccc32)[SiH](C)C)c2ccccc21.CCCC(C)C1=C[CH]([Zr+]([CH]2C=C(C)c3ccccc32)[SiH](C)C)c2ccccc21.[Cl-].[Cl-]",
+            "CCCC(C)C1=C[CH]([Zr+]([CH]2C=Cc3ccccc32)[SiH](C)C)c2ccccc21.CCCC(C)C1=C[CH]([Zr+]([CH]2C=Cc3ccccc32)[SiH](C)C)c2ccccc21.[Cl-].[Cl-]",
+            "CC1=Cc2cc(CC(C)C)ccc2[CH]1[Zr+2]([CH]1C(C)=Cc2cc(CC(C)C)ccc21)=[Si](C)C.[Cl-].[Cl-]",
+            "CC1=Cc2cc(C(C)(C)C)ccc2[CH]1[Zr+2]([CH]1C(C)=Cc2cc(C(C)(C)C)ccc21)=[Si](C)C.[Cl-].[Cl-]"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/patent_test_10k_H/fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "00dd532d5dacffbfb46b65ed6dc161a5143e4a128551a820f5aee8b6bbdf959d"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/patent_test_10k_H/fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "7b07572905863b4257a28b2536b7b3642a6ac1dae3a1c068397422f6954accd2"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/patent_test_10k_H/fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "d4dbe6d12c55d43cc4c22de6da123276bb8d2a55d43b3b82569ab7e071e44158"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/patent_test_10k_H/fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "9be14252d27d7a6729ea93aa836ec641f87684c3c4788db76cd04fcd21729aad"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/patent_test_10k_H/fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "dd5c36c45f755993ffc054b7a6cf2704371c9ae3e97a729b49a6c42a8b3108b8"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/patent_test_10k_H/valid.lmdb",
+            "sha256": "9e9d547ee0fcfede4d766f7090b1b425bd500db367a058fb4cdd202a702b8fe8"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.22784231065252586,
+            "matched_peak_rmse_ppm": 0.4845488263627234,
+            "peak_count_mae": 24.75862068965517,
+            "matched_fraction": 0.2947374416128153,
+            "examples": 29,
+            "scored_examples": 29,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 29,
+          "sample_ids": [
+            "C#CCN[C@H](C)CCCCC.C#CCN[C@H](C)CCCCC.Cl",
+            "CC1=Cc2ccccc2[CH]1[Zr+2]([CH]1C(C)=Cc2ccccc21)=[Si](C)C.[Cl-].[Cl-]",
+            "CC1=Cc2ccccc2[CH]1[Zr+2]([CH]1C(C)=Cc2ccccc21)=[Si](C)C.Cc1ccc([O-])c(C)c1.[Cl-]",
+            "COc1cc2c(cc1OC)[CH]([Zr+2]([CH]1C=Cc3cc(OC)c(OC)cc31)=[Si](C)C)C=C2.[Cl-].[Cl-]",
+            "CC1(COc2cnccc2C#N)CCO1.CC1(COc2cnccc2C#N)CCO1",
+            "CCCCCCCCOCC1CO1.CCCCCCCCOCC1CO1",
+            "CC1=C[CH]([Zr+]([CH]2C=C(C(C)C)c3ccccc32)[SiH](C)C)c2ccccc21.CC1=C[CH]([Zr+]([CH]2C=C(C(C)C)c3ccccc32)[SiH](C)C)c2ccccc21.[Cl-].[Cl-]",
+            "CC(C)C1=C[CH]([Zr+]([CH]2C=Cc3ccccc32)[SiH](C)C)c2ccccc21.CC(C)C1=C[CH]([Zr+]([CH]2C=Cc3ccccc32)[SiH](C)C)c2ccccc21.[Cl-].[Cl-]",
+            "CC1=Cc2c(C)cc(C)cc2[CH]1[Zr+2]([CH]1C(C)=Cc2c(C)cc(C)cc21)=[Si](C)C.[Cl-].[Cl-]",
+            "CC1=Cc2cc(C)c(C)cc2[CH]1[Zr+2]([CH]1C(C)=Cc2cc(C)c(C)cc21)=[Si](C)C.[Cl-].[Cl-]",
+            "CC(C)C1=Cc2ccccc2[CH]1[Zr+2]([CH]1C(C(C)C)=Cc2ccccc21)=[Si](C)C.[Cl-].[Cl-]",
+            "CC(C)c1cccc(C(C)C)c1[O][Nb-]([Cl])([Cl])([Cl])[O]c1c(C(C)C)cccc1C(C)C",
+            "CCCCCCCCCCCC(=O)O.CCCCCCCCCCCC(=O)O.OCC1CCC(CO)O1",
+            "O=S(=O)([O-])[O-].O=[N+]([O-])c1ccc2c(c1)[I+]c1ccccc1-2.O=[N+]([O-])c1ccc2c(c1)[I+]c1ccccc1-2",
+            "Oc1ccccc1C=C1C=CC=CC1[NH][Ti+]([NH]C1C=CC=CC1=Cc1ccccc1O)[CH]1C=CC=C1.[Cl-]",
+            "O=C([O-])CSC1CCN(c2ccc(Cl)c(C(F)(F)F)c2)C1.O=C([O-])CSC1CCN(c2ccc(Cl)c(C(F)(F)F)c2)C1.[Ca+2]",
+            "O=C([O-])COC1CCN(c2ccc(Cl)c(C(F)(F)F)c2)C1.O=C([O-])COC1CCN(c2ccc(Cl)c(C(F)(F)F)c2)C1.[Ca+2]",
+            "O=C([O-])COC1CCN(c2cc(C(F)(F)F)ccc2F)C1.O=C([O-])COC1CCN(c2cc(C(F)(F)F)ccc2F)C1.[Ca+2]",
+            "O=C([O-])COC1CCN(c2ccccc2C(F)(F)F)C1.O=C([O-])COC1CCN(c2ccccc2C(F)(F)F)C1.[Ca+2]",
+            "O=C([O-])COC1CCN(c2cccc(C(F)(F)F)c2)C1.O=C([O-])COC1CCN(c2cccc(C(F)(F)F)c2)C1.[Ca+2]",
+            "OB1OCc2cc(Oc3ccc(-c4nnn[nH]4)cc3)ccc21.OB1OCc2cc(Oc3ccc(-n4cnnn4)cc3)ccc21",
+            "COc1cc2c(CBr)nc(OC(C)=O)c([N+](=O)[O-])c2cc1OC.COc1cc2c(CBr)nc(OC(C)=O)c([N+](=O)[O-])c2cc1OC.O",
+            "O=C([O-])CSC1CCN(c2ccc(C(F)(F)F)cc2C(F)(F)F)C1.O=C([O-])CSC1CCN(c2ccc(C(F)(F)F)cc2C(F)(F)F)C1.[Ca+2]",
+            "O=C([O-])COC1CCN(c2ccc(C(F)(F)F)cc2C(F)(F)F)C1.O=C([O-])COC1CCN(c2ccc(C(F)(F)F)cc2C(F)(F)F)C1.[Ca+2]",
+            "COc1cc2c(C)nc(O)c(NC(C)=O)c2cc1OC.COc1cc2c(C)nc(O)c(NC(C)=O)c2cc1OC.O",
+            "CCCC(C)C1=C[CH]([Zr+]([CH]2C=C(C)c3ccccc32)[SiH](C)C)c2ccccc21.CCCC(C)C1=C[CH]([Zr+]([CH]2C=C(C)c3ccccc32)[SiH](C)C)c2ccccc21.[Cl-].[Cl-]",
+            "CCCC(C)C1=C[CH]([Zr+]([CH]2C=Cc3ccccc32)[SiH](C)C)c2ccccc21.CCCC(C)C1=C[CH]([Zr+]([CH]2C=Cc3ccccc32)[SiH](C)C)c2ccccc21.[Cl-].[Cl-]",
+            "CC1=Cc2cc(CC(C)C)ccc2[CH]1[Zr+2]([CH]1C(C)=Cc2cc(CC(C)C)ccc21)=[Si](C)C.[Cl-].[Cl-]",
+            "CC1=Cc2cc(C(C)(C)C)ccc2[CH]1[Zr+2]([CH]1C(C)=Cc2cc(C(C)(C)C)ccc21)=[Si](C)C.[Cl-].[Cl-]"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/patent_test_10k_H/cv_seed_42_fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "4fed49c07d3affe6af3c2f828ee69de70327c4968e9548cc80095fdabb867c02"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/patent_test_10k_H/cv_seed_42_fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "5cea75aa89f571dacf44cfffa67c9cf35b564e130dd6e323dfaac2fb591117de"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/patent_test_10k_H/cv_seed_42_fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "6c91e3cb0b66e24b111ca581517859395eeddee69b132aa9919b516a2b2987c5"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/patent_test_10k_H/cv_seed_42_fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "b79d79f2b92c03d3b21bb4e8bbec2a553b6c549f0b526d602a1d75e9dc445afe"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/patent_test_10k_H/cv_seed_42_fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "e7e442d0520b526e0d9e86ffc2a26f89a6b32bdd8123156b21cb4a21e5369e05"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/patent_test_10k_H/valid.lmdb",
+            "sha256": "9e9d547ee0fcfede4d766f7090b1b425bd500db367a058fb4cdd202a702b8fe8"
+          }
+        }
+      ],
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/OpenMolSpec/data/align_eval/patent_test_10k/test.jsonl",
+        "sha256": "4f90649fce7bbc0d1aa92056baf46ff28ca15b95880f0af8c269b87057e5808a"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "solvent_filter": "none; retain recorded reference peaks",
+      "domain_verification": "legacy_dataset_source_not_independently_reaudited",
+      "split_leakage_audit": "not_performed_by_this_smoke_run",
+      "status": "passed",
+      "elapsed_seconds": 1.093
+    },
+    {
+      "task": "nmr.forward.1H",
+      "title": "结构 → 1H 峰列表",
+      "backend": "nmrnet_predictions",
+      "domain": "experimental",
+      "dataset_name": "nmrexp_exp_10k",
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.04858252130873491,
+            "matched_peak_rmse_ppm": 0.07973883212249766,
+            "peak_count_mae": 8.09375,
+            "matched_fraction": 0.5308309470320394,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 32,
+          "sample_ids": [
+            "CC[Si](CC)(CC)/C(F)=C(\\Cc1ccccc1)C(=O)OC(C)(C)C",
+            "CCOC(=O)/C(CCc1ccccc1)=C(/F)[Si](CC)(CC)CC",
+            "CCOC(=O)/C(CCCOc1ccc(OC)cc1)=C(\\F)[Si](CC)(CC)CC",
+            "CCCCCCCC/C(C(=O)OCC)=C(/F)[Si](CC)(CC)CC",
+            "Cc1ccccc1/C=C/CCn1cnc2ccccc2c1=O",
+            "COc1cccc(/C=C/CCn2cnc3ccccc3c2=O)c1",
+            "COc1ccc(/C=C/CCn2cnc3ccccc3c2=O)cc1",
+            "O=c1c2ccccc2ncn1CC/C=C/c1ccc(Br)cc1",
+            "O=c1c2ccccc2ncn1CC/C=C/c1ccc2c(c1)OCO2",
+            "O=c1c2ccccc2ncn1CCC=C(c1ccccc1)c1ccccc1",
+            "Cn1c(/C=C/CCn2cnc3ccccc3c2=O)cc2ccccc21",
+            "O=c1c2ccccc2ncn1CC/C=C/c1csc2ccccc12",
+            "O=c1c2ccc(Br)cc2ncn1CC/C=C/c1ccccc1",
+            "O=c1c2cc(Br)ccc2ncn1CC/C=C/c1ccccc1",
+            "O=c1c2ccc(F)cc2ncn1CC/C=C/c1ccccc1",
+            "COc1cc2ncn(CC/C=C/c3ccccc3)c(=O)c2cc1OC",
+            "C#CCCCOC(=O)c1ccccc1",
+            "O=C(c1ccccc1)c1ccccc1",
+            "O=C(c1ccccc1)c1ccc(F)cc1",
+            "O=C(c1ccccc1)c1ccc(Cl)cc1",
+            "O=C(c1ccccc1)c1ccc(Br)cc1",
+            "O=C(c1ccccc1)c1ccc(C(F)(F)F)cc1",
+            "N#Cc1ccc(C(=O)c2ccccc2)cc1",
+            "O=C(c1ccccc1)c1ccc([N+](=O)[O-])cc1",
+            "O=C(c1ccccc1)c1ccc(-c2ccccc2)cc1",
+            "CCCCCc1ccc(C(=O)c2ccccc2)cc1",
+            "O=C(c1ccccc1)c1cccc(F)c1",
+            "O=C(c1ccccc1)c1cccc(Cl)c1",
+            "O=C(c1ccccc1)c1cccc([N+](=O)[O-])c1",
+            "Cc1cccc(C(=O)c2ccccc2)c1",
+            "O=C(c1ccccc1)c1ccccc1F",
+            "O=C(c1ccccc1)c1ccc2ccccc2c1"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrexp_exp_10k_H/fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "9aa00f8378cf18d6ee58005d527bd480cb6c565e54910868329b78cf2f12415b"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrexp_exp_10k_H/fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "d5f5713f186246251bd0c06548ace8bc204f4086fa2ee18ba91e7af5d79b5038"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrexp_exp_10k_H/fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "14642386865dbb12b4db6549d4fc4ea35cee106c4b2d353e112da66724ea2f64"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrexp_exp_10k_H/fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "9e858ba947ec5ece0e23c8ec0feb76de4b353ee3a4a6c57632bf18d6f848177e"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrexp_exp_10k_H/fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "6eb6d59293e088b3e20dc3bd3a0206c4558c48a5b2139a75acaf761655562fe4"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/nmrexp_exp_10k_H/valid.lmdb",
+            "sha256": "a9b3422f165f69df1d5c697ac58bbafc78bcc7e81235dc1e1fb8c6b512bccb5b"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.03063703681651138,
+            "matched_peak_rmse_ppm": 0.06262486667216845,
+            "peak_count_mae": 8.09375,
+            "matched_fraction": 0.5308309470320394,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 32,
+          "sample_ids": [
+            "CC[Si](CC)(CC)/C(F)=C(\\Cc1ccccc1)C(=O)OC(C)(C)C",
+            "CCOC(=O)/C(CCc1ccccc1)=C(/F)[Si](CC)(CC)CC",
+            "CCOC(=O)/C(CCCOc1ccc(OC)cc1)=C(\\F)[Si](CC)(CC)CC",
+            "CCCCCCCC/C(C(=O)OCC)=C(/F)[Si](CC)(CC)CC",
+            "Cc1ccccc1/C=C/CCn1cnc2ccccc2c1=O",
+            "COc1cccc(/C=C/CCn2cnc3ccccc3c2=O)c1",
+            "COc1ccc(/C=C/CCn2cnc3ccccc3c2=O)cc1",
+            "O=c1c2ccccc2ncn1CC/C=C/c1ccc(Br)cc1",
+            "O=c1c2ccccc2ncn1CC/C=C/c1ccc2c(c1)OCO2",
+            "O=c1c2ccccc2ncn1CCC=C(c1ccccc1)c1ccccc1",
+            "Cn1c(/C=C/CCn2cnc3ccccc3c2=O)cc2ccccc21",
+            "O=c1c2ccccc2ncn1CC/C=C/c1csc2ccccc12",
+            "O=c1c2ccc(Br)cc2ncn1CC/C=C/c1ccccc1",
+            "O=c1c2cc(Br)ccc2ncn1CC/C=C/c1ccccc1",
+            "O=c1c2ccc(F)cc2ncn1CC/C=C/c1ccccc1",
+            "COc1cc2ncn(CC/C=C/c3ccccc3)c(=O)c2cc1OC",
+            "C#CCCCOC(=O)c1ccccc1",
+            "O=C(c1ccccc1)c1ccccc1",
+            "O=C(c1ccccc1)c1ccc(F)cc1",
+            "O=C(c1ccccc1)c1ccc(Cl)cc1",
+            "O=C(c1ccccc1)c1ccc(Br)cc1",
+            "O=C(c1ccccc1)c1ccc(C(F)(F)F)cc1",
+            "N#Cc1ccc(C(=O)c2ccccc2)cc1",
+            "O=C(c1ccccc1)c1ccc([N+](=O)[O-])cc1",
+            "O=C(c1ccccc1)c1ccc(-c2ccccc2)cc1",
+            "CCCCCc1ccc(C(=O)c2ccccc2)cc1",
+            "O=C(c1ccccc1)c1cccc(F)c1",
+            "O=C(c1ccccc1)c1cccc(Cl)c1",
+            "O=C(c1ccccc1)c1cccc([N+](=O)[O-])c1",
+            "Cc1cccc(C(=O)c2ccccc2)c1",
+            "O=C(c1ccccc1)c1ccccc1F",
+            "O=C(c1ccccc1)c1ccc2ccccc2c1"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrexp_exp_10k_H/cv_seed_42_fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "2d80eea640e3ec4dcfa8f51bbd2623c86dedc2d1d52dedef7ccec139c8e7f289"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrexp_exp_10k_H/cv_seed_42_fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "1096ef0940992c69c89aa5a6f75fc9d7cc158035217050767fdbb6dfd4a086f6"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrexp_exp_10k_H/cv_seed_42_fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "8936524c7039a41fe1189c6a468ad7ed114ccf8f73bc2a7d3ee9fa04cc864dc7"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrexp_exp_10k_H/cv_seed_42_fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "4dc31ad88a5681b2f6a20a6577e65394edc6fc77483ae8e2fee0fabc788117c4"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrexp_exp_10k_H/cv_seed_42_fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "3d0f694058101b41ee0908c40e2dba252eaf8db3821a3be3d7405a03a8bb46f7"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/nmrexp_exp_10k_H/valid.lmdb",
+            "sha256": "a9b3422f165f69df1d5c697ac58bbafc78bcc7e81235dc1e1fb8c6b512bccb5b"
+          }
+        }
+      ],
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/OpenMolSpec/data/align_eval/nmrexp_exp_10k/test.jsonl",
+        "sha256": "e074dab3cc749e126bea8abc348a46f895dd033e5b45a21cacb28035741a2d11"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "solvent_filter": "none; retain recorded reference peaks",
+      "domain_verification": "legacy_dataset_source_not_independently_reaudited",
+      "split_leakage_audit": "not_performed_by_this_smoke_run",
+      "status": "passed",
+      "elapsed_seconds": 1.065
+    },
+    {
+      "task": "nmr.forward.1H",
+      "title": "结构 → 1H 峰列表",
+      "backend": "nmrnet_predictions",
+      "domain": "experimental",
+      "dataset_name": "nmrgym_test",
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.1968244606377943,
+            "matched_peak_rmse_ppm": 0.39348758699328934,
+            "peak_count_mae": 15.84375,
+            "matched_fraction": 0.5291027660402658,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 32,
+          "sample_ids": [
+            "N#Cc1c(N)n[nH]c1-c1c(N)sc2c(-c3ccccc3)nn(-c3ccccc3)c12",
+            "COC(=O)[C@@]1(OC)C(OC)=C(OC)C(=O)/C1=C(O)/C=C/c1ccccc1",
+            "CC[C@@H](O)C[C@@H](O)[C@@]1(C)C[C@@H](C)[C@@H]2CC[C@H](CC/C=C(/C)C(=O)[C@@H](C)CC/C=C\\C(=O)N3CCCC[C@H]3C(=O)O1)O2",
+            "CC(O)(CCOc1ccc2ccc(=O)oc2c1)CCC1C(C)(O)CCC(=O)C1(C)C",
+            "CC(C)C[C@@H]1NC(=O)[C@H](C(C)C)NC(=O)[C@@H](CC(C)C)NC(=O)[C@H](Cc2ccccc2)NC(=O)[C@@H]2CCCN2C(=O)[C@@H](Cc2ccccc2)NC1=O",
+            "[O-][N+]12CCC[C@@H]3[C@@H](O)C[C@@H]4C[C@H]5CO[C@]1(C5)[C@@]43CCC2",
+            "COc1ccc([C@@H](CN=C(O)/C=C\\c2ccccc2)O[C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O)cc1",
+            "Cc1ccc2c(c1)C(C)(C)CCCC2=NCc1ccccc1",
+            "CC(C)C(O)=N[C@H]1CC[C@]2(O)CC3=CC[C@]4(C)[C@@H]([C@H](C)N(C)C)CC[C@@]4(C)[C@@H]3CC[C@H]2C1(C)C",
+            "C=C1CC[C@@]23CC[C@]4(C)[C@@](OC2=O)([C@@H]3C1)[C@H]1O[C@H]1[C@@H]1[C@@]2(C)CC[C@@H]3OC(C)(C)OC[C@@]3(O)[C@@H]2CC[C@]14C",
+            "O=C(NCCc1c[nH]cn1)c1cnc[nH]1",
+            "CC(=O)Oc1cc(OC(C)=O)cc(Oc2c(OC(C)=O)cc(OC(C)=O)c3c2Oc2c(cc(OC(C)=O)c4c2oc2cc(OC(C)=O)cc(OC(C)=O)c24)O3)c1",
+            "COC(=O)[C@@H](C)[C@H]1CC[C@](C)(CCC/C(C)=C/CC2=C(C)CCCC2(C)C)OO1",
+            "Cc1ccc(C2=NCC(=O)N(C)c3ccccc32)c(I)c1",
+            "C=C1C[C@]23C[C@@]4(O)[C@@H]5[C@]6(C)C[N@@+]4(C)[C@@H]4[C@H]2[C@@H](O)[C@H]1C[C@H]3[C@]54C[C@@H](O)[C@H]6O",
+            "O=c1c(-c2ccc(O)c(O)c2)c(OCC2OC(O)C(O)C(O)C2O)oc2c(O)cc(O)cc12",
+            "CC(C)(O)C1CCC(C)(C2CCC3(C)C2C(O)CC2C4(C)CCC(O)C(C)(C)C4C(OC4OC(COC5OC(CO)C(O)C(O)C5O)C(O)C(O)C4OC4OCC(O)C(O)C4O)CC23C)O1",
+            "COC1CC(=O)N2c3cc(O)cc4c3OC(/C=C\\C=C\\CC(OC(=O)C(C)N=C(O)CC(C)C)C(C)C(O)/C(C)=C/CC4)C12",
+            "Cc1ncc(COP(=O)(O)O)c(=N)[nH]1",
+            "CC(C)C[C@H](N=C(O)[C@@H]1CCCN1C(=O)[C@@H](N=C(O)[C@@H](N)Cc1ccc(O)cc1)C(C)C)C(=O)O",
+            "C=C1OC(=O)c2c(O[C@@H]3O[C@@H](CO)[C@H](O)[C@@H](O)[C@@H]3O)cc(OC)c(C)c2[C@@H]1C",
+            "CN1C(=O)/C(=C/c2ccc3c(c2)OCO3)N=C1N",
+            "CN1C=NC(C(=O)O)CC1(C)COC(=O)c1ccc[nH]1",
+            "O=C1C=C(c2cc3nc(O)[nH]c3nc2O)C(O)=NC1=O",
+            "CC1=CC(=O)[C@@H](O)[C@]2(C)[C@H]3[C@@]4(O)OC[C@]35[C@H]([C@@H](CO)[C@H]4O)[C@@H](O[C@@H]3O[C@H](CO)[C@@H](O)[C@H](O)[C@H]3O)C(=O)O[C@@H]5C[C@@H]12",
+            "O=C1CCC2=C1N1CCCC1OC2",
+            "C=C(C)C1OC2CCC3(C)C(CCC4(OC)OC5OC(C)(C)C6CC7C(=C)Cc8ccc9[nH]c(c5c9c8C76O)C43C)C23OC3C1O",
+            "CC(=CC1CC(O)(C2CCC3(C)C2CCC2C4(C)CCC(OC5OCC(O)C(OC6OC(CO)C(O)C(O)C6O)C5OC5OC(C)C(O)C(O)C5O)C(C)(C)C4CCC23C)C(O)O1)CO",
+            "COc1cc2c(cc1C(C)(O)CC(C)c1cc3cc(C(C)=O)c(O)cc3o1)C=CC(C)(C)O2",
+            "COc1cc(C)cc2c3ccccc3n(Cc3cc4c([nH]c5ccccc54)c4c3OC(C)(C)C=C4)c12",
+            "c1ccn2c(NCCN3CCOCC3)c(-c3ccc4c(c3)OCO4)nc2c1",
+            "CC(=O)OCC=CC1=CC2=C(CO1)C(=O)C(C)(OC(=O)c1c(C)cc(O)cc1O)C(=O)C2=CC=CC1=CC2=C(CO1)C(=O)C(C)(O)C(OC(=O)c1c(C)cc(O)cc1O)C2"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrgym_test_H/fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "99002f1294f1faa8141d9260010131a7db04da3f1bd9309681646174cbd412d8"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrgym_test_H/fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "93cbd0b4ddd04068dc03d5aaa27b01ccd7d2dcdc1be4b2da9629c23408577d33"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrgym_test_H/fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "6f2d58349068e3ef7bb2c889dbd2707e03e1fa8d6bd2dddc27a872ba7c51ebdf"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrgym_test_H/fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "9dacb6d6ad5a281b8096433ecc412e12743f68cd77c69348e6be7812f7a56a5d"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrgym_test_H/fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "1e0c1a1d2bc74c3f3d4be08fe3cbe952fe7242ea8529873ae92773ce36d83196"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/nmrgym_test_H/valid.lmdb",
+            "sha256": "eadbc8ef1521d5060c42ac479bd404dc6595a5f12c63b253520447573c72f05e"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.19821629074817518,
+            "matched_peak_rmse_ppm": 0.40631559148803237,
+            "peak_count_mae": 15.84375,
+            "matched_fraction": 0.5291027660402658,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 32,
+          "sample_ids": [
+            "N#Cc1c(N)n[nH]c1-c1c(N)sc2c(-c3ccccc3)nn(-c3ccccc3)c12",
+            "COC(=O)[C@@]1(OC)C(OC)=C(OC)C(=O)/C1=C(O)/C=C/c1ccccc1",
+            "CC[C@@H](O)C[C@@H](O)[C@@]1(C)C[C@@H](C)[C@@H]2CC[C@H](CC/C=C(/C)C(=O)[C@@H](C)CC/C=C\\C(=O)N3CCCC[C@H]3C(=O)O1)O2",
+            "CC(O)(CCOc1ccc2ccc(=O)oc2c1)CCC1C(C)(O)CCC(=O)C1(C)C",
+            "CC(C)C[C@@H]1NC(=O)[C@H](C(C)C)NC(=O)[C@@H](CC(C)C)NC(=O)[C@H](Cc2ccccc2)NC(=O)[C@@H]2CCCN2C(=O)[C@@H](Cc2ccccc2)NC1=O",
+            "[O-][N+]12CCC[C@@H]3[C@@H](O)C[C@@H]4C[C@H]5CO[C@]1(C5)[C@@]43CCC2",
+            "COc1ccc([C@@H](CN=C(O)/C=C\\c2ccccc2)O[C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O)cc1",
+            "Cc1ccc2c(c1)C(C)(C)CCCC2=NCc1ccccc1",
+            "CC(C)C(O)=N[C@H]1CC[C@]2(O)CC3=CC[C@]4(C)[C@@H]([C@H](C)N(C)C)CC[C@@]4(C)[C@@H]3CC[C@H]2C1(C)C",
+            "C=C1CC[C@@]23CC[C@]4(C)[C@@](OC2=O)([C@@H]3C1)[C@H]1O[C@H]1[C@@H]1[C@@]2(C)CC[C@@H]3OC(C)(C)OC[C@@]3(O)[C@@H]2CC[C@]14C",
+            "O=C(NCCc1c[nH]cn1)c1cnc[nH]1",
+            "CC(=O)Oc1cc(OC(C)=O)cc(Oc2c(OC(C)=O)cc(OC(C)=O)c3c2Oc2c(cc(OC(C)=O)c4c2oc2cc(OC(C)=O)cc(OC(C)=O)c24)O3)c1",
+            "COC(=O)[C@@H](C)[C@H]1CC[C@](C)(CCC/C(C)=C/CC2=C(C)CCCC2(C)C)OO1",
+            "Cc1ccc(C2=NCC(=O)N(C)c3ccccc32)c(I)c1",
+            "C=C1C[C@]23C[C@@]4(O)[C@@H]5[C@]6(C)C[N@@+]4(C)[C@@H]4[C@H]2[C@@H](O)[C@H]1C[C@H]3[C@]54C[C@@H](O)[C@H]6O",
+            "O=c1c(-c2ccc(O)c(O)c2)c(OCC2OC(O)C(O)C(O)C2O)oc2c(O)cc(O)cc12",
+            "CC(C)(O)C1CCC(C)(C2CCC3(C)C2C(O)CC2C4(C)CCC(O)C(C)(C)C4C(OC4OC(COC5OC(CO)C(O)C(O)C5O)C(O)C(O)C4OC4OCC(O)C(O)C4O)CC23C)O1",
+            "COC1CC(=O)N2c3cc(O)cc4c3OC(/C=C\\C=C\\CC(OC(=O)C(C)N=C(O)CC(C)C)C(C)C(O)/C(C)=C/CC4)C12",
+            "Cc1ncc(COP(=O)(O)O)c(=N)[nH]1",
+            "CC(C)C[C@H](N=C(O)[C@@H]1CCCN1C(=O)[C@@H](N=C(O)[C@@H](N)Cc1ccc(O)cc1)C(C)C)C(=O)O",
+            "C=C1OC(=O)c2c(O[C@@H]3O[C@@H](CO)[C@H](O)[C@@H](O)[C@@H]3O)cc(OC)c(C)c2[C@@H]1C",
+            "CN1C(=O)/C(=C/c2ccc3c(c2)OCO3)N=C1N",
+            "CN1C=NC(C(=O)O)CC1(C)COC(=O)c1ccc[nH]1",
+            "O=C1C=C(c2cc3nc(O)[nH]c3nc2O)C(O)=NC1=O",
+            "CC1=CC(=O)[C@@H](O)[C@]2(C)[C@H]3[C@@]4(O)OC[C@]35[C@H]([C@@H](CO)[C@H]4O)[C@@H](O[C@@H]3O[C@H](CO)[C@@H](O)[C@H](O)[C@H]3O)C(=O)O[C@@H]5C[C@@H]12",
+            "O=C1CCC2=C1N1CCCC1OC2",
+            "C=C(C)C1OC2CCC3(C)C(CCC4(OC)OC5OC(C)(C)C6CC7C(=C)Cc8ccc9[nH]c(c5c9c8C76O)C43C)C23OC3C1O",
+            "CC(=CC1CC(O)(C2CCC3(C)C2CCC2C4(C)CCC(OC5OCC(O)C(OC6OC(CO)C(O)C(O)C6O)C5OC5OC(C)C(O)C(O)C5O)C(C)(C)C4CCC23C)C(O)O1)CO",
+            "COc1cc2c(cc1C(C)(O)CC(C)c1cc3cc(C(C)=O)c(O)cc3o1)C=CC(C)(C)O2",
+            "COc1cc(C)cc2c3ccccc3n(Cc3cc4c([nH]c5ccccc54)c4c3OC(C)(C)C=C4)c12",
+            "c1ccn2c(NCCN3CCOCC3)c(-c3ccc4c(c3)OCO4)nc2c1",
+            "CC(=O)OCC=CC1=CC2=C(CO1)C(=O)C(C)(OC(=O)c1c(C)cc(O)cc1O)C(=O)C2=CC=CC1=CC2=C(CO1)C(=O)C(C)(O)C(OC(=O)c1c(C)cc(O)cc1O)C2"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrgym_test_H/cv_seed_42_fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "2ed76c0c3ba9e9eb5d0ba072e7bdd745fbfa09b30d6a2bbd558894cd05f35826"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrgym_test_H/cv_seed_42_fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "0735cfe8a9e545dd2eab1251a7e72461c91ddeaab5360ffe7c68bfa10910d6fe"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrgym_test_H/cv_seed_42_fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "f2e7efa0fcd471b64a29acce86933eaeefa2e71d930448d54c27f6fa0d118e17"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrgym_test_H/cv_seed_42_fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "dc64d4072f4454430e34b00f044cd794100c45a242c58b9faf8359cb8dc170a4"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrgym_test_H/cv_seed_42_fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "4e7ff2d79acd9bbb060b0da6ab3f14a226ce58dc967893b68c9a57107842982a"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/nmrgym_test_H/valid.lmdb",
+            "sha256": "eadbc8ef1521d5060c42ac479bd404dc6595a5f12c63b253520447573c72f05e"
+          }
+        }
+      ],
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/OpenMolSpec/data/align_eval/nmrgym_test/test.jsonl",
+        "sha256": "bf8cb0cdcaf19884349e15230206c6110a29b479b1a04bec7ec0b9e5bff3ff9b"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "solvent_filter": "none; retain recorded reference peaks",
+      "domain_verification": "legacy_dataset_source_not_independently_reaudited",
+      "split_leakage_audit": "not_performed_by_this_smoke_run",
+      "status": "passed",
+      "elapsed_seconds": 1.437
+    },
+    {
+      "task": "nmr.forward.13C",
+      "title": "结构 → 13C 峰列表",
+      "backend": "nmrnet_predictions",
+      "domain": "experimental",
+      "dataset_name": "nmrspec_test",
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 1.166839493503614,
+            "matched_peak_rmse_ppm": 2.3898515362116135,
+            "peak_count_mae": 2.65625,
+            "matched_fraction": 0.8683153839313926,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 32,
+          "sample_ids": [
+            "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+            "CCOC(=O)C1=C(C)NC(C)C(C)(C(=O)[O-])C1c1ccc(-c2ccccc2)cc1",
+            "COc1ccccc1-n1nnc2ccccc21",
+            "CCCCCCOc1cc2ccccc2c(B(O)O)c1OCCCCCC",
+            "CCOP(=O)(CC(CP(=O)(OCC)OCC)C(=O)c1ccc(C)cc1C)OCC",
+            "CC[C@H]1c2c(n(Cc3ccccc3)c3c(C)cccc23)CC[C@@H]1C=O",
+            "CCN(CC)c1nc2ccccc2c2ccccc12",
+            "CC1=C2CCCCCCCCCCC2OC1=O",
+            "C=CCC(C(=O)OC)(c1cccc(Cl)c1)c1cn(C)c2ccccc12",
+            "Cc1cc(C[C@H](C(=O)c2nccn2C(C)C)c2ccc(F)cc2)cc(C)c1O",
+            "O=C1C[C@@H](c2cccc([N+](=O)[O-])c2)SC(c2ccccc2)=N1",
+            "COc1cccc(N[C@H](C(=O)O)C(C)C)c1",
+            "COC(=O)[C@@]12N=NC[C@@H]1CN(Cc1ccccc1)[C@@H]2C",
+            "Fc1ccc2c(ccn2Cc2ccc(C3COC(c4c(F)cccc4F)=N3)cc2)c1",
+            "Cc1cnn(C2CCc3ccccc32)c1",
+            "Cc1ccc(-c2nn(-c3ccccc3)cc2C(Cc2onc(C)c2[N+](=O)[O-])C[N+](=O)[O-])cc1",
+            "C[C@H]1CCc2ccccc2N1",
+            "Cc1c(/C=C/[N+](=O)[O-])cc([N+](=O)[O-])c(Cl)c1[N+](=O)[O-]",
+            "O=C(c1ccccc1)c1cn(Cc2ccccc2)c2cc(Br)cc([N+](=O)[O-])c12",
+            "Nc1cccc(C(=O)c2ccccc2)c1",
+            "CC(C)(C)OC(=O)N[C@H](CCC(=O)c1ccccc1)c1c[nH]c2cc(Cl)ccc12",
+            "CCOC(=O)C(OS(=O)(=O)c1ccc2ccccc2c1)c1ccc(F)cc1",
+            "CC(C)CC(/C=C/c1ccccc1)CO",
+            "CC(C)(C)C1=CC(=Cc2ccc(Cl)cc2)C=C(C(C)(C)C)C1=O",
+            "Cc1ccc(S(=O)(=O)N2C[C@@H](O)[C@@H](C(=O)c3ccc(F)cc3)[C@@H]3CC(=O)C=C[C@]32C)cc1",
+            "COC(=O)C[C@@H]1C[C@@H]([N+](=O)[O-])[C@@H](c2ccc(C)cc2)[C@H]1C=O",
+            "Cc1ccc(/C=C/C(O)(CCCCCO)c2ccccc2)cc1",
+            "O=C1/C(=C(/c2ccccc2)c2c(OC3CCCCC3)ccc3ccccc23)Cc2ccccc21",
+            "Cc1c(C(=O)OCc2ccccc2)c2ccccc2n1-c1ccccn1",
+            "FC(F)(F)C1(C#Cc2ccsc2)CNCC1c1ccccc1",
+            "COC(=O)c1cc(-c2ccccc2)n(N)c1C",
+            "O=C1c2sccc2[C@H]2[C@H]([C@H]3O[C@@H]2c2cc(Br)c(Br)cc23)N1c1cccc2cccnc12"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrspec_test_C/fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "ff8be665b97813c6218741a871b1863e575e03f3fe1967fab0601eb51e0ae4a5"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrspec_test_C/fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "f5786b57c8e9761fc06e4dca51113320c0800e1a88b970eeb97709cad798d7ca"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrspec_test_C/fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "663c3ae04aab4124f7fe30000a86e901137c246344c14f3fbd04b8cce707d3d9"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrspec_test_C/fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "d0d729c284ec143df94b0c4449c624cf93fafefbccaa5b15a22234e3f9beb68f"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrspec_test_C/fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "011807a527d6b2781d5a845a22cd77b0f707a0bbe833d200652602d932928a1e"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/nmrspec_test_C/valid.lmdb",
+            "sha256": "af9b3347e8375e4aaedec3866ad116ab6da548224dc80637a0c7d9f1d1395a67"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.8163807039222384,
+            "matched_peak_rmse_ppm": 2.0137184870551987,
+            "peak_count_mae": 2.65625,
+            "matched_fraction": 0.8683153839313926,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 32,
+          "sample_ids": [
+            "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+            "CCOC(=O)C1=C(C)NC(C)C(C)(C(=O)[O-])C1c1ccc(-c2ccccc2)cc1",
+            "COc1ccccc1-n1nnc2ccccc21",
+            "CCCCCCOc1cc2ccccc2c(B(O)O)c1OCCCCCC",
+            "CCOP(=O)(CC(CP(=O)(OCC)OCC)C(=O)c1ccc(C)cc1C)OCC",
+            "CC[C@H]1c2c(n(Cc3ccccc3)c3c(C)cccc23)CC[C@@H]1C=O",
+            "CCN(CC)c1nc2ccccc2c2ccccc12",
+            "CC1=C2CCCCCCCCCCC2OC1=O",
+            "C=CCC(C(=O)OC)(c1cccc(Cl)c1)c1cn(C)c2ccccc12",
+            "Cc1cc(C[C@H](C(=O)c2nccn2C(C)C)c2ccc(F)cc2)cc(C)c1O",
+            "O=C1C[C@@H](c2cccc([N+](=O)[O-])c2)SC(c2ccccc2)=N1",
+            "COc1cccc(N[C@H](C(=O)O)C(C)C)c1",
+            "COC(=O)[C@@]12N=NC[C@@H]1CN(Cc1ccccc1)[C@@H]2C",
+            "Fc1ccc2c(ccn2Cc2ccc(C3COC(c4c(F)cccc4F)=N3)cc2)c1",
+            "Cc1cnn(C2CCc3ccccc32)c1",
+            "Cc1ccc(-c2nn(-c3ccccc3)cc2C(Cc2onc(C)c2[N+](=O)[O-])C[N+](=O)[O-])cc1",
+            "C[C@H]1CCc2ccccc2N1",
+            "Cc1c(/C=C/[N+](=O)[O-])cc([N+](=O)[O-])c(Cl)c1[N+](=O)[O-]",
+            "O=C(c1ccccc1)c1cn(Cc2ccccc2)c2cc(Br)cc([N+](=O)[O-])c12",
+            "Nc1cccc(C(=O)c2ccccc2)c1",
+            "CC(C)(C)OC(=O)N[C@H](CCC(=O)c1ccccc1)c1c[nH]c2cc(Cl)ccc12",
+            "CCOC(=O)C(OS(=O)(=O)c1ccc2ccccc2c1)c1ccc(F)cc1",
+            "CC(C)CC(/C=C/c1ccccc1)CO",
+            "CC(C)(C)C1=CC(=Cc2ccc(Cl)cc2)C=C(C(C)(C)C)C1=O",
+            "Cc1ccc(S(=O)(=O)N2C[C@@H](O)[C@@H](C(=O)c3ccc(F)cc3)[C@@H]3CC(=O)C=C[C@]32C)cc1",
+            "COC(=O)C[C@@H]1C[C@@H]([N+](=O)[O-])[C@@H](c2ccc(C)cc2)[C@H]1C=O",
+            "Cc1ccc(/C=C/C(O)(CCCCCO)c2ccccc2)cc1",
+            "O=C1/C(=C(/c2ccccc2)c2c(OC3CCCCC3)ccc3ccccc23)Cc2ccccc21",
+            "Cc1c(C(=O)OCc2ccccc2)c2ccccc2n1-c1ccccn1",
+            "FC(F)(F)C1(C#Cc2ccsc2)CNCC1c1ccccc1",
+            "COC(=O)c1cc(-c2ccccc2)n(N)c1C",
+            "O=C1c2sccc2[C@H]2[C@H]([C@H]3O[C@@H]2c2cc(Br)c(Br)cc23)N1c1cccc2cccnc12"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrspec_test_C/cv_seed_42_fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "dbba172609bd6a6f903486044e2560c709fc8ddf763b72ed3961ebb03a6f212d"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrspec_test_C/cv_seed_42_fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "e64b371393e7f073becffb5b59700a797705d05f394154250cbf52e689dac900"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrspec_test_C/cv_seed_42_fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "0248c26b7c3b87283ab022c5d058a80179d8276f23553d3f3338acb3f7cbe974"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrspec_test_C/cv_seed_42_fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "2f7bd6142eae9ef9b908f5b6c163f43ee2534291a673e6e5f61ffd01b9706167"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrspec_test_C/cv_seed_42_fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "217a5e97e1667e3ed24b22034809b09d79fef5d1e13d9acef7e27b89a85912e6"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/nmrspec_test_C/valid.lmdb",
+            "sha256": "af9b3347e8375e4aaedec3866ad116ab6da548224dc80637a0c7d9f1d1395a67"
+          }
+        }
+      ],
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/OpenMolSpec/data/align_eval/nmrspec_test/test.jsonl",
+        "sha256": "256ca2d733db0103e99aad5855bc66b73e3a0bd2117ce2bd3204b63eff0f67a2"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "solvent_filter": "none; retain recorded reference peaks",
+      "domain_verification": "legacy_dataset_source_not_independently_reaudited",
+      "split_leakage_audit": "not_performed_by_this_smoke_run",
+      "status": "passed",
+      "elapsed_seconds": 1.134
+    },
+    {
+      "task": "nmr.forward.13C",
+      "title": "结构 → 13C 峰列表",
+      "backend": "nmrnet_predictions",
+      "domain": "experimental",
+      "dataset_name": "patent_test_10k",
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 8.041924852126245,
+            "matched_peak_rmse_ppm": 24.297510376653264,
+            "peak_count_mae": 18.193548387096776,
+            "matched_fraction": 0.43315070786510484,
+            "examples": 31,
+            "scored_examples": 31,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 31,
+          "sample_ids": [
+            "CC1=Cc2cc(C)c(C)cc2[CH]1[Zr+2]([CH]1C(C)=Cc2cc(C)c(C)cc21)=[Si](C)C.[Cl-].[Cl-]",
+            "CC(C)c1cccc(C(C)C)c1[O][Nb-]([Cl])([Cl])([Cl])[O]c1c(C(C)C)cccc1C(C)C",
+            "CCCCCCCCCCCC(=O)O.CCCCCCCCCCCC(=O)O.OCC1CCC(CO)O1",
+            "C[C@H]1CN(Cc2ccccc2)[C@]12CCNC2.C[C@H]1CN(Cc2ccccc2)[C@]12CCNC2.O=C(O)C(=O)O",
+            "N#CC(OC(=O)c1ccccc1)c1ccc([N+](=O)[O-])cc1.N#Cc1cccc(C(=O)O)c1Cc1ccc([N+](=O)[O-])cc1",
+            "CC(C)N(C1=C(N(C(C)C)C(C)C)[CH]1[Mg]([Br])([Br])[CH]1C(N(C(C)C)C(C)C)=C1N(C(C)C)C(C)C)C(C)C",
+            "CCCCCCCCCCCCCCCC(=O)O.CCCCCCCCCCCCCCCC(=O)O.OCC1CCC(CO)O1",
+            "Cc1cc(C)c(N2[CH]([Ru]([Cl])([Cl])(=[C]3C=C(c4ccccc4)c4ccccc43)[CH]3N(c4c(C)cc(C)cc4C)C(C)(C)CC3(C)C)C(C)(C)CC2(C)C)c(C)c1",
+            "CCc1cccc(C)c1N1[CH]([Ru]([Cl])([Cl])(=[C]2C=C(c3ccccc3)c3ccccc32)[CH]2N(c3c(C)cccc3CC)C(C)(C)CC2(C)C)C(C)(C)CC1(C)C",
+            "CC1=[N+](CCC[N+](C)(C)C)c2ccc(S(=O)(=O)[O-])cc2C1(C)C.CC1=[N+](CCC[N+](C)(C)C)c2ccc(S(=O)(=O)[O-])cc2C1(C)C.[Br-].[Br-]",
+            "CC(C)(C)C1[O][Ru]2([PH](c3ccccc3)(c3ccccc3)c3ccccc3)([PH](c3ccccc3)(c3ccccc3)c3ccccc3)([O]1)[O]C(C(C)(C)C)[O]2",
+            "CC(=O)[O][Ru]1([O]C(C)=O)([PH](c2ccccc2)(c2ccccc2)c2ccccc2)([PH](c2ccccc2)(c2ccccc2)c2ccccc2)[CH2]CC[NH]1",
+            "Cc1cccc(C(C)C)c1N1[CH]([Ru]([Cl])([Cl])(=[C]2C=C(c3ccccc3)c3ccccc32)[CH]2N(c3c(C)cccc3C(C)C)C(C)(C)CC2(C)C)C(C)(C)CC1(C)C",
+            "CCc1cccc(CC)c1N1[CH]([Ru]([Cl])([Cl])(=[C]2C=C(c3ccccc3)c3ccccc32)[CH]2N(c3c(CC)cccc3CC)C(C)(C)CC2(C)C)C(C)(C)CC1(C)C",
+            "CC(C)[C@@H]1CC[C@@H](C)C[C@H]1C(=O)NCCc1ccccn1.CC1CCC(C(C)C)C(C(=O)NCCc2ccccn2)C1",
+            "C=[C]=[Ru]([Cl])([Cl])([PH](C1CCCCC1)(C1CCCCC1)C1CCCCC1)[PH](C1CCCCC1)(C1CCCCC1)C1CCCCC1",
+            "[CH2]=[Ru]([Cl])([Cl])([PH](C1CCCCC1)(C1CCCCC1)C1CCCCC1)[PH](C1CCCCC1)(C1CCCCC1)C1CCCCC1",
+            "CC(C)=CCC/C(C)=C/CC/C(C)=C/CCCC(P(=O)(O)CO)S(=O)(=O)[O-].CC(C)=CCC/C(C)=C/CC/C(C)=C/CCCC(P(=O)(O)CO)S(=O)(=O)[O-].[K+].[K+]",
+            "CC(C)[N]1C(P(C2CCCCC2)C2CCCCC2)[N](C(C)C)[Zr]12([CH3])([CH3])[N](C(C)C)C(P(C1CCCCC1)C1CCCCC1)[N]2C(C)C",
+            "O=C(CCCCCCNCCc1c[nH]c2ccccc12)Nc1ccccc1.O=C(CCCCCCNCCc1c[nH]c2ccccc12)Nc1ccccc1.O=C(O)/C=C/C(=O)O",
+            "CC(C)CN(CCCN1CCN(CCCNc2nc3ccccc3[nH]2)CC1)CC(C)C.CC(C)CN(CCCN1CCN(CCCNc2nc3ccccc3[nH]2)CC1)CC(C)C.O=C(O)CCC(=O)O.O=C(O)CCC(=O)O.O=C(O)CCC(=O)O",
+            "O=c1cc(-c2ccccc2)oc2cc(N(c3ccccc3)c3ccccc3)ccc12.O=c1cc(-c2ccccc2)oc2cc(N(c3ccccc3)c3ccccc3)ccc12",
+            "[K].[K].[N-]=[N+]=Nc1[nH]nnc1N[N+](=O)[O-].[N-]=[N+]=Nc1n[nH]c(N[N+](=O)[O-])n1",
+            "[K].[N-]=[N+]=Nc1[nH]nnc1N[N+](=O)[O-].[N-]=[N+]=Nc1n[nH]c(N[N+](=O)[O-])n1",
+            "[N-]=[N+]=Nc1[nH]nnc1N[N+](=O)[O-].[N-]=[N+]=Nc1n[nH]c(N[N+](=O)[O-])n1",
+            "[CH2+][Au-]12[SH](CCO)[Au-]1([CH2+])[Au+]1([P-](C)(C)C)[SH](CCO)[Au+]12[P-](C)(C)C",
+            "CC[N](CC)[Zr]([CH3])([CH3])[N](CC)CC",
+            "O=C(O)[N]1CC[N](C(=O)O)[Fe]12([Cl])([Cl])[N](C(=O)O)CC[N]2C(=O)O",
+            "O=C([O-])C[C@@H]1CO1.O=C([O-])C[C@@H]1CO1.[Ca+2]",
+            "CCC[CH2][Sn]1([CH2]CCC)[O]CC[O]1",
+            "CCC[CH2][Sn]([CH2]CCC)([N]=C=O)[O]C"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/patent_test_10k_C/fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "68ccf1c87e2e83ddc74c0e3d9e2d8e51dae4741f67dbf2a56454f4191ccef54c"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/patent_test_10k_C/fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "9b029e5e9f8b815dadd322e41e4f74b72b9ba3600b4295e8f21c5f6803a8f34a"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/patent_test_10k_C/fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "00412227d457b7ea992ace2ec6fe8453f59c36bef909f46a8b0792e956835496"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/patent_test_10k_C/fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "9ff483d6139bc2d00aa45eea4fd78a6426499a78d0c122cfc1d9644c90bcbdfd"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/patent_test_10k_C/fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "da71440f67859ae914a11ec888c758986c74133c466130764fb47e9a16aa0cac"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/patent_test_10k_C/valid.lmdb",
+            "sha256": "36c2d5bfff146ddada5a7d6a5a2259bcf0a0c5eef70f65fcce8d518c268b7006"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 7.5615217252266795,
+            "matched_peak_rmse_ppm": 22.917821121262513,
+            "peak_count_mae": 18.193548387096776,
+            "matched_fraction": 0.43315070786510484,
+            "examples": 31,
+            "scored_examples": 31,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 31,
+          "sample_ids": [
+            "CC1=Cc2cc(C)c(C)cc2[CH]1[Zr+2]([CH]1C(C)=Cc2cc(C)c(C)cc21)=[Si](C)C.[Cl-].[Cl-]",
+            "CC(C)c1cccc(C(C)C)c1[O][Nb-]([Cl])([Cl])([Cl])[O]c1c(C(C)C)cccc1C(C)C",
+            "CCCCCCCCCCCC(=O)O.CCCCCCCCCCCC(=O)O.OCC1CCC(CO)O1",
+            "C[C@H]1CN(Cc2ccccc2)[C@]12CCNC2.C[C@H]1CN(Cc2ccccc2)[C@]12CCNC2.O=C(O)C(=O)O",
+            "N#CC(OC(=O)c1ccccc1)c1ccc([N+](=O)[O-])cc1.N#Cc1cccc(C(=O)O)c1Cc1ccc([N+](=O)[O-])cc1",
+            "CC(C)N(C1=C(N(C(C)C)C(C)C)[CH]1[Mg]([Br])([Br])[CH]1C(N(C(C)C)C(C)C)=C1N(C(C)C)C(C)C)C(C)C",
+            "CCCCCCCCCCCCCCCC(=O)O.CCCCCCCCCCCCCCCC(=O)O.OCC1CCC(CO)O1",
+            "Cc1cc(C)c(N2[CH]([Ru]([Cl])([Cl])(=[C]3C=C(c4ccccc4)c4ccccc43)[CH]3N(c4c(C)cc(C)cc4C)C(C)(C)CC3(C)C)C(C)(C)CC2(C)C)c(C)c1",
+            "CCc1cccc(C)c1N1[CH]([Ru]([Cl])([Cl])(=[C]2C=C(c3ccccc3)c3ccccc32)[CH]2N(c3c(C)cccc3CC)C(C)(C)CC2(C)C)C(C)(C)CC1(C)C",
+            "CC1=[N+](CCC[N+](C)(C)C)c2ccc(S(=O)(=O)[O-])cc2C1(C)C.CC1=[N+](CCC[N+](C)(C)C)c2ccc(S(=O)(=O)[O-])cc2C1(C)C.[Br-].[Br-]",
+            "CC(C)(C)C1[O][Ru]2([PH](c3ccccc3)(c3ccccc3)c3ccccc3)([PH](c3ccccc3)(c3ccccc3)c3ccccc3)([O]1)[O]C(C(C)(C)C)[O]2",
+            "CC(=O)[O][Ru]1([O]C(C)=O)([PH](c2ccccc2)(c2ccccc2)c2ccccc2)([PH](c2ccccc2)(c2ccccc2)c2ccccc2)[CH2]CC[NH]1",
+            "Cc1cccc(C(C)C)c1N1[CH]([Ru]([Cl])([Cl])(=[C]2C=C(c3ccccc3)c3ccccc32)[CH]2N(c3c(C)cccc3C(C)C)C(C)(C)CC2(C)C)C(C)(C)CC1(C)C",
+            "CCc1cccc(CC)c1N1[CH]([Ru]([Cl])([Cl])(=[C]2C=C(c3ccccc3)c3ccccc32)[CH]2N(c3c(CC)cccc3CC)C(C)(C)CC2(C)C)C(C)(C)CC1(C)C",
+            "CC(C)[C@@H]1CC[C@@H](C)C[C@H]1C(=O)NCCc1ccccn1.CC1CCC(C(C)C)C(C(=O)NCCc2ccccn2)C1",
+            "C=[C]=[Ru]([Cl])([Cl])([PH](C1CCCCC1)(C1CCCCC1)C1CCCCC1)[PH](C1CCCCC1)(C1CCCCC1)C1CCCCC1",
+            "[CH2]=[Ru]([Cl])([Cl])([PH](C1CCCCC1)(C1CCCCC1)C1CCCCC1)[PH](C1CCCCC1)(C1CCCCC1)C1CCCCC1",
+            "CC(C)=CCC/C(C)=C/CC/C(C)=C/CCCC(P(=O)(O)CO)S(=O)(=O)[O-].CC(C)=CCC/C(C)=C/CC/C(C)=C/CCCC(P(=O)(O)CO)S(=O)(=O)[O-].[K+].[K+]",
+            "CC(C)[N]1C(P(C2CCCCC2)C2CCCCC2)[N](C(C)C)[Zr]12([CH3])([CH3])[N](C(C)C)C(P(C1CCCCC1)C1CCCCC1)[N]2C(C)C",
+            "O=C(CCCCCCNCCc1c[nH]c2ccccc12)Nc1ccccc1.O=C(CCCCCCNCCc1c[nH]c2ccccc12)Nc1ccccc1.O=C(O)/C=C/C(=O)O",
+            "CC(C)CN(CCCN1CCN(CCCNc2nc3ccccc3[nH]2)CC1)CC(C)C.CC(C)CN(CCCN1CCN(CCCNc2nc3ccccc3[nH]2)CC1)CC(C)C.O=C(O)CCC(=O)O.O=C(O)CCC(=O)O.O=C(O)CCC(=O)O",
+            "O=c1cc(-c2ccccc2)oc2cc(N(c3ccccc3)c3ccccc3)ccc12.O=c1cc(-c2ccccc2)oc2cc(N(c3ccccc3)c3ccccc3)ccc12",
+            "[K].[K].[N-]=[N+]=Nc1[nH]nnc1N[N+](=O)[O-].[N-]=[N+]=Nc1n[nH]c(N[N+](=O)[O-])n1",
+            "[K].[N-]=[N+]=Nc1[nH]nnc1N[N+](=O)[O-].[N-]=[N+]=Nc1n[nH]c(N[N+](=O)[O-])n1",
+            "[N-]=[N+]=Nc1[nH]nnc1N[N+](=O)[O-].[N-]=[N+]=Nc1n[nH]c(N[N+](=O)[O-])n1",
+            "[CH2+][Au-]12[SH](CCO)[Au-]1([CH2+])[Au+]1([P-](C)(C)C)[SH](CCO)[Au+]12[P-](C)(C)C",
+            "CC[N](CC)[Zr]([CH3])([CH3])[N](CC)CC",
+            "O=C(O)[N]1CC[N](C(=O)O)[Fe]12([Cl])([Cl])[N](C(=O)O)CC[N]2C(=O)O",
+            "O=C([O-])C[C@@H]1CO1.O=C([O-])C[C@@H]1CO1.[Ca+2]",
+            "CCC[CH2][Sn]1([CH2]CCC)[O]CC[O]1",
+            "CCC[CH2][Sn]([CH2]CCC)([N]=C=O)[O]C"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/patent_test_10k_C/cv_seed_42_fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "4e8242ce41761a0d6f678eda74bb9b04171a4c7bbe39187f4b759451656bc35f"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/patent_test_10k_C/cv_seed_42_fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "d4302cca17d1b11f1ebb7afcce3d90a263865e532e6e188db6c825f8441a96d6"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/patent_test_10k_C/cv_seed_42_fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "3a80f31e87cd210e767201e100c27efc76372aa4463c3dd31cdb7f45eef6002c"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/patent_test_10k_C/cv_seed_42_fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "601fba2ea2eb5716504cac7a25016f9fda2737f74e1a39fd9ca4374df0dda6b4"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/patent_test_10k_C/cv_seed_42_fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "153c3bc207cccd0ce47035fd04746a989ed309fc291c8183283209ad887c5805"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/patent_test_10k_C/valid.lmdb",
+            "sha256": "36c2d5bfff146ddada5a7d6a5a2259bcf0a0c5eef70f65fcce8d518c268b7006"
+          }
+        }
+      ],
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/OpenMolSpec/data/align_eval/patent_test_10k/test.jsonl",
+        "sha256": "4f90649fce7bbc0d1aa92056baf46ff28ca15b95880f0af8c269b87057e5808a"
+      },
+      "selection": {
+        "read": 173,
+        "missing_modality": 141,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "solvent_filter": "none; retain recorded reference peaks",
+      "domain_verification": "legacy_dataset_source_not_independently_reaudited",
+      "split_leakage_audit": "not_performed_by_this_smoke_run",
+      "status": "passed",
+      "elapsed_seconds": 1.348
+    },
+    {
+      "task": "nmr.forward.13C",
+      "title": "结构 → 13C 峰列表",
+      "backend": "nmrnet_predictions",
+      "domain": "experimental",
+      "dataset_name": "nmrexp_exp_10k",
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 1.3063837598230228,
+            "matched_peak_rmse_ppm": 7.498559532565537,
+            "peak_count_mae": 3.90625,
+            "matched_fraction": 0.7535539713423682,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 32,
+          "sample_ids": [
+            "CC[Si](CC)(CC)/C(F)=C(\\Cc1ccccc1)C(=O)OC(C)(C)C",
+            "CCOC(=O)/C(CCc1ccccc1)=C(/F)[Si](CC)(CC)CC",
+            "CCOC(=O)/C(CCCOc1ccc(OC)cc1)=C(\\F)[Si](CC)(CC)CC",
+            "CCCCCCCC/C(C(=O)OCC)=C(/F)[Si](CC)(CC)CC",
+            "O=C(c1ccccc1)c1ccccc1",
+            "O=C(c1ccccc1)c1ccc(Cl)cc1",
+            "O=C(c1ccccc1)c1ccc(Br)cc1",
+            "N#Cc1ccc(C(=O)c2ccccc2)cc1",
+            "O=C(c1ccccc1)c1ccc([N+](=O)[O-])cc1",
+            "O=C(c1ccccc1)c1ccc(-c2ccccc2)cc1",
+            "CCCCCc1ccc(C(=O)c2ccccc2)cc1",
+            "O=C(c1ccccc1)c1cccc(Cl)c1",
+            "O=C(c1ccccc1)c1cccc([N+](=O)[O-])c1",
+            "Cc1cccc(C(=O)c2ccccc2)c1",
+            "O=C(c1ccccc1)c1ccccc1F",
+            "O=C(c1ccccc1)c1ccc2ccccc2c1",
+            "O=C(c1ccccc1)c1cccs1",
+            "O=C(c1ccccc1)c1cccnc1",
+            "O=C(CCc1ccccc1)c1ccccc1",
+            "CCCCC(=O)c1ccccc1",
+            "CCCCCCC(=O)c1ccccc1",
+            "CCCCCCCCCCC(=O)c1ccccc1",
+            "CC(C)CCC(=O)c1ccccc1",
+            "C#CCCCC(=O)c1ccccc1",
+            "O=C(CCCC(=O)c1ccccc1)c1ccccc1",
+            "CC(=O)OCCCC(=O)c1ccccc1",
+            "O=C(CCCOC(=O)c1ccccc1)c1ccccc1",
+            "CCCC(=O)c1ccccc1",
+            "CC(C)(C)OC(C=O)(c1ccccc1)c1ccccc1",
+            "CC(C)(C)OC(=O)N1C(=O)CS[C@@]12C(=O)N(Cc1ccccc1)c1ccccc12",
+            "COc1ccc2c(c1)[C@@]1(SCC(=O)N1C(=O)OC(C)(C)C)C(=O)N2Cc1ccccc1",
+            "Cc1ccc2c(c1)[C@@]1(SCC(=O)N1C(=O)OC(C)(C)C)C(=O)N2Cc1ccccc1"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrexp_exp_10k_C/fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "624420df347a95de9c4ab9c55bd9d3d58e077ab62fdf3a5295d15500efa88d41"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrexp_exp_10k_C/fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "f2da0f6c17065ba7898a3d651b957492138bada1b1211b819ca24556110a7b55"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrexp_exp_10k_C/fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "8ce0f79260ad800c781ce19261ef7ce48bdc4abe6459c0ab3c58d85641482ea8"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrexp_exp_10k_C/fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "f443fd3774f6676549823c774edc56e16ef59fe9ed6cbf29ea7af0566b9367e0"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrexp_exp_10k_C/fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "b4324b2a31524aba999e0a74cf6135875ad315ca946897c46bb0bc2b8a5a4fc2"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/nmrexp_exp_10k_C/valid.lmdb",
+            "sha256": "d9cf43362937ab92bc78e0573f7c0c7e6107ebb2999e38de24fe4c615bb18bdc"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 1.2925194849511477,
+            "matched_peak_rmse_ppm": 8.097448280861592,
+            "peak_count_mae": 3.90625,
+            "matched_fraction": 0.7535539713423682,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 32,
+          "sample_ids": [
+            "CC[Si](CC)(CC)/C(F)=C(\\Cc1ccccc1)C(=O)OC(C)(C)C",
+            "CCOC(=O)/C(CCc1ccccc1)=C(/F)[Si](CC)(CC)CC",
+            "CCOC(=O)/C(CCCOc1ccc(OC)cc1)=C(\\F)[Si](CC)(CC)CC",
+            "CCCCCCCC/C(C(=O)OCC)=C(/F)[Si](CC)(CC)CC",
+            "O=C(c1ccccc1)c1ccccc1",
+            "O=C(c1ccccc1)c1ccc(Cl)cc1",
+            "O=C(c1ccccc1)c1ccc(Br)cc1",
+            "N#Cc1ccc(C(=O)c2ccccc2)cc1",
+            "O=C(c1ccccc1)c1ccc([N+](=O)[O-])cc1",
+            "O=C(c1ccccc1)c1ccc(-c2ccccc2)cc1",
+            "CCCCCc1ccc(C(=O)c2ccccc2)cc1",
+            "O=C(c1ccccc1)c1cccc(Cl)c1",
+            "O=C(c1ccccc1)c1cccc([N+](=O)[O-])c1",
+            "Cc1cccc(C(=O)c2ccccc2)c1",
+            "O=C(c1ccccc1)c1ccccc1F",
+            "O=C(c1ccccc1)c1ccc2ccccc2c1",
+            "O=C(c1ccccc1)c1cccs1",
+            "O=C(c1ccccc1)c1cccnc1",
+            "O=C(CCc1ccccc1)c1ccccc1",
+            "CCCCC(=O)c1ccccc1",
+            "CCCCCCC(=O)c1ccccc1",
+            "CCCCCCCCCCC(=O)c1ccccc1",
+            "CC(C)CCC(=O)c1ccccc1",
+            "C#CCCCC(=O)c1ccccc1",
+            "O=C(CCCC(=O)c1ccccc1)c1ccccc1",
+            "CC(=O)OCCCC(=O)c1ccccc1",
+            "O=C(CCCOC(=O)c1ccccc1)c1ccccc1",
+            "CCCC(=O)c1ccccc1",
+            "CC(C)(C)OC(C=O)(c1ccccc1)c1ccccc1",
+            "CC(C)(C)OC(=O)N1C(=O)CS[C@@]12C(=O)N(Cc1ccccc1)c1ccccc12",
+            "COc1ccc2c(c1)[C@@]1(SCC(=O)N1C(=O)OC(C)(C)C)C(=O)N2Cc1ccccc1",
+            "Cc1ccc2c(c1)[C@@]1(SCC(=O)N1C(=O)OC(C)(C)C)C(=O)N2Cc1ccccc1"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrexp_exp_10k_C/cv_seed_42_fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "25628ad1372776fef019ea606acf61be82e1ac5ce628c78016d11756132d459c"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrexp_exp_10k_C/cv_seed_42_fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "d9e21d850ba883aefc896f5124273ff58b4b098d73da0bbebb5e09f965b48c6f"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrexp_exp_10k_C/cv_seed_42_fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "2745c884325ff7f89599bc5f8265d27b0b321c749d0abba5330842adde9010d9"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrexp_exp_10k_C/cv_seed_42_fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "2386a25f92ba4268a51dc40afde33aa50f7b39d2b697edbcba4333338976c2a8"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrexp_exp_10k_C/cv_seed_42_fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "cf0b51a4c4adbed23854caa6b20c7e768daba2bd92c54cd3b5f53bd0acf20fb8"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/nmrexp_exp_10k_C/valid.lmdb",
+            "sha256": "d9cf43362937ab92bc78e0573f7c0c7e6107ebb2999e38de24fe4c615bb18bdc"
+          }
+        }
+      ],
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/OpenMolSpec/data/align_eval/nmrexp_exp_10k/test.jsonl",
+        "sha256": "e074dab3cc749e126bea8abc348a46f895dd033e5b45a21cacb28035741a2d11"
+      },
+      "selection": {
+        "read": 50,
+        "missing_modality": 18,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "solvent_filter": "none; retain recorded reference peaks",
+      "domain_verification": "legacy_dataset_source_not_independently_reaudited",
+      "split_leakage_audit": "not_performed_by_this_smoke_run",
+      "status": "passed",
+      "elapsed_seconds": 1.003
+    },
+    {
+      "task": "nmr.forward.13C",
+      "title": "结构 → 13C 峰列表",
+      "backend": "nmrnet_predictions",
+      "domain": "experimental",
+      "dataset_name": "nmrgym_test",
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 2.2765265164740645,
+            "matched_peak_rmse_ppm": 3.99253565138379,
+            "peak_count_mae": 2.625,
+            "matched_fraction": 0.9080126647199663,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 32,
+          "sample_ids": [
+            "N#Cc1c(N)n[nH]c1-c1c(N)sc2c(-c3ccccc3)nn(-c3ccccc3)c12",
+            "COC(=O)[C@@]1(OC)C(OC)=C(OC)C(=O)/C1=C(O)/C=C/c1ccccc1",
+            "CC[C@@H](O)C[C@@H](O)[C@@]1(C)C[C@@H](C)[C@@H]2CC[C@H](CC/C=C(/C)C(=O)[C@@H](C)CC/C=C\\C(=O)N3CCCC[C@H]3C(=O)O1)O2",
+            "CC(O)(CCOc1ccc2ccc(=O)oc2c1)CCC1C(C)(O)CCC(=O)C1(C)C",
+            "CC(C)C[C@@H]1NC(=O)[C@H](C(C)C)NC(=O)[C@@H](CC(C)C)NC(=O)[C@H](Cc2ccccc2)NC(=O)[C@@H]2CCCN2C(=O)[C@@H](Cc2ccccc2)NC1=O",
+            "[O-][N+]12CCC[C@@H]3[C@@H](O)C[C@@H]4C[C@H]5CO[C@]1(C5)[C@@]43CCC2",
+            "COc1ccc([C@@H](CN=C(O)/C=C\\c2ccccc2)O[C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O)cc1",
+            "Cc1ccc2c(c1)C(C)(C)CCCC2=NCc1ccccc1",
+            "CC(C)C(O)=N[C@H]1CC[C@]2(O)CC3=CC[C@]4(C)[C@@H]([C@H](C)N(C)C)CC[C@@]4(C)[C@@H]3CC[C@H]2C1(C)C",
+            "C=C1CC[C@@]23CC[C@]4(C)[C@@](OC2=O)([C@@H]3C1)[C@H]1O[C@H]1[C@@H]1[C@@]2(C)CC[C@@H]3OC(C)(C)OC[C@@]3(O)[C@@H]2CC[C@]14C",
+            "O=C(NCCc1c[nH]cn1)c1cnc[nH]1",
+            "CC(=O)Oc1cc(OC(C)=O)cc(Oc2c(OC(C)=O)cc(OC(C)=O)c3c2Oc2c(cc(OC(C)=O)c4c2oc2cc(OC(C)=O)cc(OC(C)=O)c24)O3)c1",
+            "COC(=O)[C@@H](C)[C@H]1CC[C@](C)(CCC/C(C)=C/CC2=C(C)CCCC2(C)C)OO1",
+            "Cc1ccc(C2=NCC(=O)N(C)c3ccccc32)c(I)c1",
+            "C=C1C[C@]23C[C@@]4(O)[C@@H]5[C@]6(C)C[N@@+]4(C)[C@@H]4[C@H]2[C@@H](O)[C@H]1C[C@H]3[C@]54C[C@@H](O)[C@H]6O",
+            "O=c1c(-c2ccc(O)c(O)c2)c(OCC2OC(O)C(O)C(O)C2O)oc2c(O)cc(O)cc12",
+            "CC(C)(O)C1CCC(C)(C2CCC3(C)C2C(O)CC2C4(C)CCC(O)C(C)(C)C4C(OC4OC(COC5OC(CO)C(O)C(O)C5O)C(O)C(O)C4OC4OCC(O)C(O)C4O)CC23C)O1",
+            "COC1CC(=O)N2c3cc(O)cc4c3OC(/C=C\\C=C\\CC(OC(=O)C(C)N=C(O)CC(C)C)C(C)C(O)/C(C)=C/CC4)C12",
+            "Cc1ncc(COP(=O)(O)O)c(=N)[nH]1",
+            "CC(C)C[C@H](N=C(O)[C@@H]1CCCN1C(=O)[C@@H](N=C(O)[C@@H](N)Cc1ccc(O)cc1)C(C)C)C(=O)O",
+            "C=C1OC(=O)c2c(O[C@@H]3O[C@@H](CO)[C@H](O)[C@@H](O)[C@@H]3O)cc(OC)c(C)c2[C@@H]1C",
+            "CN1C(=O)/C(=C/c2ccc3c(c2)OCO3)N=C1N",
+            "CN1C=NC(C(=O)O)CC1(C)COC(=O)c1ccc[nH]1",
+            "O=C1C=C(c2cc3nc(O)[nH]c3nc2O)C(O)=NC1=O",
+            "CC1=CC(=O)[C@@H](O)[C@]2(C)[C@H]3[C@@]4(O)OC[C@]35[C@H]([C@@H](CO)[C@H]4O)[C@@H](O[C@@H]3O[C@H](CO)[C@@H](O)[C@H](O)[C@H]3O)C(=O)O[C@@H]5C[C@@H]12",
+            "O=C1CCC2=C1N1CCCC1OC2",
+            "C=C(C)C1OC2CCC3(C)C(CCC4(OC)OC5OC(C)(C)C6CC7C(=C)Cc8ccc9[nH]c(c5c9c8C76O)C43C)C23OC3C1O",
+            "CC(=CC1CC(O)(C2CCC3(C)C2CCC2C4(C)CCC(OC5OCC(O)C(OC6OC(CO)C(O)C(O)C6O)C5OC5OC(C)C(O)C(O)C5O)C(C)(C)C4CCC23C)C(O)O1)CO",
+            "COc1cc2c(cc1C(C)(O)CC(C)c1cc3cc(C(C)=O)c(O)cc3o1)C=CC(C)(C)O2",
+            "COc1cc(C)cc2c3ccccc3n(Cc3cc4c([nH]c5ccccc54)c4c3OC(C)(C)C=C4)c12",
+            "c1ccn2c(NCCN3CCOCC3)c(-c3ccc4c(c3)OCO4)nc2c1",
+            "CC(=O)OCC=CC1=CC2=C(CO1)C(=O)C(C)(OC(=O)c1c(C)cc(O)cc1O)C(=O)C2=CC=CC1=CC2=C(CO1)C(=O)C(C)(O)C(OC(=O)c1c(C)cc(O)cc1O)C2"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrgym_test_C/fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "48702d165bde7eb4c6e6d857590db8253490fb7860aebc209a187786f4798709"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrgym_test_C/fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "a2ea028e98fc122bb9bc18db9dbea1ff024d5c35c9ae3504da9328c3b4f1ad10"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrgym_test_C/fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "ca9baa19a1dcedc6943681055275cc036b532aac82e6073ca00720c001998c05"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrgym_test_C/fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "54f56526bb5a88536c6d282fbdd22b0bf519afe0f2c5fc615bf6e4423cebfa13"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/results/nmrgym_test_C/fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "ac84289c03b6daa55ecaea1cfa86c3b6e5bdc98c50bf1a37b5532eb8d0ebc992"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/nmrgym_test_C/valid.lmdb",
+            "sha256": "338d75001a0c028dd4eacba5c97f47b80460a485f0e6507b0f8eb459898f8d70"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 2.4534173733134828,
+            "matched_peak_rmse_ppm": 4.157696167382544,
+            "peak_count_mae": 2.625,
+            "matched_fraction": 0.9080126647199663,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          },
+          "inference_mode": "score_existing_predictions",
+          "selected_references": 32,
+          "covered_references": 32,
+          "sample_ids": [
+            "N#Cc1c(N)n[nH]c1-c1c(N)sc2c(-c3ccccc3)nn(-c3ccccc3)c12",
+            "COC(=O)[C@@]1(OC)C(OC)=C(OC)C(=O)/C1=C(O)/C=C/c1ccccc1",
+            "CC[C@@H](O)C[C@@H](O)[C@@]1(C)C[C@@H](C)[C@@H]2CC[C@H](CC/C=C(/C)C(=O)[C@@H](C)CC/C=C\\C(=O)N3CCCC[C@H]3C(=O)O1)O2",
+            "CC(O)(CCOc1ccc2ccc(=O)oc2c1)CCC1C(C)(O)CCC(=O)C1(C)C",
+            "CC(C)C[C@@H]1NC(=O)[C@H](C(C)C)NC(=O)[C@@H](CC(C)C)NC(=O)[C@H](Cc2ccccc2)NC(=O)[C@@H]2CCCN2C(=O)[C@@H](Cc2ccccc2)NC1=O",
+            "[O-][N+]12CCC[C@@H]3[C@@H](O)C[C@@H]4C[C@H]5CO[C@]1(C5)[C@@]43CCC2",
+            "COc1ccc([C@@H](CN=C(O)/C=C\\c2ccccc2)O[C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O)cc1",
+            "Cc1ccc2c(c1)C(C)(C)CCCC2=NCc1ccccc1",
+            "CC(C)C(O)=N[C@H]1CC[C@]2(O)CC3=CC[C@]4(C)[C@@H]([C@H](C)N(C)C)CC[C@@]4(C)[C@@H]3CC[C@H]2C1(C)C",
+            "C=C1CC[C@@]23CC[C@]4(C)[C@@](OC2=O)([C@@H]3C1)[C@H]1O[C@H]1[C@@H]1[C@@]2(C)CC[C@@H]3OC(C)(C)OC[C@@]3(O)[C@@H]2CC[C@]14C",
+            "O=C(NCCc1c[nH]cn1)c1cnc[nH]1",
+            "CC(=O)Oc1cc(OC(C)=O)cc(Oc2c(OC(C)=O)cc(OC(C)=O)c3c2Oc2c(cc(OC(C)=O)c4c2oc2cc(OC(C)=O)cc(OC(C)=O)c24)O3)c1",
+            "COC(=O)[C@@H](C)[C@H]1CC[C@](C)(CCC/C(C)=C/CC2=C(C)CCCC2(C)C)OO1",
+            "Cc1ccc(C2=NCC(=O)N(C)c3ccccc32)c(I)c1",
+            "C=C1C[C@]23C[C@@]4(O)[C@@H]5[C@]6(C)C[N@@+]4(C)[C@@H]4[C@H]2[C@@H](O)[C@H]1C[C@H]3[C@]54C[C@@H](O)[C@H]6O",
+            "O=c1c(-c2ccc(O)c(O)c2)c(OCC2OC(O)C(O)C(O)C2O)oc2c(O)cc(O)cc12",
+            "CC(C)(O)C1CCC(C)(C2CCC3(C)C2C(O)CC2C4(C)CCC(O)C(C)(C)C4C(OC4OC(COC5OC(CO)C(O)C(O)C5O)C(O)C(O)C4OC4OCC(O)C(O)C4O)CC23C)O1",
+            "COC1CC(=O)N2c3cc(O)cc4c3OC(/C=C\\C=C\\CC(OC(=O)C(C)N=C(O)CC(C)C)C(C)C(O)/C(C)=C/CC4)C12",
+            "Cc1ncc(COP(=O)(O)O)c(=N)[nH]1",
+            "CC(C)C[C@H](N=C(O)[C@@H]1CCCN1C(=O)[C@@H](N=C(O)[C@@H](N)Cc1ccc(O)cc1)C(C)C)C(=O)O",
+            "C=C1OC(=O)c2c(O[C@@H]3O[C@@H](CO)[C@H](O)[C@@H](O)[C@@H]3O)cc(OC)c(C)c2[C@@H]1C",
+            "CN1C(=O)/C(=C/c2ccc3c(c2)OCO3)N=C1N",
+            "CN1C=NC(C(=O)O)CC1(C)COC(=O)c1ccc[nH]1",
+            "O=C1C=C(c2cc3nc(O)[nH]c3nc2O)C(O)=NC1=O",
+            "CC1=CC(=O)[C@@H](O)[C@]2(C)[C@H]3[C@@]4(O)OC[C@]35[C@H]([C@@H](CO)[C@H]4O)[C@@H](O[C@@H]3O[C@H](CO)[C@@H](O)[C@H](O)[C@H]3O)C(=O)O[C@@H]5C[C@@H]12",
+            "O=C1CCC2=C1N1CCCC1OC2",
+            "C=C(C)C1OC2CCC3(C)C(CCC4(OC)OC5OC(C)(C)C6CC7C(=C)Cc8ccc9[nH]c(c5c9c8C76O)C43C)C23OC3C1O",
+            "CC(=CC1CC(O)(C2CCC3(C)C2CCC2C4(C)CCC(OC5OCC(O)C(OC6OC(CO)C(O)C(O)C6O)C5OC5OC(C)C(O)C(O)C5O)C(C)(C)C4CCC23C)C(O)O1)CO",
+            "COc1cc2c(cc1C(C)(O)CC(C)c1cc3cc(C(C)=O)c(O)cc3o1)C=CC(C)(C)O2",
+            "COc1cc(C)cc2c3ccccc3n(Cc3cc4c([nH]c5ccccc54)c4c3OC(C)(C)C=C4)c12",
+            "c1ccn2c(NCCN3CCOCC3)c(-c3ccc4c(c3)OCO4)nc2c1",
+            "CC(=O)OCC=CC1=CC2=C(CO1)C(=O)C(C)(OC(=O)c1c(C)cc(O)cc1O)C(=O)C2=CC=CC1=CC2=C(CO1)C(=O)C(C)(O)C(OC(=O)c1c(C)cc(O)cc1O)C2"
+          ],
+          "folds": 5,
+          "prediction_files": [
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrgym_test_C/cv_seed_42_fold_0/cv_seed_42_fold_0_valid.out.pkl",
+              "sha256": "0faa36ab353442e1d3c0519a7b309721abfe57289dc1b3e9450f6bf2aab12591"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrgym_test_C/cv_seed_42_fold_1/cv_seed_42_fold_1_valid.out.pkl",
+              "sha256": "6b29125add86bda481e30aa02896e6a29dc7983b6beaca8f16330c7f0abd0720"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrgym_test_C/cv_seed_42_fold_2/cv_seed_42_fold_2_valid.out.pkl",
+              "sha256": "779124f5eedc1d38ae050543480722098a0741bb58e577f547f548018ee653b8"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrgym_test_C/cv_seed_42_fold_3/cv_seed_42_fold_3_valid.out.pkl",
+              "sha256": "f319a60d7c4efa91e9c01fd38fd1d8660709238121ce96c4a0041a20c4a2c101"
+            },
+            {
+              "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/results/nmrgym_test_C/cv_seed_42_fold_4/cv_seed_42_fold_4_valid.out.pkl",
+              "sha256": "2d923b70782fb919285bac59751b2a738ca12f606e933c691fea1a526326ab5c"
+            }
+          ],
+          "metadata": {
+            "path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/data_ours/nmrgym_test_C/valid.lmdb",
+            "sha256": "338d75001a0c028dd4eacba5c97f47b80460a485f0e6507b0f8eb459898f8d70"
+          }
+        }
+      ],
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/OpenMolSpec/data/align_eval/nmrgym_test/test.jsonl",
+        "sha256": "bf8cb0cdcaf19884349e15230206c6110a29b479b1a04bec7ec0b9e5bff3ff9b"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "solvent_filter": "none; retain recorded reference peaks",
+      "domain_verification": "legacy_dataset_source_not_independently_reaudited",
+      "split_leakage_audit": "not_performed_by_this_smoke_run",
+      "status": "passed",
+      "elapsed_seconds": 1.649
+    }
+  ],
+  "counts": {
+    "passed": 8
+  },
+  "elapsed_seconds": 12.409,
+  "completed_at": "2026-11-15T10:01:10.874933+00:00"
+}

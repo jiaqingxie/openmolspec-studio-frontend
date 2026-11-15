@@ -55,7 +55,11 @@ class OpenMolSpecService:
         self._molecular_embeddings: Any | None = None
 
     def preload(self) -> dict[str, str]:
-        """Load every production model before the first page is served."""
+        """Load every production model before the first page is served.
+
+        Models without available checkpoints are skipped so the UI can still
+        start in demo mode (capability_status() reflects what is missing).
+        """
         import torch
 
         if self.device.startswith("cuda") and not torch.cuda.is_available():
@@ -63,26 +67,34 @@ class OpenMolSpecService:
                 f"OPENMOLSPEC_DEVICE={self.device}, but CUDA is unavailable. "
                 "Set OPENMOLSPEC_DEVICE=auto or cpu."
             )
-        self._load_theoretical_models()
-        self._load_nmr()
-        self._load_gap()
-        loaded = {
-            "theoretical_hessian_hi": self.device,
-            "theoretical_hessian_hij": self.device,
-            "theoretical_dedipole": self.device,
-            "theoretical_depolar": self.device,
-            "structure_to_nmr": self.device,
-            "spectrum_to_gap": self.device,
+        loaded: dict[str, str] = {}
+        optional_loaders = {
+            "theoretical_hessian_hi": lambda: self._load_tensor_model("Hi"),
+            "theoretical_hessian_hij": lambda: self._load_tensor_model("Hij"),
+            "theoretical_dedipole": lambda: self._load_tensor_model("dedipole"),
+            "theoretical_depolar": lambda: self._load_tensor_model("depolar"),
+            "structure_to_nmr": self._load_nmr,
+            "spectrum_to_gap": self._load_gap,
         }
+        for name, loader in optional_loaders.items():
+            try:
+                loader()
+            except ModelUnavailable:
+                continue
+            loaded[name] = self.device
         if self._direct_vib2mol_enabled():
-            self._load_vib2mol(1)
-            self._load_vib2mol(2)
-            loaded.update(
-                {
-                    "vib2mol_retrieval": self.device,
-                    "vib2mol_generation": self.device,
-                }
-            )
+            try:
+                self._load_vib2mol(1)
+                self._load_vib2mol(2)
+            except ModelUnavailable:
+                pass
+            else:
+                loaded.update(
+                    {
+                        "vib2mol_retrieval": self.device,
+                        "vib2mol_generation": self.device,
+                    }
+                )
         return loaded
 
     def _add_project_paths(self) -> None:

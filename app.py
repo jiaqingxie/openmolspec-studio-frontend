@@ -37,26 +37,10 @@ st.markdown(APP_CSS, unsafe_allow_html=True)
 
 @st.cache_resource(show_spinner=False)
 def get_service() -> OpenMolSpecService:
-    instance = OpenMolSpecService(discover_assets())
-    instance.preload()
-    return instance
+    return OpenMolSpecService(discover_assets())
 
 
-startup_device = resolve_device()
-startup_panel = st.empty()
-startup_panel.markdown(
-    '<div class="startup-card">'
-    '<div class="eyebrow">OPENMOLSPEC / INITIALIZING</div>'
-    '<div class="startup-title">正在准备光谱推理工作台</div>'
-    f'<div class="startup-copy">正在为 <code>{startup_device}</code> 准备模型组件。'
-    "CUDA 会预加载全部模型；CPU 使用缓存完成 Vib2Mol 检索与生成。首次启动可能需要一些时间。</div>"
-    '<div class="startup-models">Hi · Hij · ∂μ/∂R · ∂α/∂R · AtomNMR · Spectral Transformer · Vib2Mol × 2</div>'
-    "</div>",
-    unsafe_allow_html=True,
-)
-with st.spinner("正在加载 OpenMolSpec 模型组件，请稍候"):
-    service = get_service()
-startup_panel.empty()
+service = get_service()
 
 
 def sidebar() -> str:
@@ -66,6 +50,8 @@ def sidebar() -> str:
         page = st.radio(
             "工作区",
             (
+                "任务与评测",
+                "实验 NMR → 结构",
                 "构象 → 谱图",
                 "谱图 → 结构检索",
                 "谱图 → HOMO–LUMO gap",
@@ -76,7 +62,7 @@ def sidebar() -> str:
         st.markdown("<br>", unsafe_allow_html=True)
         st.caption("LOCAL MODEL STATUS")
         st.caption(f"推理设备 · {service.device}")
-        st.caption("光谱域 · THEORETICAL")
+        st.caption("v1.0 · Experimental NMR / Computed IR–Raman")
         for label, (available, detail) in service.assets.capability_status().items():
             css = "status-ok" if available else "status-bad"
             state = "READY" if available else "MISSING"
@@ -547,7 +533,13 @@ def generation_page() -> None:
 
 
 page = sidebar()
-if page == "构象 → 谱图":
+if page == "任务与评测":
+    from openmolspec_ui.benchmark import benchmark_page
+    benchmark_page(st)
+elif page == "实验 NMR → 结构":
+    from openmolspec_ui.benchmark import nmr_page
+    nmr_page(st, service.device)
+elif page == "构象 → 谱图":
     structure_to_spectrum_page()
 elif page == "谱图 → 结构检索":
     retrieval_page()
