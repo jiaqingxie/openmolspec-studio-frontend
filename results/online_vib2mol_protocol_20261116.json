@@ -1,0 +1,32 @@
+{
+  "completed": true,
+  "training_performed": false,
+  "purpose": "online_protocol_execution_example",
+  "sample": {
+    "sample_id": "ZINCV2-ZINC000000000334",
+    "smiles": "CC1CN(N=CC2=CC=C([N+](=O)[O-])O2)C(=O)O1",
+    "inchikey": "TUTQORSNAITDSX-KIUQOZPWSA-N",
+    "source": "ZINCV2"
+  },
+  "result": {
+    "anchor": null,
+    "anchor_similarity": null,
+    "anchors_used": 0,
+    "beam_size": 10,
+    "ranking": "itm_positive_probability",
+    "input_modalities": [
+      "IR",
+      "Raman",
+      "1H",
+      "13C"
+    ],
+    "candidates": [
+      {
+        "rank": 1,
+        "smiles": "CC1CN(N=CC2=CC=C([N+](=O)[O-])O2)C(=O)O1",
+        "score": 0.9999135732650757
+      }
+    ],
+    "mode": "Direct Vib2Mol beam=10 with canonical deduplication and ITM reranking"
+  }
+}
