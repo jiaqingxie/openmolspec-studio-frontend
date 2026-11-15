@@ -42,8 +42,22 @@ The local checkpoint release/stage and prompt compatibility are unverified. This
 ```json
 [
   {
-    "status": "not_evaluated",
-    "reason": "需要有参考答案的题集和固定模型接口。"
+    "task": "spectroscopy.qa",
+    "status": "diagnostic_only",
+    "model": "local_MolSpect-7B",
+    "scope": "explicit_zero_shot_baseline_not_the_official_SpectraLLM_32B_release",
+    "metrics": {
+      "accuracy": 0.0,
+      "examples": 4
+    },
+    "decoding": {
+      "do_sample": false,
+      "max_new_tokens": 32,
+      "seed": 42
+    },
+    "formula_provided_to_model": false,
+    "source_file": "molspect_zeroshot_formula_qa_20261116.json",
+    "sample_limit": 4
   }
 ]
 ```

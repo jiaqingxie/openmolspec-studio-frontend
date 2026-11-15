@@ -46,8 +46,22 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 ```json
 [
   {
-    "status": "not_evaluated",
-    "reason": "现有生成器使用给定分子式；不将其计为分子式预测器。"
+    "task": "nmr.formula",
+    "status": "diagnostic_only",
+    "model": "local_MolSpect-7B",
+    "scope": "explicit_zero_shot_baseline_not_the_official_SpectraLLM_32B_release",
+    "metrics": {
+      "accuracy": 0.0,
+      "examples": 4
+    },
+    "decoding": {
+      "do_sample": false,
+      "max_new_tokens": 32,
+      "seed": 42
+    },
+    "formula_provided_to_model": false,
+    "source_file": "molspect_zeroshot_formula_qa_20261116.json",
+    "sample_limit": 4
   }
 ]
 ```
