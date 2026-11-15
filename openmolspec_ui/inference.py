@@ -576,14 +576,17 @@ class OpenMolSpecService:
         model, tokenizer, device = self._load_vib2mol(2)
         from benchmarks.models.vib2mol.evaluate_multimodal import (
             rerank_candidates,
-            spectrum_row,
             unique_candidates,
         )
 
         data = self._vib2mol_input(inputs, device)
-        # Decode a larger beam pool because invalid strings and equivalent SMILES
-        # collapse during canonicalization. This preserves several real alternatives.
-        beam_size = min(max(limit * 4, 24), 48)
+        if not 1 <= limit <= 10:
+            raise ValueError("Xinyu beam=10 protocol supports 1–10 displayed candidates")
+        rank_model, rank_tokenizer, _ = self._load_vib2mol(1)
+        for key in ("center", "scale"):
+            if not torch.equal(getattr(rank_model.spectral_encoding, key), getattr(model.spectral_encoding, key)):
+                raise ValueError("Generation/reranking checkpoint NMR normalization differs")
+        beam_size = 10
         with torch.inference_mode():
             sequences = model.beam_infer_lm(
                 data, beam_size=beam_size, max_len=300
@@ -593,26 +596,26 @@ class OpenMolSpecService:
             for item in sequences
         ]
         candidates = unique_candidates(raw)
-        scores: list[float | None] = [None] * len(candidates)
-        try:
-            rank_model, _, _ = self._load_vib2mol(1)
+        with torch.inference_mode():
             order, ranked_scores = rerank_candidates(
-                rank_model, tokenizer, spectrum_row(data, 0), candidates, 32
+                rank_model, rank_tokenizer, data, candidates[:10], 32
             )
-            candidates = [candidates[index] for index in order]
-            scores = ranked_scores
-        except Exception:
-            pass
+        candidates = [candidates[index] for index in order]
+        scores = ranked_scores
         return {
             "anchor": None,
             "anchor_similarity": None,
             "anchors_used": 0,
             "beam_size": beam_size,
+            "ranking": "itm_positive_probability",
+            "input_modalities": [name for name, value in (("IR", inputs.ir), ("Raman", inputs.raman),
+                                                          ("1H", inputs.nmr_h), ("13C", inputs.nmr_c))
+                                 if value is not None and len(value)],
             "candidates": [
                 {"rank": rank, "smiles": smiles, "score": scores[rank - 1]}
                 for rank, smiles in enumerate(candidates[:limit], start=1)
             ],
-            "mode": "Direct Vib2Mol beam search",
+            "mode": "Direct Vib2Mol beam=10 with canonical deduplication and ITM reranking",
         }
 
     def sample_spectrum(self) -> tuple[SpectralInput, dict[str, Any]]:

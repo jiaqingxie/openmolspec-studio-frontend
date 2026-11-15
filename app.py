@@ -498,16 +498,16 @@ def generation_page() -> None:
         unsafe_allow_html=True,
     )
     with st.container(border=True):
-        section_header("STEP 01", "输入多模态理论光谱", "理论 IR、Raman 与计算 H/C 位移都会用于模型；缓存回退也使用四模态定位锚点。")
+        section_header("STEP 01", "输入多模态理论光谱", "完整输入为理论 IR、Raman 与计算 H/C 位移，按 Xinyu 的 beam=10 协议直接生成并重排。")
         inputs = spectrum_input("generation", include_nmr=True)
-    limit = st.slider("生成候选数", 3, 12, 8)
+    limit = st.slider("生成候选数", 1, 10, 8)
     if st.button(
         "生成结构候选",
         type="primary",
         width="stretch",
         disabled=inputs is None,
     ):
-        with st.spinner("正在匹配查询并读取 Vib2Mol beam 结果…"):
+        with st.spinner("正在运行 Vib2Mol 生成与 ITM 重排…"):
             try:
                 result = service.generate(inputs, limit)  # type: ignore[arg-type]
             except Exception as error:
@@ -516,7 +516,7 @@ def generation_page() -> None:
         section_header(
             "STEP 02",
             "生成候选",
-            "展示多个有效且互不重复的结构可能性，并按光谱–结构匹配置信度排序。",
+            "展示有效且互不重复的结构候选，按 ITM 匹配分数排序。",
         )
         anchor = result["anchor"]
         if anchor is None:
@@ -534,7 +534,9 @@ def generation_page() -> None:
         candidates = result["candidates"]
         if len(candidates) < limit:
             st.info(f"模型得到 {len(candidates)} 个有效且不重复的结构候选。")
-        render_candidates(candidates, score_label="candidate confidence")
+        render_candidates(candidates, score_label="ITM matching score")
+        if len(result.get("input_modalities", [])) < 4:
+            st.warning("当前输入缺少部分模态，不能直接套用完整 IR+Raman+H/C 的离线准确率。")
         st.caption("生成结果来自当前输入。离线准确率取决于输入模态、候选去重、beam 和重排设置，详见任务文档。")
         export = pd.DataFrame(result["candidates"])
         st.download_button(

@@ -45,3 +45,5 @@ Read the Docs 导入本仓库并使用 `.readthedocs.yaml` 构建；GitHub Actio
 前端导航为 Tool、Dataset Download、Prediction (Online)、Full documentation。在线 MS 推理可通过 `OPENMOLSPEC_MS_PYTHON` 指定包含作者依赖的 Python。模型与数据路径配置见 [快速开始](documentation/quickstart.zh.md)。
 
 最新证据见 [评测协议](documentation/protocols.zh.md) 和各任务页。旧 F/P 分数因输入与标签错配作废；新推理已对齐，但固态权重的溶液位移参考未核实，不能宣称修复了预测精度。
+
+在线 Vib2Mol 生成使用 beam=10、有效规范化候选去重和 ITM 重排，与本轮 Xinyu 协议评测一致。生成与重排模型的 H/C 归一化不一致或重排失败时明确报错；缺少模态时页面提示离线四模态准确率不适用。

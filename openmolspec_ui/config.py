@@ -65,7 +65,8 @@ class ModelAssets:
             ),
             "谱图 → 结构生成": (
                 self.generation_checkpoint is not None
-                and (self.nmr_normalizer is not None if online else self.generation_predictions is not None),
+                and (self.nmr_normalizer is not None and self.retrieval_checkpoint is not None
+                     if online else self.generation_predictions is not None),
                 "Vib2Mol · direct inference" if online else "Vib2Mol · legacy test set cache",
             ),
         }
