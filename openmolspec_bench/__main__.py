@@ -42,11 +42,23 @@ def main():
     run.add_argument("--datasets", nargs="+", default=["nmrspec_test", "patent_test_10k", "nmrexp_exp_10k", "nmrgym_test"])
     run.add_argument("--alignment-checkpoint", type=Path)
     run.add_argument("--generation-checkpoint", type=Path)
+    run.add_argument("--fp-inference-root", type=Path, help="Exact prepared F.lmdb/P.lmdb and frozen prediction folders")
+    run.add_argument("--allow-cross-domain-diagnostic", action="store_true", help="Report unverified solid-to-solution F/P diagnostic errors separately")
     run.add_argument("--gap-lmdb", type=Path)
+    run.add_argument("--forward-logs", nargs="+", type=Path, help="Paired Gaussian geometry/spectrum logs for frozen forward evaluation")
     run.add_argument("--gap-unit", choices=("auto", "hartree", "eV"), default="auto")
+    run.add_argument("--ms-python", default=sys.executable, help="Interpreter containing authors' MS dependencies")
+    run.add_argument("--ms-source", type=Path)
+    run.add_argument("--ms-weights", type=Path)
+    run.add_argument("--ms-input-csv", type=Path)
+    run.add_argument("--ms-metadata-tsv", type=Path)
+    run.add_argument("--magma-source", type=Path)
     run.add_argument("--limit", type=int, default=64)
+    run.add_argument("--sampling", choices=("first", "reservoir"), default="first")
+    run.add_argument("--seed", type=int, default=42)
     run.add_argument("--batch-size", type=int, default=16)
     run.add_argument("--beam-size", type=int, default=5)
+    run.add_argument("--vib-beam-size", type=int, default=10, help="Xinyu evaluation default for complete-input Vib2Mol generation")
     run.add_argument("--device", default="cpu")
     run.add_argument("--threads", type=int, default=2)
     run.add_argument("--output", type=Path, required=True)
@@ -58,7 +70,7 @@ def main():
             for task in TASKS:
                 print(f"{task.id:36s} {task.backend:26s} {task.title}")
         return 0
-    if min(args.limit, args.batch_size, args.beam_size, args.threads) < 1:
+    if min(args.limit, args.batch_size, args.beam_size, args.vib_beam_size, args.threads) < 1:
         parser.error("limit, batch-size, beam-size and threads must be positive")
     if args.output.exists():
         parser.error(f"Output exists: {args.output}; choose a new result file")

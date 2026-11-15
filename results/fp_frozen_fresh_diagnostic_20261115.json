@@ -1,0 +1,46 @@
+{
+  "training_performed": false,
+  "purpose": "frozen_cross_domain_diagnostic_after_input_alignment_repair",
+  "results": [
+    {
+      "nucleus": "F",
+      "examples": 32,
+      "mae_ppm": 356.34472942352295,
+      "rmse_ppm": 364.3964033616038,
+      "max_logged_vs_reference_target_delta": 3.0517578125e-05,
+      "normalizer_mean": [
+        231.4799757808585
+      ],
+      "normalizer_scale": [
+        60.214258110980396
+      ],
+      "model_domain": "solid_state",
+      "evaluation_domain": "experimental_solution",
+      "reference_convention_verified": false,
+      "publication_status": "diagnostic_only_not_validated_as_solution_shift_model",
+      "prediction_files": [
+        ".runtime/fp_frozen_20261115/F/cv_seed_42_fold_0/cv_seed_42_fold_0_valid.out.pkl"
+      ]
+    },
+    {
+      "nucleus": "P",
+      "examples": 32,
+      "mae_ppm": 226.44937086105347,
+      "rmse_ppm": 237.25195210549927,
+      "max_logged_vs_reference_target_delta": 1.52587890625e-05,
+      "normalizer_mean": [
+        250.87209878879636
+      ],
+      "normalizer_scale": [
+        67.69539654597729
+      ],
+      "model_domain": "solid_state",
+      "evaluation_domain": "experimental_solution",
+      "reference_convention_verified": false,
+      "publication_status": "diagnostic_only_not_validated_as_solution_shift_model",
+      "prediction_files": [
+        ".runtime/fp_frozen_20261115/P/cv_seed_42_fold_0/cv_seed_42_fold_0_valid.out.pkl"
+      ]
+    }
+  ]
+}

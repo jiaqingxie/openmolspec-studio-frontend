@@ -1,0 +1,387 @@
+{
+  "schema_version": 1,
+  "release": "1.0.0",
+  "started_at": "2026-11-15T15:49:59.694195+00:00",
+  "purpose": "pipeline_smoke_evaluation",
+  "limit": 8,
+  "device": "cpu",
+  "python": "3.13.5",
+  "torch": "2.14.0+cu130",
+  "implementation_sha256": "45a12c0d6d922017bb2090227b7f6a84889192e39aac037748dbb2fe3db2056a",
+  "training_performed": false,
+  "results": [
+    {
+      "task": "vibrational.retrieval.hc",
+      "title": "IR + Raman + H/C → 结构检索",
+      "backend": "vib2mol_retrieval",
+      "domain": "computed",
+      "dataset_name": null,
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/benchmark_data/release_v1_ks200k_hc_nmr_minmax/vib2mol/openspec_test.lmdb",
+        "sha256": "736a234607992865136b23b3d091b26323936f08377362a196fe97ceb3bdb6a1"
+      },
+      "sample_ids": [
+        "CCCCc1cc2ccccc2c(OCCN(C)C)n1",
+        "N#CSCSc1nc2ccccc2s1",
+        "CC12CCC(=O)C=C1CCC1C2CCC2(C)C(C(=O)CO)CCC12",
+        "N#CCc1ccccc1Oc1ccccc1",
+        "OC(c1ccc(Oc2ccc(C(O)(C(F)(F)F)C(F)(F)F)cc2)cc1)(C(F)(F)F)C(F)(F)F",
+        "O=C(CCc1ccccc1)c1ccccc1",
+        "OC1CCOc2ccccc21",
+        "O=C(O)c1ccc(Oc2ccccc2)cc1"
+      ],
+      "given_nmr": true,
+      "given_formula": false,
+      "inference_mode": "direct_checkpoint",
+      "sampling": "first_distinct_canonical_structures_in_lmdb_order",
+      "checkpoint": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/runs/openmolspec-v1-ks1000k/spectrum2structure/vib2mol/ir-raman-hc-generation-v1/seed-624/2026-09-16-07-00-d369d0/artifacts/vib2mol/checkpoints/openspec/ir-raman-kekule_smiles/vib2mol/2026-09-16-07-01-8e4216/best_recall.pth",
+        "sha256": "e81cb178991742a6686b2d31ea191381cc5951aa15f8f7ddeb93c5473b0c0cf1"
+      },
+      "metrics": {
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "queries": 8,
+        "candidate_pool": 8,
+        "unique_candidates": 8,
+        "tie_policy": "stable_candidate_order"
+      },
+      "reverse_metrics": {
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "queries": 8,
+        "candidate_pool": 8,
+        "unique_candidates": 8,
+        "tie_policy": "stable_candidate_order"
+      },
+      "status": "passed",
+      "elapsed_seconds": 73.705
+    },
+    {
+      "task": "vibrational.generation.hc",
+      "title": "IR + Raman + H/C → SMILES（Xinyu 协议）",
+      "backend": "vib2mol_generation",
+      "domain": "computed",
+      "dataset_name": null,
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/benchmark_data/release_v1_ks200k_hc_nmr_minmax/vib2mol/openspec_test.lmdb",
+        "sha256": "736a234607992865136b23b3d091b26323936f08377362a196fe97ceb3bdb6a1"
+      },
+      "sample_ids": [
+        "CCCCc1cc2ccccc2c(OCCN(C)C)n1",
+        "N#CSCSc1nc2ccccc2s1",
+        "CC12CCC(=O)C=C1CCC1C2CCC2(C)C(C(=O)CO)CCC12",
+        "N#CCc1ccccc1Oc1ccccc1",
+        "OC(c1ccc(Oc2ccc(C(O)(C(F)(F)F)C(F)(F)F)cc2)cc1)(C(F)(F)F)C(F)(F)F",
+        "O=C(CCc1ccccc1)c1ccccc1",
+        "OC1CCOc2ccccc21",
+        "O=C(O)c1ccc(Oc2ccccc2)cc1"
+      ],
+      "given_nmr": true,
+      "given_formula": false,
+      "inference_mode": "direct_checkpoint",
+      "sampling": "first_distinct_canonical_structures_in_lmdb_order",
+      "checkpoint": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/runs/openmolspec-v1-ks1000k/spectrum2structure/vib2mol/ir-raman-hc-generation-v1/seed-624/2026-09-16-07-00-d369d0/artifacts/vib2mol/checkpoints/openspec/ir-raman-kekule_smiles/vib2mol/2026-09-16-21-21-88e3a8/best_acc.pth",
+        "sha256": "978aae6864104e4581d814a964cbcb04b7207eaa0b74946d3c5a0f886d54db06"
+      },
+      "metrics": {
+        "exact_canonical_top1": 0.875,
+        "exact_canonical_top3": 0.875,
+        "exact_canonical_top5": 0.875,
+        "exact_canonical_top10": 0.875,
+        "valid_smiles_fraction": 0.9875,
+        "duplicate_valid_beams": 62,
+        "examples": 8
+      },
+      "reranked_metrics": {
+        "exact_canonical_top1": 0.875,
+        "exact_canonical_top3": 0.875,
+        "exact_canonical_top5": 0.875,
+        "exact_canonical_top10": 0.875
+      },
+      "ranking": "Xinyu canonical valid unique beams, then ITM positive probability top10 reranking",
+      "beam_size": 10,
+      "max_length": 300,
+      "rank_checkpoint": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/runs/openmolspec-v1-ks1000k/spectrum2structure/vib2mol/ir-raman-hc-generation-v1/seed-624/2026-09-16-07-00-d369d0/artifacts/vib2mol/checkpoints/openspec/ir-raman-kekule_smiles/vib2mol/2026-09-16-07-01-8e4216/best_recall.pth",
+        "sha256": "e81cb178991742a6686b2d31ea191381cc5951aa15f8f7ddeb93c5473b0c0cf1"
+      },
+      "predictions": [
+        {
+          "target": "CCCCC1=CC2=CC=CC=C2C(OCCN(C)C)=N1",
+          "raw_beams": [
+            "CCCCC1=CC2=CC=CC=C2C(N(C)CCN(C)C)=N1",
+            "CCCC1=CC2=CC=CC=C2C(N(C)CCN(C)C)=N1",
+            "CCCCC1=CC(N(C)CCN(C)C)=NC2=CC=CC=C12",
+            "CCCCC1=NC2=CC=CC=C2C(N(C)CCN(C)C)=C1",
+            "CCCCC1=CC2=CC=CC=C2C(N(C)C)=N1",
+            "CCCCC1=CC(N(C)C)=NC2=CC=CC=C12",
+            "CCCCC1=CC2=CC=CC=C2C(N(CCN(C)C)C)=N1",
+            "CCCCC1=CC2=CC=CC=C2C(=N1)N(C)CCN(C)C",
+            "CCCCC1=CC2=CC=CC=C2C(=N1)N(CCN(C)C)C",
+            "C1C=C2C(=CC=1)C=C(CCCC)N=C2N(C)CCN(C)"
+          ],
+          "unique_candidates": [
+            "CCCCC1=CC2=CC=CC=C2C(N(C)CCN(C)C)=N1",
+            "CCCC1=CC2=CC=CC=C2C(N(C)CCN(C)C)=N1",
+            "CCCCC1=CC(N(C)CCN(C)C)=NC2=CC=CC=C12",
+            "CCCCC1=NC2=CC=CC=C2C(N(C)CCN(C)C)=C1",
+            "CCCCC1=CC2=CC=CC=C2C(N(C)C)=N1",
+            "CCCCC1=CC(N(C)C)=NC2=CC=CC=C12",
+            "CCCCC1=CC2=CC=CC=C2C(N(C)CCNC)=N1"
+          ],
+          "reranked": [
+            "CCCC1=CC2=CC=CC=C2C(N(C)CCN(C)C)=N1",
+            "CCCCC1=CC(N(C)CCN(C)C)=NC2=CC=CC=C12",
+            "CCCCC1=CC2=CC=CC=C2C(N(C)CCNC)=N1",
+            "CCCCC1=NC2=CC=CC=C2C(N(C)CCN(C)C)=C1",
+            "CCCCC1=CC2=CC=CC=C2C(N(C)CCN(C)C)=N1",
+            "CCCCC1=CC2=CC=CC=C2C(N(C)C)=N1",
+            "CCCCC1=CC(N(C)C)=NC2=CC=CC=C12"
+          ],
+          "positive_probabilities": [
+            0.9963234663009644,
+            0.00011854852346004918,
+            0.00011750546400435269,
+            1.794054895754016e-07,
+            1.2934806647990627e-07,
+            3.901347560980595e-12,
+            2.8667482884076056e-12
+          ]
+        },
+        {
+          "target": "N#CSCSC1=NC2=CC=CC=C2S1",
+          "raw_beams": [
+            "N#CSCSC1=NC2=CC=CC=C2S1",
+            "N#CSCSC1SC2=CC=CC=C2N=1",
+            "N1=C(SCSC#N)SC2C1=CC=CC=2",
+            "N#CSCSC1=NC2C(S1)=CC=CC=2",
+            "N#CSCSC1=NC2C(=CC=CC=2)S1",
+            "C1C=CC=C2C=1N=C(S2)SCC#N",
+            "C1C=CC=C2C=1N=C(SCSC#N)S2",
+            "N1=C(SCSC#N)SC2=CC=CC=C21",
+            "N1=C(SCSC#N)SC2=CC=CC=C12",
+            "C12=CC=CC=C1N=C(SCSC#N)S2"
+          ],
+          "unique_candidates": [
+            "N#CSCSC1=NC2=CC=CC=C2S1",
+            "N#CCSC1=NC2=CC=CC=C2S1"
+          ],
+          "reranked": [
+            "N#CSCSC1=NC2=CC=CC=C2S1",
+            "N#CCSC1=NC2=CC=CC=C2S1"
+          ],
+          "positive_probabilities": [
+            0.9999287128448486,
+            0.9998557567596436
+          ]
+        },
+        {
+          "target": "CC12CCC(=O)C=C1CCC1C2CCC2(C)C(C(=O)CO)CCC12",
+          "raw_beams": [
+            "CC12CCC(=O)C=C1CCC1C2CCC2(C)C(C(=O)CO)CCC12",
+            "CC12CCC(=O)C=C1CCC1C2CCC2(C)C1CCC2C(=O)CO",
+            "CC12CCC(=O)C=C1CCC1C2CCC2(C)C(C(CO)=O)CCC12",
+            "CC12CCC(=O)C=C1CCC1C3CCC(C(=O)CO)C3(C)CCC12",
+            "CC12CCC(=O)C=C1CCC1C2CCC2(C(C(=O)CO)CCC12)C",
+            "CC12CCC(C=C1CCC1C2CCC2(C)C(C(=O)CO)CCC12)=O",
+            "CC12CCC(=O)C=C1CCC1C2CCC2(C(=O)CO)CCCC12C",
+            "CC12CCC(C=C1CCC1C2CCC2(C)C1CCC2C(=O)CO)=O",
+            "CC12CCC(=O)C=C1CCC1C2CCC2(C1CCC2C(=O)CO)C",
+            "CC12CCC(C=C1CCC1C2CCC2(C)C(C(=O)CO)CCC21)=O"
+          ],
+          "unique_candidates": [
+            "CC12CCC(=O)C=C1CCC1C2CCC2(C)C(C(=O)CO)CCC12",
+            "CC12CCC(=O)C=C1CCC1C2CCC2(C(=O)CO)CCCC12C"
+          ],
+          "reranked": [
+            "CC12CCC(=O)C=C1CCC1C2CCC2(C)C(C(=O)CO)CCC12",
+            "CC12CCC(=O)C=C1CCC1C2CCC2(C(=O)CO)CCCC12C"
+          ],
+          "positive_probabilities": [
+            0.9986183643341064,
+            0.9979507327079773
+          ]
+        },
+        {
+          "target": "N#CCC1=CC=CC=C1OC1=CC=CC=C1",
+          "raw_beams": [
+            "N#CCC1=CC=CC=C1OC1=CC=CC=C1",
+            "C1C=CC=CC=1OC1=CC=CC=C1CC#N",
+            "N#CCC1=CC=CC=C1OC1C=CC=CC=1",
+            "C1=CC=CC=C1OC1=CC=CC=C1CC#N",
+            "C1C=C(C=CC=1)OC1=CC=CC=C1CC#N",
+            "C1C=CC=CC=1OC1C(CC#N)=CC=CC=1",
+            "N#CCC1C(=CC=CC=1)OC1=CC=CC=C1",
+            "C1C=CC=CC=1OC1C(=CC=CC=1)CC#N",
+            "N#CCC1C(=CC=CC=1)OC1C=CC=CC=1",
+            "O(C1=CC=CC=C1CC#N)C1C=CC=CC=1"
+          ],
+          "unique_candidates": [
+            "N#CCC1=CC=CC=C1OC1=CC=CC=C1"
+          ],
+          "reranked": [
+            "N#CCC1=CC=CC=C1OC1=CC=CC=C1"
+          ],
+          "positive_probabilities": [
+            0.9998579025268555
+          ]
+        },
+        {
+          "target": "OC(C1=CC=C(OC2=CC=C(C(O)(C(F)(F)F)C(F)(F)F)C=C2)C=C1)(C(F)(F)F)C(F)(F)F",
+          "raw_beams": [
+            "OC(C1=CC=C(OC2=CC=C(C(O)(C(F)(F)F)C(F)(F)F)C=C2)C=C1)(C(F)(F)F)C(F)(F)F",
+            "OC(C1=CC=C(OC2=CC=C(C(C(F)(F)F)(O)C(F)(F)F)C=C2)C=C1)(C(F)(F)F)C(F)(F)F",
+            "FC(F)(F)C(O)(C1=CC=C(OC2=CC=C(C=C2)C(C(F)(F)F)(O)C(F)(F)F)C=C1)C(F)(F)F",
+            "FC(F)(F)C(O)(C1=CC=C(C=C1)OC1=CC=C(C=C1)C(C(F)(F)F)(O)C(F)(F)F)C(F)(F)F",
+            "FC(F)(F)C(O)(C1C=CC(=CC=1)OC1=CC=C(C=C1)C(C(F)(F)F)(O)C(F)(F)F)C(F)(F)F",
+            "FC(F)(F)C(O)(C1=CC=C(C=C1)OC1C=CC(=CC=1)C(C(F)(F)F)(O)C(F)(F)F)C(F)(F)F",
+            "FC(F)(F)C(O)(C1=CC=C(OC2=CC=C(C=C2)C(C(F)(F)F)(C(F)(F)F)O)C=C1)C(F)(F)F",
+            "FC(F)(F)C(O)(C1C=CC(=CC=1)OC1C=CC(=CC=1)C(C(F)(F)F)(O)C(F)(F)F)C(F)(F)F",
+            "OC(C1=CC=C(OC2=CC=C(C(O)(C(F)(F)F)C(F)(F)F)C=C2)C=C1)(C1=C(F)F)C(F)(F)F",
+            "FC(F)(F)C(O)(C1=CC=C(C=C1)OC1=CC=C(C=C1)C(C(F)(F)F)(C(F)(F)F)O)C(F)(F)F"
+          ],
+          "unique_candidates": [
+            "OC(C1=CC=C(OC2=CC=C(C(O)(C(F)(F)F)C(F)(F)F)C=C2)C=C1)(C(F)(F)F)C(F)(F)F"
+          ],
+          "reranked": [
+            "OC(C1=CC=C(OC2=CC=C(C(O)(C(F)(F)F)C(F)(F)F)C=C2)C=C1)(C(F)(F)F)C(F)(F)F"
+          ],
+          "positive_probabilities": [
+            0.9996802806854248
+          ]
+        },
+        {
+          "target": "O=C(CCC1=CC=CC=C1)C1=CC=CC=C1",
+          "raw_beams": [
+            "O=C(CCC1=CC=CC=C1)C1=CC=CC=C1",
+            "O=C(CCC1=CC=CC=C1)C1C=CC=CC=1",
+            "C1C=CC=CC=1C(CCC1C=CC=CC=1)=O",
+            "C1C=CC=CC=1C(CCC1=CC=CC=C1)=O",
+            "C1=CC=CC=C1C(CCC1=CC=CC=C1)=O",
+            "C1=CC=CC=C1C(CCC1C=CC=CC=1)=O",
+            "C1C=CC=CC=1CCC(=O)C1=CC=CC=C1",
+            "C1C=CC=CC=1CCC(=O)C1C=CC=CC=1",
+            "C1(C=CC=CC=1)C(CCC1=CC=CC=C1)=O",
+            "C1(C=CC=CC=1)C(=O)CCC1=CC=CC=C1"
+          ],
+          "unique_candidates": [
+            "O=C(CCC1=CC=CC=C1)C1=CC=CC=C1"
+          ],
+          "reranked": [
+            "O=C(CCC1=CC=CC=C1)C1=CC=CC=C1"
+          ],
+          "positive_probabilities": [
+            0.9999263286590576
+          ]
+        },
+        {
+          "target": "OC1CCOC2=CC=CC=C21",
+          "raw_beams": [
+            "OC1CCOC2=CC=CC=C21",
+            "C1COC2=CC=CC=C2C1O",
+            "OC1CCOC2C1=CC=CC=2",
+            "C1=CC=C2C(CCOC2=C1)O",
+            "C1C=CC=C2C=1OCCC2O",
+            "C12=CC=CC=C2OCCC1O",
+            "C1=CC=C2OCCC(C2=C1)O",
+            "C1C=CC=C2OCCC(C=12)O",
+            "C1C=CC=C2OCCC(O)C2=1",
+            "C1=C2C(=CC=C1)C(CCO2)"
+          ],
+          "unique_candidates": [
+            "OC1CCOC2=CC=CC=C21",
+            "C1=CC=C2OCCCC2=C1"
+          ],
+          "reranked": [
+            "OC1CCOC2=CC=CC=C21",
+            "C1=CC=C2OCCCC2=C1"
+          ],
+          "positive_probabilities": [
+            0.9996805191040039,
+            8.403961970770979e-09
+          ]
+        },
+        {
+          "target": "O=C(O)C1=CC=C(OC2=CC=CC=C2)C=C1",
+          "raw_beams": [
+            "O=C(O)C1=CC=C(OC2=CC=CC=C2)C=C1",
+            "C1C=CC=CC=1OC1C=CC(=CC=1)C(O)=O",
+            "C1C=CC=CC=1OC1=CC=C(C=C1)C(O)=O",
+            "C1C=CC=CC=1OC1C=CC(=CC=1)C(=O)O",
+            "C1C=CC=CC=1OC1=CC=C(C=C1)C(=O)O",
+            "C1=CC=CC=C1OC1=CC=C(C=C1)C(O)=O",
+            "C1C=C(C=CC=1)OC1=CC=C(C=C1)C(O)=O",
+            "C1C=C(C=CC=1)OC1C=CC(=CC=1)C(O)=O",
+            "C1C=C(C=CC=1)OC1=CC=C(C=C1)C(=O)O",
+            "C1C=C(C=CC=1)OC1C=CC(=CC=1)C(=O)O"
+          ],
+          "unique_candidates": [
+            "O=C(O)C1=CC=C(OC2=CC=CC=C2)C=C1"
+          ],
+          "reranked": [
+            "O=C(O)C1=CC=C(OC2=CC=CC=C2)C=C1"
+          ],
+          "positive_probabilities": [
+            0.9998536109924316
+          ]
+        }
+      ],
+      "status": "passed",
+      "elapsed_seconds": 13.187
+    },
+    {
+      "task": "spectroscopy.reranking.hc",
+      "title": "IR + Raman + H/C + 候选 → ITM 重排",
+      "backend": "vib2mol_reranking",
+      "domain": "computed",
+      "dataset_name": null,
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/benchmark_data/release_v1_ks200k_hc_nmr_minmax/vib2mol/openspec_test.lmdb",
+        "sha256": "736a234607992865136b23b3d091b26323936f08377362a196fe97ceb3bdb6a1"
+      },
+      "sample_ids": [
+        "CCCCc1cc2ccccc2c(OCCN(C)C)n1",
+        "N#CSCSc1nc2ccccc2s1",
+        "CC12CCC(=O)C=C1CCC1C2CCC2(C)C(C(=O)CO)CCC12",
+        "N#CCc1ccccc1Oc1ccccc1",
+        "OC(c1ccc(Oc2ccc(C(O)(C(F)(F)F)C(F)(F)F)cc2)cc1)(C(F)(F)F)C(F)(F)F",
+        "O=C(CCc1ccccc1)c1ccccc1",
+        "OC1CCOc2ccccc21",
+        "O=C(O)c1ccc(Oc2ccccc2)cc1"
+      ],
+      "given_nmr": true,
+      "given_formula": false,
+      "inference_mode": "direct_checkpoint",
+      "sampling": "first_distinct_canonical_structures_in_lmdb_order",
+      "checkpoint": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/runs/openmolspec-v1-ks1000k/spectrum2structure/vib2mol/ir-raman-hc-generation-v1/seed-624/2026-09-16-07-00-d369d0/artifacts/vib2mol/checkpoints/openspec/ir-raman-kekule_smiles/vib2mol/2026-09-16-07-01-8e4216/best_recall.pth",
+        "sha256": "e81cb178991742a6686b2d31ea191381cc5951aa15f8f7ddeb93c5473b0c0cf1"
+      },
+      "metrics": {
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "queries": 8,
+        "candidate_pool": 8,
+        "unique_candidates": 8,
+        "tie_policy": "stable_candidate_order",
+        "top_1_hit_rate": 1.0
+      },
+      "ranking": "itm_positive_probability",
+      "status": "passed",
+      "elapsed_seconds": 6.38
+    }
+  ],
+  "counts": {
+    "passed": 3
+  },
+  "elapsed_seconds": 93.314,
+  "completed_at": "2026-11-15T15:51:33.010139+00:00"
+}

@@ -135,7 +135,7 @@ class OpenMolSpecService:
             return torch.zeros((1, 1024), dtype=torch.float32)
         return torch.as_tensor(values, dtype=torch.float32).reshape(1, 1024)
 
-    def predict_gap(self, inputs: SpectralInput) -> dict[str, float]:
+    def predict_gap(self, inputs: SpectralInput) -> dict[str, Any]:
         inputs.require_vibrational_spectrum()
         import torch
 
@@ -159,8 +159,10 @@ class OpenMolSpecService:
         prediction = float(normalized.item() * std + mean)
         return {
             "gap_ev": prediction,
-            "benchmark_mae_ev": 0.12638,
-            "benchmark_r2": 0.95535,
+            "unit": "eV",
+            "input_modalities": [label for label, value in (("IR", inputs.ir), ("Raman", inputs.raman),
+                                                            ("1H", inputs.nmr_h), ("13C", inputs.nmr_c)) if value is not None and len(value)],
+            "training_modality": payload["model_metadata"]["modality"],
         }
 
     def _load_tensor_model(self, target: str):
@@ -291,14 +293,8 @@ class OpenMolSpecService:
             return self._dataset
         if self.assets.spectrum_lmdb is None:
             raise ModelUnavailable("没有发现用于检索的 OpenMolSpec test LMDB。")
-        environment = lmdb.open(
-            str(self.assets.spectrum_lmdb),
-            subdir=False,
-            readonly=True,
-            lock=False,
-            readahead=False,
-            meminit=False,
-        )
+        from openmolspec_bench.data import readonly_lmdb
+        environment = readonly_lmdb(self.assets.spectrum_lmdb)
         ir, raman, nmr_h, nmr_c, records = [], [], [], [], []
         with environment.begin() as transaction:
             for key, value in transaction.cursor():
@@ -622,14 +618,8 @@ class OpenMolSpecService:
     def sample_spectrum(self) -> tuple[SpectralInput, dict[str, Any]]:
         if self.assets.spectrum_lmdb is None:
             raise ModelUnavailable("没有发现 OpenMolSpec 示例数据。")
-        environment = lmdb.open(
-            str(self.assets.spectrum_lmdb),
-            subdir=False,
-            readonly=True,
-            lock=False,
-            readahead=False,
-            meminit=False,
-        )
+        from openmolspec_bench.data import readonly_lmdb
+        environment = readonly_lmdb(self.assets.spectrum_lmdb)
         with environment.begin() as transaction:
             selected = None
             for key, value in transaction.cursor():

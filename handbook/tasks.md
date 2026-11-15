@@ -24,7 +24,8 @@
 | `vibrational.gap.ir` | IR → HOMO–LUMO gap | IR | computed | studio_gap | mae_ev, rmse_ev |
 | `vibrational.gap.raman` | RAMAN → HOMO–LUMO gap | RAMAN | computed | studio_gap | mae_ev, rmse_ev |
 | `vibrational.gap.ir_raman` | IR_RAMAN → HOMO–LUMO gap | IR, RAMAN | computed | studio_gap | mae_ev, rmse_ev |
-| `vibrational.forward` | 构象 → IR / Raman | IR, Raman | computed | 待接入 | spectral_cosine, spectral_mae |
+| `vibrational.gap.ir_raman_hc` | IR + Raman + H/C NMR → HOMO–LUMO gap | IR, Raman, 1H, 13C | computed | studio_gap | mae_ev, rmse_ev |
+| `vibrational.forward` | 构象 → IR / Raman | IR, Raman | computed | studio_vibrational_forward | ir_cosine_similarity, raman_cosine_similarity, ir_mae, raman_mae |
 | `vibrational.retrieval` | IR / Raman → 结构检索 | IR, Raman | computed | vib2mol_retrieval | recall_at_1, recall_at_5, recall_at_10, mrr |
 | `vibrational.generation` | IR / Raman → SMILES | IR, Raman | computed | vib2mol_generation | exact_rate, valid_rate |
 | `nmr.assignment` | 峰 → 原子指认 | 1H, 13C, 19F, 31P, 11B, 29Si | experimental | 待接入 | assignment_accuracy |
@@ -32,6 +33,13 @@
 | `nmr.formula` | 谱图 → 分子式 | 1H, 13C | experimental | 待接入 | formula_exact_rate |
 | `spectroscopy.qa` | 谱学问答 / 推理 | NMR, IR, Raman | experimental | 待接入 | answer_accuracy |
 | `spectroscopy.reranking` | 谱图 + 候选结构 → 重排 | IR, Raman | computed | vib2mol_reranking | top_1_hit_rate, mrr |
+| `vibrational.retrieval.hc` | IR + Raman + H/C → 结构检索 | IR, Raman, 1H, 13C | computed | vib2mol_retrieval | recall_at_1, recall_at_5, recall_at_10, mrr |
+| `vibrational.generation.hc` | IR + Raman + H/C → SMILES（Xinyu 协议） | IR, Raman, 1H, 13C | computed | vib2mol_generation | exact_canonical_top1, exact_canonical_top5, valid_smiles_fraction |
+| `spectroscopy.reranking.hc` | IR + Raman + H/C + 候选 → ITM 重排 | IR, Raman, 1H, 13C | computed | vib2mol_reranking | top_1_hit_rate, mrr |
+| `ms.forward.glacier` | 分子 → MS/MS（GLACIER） | MS/MS | experimental | ms_pretrained_glacier | cosine_similarity, entropy_similarity |
+| `ms.forward.iceberg` | 分子 → MS/MS（ICEBERG） | MS/MS | experimental | ms_pretrained_iceberg | cosine_similarity, entropy_similarity |
+| `ms.annotation.magma` | MS/MS 峰 → MAGMa 候选碎片标注 | MS/MS | experimental | magma_algorithm | matched_peak_fraction, checked_fragments |
+| `multispectral.spectrallm.generation` | 多谱 → 结构（SpectraLLM） | IR, Raman, NMR, MS/MS | mixed | 待接入 | exact_rate, valid_rate |
 
 ## 任务说明
 
@@ -39,9 +47,9 @@
 
 - **nmr.forward.13C**：对已有 NMRNet/NMRNet++ 推理文件评分；无逐原子指认时使用最小代价峰匹配。
 
-- **nmr.forward.19F**：已有 NMRNet 固相权重在实验溶液单核数据上的预测评分，明确作为跨域诊断结果。
+- **nmr.forward.19F**：已拦截旧输入错配；冻结重跑后固相权重的溶液位移参考仍未确认，默认跳过正式评分，仅显式允许跨域诊断。
 
-- **nmr.forward.31P**：已有 NMRNet 固相权重在实验溶液单核数据上的预测评分，明确作为跨域诊断结果。
+- **nmr.forward.31P**：已拦截旧输入错配；冻结重跑后固相权重的溶液位移参考仍未确认，默认跳过正式评分，仅显式允许跨域诊断。
 
 - **nmr.forward.11B**：保留六核任务定义；尚未验证可用于此实验域的 checkpoint 和预测文件。
 
@@ -53,7 +61,9 @@
 
 - **nmr.generation.hc**：显式提供分子式；模型按分子式重排 beam，需与无分子式结果分开比较。
 
-- **vibrational.forward**：Studio 已有 Hessian / response 推理入口；本统一基准尚未接入有配对参考值的评测数据。
+- **vibrational.gap.ir_raman_hc**：按 checkpoint 的 ir-raman-nmr 完整输入运行；同时报告训练均值常量基线。
+
+- **vibrational.forward**：已有 Hessian/response 模型在原始 Gaussian 日志的同一几何上预测；默认两个真实日志示例，仅作配对流程检查。
 
 - **vibrational.retrieval**：已有 Vib2Mol checkpoint 直接编码本次选中样本；提供 IR+Raman，不提供 H/C。
 
@@ -68,3 +78,17 @@
 - **spectroscopy.qa**：需要有参考答案的题集和固定模型接口。
 
 - **spectroscopy.reranking**：Vib2Mol ITM 正类概率重排显式候选池；候选池由本次选中的不同参考结构构成。
+
+- **vibrational.retrieval.hc**：使用 Xinyu 保存的四模态 checkpoint、H/C 参考与归一化；生成按原评测脚本去重和 ITM 重排。
+
+- **vibrational.generation.hc**：使用 Xinyu 保存的四模态 checkpoint、H/C 参考与归一化；生成按原评测脚本去重和 ITM 重排。
+
+- **spectroscopy.reranking.hc**：使用 Xinyu 保存的四模态 checkpoint、H/C 参考与归一化；生成按原评测脚本去重和 ITM 重排。
+
+- **ms.forward.glacier**：直接调用作者的冻结 checkpoint；使用我们测试 CSV 的实测谱并核对分子、加合物和采集条件。
+
+- **ms.forward.iceberg**：直接调用作者的冻结 checkpoint；使用我们测试 CSV 的实测谱并核对分子、加合物和采集条件。
+
+- **ms.annotation.magma**：原算法，无训练；原子索引以 engine_smiles 为准并逐碎片验证，标注不等于实验确认的机制。
+
+- **multispectral.spectrallm.generation**：官方新权重为 32B；当前本地仅有旧 7B adapter 且其指定基座缺失。需下载完整官方权重或提供匹配基座，不进行训练。

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import html
+import json
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -24,6 +26,8 @@ from openmolspec_ui.spectra import (
     spectrum_template,
 )
 from openmolspec_ui.ui import APP_CSS, metric_card, page_hero
+from openmolspec_ui.portal import (OnlinePredictionService, primary_navigation, dataset_page,
+                                  documentation_page, ms_prediction_page)
 
 
 st.set_page_config(
@@ -33,37 +37,39 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 st.markdown(APP_CSS, unsafe_allow_html=True)
+navigation = primary_navigation(st)
 
 
 @st.cache_resource(show_spinner=False)
-def get_service() -> OpenMolSpecService:
-    return OpenMolSpecService(discover_assets())
+def get_service(online: bool = False) -> OpenMolSpecService:
+    service_type = OnlinePredictionService if online else OpenMolSpecService
+    return service_type(discover_assets())
 
 
-service = get_service()
+service = get_service(navigation == "prediction")
 
 
-def sidebar() -> str:
+def sidebar(workflows: bool = True) -> str:
     with st.sidebar:
         st.markdown('<div class="brand">OpenMolSpec</div>', unsafe_allow_html=True)
         st.markdown('<div class="brand-title">Spectrum–Structure<br>Workbench</div>', unsafe_allow_html=True)
         page = st.radio(
             "工作区",
             (
-                "任务与评测",
                 "实验 NMR → 结构",
+                "分子 → MS/MS",
                 "构象 → 谱图",
                 "谱图 → 结构检索",
                 "谱图 → HOMO–LUMO gap",
                 "谱图 → 结构生成",
             ),
             label_visibility="collapsed",
-        )
+        ) if workflows else "任务与评测"
         st.markdown("<br>", unsafe_allow_html=True)
         st.caption("LOCAL MODEL STATUS")
         st.caption(f"推理设备 · {service.device}")
         st.caption("v1.0 · Experimental NMR / Computed IR–Raman")
-        for label, (available, detail) in service.assets.capability_status().items():
+        for label, (available, detail) in service.assets.capability_status(online=navigation == "prediction").items():
             css = "status-ok" if available else "status-bad"
             state = "READY" if available else "MISSING"
             st.markdown(
@@ -438,8 +444,8 @@ def gap_page() -> None:
                 return
         section_header(
             "STEP 02",
-            "性质预测与置信度参考",
-            "预测能隙对应当前输入；MAE 与 R² 来自固定 test set，用于参考模型的整体可靠性。",
+            "性质预测与输入条件",
+            "预测能隙对应当前输入；完整输入配置为 IR + Raman + H/C NMR。",
         )
         col1, col2, col3 = st.columns(3)
         col1.markdown(
@@ -452,26 +458,34 @@ def gap_page() -> None:
         )
         col2.markdown(
             metric_card(
-                "置信度参考 · Test MAE",
-                f"{result['benchmark_mae_ev']:.3f} eV",
-                "固定 test set · 20,390 molecules",
+                "Input coverage",
+                f"{len(result['input_modalities'])} / 4",
+                " · ".join(result["input_modalities"]),
             ),
             unsafe_allow_html=True,
         )
         col3.markdown(
             metric_card(
-                "置信度参考 · Test R²",
-                f"{result['benchmark_r2']:.3f}",
-                "固定 test set · OpenMolSpec 1M",
+                "Checkpoint modality",
+                "IR + Raman + H/C",
+                "Shared spectroscopy Transformer",
             ),
             unsafe_allow_html=True,
         )
         st.markdown(
             '<div class="model-note">预测结果已从训练时的标准化空间还原为 eV。'
-            "置信度参考是固定 test set 的总体统计，不代表当前样本的预测区间或单样本误差；"
+            "离线评测不代表当前样本的预测区间或单样本误差；"
             "输入谱图仍应与训练域的 400–4000 cm⁻¹ 范围一致。</div>",
             unsafe_allow_html=True,
         )
+        if len(result["input_modalities"]) < 4:
+            st.warning("当前输入缺少训练时使用的部分谱型，属于缺通道推理；请与完整输入结果分开解读。")
+        audit = Path(__file__).resolve().parent / "results/gap_protocol_random128_20261116.json"
+        if audit.is_file():
+            rows = json.loads(audit.read_text()).get("results", [])
+            selected = next((row for row in rows if row["task"] == "vibrational.gap.ir_raman_hc" and row["status"] == "passed"), None)
+            if selected:
+                st.caption(f"离线完整输入检查 · {selected['metrics']['examples']} 个随机样本 · MAE {selected['metrics']['mae_ev']:.3f} eV；不代表单样本误差。")
 
 
 def generation_page() -> None:
@@ -521,7 +535,7 @@ def generation_page() -> None:
         if len(candidates) < limit:
             st.info(f"模型得到 {len(candidates)} 个有效且不重复的结构候选。")
         render_candidates(candidates, score_label="candidate confidence")
-        st.caption("200k Vib2Mol test set: reranked top-1 68.13% · top-5 80.02% · valid SMILES 97.67%")
+        st.caption("生成结果来自当前输入。离线准确率取决于输入模态、候选去重、beam 和重排设置，详见任务文档。")
         export = pd.DataFrame(result["candidates"])
         st.download_button(
             "下载生成结果 CSV",
@@ -532,13 +546,19 @@ def generation_page() -> None:
         )
 
 
-page = sidebar()
-if page == "任务与评测":
+page = sidebar(navigation == "prediction")
+if navigation == "dataset":
+    dataset_page(st)
+elif navigation == "documentation":
+    documentation_page(st)
+elif page == "任务与评测":
     from openmolspec_ui.benchmark import benchmark_page
     benchmark_page(st)
 elif page == "实验 NMR → 结构":
     from openmolspec_ui.benchmark import nmr_page
     nmr_page(st, service.device)
+elif page == "分子 → MS/MS":
+    ms_prediction_page(st)
 elif page == "构象 → 谱图":
     structure_to_spectrum_page()
 elif page == "谱图 → 结构检索":

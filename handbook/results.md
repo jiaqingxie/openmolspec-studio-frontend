@@ -1,4 +1,6 @@
-# 评测结果
+# 历史评测结果（已被后续审计部分替代）
+
+> 本页保留旧运行记录，不能作为当前能力总表。旧 F/P 预测与输入标签错配，以下两项分数已作废；新审计见 `results/fp_primary_score_gate_20261116.json`。最新四模态 Vib2Mol、gap、振动正向与 MS 结果见 [中英文任务文档](../documentation/tasks/index.zh.md)。
 
 运行完成：`2026-11-15T10:08:12.353774+00:00`。用途：流程小样本验证。
 
@@ -48,8 +50,8 @@ H/C 使用未指认峰的最小误差匹配，同时记录峰数误差和覆盖�
 
 | 任务 | 条件 | 指标 |
 | --- | --- | --- |
-| nmr.forward.19F | 固相→溶液域诊断 | mae_ppm=356.1634; rmse_ppm=362.2775 |
-| nmr.forward.31P | 固相→溶液域诊断 | mae_ppm=216.3488; rmse_ppm=220.9719 |
+| nmr.forward.19F | 旧输入错配 | 分数作废 |
+| nmr.forward.31P | 旧输入错配 | 分数作废 |
 | vibrational.gap.ir | 计算 IR/Raman，未提供 H/C | mae_ev=1.3193; rmse_ev=1.6003 |
 | vibrational.gap.raman | 计算 IR/Raman，未提供 H/C | mae_ev=2.7287; rmse_ev=2.7861 |
 | vibrational.gap.ir_raman | 计算 IR/Raman，未提供 H/C | mae_ev=1.1394; rmse_ev=1.2454 |
@@ -57,7 +59,7 @@ H/C 使用未指认峰的最小误差匹配，同时记录峰数误差和覆盖�
 | vibrational.generation | 计算 IR/Raman，未提供 H/C | valid_rate=1.0000; exact_rate=0.0000 |
 | spectroscopy.reranking | 计算 IR/Raman，未提供 H/C | recall_at_1=0.1250; mrr=0.3015; top_1_hit_rate=0.1250 |
 
-F/P 的固相到实验溶液域误差很大，仅证明已有预测评分路径可运行。Vib2Mol 生成使用原始 beam top-1，不使用测试集缓存。Gap 参考值先按元数据转换成 eV。
+F/P 的旧评分无效；冻结重跑虽已验证标签对齐，但固态到溶液的参考约定仍未确认，默认跳过正式评分。Vib2Mol 生成使用原始 beam top-1，不使用测试集缓存。Gap 参考值先按元数据转换成 eV。
 
 ## 跳过项
 

@@ -1,18 +1,43 @@
-site_name: OpenMolSpec v1.0 使用手册
-site_description: 谱学任务、现有模型推理和可复现评测
-site_url: https://jiaqingxie.github.io/openmolspec-studio-frontend/
+site_name: OpenMolSpec v1.0
+site_description: Pretrained spectroscopy tasks, reproducible evaluation, and online prediction
+site_url: !ENV [READTHEDOCS_CANONICAL_URL, 'http://localhost:8000/']
 repo_url: https://github.com/jiaqingxie/openmolspec-studio-frontend
-docs_dir: handbook
+docs_dir: documentation
 site_dir: site
 theme:
   name: material
-  language: zh
+  language: en
   features:
     - navigation.sections
     - navigation.top
     - content.code.copy
 plugins:
   - search
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: en
+          default: true
+          name: English
+          build: true
+        - locale: zh
+          name: 简体中文
+          build: true
+          nav_translations:
+            Home: 首页
+            Quick start: 快速开始
+            Tasks: 任务目录
+            Notebooks: Notebook 展示
+            Dataset Download: 数据下载
+            Evaluation protocols: 评测协议
+            Publication: 发布状态
+  - mkdocs-jupyter:
+      include: ['*.ipynb']
+      execute: false
+      include_source: true
 markdown_extensions:
   - admonition
   - fenced_code
@@ -20,12 +45,10 @@ markdown_extensions:
   - toc:
       permalink: true
 nav:
-  - 欢迎: index.md
-  - 安装与首次运行: quickstart.md
-  - 任务目录: tasks.md
-  - 数据与输入格式: data.md
-  - 基准评测: benchmark.md
-  - Studio 操作: studio.md
-  - 评测结果: results.md
-  - 常见问题: troubleshooting.md
-  - 文档维护与发布: development.md
+  - Home: index.md
+  - Quick start: quickstart.md
+  - Tasks: tasks/index.md
+  - Notebooks: notebooks/index.md
+  - Dataset Download: datasets.md
+  - Evaluation protocols: protocols.md
+  - Publication: publication.md

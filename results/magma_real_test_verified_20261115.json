@@ -1,0 +1,63 @@
+{
+  "task": "ms.annotation.magma",
+  "training_performed": false,
+  "algorithm": "MAGMa v8, original canonicalization",
+  "dataset": {
+    "path": "/mnt/shared-storage-user/xiejiaqing/MassSpecGym-MAGMA-annotation/data/MassSpecGym_test_full.csv",
+    "sha256": "1dc029f5e6ac6709aa5bc1c8986859f3f0f6403ea777740ed465e9e254420937"
+  },
+  "selection": {
+    "split_rows_examined": 2040,
+    "exceeds_heavy_atom_limit": 2005,
+    "duplicate_molecule": 33,
+    "missing_acquisition_metadata": 0
+  },
+  "ppm_tolerance": 10.0,
+  "source": {
+    "path": "/mnt/shared-storage-user/xiejiaqing/MassSpecGym-MAGMA-annotation",
+    "entry_sha256": "065bba978875da833a57efb8b47b37c083ea1cd45a7ce1cebc255ca3f35cebfc"
+  },
+  "atom_index_basis": "engine_smiles",
+  "interpretation": "algorithmic_candidate_annotations_not_experimentally_confirmed_mechanisms",
+  "records": [
+    {
+      "spec_id": "MassSpecGymID0046618",
+      "smiles": "O=C(O)c1ccc(-c2ccccc2-c2nn[nH]n2)cc1",
+      "n_peaks": 40,
+      "n_matched": 24,
+      "match_rate": 60.0,
+      "n_frags": 930,
+      "n_scores": 40,
+      "success": true,
+      "status": "passed",
+      "engine_smiles": "O=C(O)c1ccc(-c2ccccc2-c2nn[nH]n2)cc1",
+      "checked_fragments": 930,
+      "invalid_atom_mappings": 0,
+      "invalid_bond_mappings": 0
+    },
+    {
+      "spec_id": "MassSpecGymID0059557",
+      "smiles": "N#Cc1ccccc1NC(=O)c1snc(Cl)c1Cl",
+      "n_peaks": 4,
+      "n_matched": 1,
+      "match_rate": 25.0,
+      "n_frags": 604,
+      "n_scores": 1,
+      "success": true,
+      "status": "passed",
+      "engine_smiles": "N#Cc1ccccc1NC(=O)c1snc(Cl)c1Cl",
+      "checked_fragments": 604,
+      "invalid_atom_mappings": 0,
+      "invalid_bond_mappings": 0
+    }
+  ],
+  "counts": {
+    "passed": 2
+  },
+  "metrics": {
+    "matched_peak_fraction": 0.5681818181818182,
+    "annotated_spectra": 2,
+    "checked_fragments": 1534
+  },
+  "completed": true
+}

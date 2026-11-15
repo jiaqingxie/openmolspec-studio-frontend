@@ -40,7 +40,7 @@ class ModelAssets:
     def root_available(self) -> bool:
         return self.root.is_dir()
 
-    def capability_status(self) -> dict[str, tuple[bool, str]]:
+    def capability_status(self, online: bool = False) -> dict[str, tuple[bool, str]]:
         return {
             "构象 → 谱图": (
                 all(
@@ -56,7 +56,7 @@ class ModelAssets:
                 "1M theoretical · Hessian / response / H-C NMR",
             ),
             "谱图 → 结构检索": (
-                self.spectrum_lmdb is not None,
+                self.spectrum_lmdb is not None and (not online or self.retrieval_checkpoint is not None and self.nmr_normalizer is not None),
                 "OpenMolSpec theoretical test set",
             ),
             "谱图 → HOMO–LUMO gap": (
@@ -65,8 +65,8 @@ class ModelAssets:
             ),
             "谱图 → 结构生成": (
                 self.generation_checkpoint is not None
-                and self.generation_predictions is not None,
-                "Vib2Mol · cached test set inference",
+                and (self.nmr_normalizer is not None if online else self.generation_predictions is not None),
+                "Vib2Mol · direct inference" if online else "Vib2Mol · legacy test set cache",
             ),
         }
 

@@ -4,6 +4,7 @@ import hashlib
 import io
 import json
 import pickle
+import random
 from pathlib import Path
 import shutil
 import tempfile
@@ -51,6 +52,44 @@ def readonly_lmdb(path):
             finally:
                 temporary.unlink(missing_ok=True)
         return lmdb.open(str(destination), **options)
+
+
+def select_vibrational_rows(environment, limit, sampling="first", seed=42, require_gap=False):
+    """Select distinct real structures; optional seeded reservoir spans the entire test pool."""
+    from rdkit import Chem
+    from collections import Counter
+
+    selected, seen, counts = [], set(), Counter()
+    rng = random.Random(seed)
+    eligible = 0
+    with environment.begin() as transaction:
+        for key, value in transaction.cursor():
+            row = pickle.loads(value)
+            counts["read"] += 1
+            if require_gap and row.get("gap") is None:
+                counts["missing_gap"] += 1
+                continue
+            molecule = Chem.MolFromSmiles(row["kekule_smiles"])
+            if molecule is None:
+                raise ValueError(f"Invalid vibrational reference at {key!r}")
+            identity = Chem.MolToSmiles(molecule, isomericSmiles=True)
+            if identity in seen:
+                counts["duplicate_structure"] += 1
+                continue
+            seen.add(identity)
+            row = {**row, "_lmdb_key": key.decode(), "_canonical_identity": identity}
+            eligible += 1
+            if len(selected) < limit:
+                selected.append(row)
+            elif sampling == "reservoir":
+                index = rng.randrange(eligible)
+                if index < limit:
+                    selected[index] = row
+            if sampling == "first" and len(selected) >= limit:
+                break
+    counts["eligible_distinct_structures"] = eligible
+    counts["selected"] = len(selected)
+    return selected, dict(counts)
 
 
 def normalize_record(row):

@@ -25,7 +25,7 @@ for nucleus in ("1H", "13C", "19F", "31P", "11B", "29Si"):
          ("matched_peak_mae_ppm", "matched_peak_rmse_ppm", "peak_count_mae", "matched_fraction")),
         "对已有 NMRNet/NMRNet++ 推理文件评分；无逐原子指认时使用最小代价峰匹配。"
         if nucleus in ("1H", "13C") else
-        "已有 NMRNet 固相权重在实验溶液单核数据上的预测评分，明确作为跨域诊断结果。"
+        "已拦截旧输入错配；冻结重跑后固相权重的溶液位移参考仍未确认，默认跳过正式评分，仅显式允许跨域诊断。"
         if nucleus in ("19F", "31P") else "保留六核任务定义；尚未验证可用于此实验域的 checkpoint 和预测文件。"))
 for view, modalities in (("h", ("1H",)), ("c", ("13C",)), ("hc", ("1H", "13C"))):
     for direction in ("s2m", "m2s"):
@@ -41,9 +41,12 @@ for view in ("ir", "raman", "ir_raman"):
     modalities = tuple(view.upper().split("_"))
     TASKS.append(Task(f"vibrational.gap.{view}", f"{view.upper()} → HOMO–LUMO gap", "property",
                       modalities, "computed", "studio_gap", ("mae_ev", "rmse_ev")))
+TASKS.append(Task("vibrational.gap.ir_raman_hc", "IR + Raman + H/C NMR → HOMO–LUMO gap", "property",
+                  ("IR", "Raman", "1H", "13C"), "computed", "studio_gap", ("mae_ev", "rmse_ev"),
+                  "按 checkpoint 的 ir-raman-nmr 完整输入运行；同时报告训练均值常量基线。"))
 for id_, title, modalities, backend, metrics, note in (
-    ("vibrational.forward", "构象 → IR / Raman", ("IR", "Raman"), "unavailable", ("spectral_cosine", "spectral_mae"),
-     "Studio 已有 Hessian / response 推理入口；本统一基准尚未接入有配对参考值的评测数据。"),
+    ("vibrational.forward", "构象 → IR / Raman", ("IR", "Raman"), "studio_vibrational_forward", ("ir_cosine_similarity", "raman_cosine_similarity", "ir_mae", "raman_mae"),
+     "已有 Hessian/response 模型在原始 Gaussian 日志的同一几何上预测；默认两个真实日志示例，仅作配对流程检查。"),
     ("vibrational.retrieval", "IR / Raman → 结构检索", ("IR", "Raman"), "vib2mol_retrieval", ("recall_at_1", "recall_at_5", "recall_at_10", "mrr"),
      "已有 Vib2Mol checkpoint 直接编码本次选中样本；提供 IR+Raman，不提供 H/C。"),
     ("vibrational.generation", "IR / Raman → SMILES", ("IR", "Raman"), "vib2mol_generation", ("exact_rate", "valid_rate"),
@@ -62,6 +65,26 @@ for id_, title, modalities, backend, metrics, note in (
     TASKS.append(Task(id_, title, id_.split(".")[-1], modalities,
                       "computed" if id_.startswith("vibrational") or backend.startswith("vib2mol_") else "experimental",
                       backend, metrics, note))
+
+for id_, title, backend, metrics in (
+    ("vibrational.retrieval.hc", "IR + Raman + H/C → 结构检索", "vib2mol_retrieval", ("recall_at_1", "recall_at_5", "recall_at_10", "mrr")),
+    ("vibrational.generation.hc", "IR + Raman + H/C → SMILES（Xinyu 协议）", "vib2mol_generation", ("exact_canonical_top1", "exact_canonical_top5", "valid_smiles_fraction")),
+    ("spectroscopy.reranking.hc", "IR + Raman + H/C + 候选 → ITM 重排", "vib2mol_reranking", ("top_1_hit_rate", "mrr")),
+):
+    TASKS.append(Task(id_, title, "generation" if "generation" in id_ else "retrieval" if "retrieval" in id_ else "reranking",
+                      ("IR", "Raman", "1H", "13C"), "computed", backend, metrics,
+                      "使用 Xinyu 保存的四模态 checkpoint、H/C 参考与归一化；生成按原评测脚本去重和 ITM 重排。"))
+
+for model in ("glacier", "iceberg"):
+    TASKS.append(Task(f"ms.forward.{model}", f"分子 → MS/MS（{model.upper()}）", "forward", ("MS/MS",),
+                      "experimental", f"ms_pretrained_{model}", ("cosine_similarity", "entropy_similarity"),
+                      "直接调用作者的冻结 checkpoint；使用我们测试 CSV 的实测谱并核对分子、加合物和采集条件。"))
+TASKS.append(Task("ms.annotation.magma", "MS/MS 峰 → MAGMa 候选碎片标注", "annotation", ("MS/MS",),
+                  "experimental", "magma_algorithm", ("matched_peak_fraction", "checked_fragments"),
+                  "原算法，无训练；原子索引以 engine_smiles 为准并逐碎片验证，标注不等于实验确认的机制。"))
+TASKS.append(Task("multispectral.spectrallm.generation", "多谱 → 结构（SpectraLLM）", "generation",
+                  ("IR", "Raman", "NMR", "MS/MS"), "mixed", "unavailable", ("exact_rate", "valid_rate"),
+                  "官方新权重为 32B；当前本地仅有旧 7B adapter 且其指定基座缺失。需下载完整官方权重或提供匹配基座，不进行训练。"))
 
 BY_ID = {task.id: task for task in TASKS}
 

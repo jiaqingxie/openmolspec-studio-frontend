@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "release": "1.0.0",
+  "started_at": "2026-11-15T16:40:03.533918+00:00",
+  "purpose": "pipeline_smoke_evaluation",
+  "limit": 32,
+  "device": "cpu",
+  "python": "3.10.18",
+  "torch": "2.6.0+cu124",
+  "implementation_sha256": "36e0f49e1f5d8a7ecc20eaa6f41f0d6f3953aa3c3ede14b1d1fa7b2766243469",
+  "training_performed": false,
+  "results": [
+    {
+      "task": "nmr.forward.19F",
+      "title": "结构 → 19F 峰列表",
+      "backend": "nmrnet_hetero_predictions",
+      "domain": "experimental",
+      "dataset_name": null,
+      "status": "skipped",
+      "reason": "F/P prediction-label alignment is verified, but the available solid-state checkpoint has no verified solution-shift reference. A compatible released checkpoint or documented reference conversion is required; no training or fitted calibration is performed. Use --allow-cross-domain-diagnostic only for a labeled diagnostic report.",
+      "elapsed_seconds": 0.218
+    },
+    {
+      "task": "nmr.forward.31P",
+      "title": "结构 → 31P 峰列表",
+      "backend": "nmrnet_hetero_predictions",
+      "domain": "experimental",
+      "dataset_name": null,
+      "status": "skipped",
+      "reason": "F/P prediction-label alignment is verified, but the available solid-state checkpoint has no verified solution-shift reference. A compatible released checkpoint or documented reference conversion is required; no training or fitted calibration is performed. Use --allow-cross-domain-diagnostic only for a labeled diagnostic report.",
+      "elapsed_seconds": 0.047
+    }
+  ],
+  "counts": {
+    "skipped": 2
+  },
+  "elapsed_seconds": 0.606,
+  "completed_at": "2026-11-15T16:40:04.152999+00:00"
+}

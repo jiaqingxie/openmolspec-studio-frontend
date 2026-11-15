@@ -1,0 +1,1620 @@
+{
+  "nmr.retrieval.h.s2m": [
+    {
+      "task": "nmr.retrieval.h.s2m",
+      "dataset_name": "nmrspec_test",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.h.s2m",
+      "dataset_name": "patent_test_10k",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.6875,
+        "recall_at_5": 0.96875,
+        "recall_at_10": 1.0,
+        "mrr": 0.8195684523809523,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 33,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 1
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.h.s2m",
+      "dataset_name": "nmrexp_exp_10k",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.875,
+        "recall_at_5": 0.96875,
+        "recall_at_10": 1.0,
+        "mrr": 0.9177083333333333,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.h.s2m",
+      "dataset_name": "nmrgym_test",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.6875,
+        "recall_at_5": 0.875,
+        "recall_at_10": 0.9375,
+        "mrr": 0.7686395202020202,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    }
+  ],
+  "nmr.retrieval.h.m2s": [
+    {
+      "task": "nmr.retrieval.h.m2s",
+      "dataset_name": "nmrspec_test",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.h.m2s",
+      "dataset_name": "patent_test_10k",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.625,
+        "recall_at_5": 0.9375,
+        "recall_at_10": 0.96875,
+        "mrr": 0.7752976190476191,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 33,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 1
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.h.m2s",
+      "dataset_name": "nmrexp_exp_10k",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.84375,
+        "recall_at_5": 0.96875,
+        "recall_at_10": 1.0,
+        "mrr": 0.8877604166666666,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.h.m2s",
+      "dataset_name": "nmrgym_test",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.65625,
+        "recall_at_5": 0.90625,
+        "recall_at_10": 0.90625,
+        "mrr": 0.7492974473443224,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    }
+  ],
+  "nmr.retrieval.c.s2m": [
+    {
+      "task": "nmr.retrieval.c.s2m",
+      "dataset_name": "nmrspec_test",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.90625,
+        "recall_at_5": 0.9375,
+        "recall_at_10": 0.96875,
+        "mrr": 0.9291666666666667,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.c.s2m",
+      "dataset_name": "patent_test_10k",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.53125,
+        "recall_at_5": 0.8125,
+        "recall_at_10": 0.9375,
+        "mrr": 0.6624236874236874,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 173,
+        "missing_modality": 140,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 1
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.c.s2m",
+      "dataset_name": "nmrexp_exp_10k",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.625,
+        "recall_at_5": 0.9375,
+        "recall_at_10": 0.96875,
+        "mrr": 0.7745535714285714,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 50,
+        "missing_modality": 18,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.c.s2m",
+      "dataset_name": "nmrgym_test",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.78125,
+        "recall_at_5": 0.96875,
+        "recall_at_10": 1.0,
+        "mrr": 0.8706597222222222,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    }
+  ],
+  "nmr.retrieval.c.m2s": [
+    {
+      "task": "nmr.retrieval.c.m2s",
+      "dataset_name": "nmrspec_test",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.9375,
+        "recall_at_5": 0.96875,
+        "recall_at_10": 0.96875,
+        "mrr": 0.9503205128205128,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.c.m2s",
+      "dataset_name": "patent_test_10k",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.5625,
+        "recall_at_5": 0.8125,
+        "recall_at_10": 0.875,
+        "mrr": 0.6944010416666666,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 173,
+        "missing_modality": 140,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 1
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.c.m2s",
+      "dataset_name": "nmrexp_exp_10k",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.65625,
+        "recall_at_5": 0.9375,
+        "recall_at_10": 0.96875,
+        "mrr": 0.7745949074074074,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 50,
+        "missing_modality": 18,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.c.m2s",
+      "dataset_name": "nmrgym_test",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.78125,
+        "recall_at_5": 0.9375,
+        "recall_at_10": 1.0,
+        "mrr": 0.8611111111111112,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    }
+  ],
+  "nmr.retrieval.hc.s2m": [
+    {
+      "task": "nmr.retrieval.hc.s2m",
+      "dataset_name": "nmrspec_test",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.hc.s2m",
+      "dataset_name": "patent_test_10k",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.65625,
+        "recall_at_5": 0.9375,
+        "recall_at_10": 0.9375,
+        "mrr": 0.7762166501976284,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 173,
+        "missing_modality": 140,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 1
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.hc.s2m",
+      "dataset_name": "nmrexp_exp_10k",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.90625,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 0.9375,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 50,
+        "missing_modality": 18,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.hc.s2m",
+      "dataset_name": "nmrgym_test",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.8125,
+        "recall_at_5": 0.96875,
+        "recall_at_10": 0.96875,
+        "mrr": 0.8869791666666667,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    }
+  ],
+  "nmr.retrieval.hc.m2s": [
+    {
+      "task": "nmr.retrieval.hc.m2s",
+      "dataset_name": "nmrspec_test",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.hc.m2s",
+      "dataset_name": "patent_test_10k",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.625,
+        "recall_at_5": 0.90625,
+        "recall_at_10": 0.90625,
+        "mrr": 0.7388174019607843,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 173,
+        "missing_modality": 140,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 1
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.hc.m2s",
+      "dataset_name": "nmrexp_exp_10k",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.875,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 0.9244791666666666,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 50,
+        "missing_modality": 18,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.retrieval.hc.m2s",
+      "dataset_name": "nmrgym_test",
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 0.84375,
+        "recall_at_5": 0.96875,
+        "recall_at_10": 0.96875,
+        "mrr": 0.8972537878787878,
+        "queries": 32,
+        "candidate_pool": 32,
+        "unique_candidates": 32,
+        "tie_policy": "stable_candidate_order"
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    }
+  ],
+  "nmr.generation.h": [
+    {
+      "task": "nmr.generation.h",
+      "dataset_name": "nmrspec_test",
+      "status": "passed",
+      "metrics": {
+        "modality": "available",
+        "examples": 32,
+        "skipped_missing_modality": 0,
+        "valid": 32,
+        "formula_match": 27,
+        "exact": 3,
+        "valid_rate": 1.0,
+        "formula_match_rate": 0.84375,
+        "exact_rate": 0.09375
+      },
+      "beam_size": 5,
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.generation.h",
+      "dataset_name": "patent_test_10k",
+      "status": "passed",
+      "metrics": {
+        "modality": "available",
+        "examples": 32,
+        "skipped_missing_modality": 0,
+        "valid": 23,
+        "formula_match": 5,
+        "exact": 0,
+        "valid_rate": 0.71875,
+        "formula_match_rate": 0.15625,
+        "exact_rate": 0.0
+      },
+      "beam_size": 5,
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.generation.h",
+      "dataset_name": "nmrexp_exp_10k",
+      "status": "passed",
+      "metrics": {
+        "modality": "available",
+        "examples": 32,
+        "skipped_missing_modality": 0,
+        "valid": 32,
+        "formula_match": 27,
+        "exact": 15,
+        "valid_rate": 1.0,
+        "formula_match_rate": 0.84375,
+        "exact_rate": 0.46875
+      },
+      "beam_size": 5,
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.generation.h",
+      "dataset_name": "nmrgym_test",
+      "status": "passed",
+      "metrics": {
+        "modality": "available",
+        "examples": 32,
+        "skipped_missing_modality": 0,
+        "valid": 30,
+        "formula_match": 15,
+        "exact": 0,
+        "valid_rate": 0.9375,
+        "formula_match_rate": 0.46875,
+        "exact_rate": 0.0
+      },
+      "beam_size": 5,
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    }
+  ],
+  "nmr.generation.c": [
+    {
+      "task": "nmr.generation.c",
+      "dataset_name": "nmrspec_test",
+      "status": "passed",
+      "metrics": {
+        "modality": "available",
+        "examples": 32,
+        "skipped_missing_modality": 0,
+        "valid": 31,
+        "formula_match": 23,
+        "exact": 3,
+        "valid_rate": 0.96875,
+        "formula_match_rate": 0.71875,
+        "exact_rate": 0.09375
+      },
+      "beam_size": 5,
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.generation.c",
+      "dataset_name": "patent_test_10k",
+      "status": "passed",
+      "metrics": {
+        "modality": "available",
+        "examples": 32,
+        "skipped_missing_modality": 0,
+        "valid": 28,
+        "formula_match": 3,
+        "exact": 0,
+        "valid_rate": 0.875,
+        "formula_match_rate": 0.09375,
+        "exact_rate": 0.0
+      },
+      "beam_size": 5,
+      "selection": {
+        "read": 173,
+        "missing_modality": 141,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.generation.c",
+      "dataset_name": "nmrexp_exp_10k",
+      "status": "passed",
+      "metrics": {
+        "modality": "available",
+        "examples": 32,
+        "skipped_missing_modality": 0,
+        "valid": 32,
+        "formula_match": 30,
+        "exact": 19,
+        "valid_rate": 1.0,
+        "formula_match_rate": 0.9375,
+        "exact_rate": 0.59375
+      },
+      "beam_size": 5,
+      "selection": {
+        "read": 50,
+        "missing_modality": 18,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.generation.c",
+      "dataset_name": "nmrgym_test",
+      "status": "passed",
+      "metrics": {
+        "modality": "available",
+        "examples": 32,
+        "skipped_missing_modality": 0,
+        "valid": 30,
+        "formula_match": 16,
+        "exact": 0,
+        "valid_rate": 0.9375,
+        "formula_match_rate": 0.5,
+        "exact_rate": 0.0
+      },
+      "beam_size": 5,
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    }
+  ],
+  "nmr.generation.hc": [
+    {
+      "task": "nmr.generation.hc",
+      "dataset_name": "nmrspec_test",
+      "status": "passed",
+      "metrics": {
+        "modality": "available",
+        "examples": 32,
+        "skipped_missing_modality": 0,
+        "valid": 32,
+        "formula_match": 29,
+        "exact": 4,
+        "valid_rate": 1.0,
+        "formula_match_rate": 0.90625,
+        "exact_rate": 0.125
+      },
+      "beam_size": 5,
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.generation.hc",
+      "dataset_name": "patent_test_10k",
+      "status": "passed",
+      "metrics": {
+        "modality": "available",
+        "examples": 32,
+        "skipped_missing_modality": 0,
+        "valid": 24,
+        "formula_match": 1,
+        "exact": 0,
+        "valid_rate": 0.75,
+        "formula_match_rate": 0.03125,
+        "exact_rate": 0.0
+      },
+      "beam_size": 5,
+      "selection": {
+        "read": 173,
+        "missing_modality": 141,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.generation.hc",
+      "dataset_name": "nmrexp_exp_10k",
+      "status": "passed",
+      "metrics": {
+        "modality": "available",
+        "examples": 32,
+        "skipped_missing_modality": 0,
+        "valid": 32,
+        "formula_match": 29,
+        "exact": 22,
+        "valid_rate": 1.0,
+        "formula_match_rate": 0.90625,
+        "exact_rate": 0.6875
+      },
+      "beam_size": 5,
+      "selection": {
+        "read": 50,
+        "missing_modality": 18,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    },
+    {
+      "task": "nmr.generation.hc",
+      "dataset_name": "nmrgym_test",
+      "status": "passed",
+      "metrics": {
+        "modality": "available",
+        "examples": 32,
+        "skipped_missing_modality": 0,
+        "valid": 25,
+        "formula_match": 15,
+        "exact": 0,
+        "valid_rate": 0.78125,
+        "formula_match_rate": 0.46875,
+        "exact_rate": 0.0
+      },
+      "beam_size": 5,
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "sampling": "first_distinct_canonical_structures_in_file_order",
+      "source_file": "smoke_nmr_20261115_v2.json",
+      "sample_limit": 32
+    }
+  ],
+  "nmr.forward.1H": [
+    {
+      "task": "nmr.forward.1H",
+      "dataset_name": "nmrspec_test",
+      "status": "passed",
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "source_file": "smoke_forward_20261115_v3.json",
+      "sample_limit": 32,
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.13414263433412102,
+            "matched_peak_rmse_ppm": 0.23681643380742615,
+            "peak_count_mae": 10.21875,
+            "matched_fraction": 0.5192430632770222,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.07699339577171921,
+            "matched_peak_rmse_ppm": 0.1638748144986357,
+            "peak_count_mae": 10.21875,
+            "matched_fraction": 0.5192430632770222,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        }
+      ]
+    },
+    {
+      "task": "nmr.forward.1H",
+      "dataset_name": "patent_test_10k",
+      "status": "passed",
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "source_file": "smoke_forward_20261115_v3.json",
+      "sample_limit": 32,
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.2691200683990773,
+            "matched_peak_rmse_ppm": 0.5308687779393774,
+            "peak_count_mae": 24.75862068965517,
+            "matched_fraction": 0.2947374416128153,
+            "examples": 29,
+            "scored_examples": 29,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.22784231065252586,
+            "matched_peak_rmse_ppm": 0.4845488263627234,
+            "peak_count_mae": 24.75862068965517,
+            "matched_fraction": 0.2947374416128153,
+            "examples": 29,
+            "scored_examples": 29,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        }
+      ]
+    },
+    {
+      "task": "nmr.forward.1H",
+      "dataset_name": "nmrexp_exp_10k",
+      "status": "passed",
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "source_file": "smoke_forward_20261115_v3.json",
+      "sample_limit": 32,
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.04858252130873491,
+            "matched_peak_rmse_ppm": 0.07973883212249766,
+            "peak_count_mae": 8.09375,
+            "matched_fraction": 0.5308309470320394,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.03063703681651138,
+            "matched_peak_rmse_ppm": 0.06262486667216845,
+            "peak_count_mae": 8.09375,
+            "matched_fraction": 0.5308309470320394,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        }
+      ]
+    },
+    {
+      "task": "nmr.forward.1H",
+      "dataset_name": "nmrgym_test",
+      "status": "passed",
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "source_file": "smoke_forward_20261115_v3.json",
+      "sample_limit": 32,
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.1968244606377943,
+            "matched_peak_rmse_ppm": 0.39348758699328934,
+            "peak_count_mae": 15.84375,
+            "matched_fraction": 0.5291027660402658,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.19821629074817518,
+            "matched_peak_rmse_ppm": 0.40631559148803237,
+            "peak_count_mae": 15.84375,
+            "matched_fraction": 0.5291027660402658,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        }
+      ]
+    }
+  ],
+  "nmr.forward.13C": [
+    {
+      "task": "nmr.forward.13C",
+      "dataset_name": "nmrspec_test",
+      "status": "passed",
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "source_file": "smoke_forward_20261115_v3.json",
+      "sample_limit": 32,
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 1.166839493503614,
+            "matched_peak_rmse_ppm": 2.3898515362116135,
+            "peak_count_mae": 2.65625,
+            "matched_fraction": 0.8683153839313926,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 0.8163807039222384,
+            "matched_peak_rmse_ppm": 2.0137184870551987,
+            "peak_count_mae": 2.65625,
+            "matched_fraction": 0.8683153839313926,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        }
+      ]
+    },
+    {
+      "task": "nmr.forward.13C",
+      "dataset_name": "patent_test_10k",
+      "status": "passed",
+      "selection": {
+        "read": 173,
+        "missing_modality": 141,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "source_file": "smoke_forward_20261115_v3.json",
+      "sample_limit": 32,
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 8.041924852126245,
+            "matched_peak_rmse_ppm": 24.297510376653264,
+            "peak_count_mae": 18.193548387096776,
+            "matched_fraction": 0.43315070786510484,
+            "examples": 31,
+            "scored_examples": 31,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 7.5615217252266795,
+            "matched_peak_rmse_ppm": 22.917821121262513,
+            "peak_count_mae": 18.193548387096776,
+            "matched_fraction": 0.43315070786510484,
+            "examples": 31,
+            "scored_examples": 31,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        }
+      ]
+    },
+    {
+      "task": "nmr.forward.13C",
+      "dataset_name": "nmrexp_exp_10k",
+      "status": "passed",
+      "selection": {
+        "read": 50,
+        "missing_modality": 18,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "source_file": "smoke_forward_20261115_v3.json",
+      "sample_limit": 32,
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 1.3063837598230228,
+            "matched_peak_rmse_ppm": 7.498559532565537,
+            "peak_count_mae": 3.90625,
+            "matched_fraction": 0.7535539713423682,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 1.2925194849511477,
+            "matched_peak_rmse_ppm": 8.097448280861592,
+            "peak_count_mae": 3.90625,
+            "matched_fraction": 0.7535539713423682,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        }
+      ]
+    },
+    {
+      "task": "nmr.forward.13C",
+      "dataset_name": "nmrgym_test",
+      "status": "passed",
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "source_file": "smoke_forward_20261115_v3.json",
+      "sample_limit": 32,
+      "models": [
+        {
+          "model": "nmrnet",
+          "metrics": {
+            "matched_peak_mae_ppm": 2.2765265164740645,
+            "matched_peak_rmse_ppm": 3.99253565138379,
+            "peak_count_mae": 2.625,
+            "matched_fraction": 0.9080126647199663,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        },
+        {
+          "model": "nmrnetpp",
+          "metrics": {
+            "matched_peak_mae_ppm": 2.4534173733134828,
+            "matched_peak_rmse_ppm": 4.157696167382544,
+            "peak_count_mae": 2.625,
+            "matched_fraction": 0.9080126647199663,
+            "examples": 32,
+            "scored_examples": 32,
+            "aggregation": "equal_weight_per_molecule",
+            "assignment": "minimum_absolute_error_without_atom_labels"
+          }
+        }
+      ]
+    }
+  ],
+  "nmr.forward.19F": [
+    {
+      "task": "nmr.forward.19F",
+      "dataset_name": null,
+      "status": "skipped",
+      "reason": "F/P prediction-label alignment is verified, but the available solid-state checkpoint has no verified solution-shift reference. A compatible released checkpoint or documented reference conversion is required; no training or fitted calibration is performed. Use --allow-cross-domain-diagnostic only for a labeled diagnostic report.",
+      "source_file": "fp_primary_score_gate_20261116.json",
+      "sample_limit": 32
+    }
+  ],
+  "nmr.forward.31P": [
+    {
+      "task": "nmr.forward.31P",
+      "dataset_name": null,
+      "status": "skipped",
+      "reason": "F/P prediction-label alignment is verified, but the available solid-state checkpoint has no verified solution-shift reference. A compatible released checkpoint or documented reference conversion is required; no training or fitted calibration is performed. Use --allow-cross-domain-diagnostic only for a labeled diagnostic report.",
+      "source_file": "fp_primary_score_gate_20261116.json",
+      "sample_limit": 32
+    }
+  ],
+  "vibrational.gap.ir": [
+    {
+      "task": "vibrational.gap.ir",
+      "dataset_name": null,
+      "status": "passed",
+      "metrics": {
+        "mae_ev": 1.1777104695762848,
+        "rmse_ev": 1.4748687542942966,
+        "examples": 128
+      },
+      "given_nmr": false,
+      "source_counts": {
+        "ZINCV2": 58,
+        "SDBS": 4,
+        "PCQM4MV2": 20,
+        "WILEYIR": 9,
+        "ZINCV1": 12,
+        "RXN": 6,
+        "QM9": 18,
+        "WILEYRAMAN": 1
+      },
+      "selection": {
+        "read": 20390,
+        "duplicate_structure": 3662,
+        "eligible_distinct_structures": 16728,
+        "selected": 128
+      },
+      "sampling": "reservoir",
+      "seed": 42,
+      "training_mean_baseline": {
+        "constant_ev": 5.645122750946045,
+        "mae_ev": 0.8999401965027582,
+        "rmse_ev": 1.0696170714220543,
+        "examples": 128
+      },
+      "source_file": "gap_protocol_random128_20261116.json",
+      "sample_limit": 128
+    }
+  ],
+  "vibrational.gap.raman": [
+    {
+      "task": "vibrational.gap.raman",
+      "dataset_name": null,
+      "status": "passed",
+      "metrics": {
+        "mae_ev": 2.9781784993717197,
+        "rmse_ev": 3.156612886408973,
+        "examples": 128
+      },
+      "given_nmr": false,
+      "source_counts": {
+        "ZINCV2": 58,
+        "SDBS": 4,
+        "PCQM4MV2": 20,
+        "WILEYIR": 9,
+        "ZINCV1": 12,
+        "RXN": 6,
+        "QM9": 18,
+        "WILEYRAMAN": 1
+      },
+      "selection": {
+        "read": 20390,
+        "duplicate_structure": 3662,
+        "eligible_distinct_structures": 16728,
+        "selected": 128
+      },
+      "sampling": "reservoir",
+      "seed": 42,
+      "training_mean_baseline": {
+        "constant_ev": 5.645122750946045,
+        "mae_ev": 0.8999401965027582,
+        "rmse_ev": 1.0696170714220543,
+        "examples": 128
+      },
+      "source_file": "gap_protocol_random128_20261116.json",
+      "sample_limit": 128
+    }
+  ],
+  "vibrational.gap.ir_raman": [
+    {
+      "task": "vibrational.gap.ir_raman",
+      "dataset_name": null,
+      "status": "passed",
+      "metrics": {
+        "mae_ev": 1.2776368534375264,
+        "rmse_ev": 1.4789026993553864,
+        "examples": 128
+      },
+      "given_nmr": false,
+      "source_counts": {
+        "ZINCV2": 58,
+        "SDBS": 4,
+        "PCQM4MV2": 20,
+        "WILEYIR": 9,
+        "ZINCV1": 12,
+        "RXN": 6,
+        "QM9": 18,
+        "WILEYRAMAN": 1
+      },
+      "selection": {
+        "read": 20390,
+        "duplicate_structure": 3662,
+        "eligible_distinct_structures": 16728,
+        "selected": 128
+      },
+      "sampling": "reservoir",
+      "seed": 42,
+      "training_mean_baseline": {
+        "constant_ev": 5.645122750946045,
+        "mae_ev": 0.8999401965027582,
+        "rmse_ev": 1.0696170714220543,
+        "examples": 128
+      },
+      "source_file": "gap_protocol_random128_20261116.json",
+      "sample_limit": 128
+    }
+  ],
+  "vibrational.gap.ir_raman_hc": [
+    {
+      "task": "vibrational.gap.ir_raman_hc",
+      "dataset_name": null,
+      "status": "passed",
+      "metrics": {
+        "mae_ev": 0.1314457535089349,
+        "rmse_ev": 0.20596364382966384,
+        "examples": 128
+      },
+      "given_nmr": true,
+      "source_counts": {
+        "ZINCV2": 58,
+        "SDBS": 4,
+        "PCQM4MV2": 20,
+        "WILEYIR": 9,
+        "ZINCV1": 12,
+        "RXN": 6,
+        "QM9": 18,
+        "WILEYRAMAN": 1
+      },
+      "selection": {
+        "read": 20390,
+        "duplicate_structure": 3662,
+        "eligible_distinct_structures": 16728,
+        "selected": 128
+      },
+      "sampling": "reservoir",
+      "seed": 42,
+      "training_mean_baseline": {
+        "constant_ev": 5.645122750946045,
+        "mae_ev": 0.8999401965027582,
+        "rmse_ev": 1.0696170714220543,
+        "examples": 128
+      },
+      "source_file": "gap_protocol_random128_20261116.json",
+      "sample_limit": 128
+    }
+  ],
+  "vibrational.retrieval.hc": [
+    {
+      "task": "vibrational.retrieval.hc",
+      "dataset_name": null,
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "queries": 64,
+        "candidate_pool": 64,
+        "unique_candidates": 64,
+        "tie_policy": "stable_candidate_order"
+      },
+      "given_nmr": true,
+      "source_counts": {
+        "ZINCV2": 28,
+        "SDBS": 2,
+        "PCQM4MV2": 11,
+        "WILEYIR": 1,
+        "ZINCV1": 7,
+        "RXN": 5,
+        "NISTIR": 1,
+        "QM9": 9
+      },
+      "selection": {
+        "read": 20390,
+        "duplicate_structure": 3662,
+        "eligible_distinct_structures": 16728,
+        "selected": 64
+      },
+      "sampling": "reservoir",
+      "seed": 42,
+      "source_file": "vib2mol_xinyu_random64_20261116.json",
+      "sample_limit": 64
+    }
+  ],
+  "vibrational.generation.hc": [
+    {
+      "task": "vibrational.generation.hc",
+      "dataset_name": null,
+      "status": "passed",
+      "metrics": {
+        "exact_canonical_top1": 0.75,
+        "exact_canonical_top3": 0.890625,
+        "exact_canonical_top5": 0.890625,
+        "exact_canonical_top10": 0.890625,
+        "valid_smiles_fraction": 0.959375,
+        "duplicate_valid_beams": 455,
+        "examples": 64
+      },
+      "given_nmr": true,
+      "beam_size": 10,
+      "reranked_metrics": {
+        "exact_canonical_top1": 0.6875,
+        "exact_canonical_top3": 0.84375,
+        "exact_canonical_top5": 0.890625,
+        "exact_canonical_top10": 0.890625
+      },
+      "source_counts": {
+        "ZINCV2": 28,
+        "SDBS": 2,
+        "PCQM4MV2": 11,
+        "WILEYIR": 1,
+        "ZINCV1": 7,
+        "RXN": 5,
+        "NISTIR": 1,
+        "QM9": 9
+      },
+      "selection": {
+        "read": 20390,
+        "duplicate_structure": 3662,
+        "eligible_distinct_structures": 16728,
+        "selected": 64
+      },
+      "sampling": "reservoir",
+      "seed": 42,
+      "source_file": "vib2mol_xinyu_random64_20261116.json",
+      "sample_limit": 64
+    }
+  ],
+  "spectroscopy.reranking.hc": [
+    {
+      "task": "spectroscopy.reranking.hc",
+      "dataset_name": null,
+      "status": "passed",
+      "metrics": {
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "queries": 64,
+        "candidate_pool": 64,
+        "unique_candidates": 64,
+        "tie_policy": "stable_candidate_order",
+        "top_1_hit_rate": 1.0
+      },
+      "given_nmr": true,
+      "source_counts": {
+        "ZINCV2": 28,
+        "SDBS": 2,
+        "PCQM4MV2": 11,
+        "WILEYIR": 1,
+        "ZINCV1": 7,
+        "RXN": 5,
+        "NISTIR": 1,
+        "QM9": 9
+      },
+      "selection": {
+        "read": 20390,
+        "duplicate_structure": 3662,
+        "eligible_distinct_structures": 16728,
+        "selected": 64
+      },
+      "sampling": "reservoir",
+      "seed": 42,
+      "source_file": "vib2mol_xinyu_random64_20261116.json",
+      "sample_limit": 64
+    }
+  ],
+  "vibrational.forward": [
+    {
+      "task": "vibrational.forward",
+      "dataset_name": null,
+      "status": "passed",
+      "metrics": {
+        "ir_cosine_similarity": 0.9775025844573975,
+        "ir_mae": 0.005194379133172333,
+        "raman_cosine_similarity": 0.9901942908763885,
+        "raman_mae": 0.0016446748340968043
+      },
+      "examples": 2,
+      "source_file": "vibrational_forward_paired_logs_20261116.json",
+      "sample_limit": 2
+    }
+  ],
+  "ms.forward.glacier": [
+    {
+      "task": "ms.forward.glacier",
+      "metrics": {
+        "cosine_similarity": 0.48571684784228214,
+        "entropy_similarity": 0.41328016795498823
+      },
+      "counts": {
+        "passed": 31,
+        "skipped": 1
+      },
+      "selection": {
+        "split_rows_examined": 1444,
+        "exceeds_heavy_atom_limit": 473,
+        "duplicate_molecule": 939,
+        "missing_acquisition_metadata": 0
+      },
+      "sampling": "first_real_test_records_with_at_most_40_heavy_atoms",
+      "unique_molecules": 32,
+      "source_file": "ms_glacier_32_molecules_20261116.json",
+      "sample_limit": 32
+    }
+  ],
+  "ms.forward.iceberg": [
+    {
+      "task": "ms.forward.iceberg",
+      "metrics": {
+        "cosine_similarity": 0.4624995623966228,
+        "entropy_similarity": 0.3698472199736009
+      },
+      "counts": {
+        "passed": 31,
+        "skipped": 1
+      },
+      "selection": {
+        "split_rows_examined": 1444,
+        "exceeds_heavy_atom_limit": 473,
+        "duplicate_molecule": 939,
+        "missing_acquisition_metadata": 0
+      },
+      "sampling": "first_real_test_records_with_at_most_40_heavy_atoms",
+      "unique_molecules": 32,
+      "source_file": "ms_iceberg_32_molecules_20261116.json",
+      "sample_limit": 32
+    }
+  ],
+  "ms.annotation.magma": [
+    {
+      "task": "ms.annotation.magma",
+      "metrics": {
+        "matched_peak_fraction": 0.5681818181818182,
+        "annotated_spectra": 2,
+        "checked_fragments": 1534
+      },
+      "counts": {
+        "passed": 2
+      },
+      "selection": {
+        "split_rows_examined": 2040,
+        "exceeds_heavy_atom_limit": 2005,
+        "duplicate_molecule": 33,
+        "missing_acquisition_metadata": 0
+      },
+      "source_file": "magma_real_test_verified_20261115.json",
+      "sample_limit": 2
+    }
+  ]
+}

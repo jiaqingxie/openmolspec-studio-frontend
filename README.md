@@ -2,7 +2,7 @@
 
 谱学任务、已有模型推理和可复现评测的统一工作台。支持实验 H/C NMR 候选检索与 SMILES 生成，并保留计算 IR/Raman、谱图到性质和 Vib2Mol 工作流。
 
-完整手册位于 [handbook/](handbook/index.md)。[GitHub Pages 手册](https://jiaqingxie.github.io/openmolspec-studio-frontend/) 在 Documentation workflow 成功部署后生效。
+中英文完整手册源文件位于 [documentation/](documentation/index.md)，每个任务附输入示例和 notebook。Read the Docs 发布配置已准备；实际构建和公开网址尚未验证。旧 [handbook/](handbook/index.md) 保留历史记录。
 
 ## 安装与启动
 
@@ -28,7 +28,7 @@ python -m openmolspec_bench run \
   --output results/my_smoke.json
 ```
 
-统一目录包含 26 个任务定义、19 个已有评测适配器，覆盖六核 NMR 任务定义、H/C 双向检索与生成、F/P 跨域评分、IR/Raman gap 和 Vib2Mol 检索/生成/重排。待接入任务显式标记。结果记录数据与权重 SHA-256、样本、候选池和状态。流程入口只进行推理或已有预测评分。
+统一目录包含 34 个任务配置：25 项已有执行或评分接口，F/P 两项默认禁止正式评分，另外 7 项缺兼容模型或评测条件。覆盖 H/C NMR、Xinyu 四模态 Vib2Mol、gap、构象到 IR/Raman、GLACIER/ICEBERG 和 MAGMa。接口存在不代表精度已验证。结果记录数据与权重 SHA-256、样本、候选池和状态。流程入口只进行推理或已有预测评分。
 
 详情见[任务目录](handbook/tasks.md)、[数据格式](handbook/data.md)、[评测口径](handbook/benchmark.md)、[Studio 操作](handbook/studio.md)及[结果](handbook/results.md)。旧核心项目说明仍位于 [docs/openmolspec_core.md](docs/openmolspec_core.md)。
 
@@ -40,4 +40,8 @@ python scripts/render_task_catalog.py --check
 python -m mkdocs build --strict
 ```
 
-GitHub 仓库 Settings → Pages 的 Source 设为 GitHub Actions。PR 构建文档，主分支更新发布文档。
+Read the Docs 导入本仓库并使用 `.readthedocs.yaml` 构建；GitHub Actions 负责严格文档构建检查。确认真实上线地址后设置 `OPENMOLSPEC_DOCS_URL`，前端 Full documentation 会跳转到该地址。未配置时展示本地文档与发布状态。
+
+前端导航为 Tool、Dataset Download、Prediction (Online)、Full documentation。在线 MS 推理可通过 `OPENMOLSPEC_MS_PYTHON` 指定包含作者依赖的 Python。模型与数据路径配置见 [快速开始](documentation/quickstart.zh.md)。
+
+最新证据见 [评测协议](documentation/protocols.zh.md) 和各任务页。旧 F/P 分数因输入与标签错配作废；新推理已对齐，但固态权重的溶液位移参考未核实，不能宣称修复了预测精度。

@@ -1,0 +1,2406 @@
+{
+  "schema_version": 1,
+  "release": "1.0.0",
+  "started_at": "2026-11-15T16:05:05.139802+00:00",
+  "purpose": "pipeline_smoke_evaluation",
+  "limit": 64,
+  "device": "cpu",
+  "python": "3.13.5",
+  "torch": "2.14.0+cu130",
+  "implementation_sha256": "365780db7ec0c5639aa3750641f3deb02adfdf9421d683796ddb58892c2db12d",
+  "training_performed": false,
+  "results": [
+    {
+      "task": "vibrational.retrieval.hc",
+      "title": "IR + Raman + H/C → 结构检索",
+      "backend": "vib2mol_retrieval",
+      "domain": "computed",
+      "dataset_name": null,
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/benchmark_data/release_v1_ks200k_hc_nmr_minmax/vib2mol/openspec_test.lmdb",
+        "sha256": "736a234607992865136b23b3d091b26323936f08377362a196fe97ceb3bdb6a1"
+      },
+      "sample_ids": [
+        "CC(C)OCc1nc(C2CCC2)cs1",
+        "CCC(CC(C)C)C(=O)NC1CCC(=O)NC1",
+        "N=c1nc2c(ncn2C2OC(CO)C(O)C2O)c(Cl)[nH]1",
+        "CCNC(c1nccn1C)C1CCCC1",
+        "Cn1cnc(C=CC(=O)NC23CCCC2C3)c1",
+        "NN1C(=O)C2(CCCCCCC2)N=C1O",
+        "COc1ccc2c(c1)CCCO2",
+        "COc1ccc2c(c1)CCC(C)(C)O2",
+        "CN(C)C(=O)CN1CC2CC1CS2",
+        "c1ccc(N2CCOCC2)cc1",
+        "Cc1nocc1C(=O)NC1CCCn2nccc21",
+        "O=S(=O)(Cc1ccccc1)Cc1ccccc1",
+        "O=CNC1C(=O)Nc2ccccc21",
+        "CS(=O)(=O)N1CC=CC12CCCCC2",
+        "CC1CC(O)CNC1=O",
+        "C=C1c2ccccc2C(=O)c2cccc(ON)c21",
+        "Cc1cc(C(F)(F)F)nc(OC(C)C2CC2)n1",
+        "O=c1cncn[nH]c1=O",
+        "O=CCC1(C2CC2)CC1",
+        "C=CCCN(C)C(=O)C1CCNC(=O)C1",
+        "CCc1noc(C)c1C(=O)N=c1cc(C)[nH][nH]1",
+        "C1CC23OCC24NC3C14",
+        "CC(C)c1cc(C(=O)N2CCC(C3CC3)C2)no1",
+        "CC(=O)N1CCC2CN(C)CC21",
+        "O=C(CC(F)(F)F)c1cncc2ccccc12",
+        "CCCC(C)[NH+]1CCC(C)=C(Br)C1",
+        "Cc1ccc(N(C)CCOC2CCOC2)cc1C",
+        "CNC(=O)Nc1nccn(C)c1=O",
+        "O=C1Nc2ccc(F)cc2C1O",
+        "Cc1ccc(Oc2ccc(C=O)c(C)c2)c(C)c1",
+        "Nc1ccc2c(c1)=NC(=O)N=2",
+        "CC1CCC2CC2CC1",
+        "COC1CCN(C(=O)c2ccc(C)o2)C1",
+        "CC(CC#N)N(C)C(=O)C1CSC(=O)N1",
+        "CCCCNC(=S)N(CC1CC1)CC1CC1",
+        "Cc1ccc(O)c(C(=O)NCCC2(C)CC2)c1",
+        "CC1(S(=O)(=O)N2CCCCC2)CC1",
+        "N#Cc1ccc2c(c1)NC(=O)C2",
+        "COC1CCC2(C)C3=CCC4(C)C5CCC(C(C)C)C5(C)CCC4(C)C3CCC2C1(C)C",
+        "CNCCN(C)c1nc2ccccc2s1",
+        "CC(C)CCn1ccncc1=O",
+        "CN(c1ccc2ncsc2c1)S(C)(=O)=O",
+        "N#COCSc1nc2ccccc2s1",
+        "CC(COC(=O)C1(C2CC2)CC1)C(F)(F)F",
+        "N#Cc1cc(Br)cnc1N1CCOCC1",
+        "CCCCC(O)c1cncc2ccccc12",
+        "Cc1ccc(CCNC(=O)c2cncnc2)cc1",
+        "Cc1c[nH]nc1-c1cccs1",
+        "Nc1ccc(Oc2ccccc2)cc1",
+        "CC1=CC(C)(C=O)OC1",
+        "CC(=O)N1CCC(c2nn[nH]n2)C1",
+        "Cc1cc(C(O)c2cn[nH]c2)cs1",
+        "OC1CCCC1NN=Cc1cnn2cccnc12",
+        "CC(C)(C)c1cn2c(n1)SCC2",
+        "CCCn1cc(-n2cc(N)ccc2=NCC)cn1",
+        "Oc1cc(F)ccc1CC1CCCCC1",
+        "CC1=CCC2CC2OC1",
+        "CC(C)C1=CCOC1",
+        "Cc1ccc(CC(=O)Nc2cnccc2C)cc1",
+        "Cc1c2ccccc2c(C)c2cnccc12",
+        "C=CCCC(C)Nc1ccc2cnccc2c1",
+        "CCn1ccnc1-c1ccc(C=O)c(F)c1",
+        "Cn1cnc(=N)cc1O",
+        "CC1ON=C(c2ccccc2)C1c1ccccc1"
+      ],
+      "given_nmr": true,
+      "given_formula": false,
+      "inference_mode": "direct_checkpoint",
+      "sampling": "reservoir",
+      "seed": 42,
+      "selection": {
+        "read": 20390,
+        "duplicate_structure": 3662,
+        "eligible_distinct_structures": 16728,
+        "selected": 64
+      },
+      "source_counts": {
+        "ZINCV2": 28,
+        "SDBS": 2,
+        "PCQM4MV2": 11,
+        "WILEYIR": 1,
+        "ZINCV1": 7,
+        "RXN": 5,
+        "NISTIR": 1,
+        "QM9": 9
+      },
+      "record_ids": [
+        "ZINCV2-ZINC000656476138",
+        "ZINCV2-ZINC000308084709",
+        "SDBS-22820",
+        "PCQM4MV2-1003250",
+        "ZINCV2-ZINC000887030689",
+        "WILEYIR-18576",
+        "ZINCV1-ZINC000028580494",
+        "ZINCV1-ZINC000096180987",
+        "ZINCV2-ZINC000335584018",
+        "RXN-6800",
+        "ZINCV2-ZINC000636371267",
+        "NISTIR-7362",
+        "ZINCV1-ZINC000000406648",
+        "ZINCV2-ZINC000920136187",
+        "QM9-dsgdb9nsd_093224",
+        "PCQM4MV2-237284",
+        "ZINCV2-ZINC001226169912",
+        "QM9-dsgdb9nsd_130725",
+        "QM9-dsgdb9nsd_050998",
+        "ZINCV2-ZINC000342497713",
+        "PCQM4MV2-1035767",
+        "QM9-dsgdb9nsd_041452",
+        "ZINCV2-ZINC000336252943",
+        "PCQM4MV2-100050",
+        "PCQM4MV2-1012750",
+        "ZINCV2-ZINC000306185194",
+        "ZINCV2-ZINC000929297468",
+        "ZINCV2-ZINC000306729660",
+        "ZINCV1-ZINC000000111128",
+        "PCQM4MV2-1083991",
+        "ZINCV1-ZINC000100063390",
+        "QM9-dsgdb9nsd_095237",
+        "ZINCV2-ZINC000170489245",
+        "ZINCV2-ZINC000155809131",
+        "ZINCV2-ZINC000123835923",
+        "ZINCV2-ZINC000348635354",
+        "ZINCV2-ZINC000334681880",
+        "ZINCV2-ZINC000002577875",
+        "SDBS-27970",
+        "RXN-22640",
+        "ZINCV2-ZINC000033951144",
+        "RXN-20644",
+        "PCQM4MV2-240272",
+        "ZINCV2-ZINC000885733638",
+        "RXN-7858",
+        "PCQM4MV2-1013127",
+        "ZINCV2-ZINC000354783905",
+        "ZINCV1-ZINC000000141275",
+        "RXN-19258",
+        "QM9-dsgdb9nsd_074300",
+        "ZINCV2-ZINC000616612362",
+        "ZINCV2-ZINC000306444860",
+        "ZINCV2-ZINC000901333599",
+        "ZINCV1-ZINC000000165090",
+        "ZINCV2-ZINC001174222306",
+        "PCQM4MV2-111041",
+        "QM9-dsgdb9nsd_075348",
+        "QM9-dsgdb9nsd_013868",
+        "ZINCV2-ZINC000336140884",
+        "ZINCV2-ZINC000001761893",
+        "ZINCV2-ZINC000453612420",
+        "PCQM4MV2-1004485",
+        "QM9-dsgdb9nsd_029879",
+        "PCQM4MV2-153703"
+      ],
+      "checkpoint": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/runs/openmolspec-v1-ks1000k/spectrum2structure/vib2mol/ir-raman-hc-generation-v1/seed-624/2026-09-16-07-00-d369d0/artifacts/vib2mol/checkpoints/openspec/ir-raman-kekule_smiles/vib2mol/2026-09-16-07-01-8e4216/best_recall.pth",
+        "sha256": "e81cb178991742a6686b2d31ea191381cc5951aa15f8f7ddeb93c5473b0c0cf1"
+      },
+      "metrics": {
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "queries": 64,
+        "candidate_pool": 64,
+        "unique_candidates": 64,
+        "tie_policy": "stable_candidate_order"
+      },
+      "reverse_metrics": {
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "queries": 64,
+        "candidate_pool": 64,
+        "unique_candidates": 64,
+        "tie_policy": "stable_candidate_order"
+      },
+      "status": "passed",
+      "elapsed_seconds": 74.258
+    },
+    {
+      "task": "vibrational.generation.hc",
+      "title": "IR + Raman + H/C → SMILES（Xinyu 协议）",
+      "backend": "vib2mol_generation",
+      "domain": "computed",
+      "dataset_name": null,
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/benchmark_data/release_v1_ks200k_hc_nmr_minmax/vib2mol/openspec_test.lmdb",
+        "sha256": "736a234607992865136b23b3d091b26323936f08377362a196fe97ceb3bdb6a1"
+      },
+      "sample_ids": [
+        "CC(C)OCc1nc(C2CCC2)cs1",
+        "CCC(CC(C)C)C(=O)NC1CCC(=O)NC1",
+        "N=c1nc2c(ncn2C2OC(CO)C(O)C2O)c(Cl)[nH]1",
+        "CCNC(c1nccn1C)C1CCCC1",
+        "Cn1cnc(C=CC(=O)NC23CCCC2C3)c1",
+        "NN1C(=O)C2(CCCCCCC2)N=C1O",
+        "COc1ccc2c(c1)CCCO2",
+        "COc1ccc2c(c1)CCC(C)(C)O2",
+        "CN(C)C(=O)CN1CC2CC1CS2",
+        "c1ccc(N2CCOCC2)cc1",
+        "Cc1nocc1C(=O)NC1CCCn2nccc21",
+        "O=S(=O)(Cc1ccccc1)Cc1ccccc1",
+        "O=CNC1C(=O)Nc2ccccc21",
+        "CS(=O)(=O)N1CC=CC12CCCCC2",
+        "CC1CC(O)CNC1=O",
+        "C=C1c2ccccc2C(=O)c2cccc(ON)c21",
+        "Cc1cc(C(F)(F)F)nc(OC(C)C2CC2)n1",
+        "O=c1cncn[nH]c1=O",
+        "O=CCC1(C2CC2)CC1",
+        "C=CCCN(C)C(=O)C1CCNC(=O)C1",
+        "CCc1noc(C)c1C(=O)N=c1cc(C)[nH][nH]1",
+        "C1CC23OCC24NC3C14",
+        "CC(C)c1cc(C(=O)N2CCC(C3CC3)C2)no1",
+        "CC(=O)N1CCC2CN(C)CC21",
+        "O=C(CC(F)(F)F)c1cncc2ccccc12",
+        "CCCC(C)[NH+]1CCC(C)=C(Br)C1",
+        "Cc1ccc(N(C)CCOC2CCOC2)cc1C",
+        "CNC(=O)Nc1nccn(C)c1=O",
+        "O=C1Nc2ccc(F)cc2C1O",
+        "Cc1ccc(Oc2ccc(C=O)c(C)c2)c(C)c1",
+        "Nc1ccc2c(c1)=NC(=O)N=2",
+        "CC1CCC2CC2CC1",
+        "COC1CCN(C(=O)c2ccc(C)o2)C1",
+        "CC(CC#N)N(C)C(=O)C1CSC(=O)N1",
+        "CCCCNC(=S)N(CC1CC1)CC1CC1",
+        "Cc1ccc(O)c(C(=O)NCCC2(C)CC2)c1",
+        "CC1(S(=O)(=O)N2CCCCC2)CC1",
+        "N#Cc1ccc2c(c1)NC(=O)C2",
+        "COC1CCC2(C)C3=CCC4(C)C5CCC(C(C)C)C5(C)CCC4(C)C3CCC2C1(C)C",
+        "CNCCN(C)c1nc2ccccc2s1",
+        "CC(C)CCn1ccncc1=O",
+        "CN(c1ccc2ncsc2c1)S(C)(=O)=O",
+        "N#COCSc1nc2ccccc2s1",
+        "CC(COC(=O)C1(C2CC2)CC1)C(F)(F)F",
+        "N#Cc1cc(Br)cnc1N1CCOCC1",
+        "CCCCC(O)c1cncc2ccccc12",
+        "Cc1ccc(CCNC(=O)c2cncnc2)cc1",
+        "Cc1c[nH]nc1-c1cccs1",
+        "Nc1ccc(Oc2ccccc2)cc1",
+        "CC1=CC(C)(C=O)OC1",
+        "CC(=O)N1CCC(c2nn[nH]n2)C1",
+        "Cc1cc(C(O)c2cn[nH]c2)cs1",
+        "OC1CCCC1NN=Cc1cnn2cccnc12",
+        "CC(C)(C)c1cn2c(n1)SCC2",
+        "CCCn1cc(-n2cc(N)ccc2=NCC)cn1",
+        "Oc1cc(F)ccc1CC1CCCCC1",
+        "CC1=CCC2CC2OC1",
+        "CC(C)C1=CCOC1",
+        "Cc1ccc(CC(=O)Nc2cnccc2C)cc1",
+        "Cc1c2ccccc2c(C)c2cnccc12",
+        "C=CCCC(C)Nc1ccc2cnccc2c1",
+        "CCn1ccnc1-c1ccc(C=O)c(F)c1",
+        "Cn1cnc(=N)cc1O",
+        "CC1ON=C(c2ccccc2)C1c1ccccc1"
+      ],
+      "given_nmr": true,
+      "given_formula": false,
+      "inference_mode": "direct_checkpoint",
+      "sampling": "reservoir",
+      "seed": 42,
+      "selection": {
+        "read": 20390,
+        "duplicate_structure": 3662,
+        "eligible_distinct_structures": 16728,
+        "selected": 64
+      },
+      "source_counts": {
+        "ZINCV2": 28,
+        "SDBS": 2,
+        "PCQM4MV2": 11,
+        "WILEYIR": 1,
+        "ZINCV1": 7,
+        "RXN": 5,
+        "NISTIR": 1,
+        "QM9": 9
+      },
+      "record_ids": [
+        "ZINCV2-ZINC000656476138",
+        "ZINCV2-ZINC000308084709",
+        "SDBS-22820",
+        "PCQM4MV2-1003250",
+        "ZINCV2-ZINC000887030689",
+        "WILEYIR-18576",
+        "ZINCV1-ZINC000028580494",
+        "ZINCV1-ZINC000096180987",
+        "ZINCV2-ZINC000335584018",
+        "RXN-6800",
+        "ZINCV2-ZINC000636371267",
+        "NISTIR-7362",
+        "ZINCV1-ZINC000000406648",
+        "ZINCV2-ZINC000920136187",
+        "QM9-dsgdb9nsd_093224",
+        "PCQM4MV2-237284",
+        "ZINCV2-ZINC001226169912",
+        "QM9-dsgdb9nsd_130725",
+        "QM9-dsgdb9nsd_050998",
+        "ZINCV2-ZINC000342497713",
+        "PCQM4MV2-1035767",
+        "QM9-dsgdb9nsd_041452",
+        "ZINCV2-ZINC000336252943",
+        "PCQM4MV2-100050",
+        "PCQM4MV2-1012750",
+        "ZINCV2-ZINC000306185194",
+        "ZINCV2-ZINC000929297468",
+        "ZINCV2-ZINC000306729660",
+        "ZINCV1-ZINC000000111128",
+        "PCQM4MV2-1083991",
+        "ZINCV1-ZINC000100063390",
+        "QM9-dsgdb9nsd_095237",
+        "ZINCV2-ZINC000170489245",
+        "ZINCV2-ZINC000155809131",
+        "ZINCV2-ZINC000123835923",
+        "ZINCV2-ZINC000348635354",
+        "ZINCV2-ZINC000334681880",
+        "ZINCV2-ZINC000002577875",
+        "SDBS-27970",
+        "RXN-22640",
+        "ZINCV2-ZINC000033951144",
+        "RXN-20644",
+        "PCQM4MV2-240272",
+        "ZINCV2-ZINC000885733638",
+        "RXN-7858",
+        "PCQM4MV2-1013127",
+        "ZINCV2-ZINC000354783905",
+        "ZINCV1-ZINC000000141275",
+        "RXN-19258",
+        "QM9-dsgdb9nsd_074300",
+        "ZINCV2-ZINC000616612362",
+        "ZINCV2-ZINC000306444860",
+        "ZINCV2-ZINC000901333599",
+        "ZINCV1-ZINC000000165090",
+        "ZINCV2-ZINC001174222306",
+        "PCQM4MV2-111041",
+        "QM9-dsgdb9nsd_075348",
+        "QM9-dsgdb9nsd_013868",
+        "ZINCV2-ZINC000336140884",
+        "ZINCV2-ZINC000001761893",
+        "ZINCV2-ZINC000453612420",
+        "PCQM4MV2-1004485",
+        "QM9-dsgdb9nsd_029879",
+        "PCQM4MV2-153703"
+      ],
+      "checkpoint": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/runs/openmolspec-v1-ks1000k/spectrum2structure/vib2mol/ir-raman-hc-generation-v1/seed-624/2026-09-16-07-00-d369d0/artifacts/vib2mol/checkpoints/openspec/ir-raman-kekule_smiles/vib2mol/2026-09-16-21-21-88e3a8/best_acc.pth",
+        "sha256": "978aae6864104e4581d814a964cbcb04b7207eaa0b74946d3c5a0f886d54db06"
+      },
+      "metrics": {
+        "exact_canonical_top1": 0.75,
+        "exact_canonical_top3": 0.890625,
+        "exact_canonical_top5": 0.890625,
+        "exact_canonical_top10": 0.890625,
+        "valid_smiles_fraction": 0.959375,
+        "duplicate_valid_beams": 455,
+        "examples": 64
+      },
+      "reranked_metrics": {
+        "exact_canonical_top1": 0.6875,
+        "exact_canonical_top3": 0.84375,
+        "exact_canonical_top5": 0.890625,
+        "exact_canonical_top10": 0.890625
+      },
+      "ranking": "Xinyu canonical valid unique beams, then ITM positive probability top10 reranking",
+      "beam_size": 10,
+      "max_length": 300,
+      "rank_checkpoint": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/runs/openmolspec-v1-ks1000k/spectrum2structure/vib2mol/ir-raman-hc-generation-v1/seed-624/2026-09-16-07-00-d369d0/artifacts/vib2mol/checkpoints/openspec/ir-raman-kekule_smiles/vib2mol/2026-09-16-07-01-8e4216/best_recall.pth",
+        "sha256": "e81cb178991742a6686b2d31ea191381cc5951aa15f8f7ddeb93c5473b0c0cf1"
+      },
+      "predictions": [
+        {
+          "target": "CC(C)OCC1=NC(C2CCC2)=CS1",
+          "raw_beams": [
+            "CC(C)OCC1=NC(C2CCC2)=CS1",
+            "CC(OCC1=NC(=CS1)C1CCC1)C",
+            "CC(OCC1=NC(C2CCC2)=CS1)C",
+            "CC(OCC1SC=C(N=1)C1CCC1)C",
+            "CC(OCC1SC=C(C2CCC2)N=1)C",
+            "C1CCC1C1=CSC(=N1)COC(C)C",
+            "C1CCC1C1=CSC(COC(C)C)=N1",
+            "C1(CCC1)C1=CSC(=N1)COC(C)C",
+            "C1(CCC1)C1=CSC(COC(C)C)=N1",
+            "C1(CCC1)C1N=C(SC=1)COC(C)C"
+          ],
+          "unique_candidates": [
+            "CC(C)OCC1=NC(C2CCC2)=CS1"
+          ],
+          "reranked": [
+            "CC(C)OCC1=NC(C2CCC2)=CS1"
+          ],
+          "positive_probabilities": [
+            0.9998494386672974
+          ]
+        },
+        {
+          "target": "CCC(CC(C)C)C(=O)NC1CCC(=O)NC1",
+          "raw_beams": [
+            "CC(C)CC(C)NC(=O)C1CCC(=O)NCC1",
+            "CC(C)CC(C)C(=O)NC1CCC(=O)NCC1",
+            "CC(C)CC(C)C(=O)NC1CCCC(=O)NC1",
+            "CC(C)CC(C)NC(=O)C1CCC(=O)NC1",
+            "CC(C)CC(C)C(=O)NC1CCC(=O)NC1",
+            "CC(C)CC(C)NC(=O)C1CNC(=O)CCC1",
+            "CC(CC(C)C)NC(=O)C1CCC(=O)NCC1",
+            "CC(CC(C)C)NC(=O)C1CCC(NCC1)=O",
+            "CC(CC(C)C)NC(C1CCC(=O)NC1)=O",
+            "CC(CC(C)C)NC(=O)C1CNC(=O)CCC1"
+          ],
+          "unique_candidates": [
+            "CC(C)CC(C)NC(=O)C1CCNC(=O)CC1",
+            "CC(C)CC(C)C(=O)NC1CCNC(=O)CC1",
+            "CC(C)CC(C)C(=O)NC1CCCC(=O)NC1",
+            "CC(C)CC(C)NC(=O)C1CCC(=O)NC1",
+            "CC(C)CC(C)C(=O)NC1CCC(=O)NC1",
+            "CC(C)CC(C)NC(=O)C1CCCC(=O)NC1"
+          ],
+          "reranked": [
+            "CC(C)CC(C)C(=O)NC1CCCC(=O)NC1",
+            "CC(C)CC(C)NC(=O)C1CCCC(=O)NC1",
+            "CC(C)CC(C)C(=O)NC1CCNC(=O)CC1",
+            "CC(C)CC(C)NC(=O)C1CCNC(=O)CC1",
+            "CC(C)CC(C)C(=O)NC1CCC(=O)NC1",
+            "CC(C)CC(C)NC(=O)C1CCC(=O)NC1"
+          ],
+          "positive_probabilities": [
+            0.9992062449455261,
+            0.9985696077346802,
+            0.9968023300170898,
+            0.9835839867591858,
+            0.0004226609307806939,
+            2.5884039132506587e-05
+          ]
+        },
+        {
+          "target": "N=C1N=C2C(=C(Cl)N1)N=CN2C1OC(CO)C(O)C1O",
+          "raw_beams": [
+            "N=C1N=C(O)C2=C(N1)N(C1OC(CO)C(O)C1O)C=N2",
+            "N=C1N=C(Cl)C2=C(N1)N(C1OC(CO)C(O)C1O)C=N2",
+            "N=C1N=C2C(=C(Cl)N1)N=CN2C1OC(CO)C(O)C1O",
+            "N=C1N=C2C(=C(O)N1)N=CN2C1OC(CO)C(O)C1O",
+            "N=C1N=C(O)C2=C(N1)N(C1OC(CO)C(O)C1O)C=N2Cl",
+            "N=C1N=C(O)C2=C(Cl)N=CN(C3OC(CO)C(O)C3O)C2=N",
+            "N=C1N=C(O)C2=C(Cl)N(C3OC(CO)C(O)C3O)C=NN12",
+            "N=C1N=C(O)C2=C(Cl)N=CN2C2OC(CO)C(O)C2O",
+            "N=C1N=C(O)C2=C(N1)N=CN2C1OC(CO)C(O)C1O",
+            "N=C1N=C(O)C2=C(Cl)N(C3OC(CO)C(O)C3O)C=N2N1"
+          ],
+          "unique_candidates": [
+            "N=C1N=C(O)C2=C(N1)N(C1OC(CO)C(O)C1O)C=N2",
+            "N=C1N=C(Cl)C2=C(N1)N(C1OC(CO)C(O)C1O)C=N2",
+            "N=C1N=C2C(=C(Cl)N1)N=CN2C1OC(CO)C(O)C1O",
+            "N=C1N=C2C(=C(O)N1)N=CN2C1OC(CO)C(O)C1O",
+            "N=C1N=C(O)C2=C(Cl)N(C3OC(CO)C(O)C3O)C=NN21",
+            "N=C1N=C(O)C2=C(N=CN2C2OC(CO)C(O)C2O)N1"
+          ],
+          "reranked": [
+            "N=C1N=C(Cl)C2=C(N1)N(C1OC(CO)C(O)C1O)C=N2",
+            "N=C1N=C(O)C2=C(Cl)N(C3OC(CO)C(O)C3O)C=NN21",
+            "N=C1N=C2C(=C(Cl)N1)N=CN2C1OC(CO)C(O)C1O",
+            "N=C1N=C2C(=C(O)N1)N=CN2C1OC(CO)C(O)C1O",
+            "N=C1N=C(O)C2=C(N=CN2C2OC(CO)C(O)C2O)N1",
+            "N=C1N=C(O)C2=C(N1)N(C1OC(CO)C(O)C1O)C=N2"
+          ],
+          "positive_probabilities": [
+            0.9998570680618286,
+            0.9998118281364441,
+            0.9998034834861755,
+            0.9992008805274963,
+            0.9991375207901001,
+            0.9991245865821838
+          ]
+        },
+        {
+          "target": "CCNC(C1=NC=CN1C)C1CCCC1",
+          "raw_beams": [
+            "CCNC(C1=NC=CN1C)C1CCCC1",
+            "CCNC(C1CCCC1)C1=NC=CN1C",
+            "C1CCCC1C(C1=NC=CN1C)NCC",
+            "C1CCCC1C(NCC)C1=NC=CN1C",
+            "CN1C=CN=C1C(C1CCCC1)NCC",
+            "C1CC(CC1)C(C1=NC=CN1C)NCC",
+            "C1CC(CC1)C(NCC)C1=NC=CN1C",
+            "C1CCC(C1)C(NCC)C1=NC=CN1C",
+            "C1CCCC1C(NCC)C1N(C)C=CN=1",
+            "C1CCCC1C(NCC)C1N(C=CN=1)C"
+          ],
+          "unique_candidates": [
+            "CCNC(C1=NC=CN1C)C1CCCC1"
+          ],
+          "reranked": [
+            "CCNC(C1=NC=CN1C)C1CCCC1"
+          ],
+          "positive_probabilities": [
+            0.9994621872901917
+          ]
+        },
+        {
+          "target": "CN1C=NC(C=CC(=O)NC23CCCC2C3)=C1",
+          "raw_beams": [
+            "CN1C=NC(C=CC(=O)NC23CCCC2C3)=C1",
+            "CN1C=NC(C=CC(=O)NC23CC2CCC3)=C1",
+            "O=C(C=CC1=CN(C=N1)C)NC12CCCC1C2",
+            "O=C(C=CC1N=CN(C=1)C)NC12CCCC1C2",
+            "O=C(C=CC1=CN(C)C=N1)NC12CCCC1C2",
+            "O=C(C=CC1=CN(C=N1)C)NC12CCCC2C1",
+            "O=C(C=CC1N=CN(C)C=1)NC12CCCC1C2",
+            "C(=CC1=CN(C=N1)C)C(=O)NC12CCCC1C2",
+            "C(=CC1=CN(C=N1)C)C(=O)NC12CCCC2C1",
+            "C(=CC1=CN(C=N1)C)C(=O)NC12C(CCC2)C"
+          ],
+          "unique_candidates": [
+            "CN1C=NC(C=CC(=O)NC23CCCC2C3)=C1"
+          ],
+          "reranked": [
+            "CN1C=NC(C=CC(=O)NC23CCCC2C3)=C1"
+          ],
+          "positive_probabilities": [
+            0.9993763566017151
+          ]
+        },
+        {
+          "target": "NN1C(=O)C2(CCCCCCC2)N=C1O",
+          "raw_beams": [
+            "NN1C(=O)C2(CCCCCC2)N=C1O",
+            "NN1C(=O)C2(CCCCCCC2)N=C1O",
+            "NN1C(O)=NC2(CCCCCCC2)C1=O",
+            "NN1C(=NC2(CCCCCCC2)C1=O)O",
+            "NN1C(=NC2(C1=O)CCCCCCC2)O",
+            "NN1C(=NC2(CCCCCC2)C1=O)O",
+            "NN1C(O)=NC2(CCCCCC2)C1=O",
+            "C1CCC2(CCC1)N=C(N(C2=O)N)O",
+            "C1C2(CCCCC1)N=C(N(C2=O)N)O",
+            "NN1C(=NC2(C1=O)CCCCCC2)O"
+          ],
+          "unique_candidates": [
+            "NN1C(=O)C2(CCCCCC2)N=C1O",
+            "NN1C(=O)C2(CCCCCCC2)N=C1O"
+          ],
+          "reranked": [
+            "NN1C(=O)C2(CCCCCCC2)N=C1O",
+            "NN1C(=O)C2(CCCCCC2)N=C1O"
+          ],
+          "positive_probabilities": [
+            0.9999181032180786,
+            0.053260400891304016
+          ]
+        },
+        {
+          "target": "COC1=CC2=C(C=C1)OCCC2",
+          "raw_beams": [
+            "COC1=CC2=C(C=C1)OCCC2",
+            "COC1=CC2CCCOC=2C=C1",
+            "COC1C=CC2OCCCC=2C=1",
+            "O1CCCC2=C1C=CC(OC)=C2",
+            "O1CCCC2=C1C=CC(=C2)OC",
+            "COC1C=CC2=C(C=1)CCCO2",
+            "C1C2=C(OCCC2)C=CC=1OC",
+            "C1C2=C(C=CC=1OC)OCCC2",
+            "O1CCCC2C=C(OC)C=CC1=2",
+            "C1COC2=C(C1)C=C(OC)C=C"
+          ],
+          "unique_candidates": [
+            "COC1=CC2=C(C=C1)OCCC2"
+          ],
+          "reranked": [
+            "COC1=CC2=C(C=C1)OCCC2"
+          ],
+          "positive_probabilities": [
+            0.9996989965438843
+          ]
+        },
+        {
+          "target": "COC1=CC2=C(C=C1)OC(C)(C)CC2",
+          "raw_beams": [
+            "COC1=CC2=C(C=C1)OC(C)(C)CC2",
+            "CC1(OC2C=CC(OC)=CC=2CC1)C",
+            "CC1(OC2C=CC(=CC=2CC1)OC)C",
+            "COC1=CC2=C(C=C1)OC(C)(CC2)C",
+            "CC1(C)OC2C=CC(OC)=CC=2CC1",
+            "CC1(C)OC2C=CC(=CC=2CC1)OC",
+            "CC1(C)CCC2C=C(OC)C=CC=2O1",
+            "COC1C=CC2OC(C)(C)CCC=2C=1",
+            "COC1C=CC2OC(C)(CCC=2C=1)C",
+            "COC1=CC2=C(C=C1)OC(CC2)(C)C"
+          ],
+          "unique_candidates": [
+            "COC1=CC2=C(C=C1)OC(C)(C)CC2"
+          ],
+          "reranked": [
+            "COC1=CC2=C(C=C1)OC(C)(C)CC2"
+          ],
+          "positive_probabilities": [
+            0.999862551689148
+          ]
+        },
+        {
+          "target": "CN(C)C(=O)CN1CC2CC1CS2",
+          "raw_beams": [
+            "CN(C)C(=O)CN1CC2CC1CS2",
+            "CN(C)C(=O)C1CC2CN1CCS2",
+            "CN(C)C(=O)C1CN2CC(C2)S1",
+            "CN(C)C(=O)C1CN2CC(C2)C1",
+            "CN(C)C(=O)CN1C2CC(C1)SC2",
+            "O=C(N(C)C)CN1CC2CC1CS2",
+            "O=C(N(C)C)CN1CC2SC1CC2",
+            "CN(C(=O)CN1CC2CC1CS2)C",
+            "CN(C)C(=O)C1CN2CCC(C2)S1",
+            "O=C(N(C)C)CN1C2CC(S2)CC1"
+          ],
+          "unique_candidates": [
+            "CN(C)C(=O)CN1CC2CC1CS2",
+            "CN(C)C(=O)C1CC2CN1CCS2",
+            "CN(C)C(=O)C1CN2CC(C2)S1",
+            "CN(C)C(=O)C1CC2CN(C2)C1",
+            "CN(C)C(=O)CN1CC2CCC1S2",
+            "CN(C)C(=O)C1CN2CCC(C2)S1",
+            "CN(C)C(=O)CN1CCC2CC1S2"
+          ],
+          "reranked": [
+            "CN(C)C(=O)CN1CC2CCC1S2",
+            "CN(C)C(=O)CN1CC2CC1CS2",
+            "CN(C)C(=O)C1CC2CN1CCS2",
+            "CN(C)C(=O)CN1CCC2CC1S2",
+            "CN(C)C(=O)C1CN2CCC(C2)S1",
+            "CN(C)C(=O)C1CN2CC(C2)S1",
+            "CN(C)C(=O)C1CC2CN(C2)C1"
+          ],
+          "positive_probabilities": [
+            0.9994102716445923,
+            0.999381422996521,
+            0.9991952776908875,
+            0.9985719919204712,
+            0.9978818297386169,
+            1.2352775229373947e-06,
+            6.627927717772764e-08
+          ]
+        },
+        {
+          "target": "C1=CC=C(N2CCOCC2)C=C1",
+          "raw_beams": [
+            "C1=CC=C(N2CCOCC2)C=C1",
+            "C1=CC=CC=C1N1CCOCC1",
+            "C1C=CC=CC=1N1CCOCC1",
+            "C1COCCN1C1=CC=CC=C1",
+            "C1COCCN1C1C=CC=CC=1",
+            "O1CCN(CC1)C1=CC=CC=C1",
+            "O1CCN(CC1)C1C=CC=CC=1",
+            "C1=CC=CC(=C1)N1CCOCC1",
+            "N1(CCOCC1)C1=CC=CC=C1",
+            "N1(CCOCC1)C1C=CC=CC=1"
+          ],
+          "unique_candidates": [
+            "C1=CC=C(N2CCOCC2)C=C1"
+          ],
+          "reranked": [
+            "C1=CC=C(N2CCOCC2)C=C1"
+          ],
+          "positive_probabilities": [
+            0.9998501539230347
+          ]
+        },
+        {
+          "target": "CC1=NOC=C1C(=O)NC1CCCN2N=CC=C12",
+          "raw_beams": [
+            "CC1=NOC=C1C(=O)NC1CCCN2N=CC=C12",
+            "CC1=NOC=C1C(=O)NC1CCCN2C1=CC=N2",
+            "O=C(C1=CON=C1C)NC1CCCN2C1=CC=N2",
+            "N1=CC=C2N1CCCC2NC(C1=CON=C1C)=O",
+            "N1=CC=C2N1CCCC2NC(=O)C1=CON=C1C",
+            "C1(C)=NOC=C1C(=O)NC1CCCN2C1=CC=N2",
+            "C1C=NN2C=1C(CCC2)NC(=O)C1=CON=C1C",
+            "C1=NN2CCCC(C2=C1)NC(=O)C1=CON=C1C",
+            "O=C(C1=CON=C1C)NC1CCCN2N=CC=C21",
+            "C1(C)=NOC=C1C(=O)NC1CCCN2N=CC=C21"
+          ],
+          "unique_candidates": [
+            "CC1=NOC=C1C(=O)NC1CCCN2N=CC=C12"
+          ],
+          "reranked": [
+            "CC1=NOC=C1C(=O)NC1CCCN2N=CC=C12"
+          ],
+          "positive_probabilities": [
+            0.9994915723800659
+          ]
+        },
+        {
+          "target": "O=S(=O)(CC1=CC=CC=C1)CC1=CC=CC=C1",
+          "raw_beams": [
+            "O=S(=O)(CC1=CC=CC=C1)CC1=CC=CC=C1",
+            "O=S(CC1=CC=CC=C1)(=O)CC1=CC=CC=C1",
+            "O=S(CC1=CC=CC=C1)(CC1C=CC=CC=1)=O",
+            "O=S(CC1=CC=CC=C1)(CC1=CC=CC=C1)=O",
+            "O=S(CC1=CC=CC=C1)(=O)CC1C=CC=CC=1",
+            "O=S(=O)(CC1=CC=CC=C1)CC1C=CC=CC=1",
+            "C1C=CC=CC=1CS(=O)(CC1C=CC=CC=1)=O",
+            "C1C=CC=CC=1CS(=O)(CC1=CC=CC=C1)=O",
+            "C1C=CC=CC=1CS(=O)(=O)CC1=CC=CC=C1",
+            "C1C=CC=C(C=1)CS(=O)(=O)CC1=CC=CC=C1"
+          ],
+          "unique_candidates": [
+            "O=S(=O)(CC1=CC=CC=C1)CC1=CC=CC=C1"
+          ],
+          "reranked": [
+            "O=S(=O)(CC1=CC=CC=C1)CC1=CC=CC=C1"
+          ],
+          "positive_probabilities": [
+            0.9982000589370728
+          ]
+        },
+        {
+          "target": "O=CNC1C(=O)NC2=CC=CC=C21",
+          "raw_beams": [
+            "O=CNC1C(=O)NC2=CC=CC=C21",
+            "O=C1NC2=CC=CC=C2C1NC=O",
+            "O=CNC1C(=O)NC2C1=CC=CC=2",
+            "O=CNC1C(NC2C1=CC=CC=2)=O",
+            "C1=CC=C2C(NC(=O)C2NC=O)=C1",
+            "C1C=CC=C2C=1NC(=O)C2NC=O",
+            "C1C=CC=C2C=1C(NC2=O)NC=O",
+            "C1=CC=C2NC(=O)C(NC=O)C2=C1",
+            "C1=CC=C2NC(=O)C(C2=C1)NC=O",
+            "C1=CC=C2C(C(NC2=O)=O)NC=O"
+          ],
+          "unique_candidates": [
+            "O=CNC1C(=O)NC2=CC=CC=C21",
+            "O=CNC1NC(=O)C2=CC=CC=C21"
+          ],
+          "reranked": [
+            "O=CNC1C(=O)NC2=CC=CC=C21",
+            "O=CNC1NC(=O)C2=CC=CC=C21"
+          ],
+          "positive_probabilities": [
+            0.9997780919075012,
+            0.9996347427368164
+          ]
+        },
+        {
+          "target": "CS(=O)(=O)N1CC=CC12CCCCC2",
+          "raw_beams": [
+            "CS(=O)(=O)N1CC=CC12CCCCC2",
+            "CS(=O)(=O)N1C2(CCCCC2)C=CC1",
+            "CS(=O)(=O)N1C2(C=CC1)CCCCC2",
+            "O=S(C)(=O)N1CC=CC21CCCCC2",
+            "CS(=O)(=O)N1CC=CC21CCCCC2",
+            "O=S(C)(=O)N1C2(CCCCC2)C=CC1",
+            "O=S(N1C2(CCCCC2)C=CC1)(=O)C",
+            "O=S(N1C2(CCCCC2)C=CC1)(C)=O",
+            "C1CCCCC21C=CCN2S(=O)(C)=O",
+            "C1C2(CCCC1)C=CCN2S(=O)(C)=O"
+          ],
+          "unique_candidates": [
+            "CS(=O)(=O)N1CC=CC12CCCCC2"
+          ],
+          "reranked": [
+            "CS(=O)(=O)N1CC=CC12CCCCC2"
+          ],
+          "positive_probabilities": [
+            0.9998088479042053
+          ]
+        },
+        {
+          "target": "CC1CC(O)CNC1=O",
+          "raw_beams": [
+            "CC1CC(O)CNC1=O",
+            "O=C1NCC(CC1C)O",
+            "O=C1NCC(O)CC1C",
+            "C1NC(C(CC1O)C)=O",
+            "C1NC(=O)C(CC1O)C",
+            "OC1CC(C(=O)NC1)C",
+            "C1NC(=O)C(C)CC1O",
+            "OC1CC(C)C(=O)NC1",
+            "C1(O)CC(C)C(=O)NC",
+            "C1(O)CC(C)C(NC1)="
+          ],
+          "unique_candidates": [
+            "CC1CC(O)CNC1=O"
+          ],
+          "reranked": [
+            "CC1CC(O)CNC1=O"
+          ],
+          "positive_probabilities": [
+            0.999187171459198
+          ]
+        },
+        {
+          "target": "C=C1C2=CC=CC=C2C(=O)C2=CC=CC(ON)=C12",
+          "raw_beams": [
+            "NN1C=CC2=C1C(=O)C1=CC=CC=C1C=CC=C2",
+            "NN1C=CC2=C1C1=CC=CC=C1C(=O)C=CC=C2",
+            "NN1C=CC2=C1C1=CC=CC=C1C(=O)C=CC=C21",
+            "NN1C=CC2=C1C=CC=C2C(=O)C1=CC=CC=C12",
+            "NOC1=C2C(=CC=C1)C(=O)C1=CC=CC=C1C2=O",
+            "NOC1=C2C(=CC=C1)C=CC1=CC=CC=C1C2=O",
+            "NN1C=CC2=C1C=CC=C2C(=O)C1=CC=CC=C1",
+            "NN1C=CC2=C1C(=O)C1=CC=CC=C1C(=O)C=C2",
+            "C1C=CC=C2C=1C(=O)C1=CC=CC=C1C2=O",
+            "O=C1C2=CC=CC=C2C(=O)C2C1=CC=CC=2NN"
+          ],
+          "unique_candidates": [
+            "NN1C=CC2=C1C(=O)C1=CC=CC=C1C=CC=C2",
+            "NN1C=CC2=C1C1=CC=CC=C1C(=O)C=CC=C2",
+            "NOC1=C2C(=O)C3=CC=CC=C3C(=O)C2=CC=C1",
+            "NOC1=C2C(=O)C3=CC=CC=C3C=CC2=CC=C1",
+            "NN1C=CC2=C(C(=O)C3=CC=CC=C3)C=CC=C21",
+            "NN1C=CC2=C1C(=O)C1=CC=CC=C1C(=O)C=C2",
+            "O=C1C2=CC=CC=C2C(=O)C2=CC=CC=C12",
+            "NNC1=C2C(=O)C3=CC=CC=C3C(=O)C2=CC=C1"
+          ],
+          "reranked": [
+            "NOC1=C2C(=O)C3=CC=CC=C3C=CC2=CC=C1",
+            "NN1C=CC2=C1C(=O)C1=CC=CC=C1C=CC=C2",
+            "NN1C=CC2=C1C(=O)C1=CC=CC=C1C(=O)C=C2",
+            "NN1C=CC2=C1C1=CC=CC=C1C(=O)C=CC=C2",
+            "NN1C=CC2=C(C(=O)C3=CC=CC=C3)C=CC=C21",
+            "NNC1=C2C(=O)C3=CC=CC=C3C(=O)C2=CC=C1",
+            "NOC1=C2C(=O)C3=CC=CC=C3C(=O)C2=CC=C1",
+            "O=C1C2=CC=CC=C2C(=O)C2=CC=CC=C12"
+          ],
+          "positive_probabilities": [
+            0.9997827410697937,
+            0.9888820052146912,
+            0.9193381667137146,
+            0.9175195693969727,
+            0.5468464493751526,
+            0.002094711409881711,
+            6.363410989251861e-07,
+            8.694591270910768e-14
+          ]
+        },
+        {
+          "target": "CC1=CC(C(F)(F)F)=NC(OC(C)C2CC2)=N1",
+          "raw_beams": [
+            "CC1=CC(C(F)(F)F)=NC(OC(C)C2CC2)=N1",
+            "CC(C1CC1)OC1N=C(C=C(C)N=1)C(F)(F)F",
+            "CC(C1CC1)OC1=NC(C)=CC(=N1)C(F)(F)F",
+            "CC(C1CC1)OC1=NC(C)=CC(C(F)(F)F)=N1",
+            "CC(C1CC1)OC1N=C(C(F)(F)F)C=C(N=1)C",
+            "CC(C1CC1)OC1N=C(C(F)(F)F)C=C(C)N=1",
+            "FC(F)(F)C1C=C(N=C(N=1)OC(C1CC1)C)C",
+            "FC(F)(F)C1=NC(OC(C)C2CC2)=NC(=C1)C",
+            "FC(F)(F)C1=NC(OC(C)C2CC2)=NC(C)=C1",
+            "FC(F)(F)C1C=C(N=C(N=1)OC(C)C1CC1)C"
+          ],
+          "unique_candidates": [
+            "CC1=CC(C(F)(F)F)=NC(OC(C)C2CC2)=N1"
+          ],
+          "reranked": [
+            "CC1=CC(C(F)(F)F)=NC(OC(C)C2CC2)=N1"
+          ],
+          "positive_probabilities": [
+            0.9993510842323303
+          ]
+        },
+        {
+          "target": "O=C1C=NC=NNC1=O",
+          "raw_beams": [
+            "O=C1C=NC=NNC1=O",
+            "O=C1C=NC=NN=C1O",
+            "O=C1NN=CC=NC1=O",
+            "O=C1C=NC=NC(=O)N1",
+            "O=C1C=NC(=O)C=NN1",
+            "C1=NN=CC(=O)NC1=O",
+            "N1=CC(=O)NN=CC1=O",
+            "C1(=O)C=NC=NNC1=O",
+            "C1C(=O)NN=CC(=O)N=1",
+            "C1=NNC(=O)C(=O)N=C1"
+          ],
+          "unique_candidates": [
+            "O=C1C=NC=NNC1=O",
+            "O=C1C=NC=NN=C1O",
+            "O=C1N=CC=NNC1=O",
+            "O=C1C=NC=NC(=O)N1",
+            "O=C1C=NNC(=O)C=N1",
+            "O=C1C=NN=CC(=O)N1"
+          ],
+          "reranked": [
+            "O=C1N=CC=NNC1=O",
+            "O=C1C=NC=NNC1=O",
+            "O=C1C=NNC(=O)C=N1",
+            "O=C1C=NN=CC(=O)N1",
+            "O=C1C=NC=NN=C1O",
+            "O=C1C=NC=NC(=O)N1"
+          ],
+          "positive_probabilities": [
+            0.999771773815155,
+            0.9996852874755859,
+            0.9995914101600647,
+            0.9994834661483765,
+            0.9993413090705872,
+            0.9847074151039124
+          ]
+        },
+        {
+          "target": "O=CCC1(C2CC2)CC1",
+          "raw_beams": [
+            "O=CCC1(C2CC2)CC1",
+            "O=CCC1(CC1)C1CC1",
+            "C1CC1C1(CC1)CC=O",
+            "C1CC1(CC=O)C1CC1",
+            "C1CC1C1(CC=O)CC1",
+            "C1CC1(C1CC1)CC=O",
+            "C(=O)CC1(CC1)C1CC1",
+            "C1C(CC=O)(C1)C1CC1",
+            "C(=O)CC1(C2CC2)CC1",
+            "C1C(C1)C1(CC1)CC=O"
+          ],
+          "unique_candidates": [
+            "O=CCC1(C2CC2)CC1"
+          ],
+          "reranked": [
+            "O=CCC1(C2CC2)CC1"
+          ],
+          "positive_probabilities": [
+            0.9996169805526733
+          ]
+        },
+        {
+          "target": "C=CCCN(C)C(=O)C1CCNC(=O)C1",
+          "raw_beams": [
+            "C=CCCN(C)C(=O)C1CCNC(=O)C1",
+            "C=CCCN(C)C(=O)C1CCCNC1=O",
+            "C=CCCN(C)C(=O)C1CCC(=O)NC1",
+            "C=CCCN(C)C(=O)C1CCNC(C1)=O",
+            "O=C(N(C)CCC=C)C1CCNC(=O)C1",
+            "O=C(N(C)CCC=C)C1CCNC(C1)=O",
+            "C=CCCN(C)C(=O)C1CC(=O)NCC1",
+            "C=CCCN(C)C(=O)C1CC(NCC1)=O",
+            "C1CNC(=O)C(C1)C(=O)N(C)CCC=C",
+            "C1CNC(=O)C(C1)C(=O)N(CCC=C)C"
+          ],
+          "unique_candidates": [
+            "C=CCCN(C)C(=O)C1CCNC(=O)C1",
+            "C=CCCN(C)C(=O)C1CCCNC1=O",
+            "C=CCCN(C)C(=O)C1CCC(=O)NC1"
+          ],
+          "reranked": [
+            "C=CCCN(C)C(=O)C1CCC(=O)NC1",
+            "C=CCCN(C)C(=O)C1CCCNC1=O",
+            "C=CCCN(C)C(=O)C1CCNC(=O)C1"
+          ],
+          "positive_probabilities": [
+            0.9984684586524963,
+            0.9981768131256104,
+            0.9979720711708069
+          ]
+        },
+        {
+          "target": "CCC1=NOC(C)=C1C(=O)N=C1C=C(C)NN1",
+          "raw_beams": [
+            "CCC1=CC(=NC(=O)C2=C(C)ON=C2C)NN1",
+            "CCC1=C(C(=O)N=C2C=C(C)ON2)C(C)=NN1",
+            "CCC1=C(C(=O)N=C2C=C(C)ON2)NNC1=C",
+            "CCC1=CC(NN1)=NC(C1=C(C)ON=C1C)=O",
+            "CCC1=CC(NN1)=NC(=O)C1=C(C)ON=C1C",
+            "CCC1=CC(NN1)=NC(=O)C1=C(ON=C1C)C",
+            "C1(CC)=CC(NN1)=NC(C1=C(C)ON=C1C)=O",
+            "CCC1=CC(NN1)=NC(=O)C1C=C(ON=1C)C",
+            "C1(CC)=CC(NN1)=NC(=O)C1C=C(C)ON=1C",
+            "C1(CC)=CC(NN1)=NC(=O)C1C=C(ON=1C)C"
+          ],
+          "unique_candidates": [
+            "CCC1=CC(=NC(=O)C2=C(C)ON=C2C)NN1",
+            "CCC1=C(C(=O)N=C2C=C(C)ON2)C(C)=NN1",
+            "C=C1NNC(C(=O)N=C2C=C(C)ON2)=C1CC"
+          ],
+          "reranked": [
+            "CCC1=CC(=NC(=O)C2=C(C)ON=C2C)NN1",
+            "CCC1=C(C(=O)N=C2C=C(C)ON2)C(C)=NN1",
+            "C=C1NNC(C(=O)N=C2C=C(C)ON2)=C1CC"
+          ],
+          "positive_probabilities": [
+            0.9996045231819153,
+            0.9995156526565552,
+            0.9642477035522461
+          ]
+        },
+        {
+          "target": "C1CC23OCC24NC3C14",
+          "raw_beams": [
+            "C1CC23OCC24NC3C14",
+            "C1CC23NC4C2CC14O3",
+            "C1CC23NC4C2CC41O3",
+            "C1CC23NC4C2CC43O1",
+            "C1CC23NC4C2OCC143",
+            "C1CC23NC4(COC24)C13",
+            "C1CC23NC4C2OCC413",
+            "C1CC23NC4C2OC43C1",
+            "C1CC23COC24C1C3N4",
+            "C1CC23NC4C2CC143"
+          ],
+          "unique_candidates": [
+            "C1CC23OCC24NC3C14",
+            "C1CC23NC4C2CC14O3",
+            "C1CC23NC4C2CC43O1",
+            "C1CC23NC4C2OCC143",
+            "C1CC23NC4(COC24)C13",
+            "C1CC23NC4C2OC43C1",
+            "C1CC23COC24NC3C14",
+            "C1CC23NC4C2CC143"
+          ],
+          "reranked": [
+            "C1CC23NC4(COC24)C13",
+            "C1CC23NC4C2OCC143",
+            "C1CC23COC24NC3C14",
+            "C1CC23OCC24NC3C14",
+            "C1CC23NC4C2CC43O1",
+            "C1CC23NC4C2CC14O3",
+            "C1CC23NC4C2OC43C1",
+            "C1CC23NC4C2CC143"
+          ],
+          "positive_probabilities": [
+            0.9991469383239746,
+            0.9989234805107117,
+            0.9986733198165894,
+            0.998440682888031,
+            0.9949052333831787,
+            0.9931356906890869,
+            0.8902153372764587,
+            0.25921207666397095
+          ]
+        },
+        {
+          "target": "CC(C)C1=CC(C(=O)N2CCC(C3CC3)C2)=NO1",
+          "raw_beams": [
+            "CC(C)C1=CC(C(=O)N2CCC(C3CC3)C2)=NO1",
+            "C1CN(CC1C1CC1)C(=O)C1C=C(C(C)C)ON=1",
+            "C1CN(CC1C1CC1)C(=O)C1=NOC(C(C)C)=C1",
+            "C1CN(CC1C1CC1)C(=O)C1=NOC(=C1)C(C)C",
+            "C1CN(CC1C1CC1)C(=O)C1C=C(ON=1)C(C)C",
+            "CC(C1ON=C(C=1)C(=O)N1CCC(C1)C1CC1)C",
+            "CC(C)C1=CC(=NO1)C(=O)N1CCC(C1)C1CC1",
+            "CC(C)C1ON=C(C=1)C(=O)N1CCC(C1)C1CC1",
+            "CC(C)C1=CC(=NO1)C(=O)N1CC(CC1)C1CC1",
+            "CC(C)C1=CC(=NO1)C(=O)N1CC(C2CC2)CC1"
+          ],
+          "unique_candidates": [
+            "CC(C)C1=CC(C(=O)N2CCC(C3CC3)C2)=NO1"
+          ],
+          "reranked": [
+            "CC(C)C1=CC(C(=O)N2CCC(C3CC3)C2)=NO1"
+          ],
+          "positive_probabilities": [
+            0.9992669224739075
+          ]
+        },
+        {
+          "target": "CC(=O)N1CCC2CN(C)CC21",
+          "raw_beams": [
+            "CC(=O)N1CC2CN(C)CC2C1",
+            "CC(=O)N1CC2CCN(C)C2C1",
+            "CC(=O)N1CCC2CN(C)CC21",
+            "CC(=O)N1CC2CN(C)CCC21",
+            "CC(=O)N1CC2C1CCN2C",
+            "CC(=O)N1CC2C1CN(C)C2",
+            "CC(=O)N1CC2N(C)CCC2C1",
+            "CC(=O)N1CC2CCN(C)CC21",
+            "CC(=O)N1C2CN(C)CC2CC1",
+            "CC(=O)N1CC2C1CN(C2)C"
+          ],
+          "unique_candidates": [
+            "CC(=O)N1CC2CN(C)CC2C1",
+            "CC(=O)N1CC2CCN(C)C2C1",
+            "CC(=O)N1CCC2CN(C)CC21",
+            "CC(=O)N1CC2CN(C)CCC21",
+            "CC(=O)N1CC2C1CCN2C",
+            "CC(=O)N1CC2CN(C)CC21",
+            "CC(=O)N1CC2CCN(C)CC21"
+          ],
+          "reranked": [
+            "CC(=O)N1CC2CCN(C)CC21",
+            "CC(=O)N1CC2CCN(C)C2C1",
+            "CC(=O)N1CC2CN(C)CCC21",
+            "CC(=O)N1CCC2CN(C)CC21",
+            "CC(=O)N1CC2CN(C)CC2C1",
+            "CC(=O)N1CC2CN(C)CC21",
+            "CC(=O)N1CC2C1CCN2C"
+          ],
+          "positive_probabilities": [
+            0.9993127584457397,
+            0.9992820620536804,
+            0.9992433786392212,
+            0.9991833567619324,
+            0.9980995059013367,
+            1.1848982239826e-07,
+            3.881402754757346e-09
+          ]
+        },
+        {
+          "target": "O=C(CC(F)(F)F)C1=CN=CC2=CC=CC=C12",
+          "raw_beams": [
+            "O=C(CC(F)(F)F)C1=CN=CC2=CC=CC=C12",
+            "FC(CC(=O)C1=CN=CC2C1=CC=CC=2)(F)F",
+            "C1C=CC=C2C=1C=NC=C2C(CC(F)(F)F)=O",
+            "C1C=CC=C2C=1C=NC=C2C(=O)CC(F)(F)F",
+            "O=C(CC(F)(F)F)C1=CN=CC2C1=CC=CC=2",
+            "FC(F)(F)CC(=O)C1=CN=CC2C1=CC=CC=2",
+            "FC(CC(=O)C1=CN=CC2=CC=CC=C12)(F)F",
+            "FC(CC(=O)C1=CN=CC2=CC=CC=C21)(F)F",
+            "FC(F)(F)CC(=O)C1=CN=CC2=CC=CC=C21",
+            "FC(F)(CC(=O)C1=CN=CC2=CC=CC=C12)F"
+          ],
+          "unique_candidates": [
+            "O=C(CC(F)(F)F)C1=CN=CC2=CC=CC=C12"
+          ],
+          "reranked": [
+            "O=C(CC(F)(F)F)C1=CN=CC2=CC=CC=C12"
+          ],
+          "positive_probabilities": [
+            0.9996777772903442
+          ]
+        },
+        {
+          "target": "CCCC(C)[NH+]1CCC(C)=C(Br)C1",
+          "raw_beams": [
+            "CCCC(C)N1CCC(C)=C(Br)C1",
+            "BrC1CN(CCC=1C)C(CCC)C",
+            "BrC1CN(CCC=1C)C(C)CCC",
+            "CC1=C(Br)CN(CC1)C(CCC)C",
+            "CC1=C(Br)CN(CC1)C(C)CCC",
+            "CC1=C(Br)CN(C(C)CCC)CC1",
+            "C1N(C(C)CCC)CCC(=C1Br)C",
+            "C(CC)C(C)N1CC(Br)=C(CC1)C",
+            "C(CC)C(C)N1CC(Br)=C(C)CC1",
+            "C1N(C(C)CCC)CC(Br)=C(C1)C"
+          ],
+          "unique_candidates": [
+            "CCCC(C)N1CCC(C)=C(Br)C1"
+          ],
+          "reranked": [
+            "CCCC(C)N1CCC(C)=C(Br)C1"
+          ],
+          "positive_probabilities": [
+            0.9994789958000183
+          ]
+        },
+        {
+          "target": "CC1=C(C)C=C(N(C)CCOC2CCOC2)C=C1",
+          "raw_beams": [
+            "CC1=C(C)C=C(N(C)CCOC2CCOC2)C=C1",
+            "CC1=C(C)C=C(N(C)CCOC2COCC2)C=C1",
+            "CC1C=CC(N(C)CCOC2COCC2)=CC=1C",
+            "CC1C=CC(N(C)CCOC2CCOC2)=CC=1C",
+            "CC1C=CC(=CC=1C)N(C)CCOC1COCC1",
+            "CC1C=CC(=CC=1C)N(C)CCOC1CCOC1",
+            "CC1C=CC(=CC=1C)N(CCOC1COCC1)C",
+            "CC1C=CC(=CC=1C)N(CCOC1CCOC1)C",
+            "CC1=C(C)C=C(C=C1)N(C)CCOC1COCC1",
+            "CC1=C(C)C=C(C=C1)N(C)CCOC1CCOC1"
+          ],
+          "unique_candidates": [
+            "CC1=C(C)C=C(N(C)CCOC2CCOC2)C=C1"
+          ],
+          "reranked": [
+            "CC1=C(C)C=C(N(C)CCOC2CCOC2)C=C1"
+          ],
+          "positive_probabilities": [
+            0.9994317889213562
+          ]
+        },
+        {
+          "target": "CNC(=O)NC1=NC=CN(C)C1=O",
+          "raw_beams": [
+            "CNC(=O)NC1=NC=CN(C)C1=O",
+            "CN1C=CN=C(NC(=O)NC)C1=O",
+            "CN1C=CN=C(NC(NC)=O)C1=O",
+            "CN1C=CN=C(C1=O)NC(NC)=O",
+            "CNC(NC1=NC=CN(C1=O)C)=O",
+            "O=C1N(C=CN=C1NC(=O)NC)C",
+            "O=C1N(C=CN=C1NC(NC)=O)C",
+            "CN1C=CN=C(C1=O)NC(=O)NC",
+            "C1(NC(=O)NC)=NC=CN(C)C1=O",
+            "C1(NC(=O)NC)=NC=CN(C1=O)C"
+          ],
+          "unique_candidates": [
+            "CNC(=O)NC1=NC=CN(C)C1=O"
+          ],
+          "reranked": [
+            "CNC(=O)NC1=NC=CN(C)C1=O"
+          ],
+          "positive_probabilities": [
+            0.9998180270195007
+          ]
+        },
+        {
+          "target": "O=C1NC2=C(C=C(F)C=C2)C1O",
+          "raw_beams": [
+            "O=C1NC2=C(C=C(F)C=C2)C1O",
+            "O=C1NC2C=CC(=CC=2C1O)F",
+            "O=C1NC2C=CC(F)=CC=2C1O",
+            "FC1C=CC2NC(=O)C(C=2C=1)O",
+            "FC1C=CC2NC(=O)C(O)C=2C=1",
+            "C1C2=C(C=CC=1F)NC(C2O)=O",
+            "C1C2=C(C=CC=1F)NC(=O)C2O",
+            "FC1C=CC2=C(C=1)C(O)C(N2)=O",
+            "FC1C=CC2=C(C=1)C(O)C(=O)N2",
+            "FC1C=CC2=C(C=1)C(C(N2)=O)O"
+          ],
+          "unique_candidates": [
+            "O=C1NC2=C(C=C(F)C=C2)C1O"
+          ],
+          "reranked": [
+            "O=C1NC2=C(C=C(F)C=C2)C1O"
+          ],
+          "positive_probabilities": [
+            0.9993641972541809
+          ]
+        },
+        {
+          "target": "CC1=CC(C)=C(OC2=CC(C)=C(C=O)C=C2)C=C1",
+          "raw_beams": [
+            "CC1=CC(C)=C(OC2=CC(C)=C(C=O)C=C2)C=C1",
+            "CC1=CC(C)=C(C=O)C=C1OC1=CC(C)=CC=C1",
+            "O=CC1C=CC(=CC=1C)OC1C=CC(C)=CC=1C",
+            "O=CC1C=CC(=CC=1C)OC1C=CC(=CC=1C)C",
+            "O=CC1C=CC(OC2C=CC(C)=CC=2C)=CC=1C",
+            "O=CC1C=CC(OC2C=CC(=CC=2C)C)=CC=1C",
+            "O=CC1C=CC(=CC=1C)OC1=CC(C)=C(C=C1)C",
+            "CC1=CC(C)=C(OC2=CC(C)=C(C=C2)C=O)C=C1",
+            "O=CC1C=CC(=CC=1C)OC1=CC(=C(C=C1)C)C",
+            "C1=CC(=CC(=C1C=O)C)OC1C=CC(=CC=1C)C"
+          ],
+          "unique_candidates": [
+            "CC1=CC(C)=C(OC2=CC(C)=C(C=O)C=C2)C=C1",
+            "CC1=CC(OC2=C(C)C=C(C)C(C=O)=C2)=CC=C1",
+            "CC1=C(C)C=C(OC2=CC(C)=C(C=O)C=C2)C=C1"
+          ],
+          "reranked": [
+            "CC1=C(C)C=C(OC2=CC(C)=C(C=O)C=C2)C=C1",
+            "CC1=CC(C)=C(OC2=CC(C)=C(C=O)C=C2)C=C1",
+            "CC1=CC(OC2=C(C)C=C(C)C(C=O)=C2)=CC=C1"
+          ],
+          "positive_probabilities": [
+            0.9997019171714783,
+            0.9995225667953491,
+            3.959313835366629e-05
+          ]
+        },
+        {
+          "target": "NC1=CC2=NC(=O)N=C2C=C1",
+          "raw_beams": [
+            "NC1=CC=C2[N]C(=O)[N]C2=C1",
+            "NC1=CC=C2C(=O)[N]C(=O)C2=C1",
+            "NC1=CC2=C(C=C1)[N]C(=O)[N]2",
+            "NC1=CC=C2C(=C1)[N]C(=O)[N]2",
+            "NC1=CC=C2C(=O)[N]C(=O)[N]C2=C1",
+            "NC1=CC=C2C(=O)[N]C([N]2)=C1",
+            "NC1=CC=C2C(=O)[N]C(=O)[N]2C=C1",
+            "NC1=CC=C2C(=NC(=O)[N]2)[CH]1",
+            "NC1=CC=C2C(=N1)[N]C(=O)[N]2",
+            "NC1=CC=C2C(=O)[N]C(=O)[CH]2N1"
+          ],
+          "unique_candidates": [
+            "NC1=CC2=C(C=C1)[N]C(=O)[N]2",
+            "NC1=CC2=C(C=C1)C(=O)[N]C2=O",
+            "NC1=CC2=C(C=C1)C(=O)[N]C(=O)[N]2",
+            "NC1=CC=C2[N]C(=C1)[N]C2=O",
+            "NC1=CC=C2C(=O)[N]C(=O)N2C=C1",
+            "NC1=CC=C2[N]C(=O)N=C2[CH]1",
+            "NC1=NC2=C(C=C1)[N]C(=O)[N]2",
+            "NC1=CC=C2C(=O)[N]C(=O)C2N1"
+          ],
+          "reranked": [
+            "NC1=CC=C2[N]C(=O)N=C2[CH]1",
+            "NC1=CC=C2[N]C(=C1)[N]C2=O",
+            "NC1=CC2=C(C=C1)[N]C(=O)[N]2",
+            "NC1=CC=C2C(=O)[N]C(=O)C2N1",
+            "NC1=CC2=C(C=C1)C(=O)[N]C(=O)[N]2",
+            "NC1=CC2=C(C=C1)C(=O)[N]C2=O",
+            "NC1=CC=C2C(=O)[N]C(=O)N2C=C1",
+            "NC1=NC2=C(C=C1)[N]C(=O)[N]2"
+          ],
+          "positive_probabilities": [
+            0.9988804459571838,
+            0.9980214834213257,
+            0.9846017360687256,
+            0.43131524324417114,
+            3.7266832805471495e-05,
+            3.4971089917235076e-05,
+            1.4526722225127742e-06,
+            1.52072807679815e-08
+          ]
+        },
+        {
+          "target": "CC1CCC2CC2CC1",
+          "raw_beams": [
+            "CC1CCCC2CC2C1",
+            "CC1CCC2CC2CC1",
+            "C1CC2CC2CCC1C",
+            "C1CC(CCC2C1C2)C",
+            "CC1CCCC2C(C1)C2",
+            "C1CC(C)CCC2C1C2",
+            "C1(C)CCCC2CC2C1",
+            "C1C(C)CCCC2C1C2",
+            "C1CC2C(C2)CC(C1)C",
+            "C1CC2C(C2)CC(C)C1"
+          ],
+          "unique_candidates": [
+            "CC1CCCC2CC2C1",
+            "CC1CCC2CC2CC1"
+          ],
+          "reranked": [
+            "CC1CCCC2CC2C1",
+            "CC1CCC2CC2CC1"
+          ],
+          "positive_probabilities": [
+            0.9990009665489197,
+            0.9982403516769409
+          ]
+        },
+        {
+          "target": "COC1CCN(C(=O)C2=CC=C(C)O2)C1",
+          "raw_beams": [
+            "COC1CCN(C(=O)C2=CC=C(C)O2)C1",
+            "C1N(CCC1OC)C(C1=CC=C(O1)C)=O",
+            "C1N(CCC1OC)C(=O)C1=CC=C(O1)C",
+            "C1N(CCC1OC)C(C1=CC=C(C)O1)=O",
+            "C1N(CCC1OC)C(=O)C1OC(=CC=1)C",
+            "C1N(CCC1OC)C(=O)C1OC(C)=CC=1",
+            "C1N(CCC1OC)C(=O)C1=CC=C(C)O1",
+            "COC1CCN(C1)C(=O)C1=CC=C(O1)C",
+            "COC1CCN(C1)C(=O)C1=CC=C(C)O1",
+            "COC1CN(CC1)C(=O)C1=CC=C(O1)C"
+          ],
+          "unique_candidates": [
+            "COC1CCN(C(=O)C2=CC=C(C)O2)C1"
+          ],
+          "reranked": [
+            "COC1CCN(C(=O)C2=CC=C(C)O2)C1"
+          ],
+          "positive_probabilities": [
+            0.9998093247413635
+          ]
+        },
+        {
+          "target": "CC(CC#N)N(C)C(=O)C1CSC(=O)N1",
+          "raw_beams": [
+            "CC(CC#N)N(C)C(=O)C1CSC(=O)N1",
+            "CC(CC#N)N(C)C(=O)C1NC(=O)SC1",
+            "CC(CC#N)N(C)C(=O)C1NC(SC1)=O",
+            "CC(CC#N)N(C)C(=O)C1CSC(N1)=O",
+            "CC(CC#N)N(C(=O)C1NC(SC1)=O)C",
+            "CC(CC#N)N(C(=O)C1NC(=O)SC1)C",
+            "O=C(C1NC(SC1)=O)N(C(C)CC#N)C",
+            "O=C(C1NC(SC1)=O)N(C)C(C)CC#N",
+            "O=C(C1NC(SC1)=O)N(C)C(CC#N)C",
+            "C1(=O)NC(CS1)C(=O)N(C)C(C)CC#N"
+          ],
+          "unique_candidates": [
+            "CC(CC#N)N(C)C(=O)C1CSC(=O)N1"
+          ],
+          "reranked": [
+            "CC(CC#N)N(C)C(=O)C1CSC(=O)N1"
+          ],
+          "positive_probabilities": [
+            0.9994969367980957
+          ]
+        },
+        {
+          "target": "CCCCNC(=S)N(CC1CC1)CC1CC1",
+          "raw_beams": [
+            "CCCCNC(=S)N(CC1CC1)CC1CC1",
+            "CCCCNC(N(CC1CC1)CC1CC1)=S",
+            "C1CC1CN(CC1CC1)C(NCCCC)=S",
+            "C1CC1CN(CC1CC1)C(=S)NCCCC",
+            "C1CC1CN(C(NCCCC)=S)CC1CC1",
+            "C1C(CN(CC2CC2)C(=S)NCCCC)C1",
+            "C1C(CN(CC2CC2)C(NCCCC)=S)C1",
+            "C1C(C1)CN(CC1CC1)C(NCCCC)=S",
+            "C1C(C1)CN(CC1CC1)C(=S)NCCCC",
+            "C1C(C1)CN(C(=S)NCCCC)CC1CC1"
+          ],
+          "unique_candidates": [
+            "CCCCNC(=S)N(CC1CC1)CC1CC1"
+          ],
+          "reranked": [
+            "CCCCNC(=S)N(CC1CC1)CC1CC1"
+          ],
+          "positive_probabilities": [
+            0.9998248219490051
+          ]
+        },
+        {
+          "target": "CC1=CC(C(=O)NCCC2(C)CC2)=C(O)C=C1",
+          "raw_beams": [
+            "CC1=CC(C(=O)NCCC2(C)CC2)=C(O)C=C1",
+            "CC1(CCNC(=O)C2C=C(C)C=CC=2O)CC1",
+            "CC1(CCNC(=O)C2C=C(C=CC=2O)C)CC1",
+            "CC1(CC1)CCNC(C1C=C(C)C=CC=1O)=O",
+            "CC1(CC1)CCNC(=O)C1C=C(C)C=CC=1O",
+            "CC1(CC1)CCNC(=O)C1C=C(C=CC=1O)C",
+            "CC1=CC(C(=O)NCCC2(C)CC2)=C(C=C1)O",
+            "CC1(CCNC(=O)C2=C(O)C=CC(=C2)C)CC1",
+            "CC1(CC1)CCNC(=O)C1=C(O)C=CC(C)=C1",
+            "CC1(CC1)CCNC(=O)C1=C(C=CC(C)=C1)O"
+          ],
+          "unique_candidates": [
+            "CC1=CC(C(=O)NCCC2(C)CC2)=C(O)C=C1"
+          ],
+          "reranked": [
+            "CC1=CC(C(=O)NCCC2(C)CC2)=C(O)C=C1"
+          ],
+          "positive_probabilities": [
+            0.9983195662498474
+          ]
+        },
+        {
+          "target": "CC1(S(=O)(=O)N2CCCCC2)CC1",
+          "raw_beams": [
+            "CC1(S(=O)(=O)N2CCCCC2)CC1",
+            "C1CC1(C)S(=O)(=O)N1CCCCC1",
+            "C1CC1(C)S(=O)(N1CCCCC1)=O",
+            "O=S(N1CCCCC1)(=O)C1(C)CC1",
+            "O=S(N1CCCCC1)(=O)C1(CC1)C",
+            "O=S(N1CCCCC1)(C1(CC1)C)=O",
+            "O=S(N1CCCCC1)(C1(C)CC1)=O",
+            "C1CCCCN1S(=O)(=O)C1(C)CC1",
+            "C1CCN(CC1)S(=O)(=O)C1(C)CC1",
+            "C1CCN(CC1)S(=O)(=O)C1(CC1)C"
+          ],
+          "unique_candidates": [
+            "CC1(S(=O)(=O)N2CCCCC2)CC1"
+          ],
+          "reranked": [
+            "CC1(S(=O)(=O)N2CCCCC2)CC1"
+          ],
+          "positive_probabilities": [
+            0.9997178912162781
+          ]
+        },
+        {
+          "target": "N#CC1=CC2=C(C=C1)CC(=O)N2",
+          "raw_beams": [
+            "N#CC1=CC2=C(C=C1)NC(O)=C2",
+            "N#CC1=CC2=C(C=C1)NC(=O)C2",
+            "N#CC1C=CC2NC(=O)CC=2C=1",
+            "N#CC1C=CC2NC(CC=2C=1)=O",
+            "N#CC1=CC2=C(C=C1)NC(C2)=O",
+            "C1=C(C=CC2=C1CC(N2)=O)C#N",
+            "C1=C(C=CC2=C1CC(=O)N2)C#N",
+            "C1=CC(=CC2=C1NC(C2)=O)C#N",
+            "C1=C(C#N)C=CC2=C1CC(N2)=O",
+            "C1=CC(=CC2=C1NC(=O)C2)C#N"
+          ],
+          "unique_candidates": [
+            "N#CC1=CC2=C(C=C1)NC(O)=C2",
+            "N#CC1=CC2=C(C=C1)NC(=O)C2"
+          ],
+          "reranked": [
+            "N#CC1=CC2=C(C=C1)NC(O)=C2",
+            "N#CC1=CC2=C(C=C1)NC(=O)C2"
+          ],
+          "positive_probabilities": [
+            0.9997329115867615,
+            0.9996916055679321
+          ]
+        },
+        {
+          "target": "COC1CCC2(C)C3=CCC4(C)C5CCC(C(C)C)C5(C)CCC4(C)C3CCC2C1(C)C",
+          "raw_beams": [
+            "COC1CCC2(C)C3=CCC4(C)C5CCC(C(C)C)C5(C)CCC4(C)C3CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4(C)C5CCC(C(C)(C)C)C5(C)CCC4(C)C3CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4(C)C(CCC5C(C)(C)CCCC5(C)C3CCC2C1(C)C)C",
+            "COC1CCC2(C)C3=CCC4(C)C5CCC(C(C)(C)C)C5(C)CCC4C3(C)CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4(C)C5CCC(C)(C)C5(C)CCC4(C)C3CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4(C)C(CCC5C(C)(C)CCCC5(C)C)C3CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4(C)C5CCC(C)(C)C5(C)CCC4C3(C)CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4C5(C)CCC(C(C)(C)C)C5CCC4(C)C3CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4C(C)(C)CCC5(C)C3CCC2(C)C5CCC(C)(C)C1(C)C",
+            "COC1CCC2(C)C3=CCC4C(C)(C)CCCC4(C)C3CCC2(C)C1C(C)(C)CCC42C"
+          ],
+          "unique_candidates": [
+            "COC1CCC2(C)C3=CCC4(C)C5CCC(C(C)C)C5(C)CCC4(C)C3CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4(C)C5CCC(C(C)(C)C)C5(C)CCC4(C)C3CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4(C)C(CCC5(C)C(C(C)(C)C)CCC54)C3(C)CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4(C)C5CCC(C)(C)C5(C)CCC4(C)C3CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4(C)C(CCC5(C)C4CCC5(C)C)C3(C)CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4C(C)(CCC5C(C(C)(C)C)CCC54C)C3CCC2C1(C)C"
+          ],
+          "reranked": [
+            "COC1CCC2(C)C3=CCC4C(C)(CCC5C(C(C)(C)C)CCC54C)C3CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4(C)C5CCC(C(C)C)C5(C)CCC4(C)C3CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4(C)C5CCC(C)(C)C5(C)CCC4(C)C3CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4(C)C(CCC5(C)C4CCC5(C)C)C3(C)CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4(C)C(CCC5(C)C(C(C)(C)C)CCC54)C3(C)CCC2C1(C)C",
+            "COC1CCC2(C)C3=CCC4(C)C5CCC(C(C)(C)C)C5(C)CCC4(C)C3CCC2C1(C)C"
+          ],
+          "positive_probabilities": [
+            0.9998337030410767,
+            0.99979168176651,
+            0.9997729659080505,
+            0.999750554561615,
+            0.9994839429855347,
+            0.9989027976989746
+          ]
+        },
+        {
+          "target": "CNCCN(C)C1=NC2=CC=CC=C2S1",
+          "raw_beams": [
+            "CNCCN(C)C1=NC2=CC=CC=C2S1",
+            "CN(CCNC)C1=NC2=CC=CC=C2S1",
+            "CN(CCNC)C1SC2=CC=CC=C2N=1",
+            "CN(C1=NC2=CC=CC=C2S1)CCNC",
+            "CN(CCNC)C1SC2C(=CC=CC=2)N=1",
+            "CN(CCNC)C1SC2C(N=1)=CC=CC=2",
+            "CN(CCNC)C1=NC2C(S1)=CC=CC=2",
+            "CN(CCNC)C1=NC2C(=CC=CC=2)S1",
+            "C1C=CC=C2C=1N=C(S2)N(C)CCNC",
+            "C1C=CC=C2C=1N=C(S2)N(CCNC)C"
+          ],
+          "unique_candidates": [
+            "CNCCN(C)C1=NC2=CC=CC=C2S1"
+          ],
+          "reranked": [
+            "CNCCN(C)C1=NC2=CC=CC=C2S1"
+          ],
+          "positive_probabilities": [
+            0.9999648332595825
+          ]
+        },
+        {
+          "target": "CC(C)CCN1C=CN=CC1=O",
+          "raw_beams": [
+            "CC(C)CCN1C=CN=CC1=O",
+            "O=C1C=NC=CN1CCC(C)C",
+            "CC(CCN1C=CN=CC1=O)C",
+            "C(C(C)C)CN1C=CN=CC1=O",
+            "C1=NC=CN(C1=O)CCC(C)C",
+            "O=C1N(CCC(C)C)C=CN=C1",
+            "C1=NC=CN(CCC(C)C)C1=O",
+            "CC(CCN1C(=O)C=NC=C1)C",
+            "CC(C)CCN1C(=O)C=NC=C1",
+            "C(C(C)C)CN1C(=O)C=NC=C"
+          ],
+          "unique_candidates": [
+            "CC(C)CCN1C=CN=CC1=O"
+          ],
+          "reranked": [
+            "CC(C)CCN1C=CN=CC1=O"
+          ],
+          "positive_probabilities": [
+            0.9994408488273621
+          ]
+        },
+        {
+          "target": "CN(C1=CC=C2N=CSC2=C1)S(C)(=O)=O",
+          "raw_beams": [
+            "CN(C)S(=O)(=O)C1=CC=C2SC=NC2=C1",
+            "CN(C1=CC=C2SC=NC2=C1)S(C)(=O)=O",
+            "CN(C1=CC=C2N=CSC2=C1)S(C)(=O)=O",
+            "CN(C)S(=O)(=O)C1=CC=C2N=CSC2=C1",
+            "CN(C1C=C2N=CSC2=CC=1)S(=O)(=O)C",
+            "CN(C1C=C2N=CSC2=CC=1)S(=O)(C)=O",
+            "CN(C1C=C2SC=NC2=CC=1)S(=O)(=O)C",
+            "CN(C1C=C2N=CSC2=CC=1)S(C)(=O)=O",
+            "CN(C1C=C2C(=CC=1)SC=N2)S(=O)(=O)C",
+            "CN(C1C=C2C(SC=N2)=CC=1)S(=O)(=O)C"
+          ],
+          "unique_candidates": [
+            "CN(C)S(=O)(=O)C1=CC=C2SC=NC2=C1",
+            "CN(C1=CC=C2SC=NC2=C1)S(C)(=O)=O",
+            "CN(C1=CC=C2N=CSC2=C1)S(C)(=O)=O",
+            "CN(C)S(=O)(=O)C1=CC=C2N=CSC2=C1"
+          ],
+          "reranked": [
+            "CN(C1=CC=C2N=CSC2=C1)S(C)(=O)=O",
+            "CN(C1=CC=C2SC=NC2=C1)S(C)(=O)=O",
+            "CN(C)S(=O)(=O)C1=CC=C2SC=NC2=C1",
+            "CN(C)S(=O)(=O)C1=CC=C2N=CSC2=C1"
+          ],
+          "positive_probabilities": [
+            0.9998823404312134,
+            0.99985671043396,
+            0.9997798800468445,
+            0.9996978044509888
+          ]
+        },
+        {
+          "target": "N#COCSC1=NC2=CC=CC=C2S1",
+          "raw_beams": [
+            "N#COCSC1=NC2=CC=CC=C2S1",
+            "N#COCN1SC2=CC=CC=C2N=C1",
+            "N#COCSC1SC2=CC=CC=C2N=1",
+            "C1=CC=C2N=C(SCOC#N)SC2=C1",
+            "C1(SCOC#N)=NC2=CC=CC=C2S1",
+            "C1=CC=C2N=C(SC2=C1)SCOC#N",
+            "C1C=CC=C2C=1N=C(SCOC#N)S2",
+            "C1C=CC=C2C=1SC(=N2)SCOC#N",
+            "C1C=CC=C2C=1N=C(S2)OCOC#N",
+            "C12=CC=CC=C1N=C(S2)OCOC#N"
+          ],
+          "unique_candidates": [
+            "N#COCSC1=NC2=CC=CC=C2S1",
+            "N#COCN1C=NC2=CC=CC=C2S1",
+            "N#COCOC1=NC2=CC=CC=C2S1"
+          ],
+          "reranked": [
+            "N#COCSC1=NC2=CC=CC=C2S1",
+            "N#COCOC1=NC2=CC=CC=C2S1",
+            "N#COCN1C=NC2=CC=CC=C2S1"
+          ],
+          "positive_probabilities": [
+            0.9998088479042053,
+            0.9982675313949585,
+            0.03163428232073784
+          ]
+        },
+        {
+          "target": "CC(COC(=O)C1(C2CC2)CC1)C(F)(F)F",
+          "raw_beams": [
+            "CC(COC(=O)C1(C2CC2)CC1)(C(F)(F)F)F",
+            "CC(COC(=O)C1(C2CC2)CC1)C(F)(F)F",
+            "CC(COC(=O)C1(C2CC2)CC1)(F)C(F)(F)F",
+            "CC(C1CC1)(C(OCC1(C(F)(F)F)CC1)=O)F",
+            "C1CC1C1(CC1)C(=O)OCC(C(F)(F)F)C",
+            "CC(C1CC1)(C(OCC1(CC1)C(F)(F)F)=O)F",
+            "CC(C1CC1)(C(=O)OCC1(C(F)(F)F)CC1)F",
+            "FC(F)(F)C1(CC1)COC(=O)C1(CC1)C",
+            "C1CC1C1(CC1)C(=O)OCC(C)(C(F)(F)F)C",
+            "CC(C1CC1)(C(=O)OCC1(CC1)C(F)(F)F)C"
+          ],
+          "unique_candidates": [
+            "CC(F)(COC(=O)C1(C2CC2)CC1)C(F)(F)F",
+            "CC(COC(=O)C1(C2CC2)CC1)C(F)(F)F",
+            "CC(F)(C(=O)OCC1(C(F)(F)F)CC1)C1CC1",
+            "CC1(C(=O)OCC2(C(F)(F)F)CC2)CC1",
+            "CC(C)(COC(=O)C1(C2CC2)CC1)C(F)(F)F",
+            "CC(C)(C(=O)OCC1(C(F)(F)F)CC1)C1CC1"
+          ],
+          "reranked": [
+            "CC(COC(=O)C1(C2CC2)CC1)C(F)(F)F",
+            "CC(F)(C(=O)OCC1(C(F)(F)F)CC1)C1CC1",
+            "CC(C)(COC(=O)C1(C2CC2)CC1)C(F)(F)F",
+            "CC(C)(C(=O)OCC1(C(F)(F)F)CC1)C1CC1",
+            "CC(F)(COC(=O)C1(C2CC2)CC1)C(F)(F)F",
+            "CC1(C(=O)OCC2(C(F)(F)F)CC2)CC1"
+          ],
+          "positive_probabilities": [
+            0.9996168613433838,
+            0.6778894662857056,
+            0.4134393036365509,
+            0.36775872111320496,
+            0.10331831872463226,
+            1.75747097430623e-10
+          ]
+        },
+        {
+          "target": "N#CC1=C(N2CCOCC2)N=CC(Br)=C1",
+          "raw_beams": [
+            "N#CC1=C(N2CCOCC2)N=CC(Br)=C1",
+            "N#CC1C=C(C=NC=1N1CCOCC1)Br",
+            "BrC1C=NC(N2CCOCC2)=C(C=1)C#N",
+            "C1COCCN1C1N=CC(Br)=CC=1C#N",
+            "BrC1C=NC(N2CCOCC2)=C(C#N)C=1",
+            "C1N(CCOC1)C1N=CC(Br)=CC=1C#N",
+            "C1(N2CCOCC2)N=CC(Br)=CC=1C#N",
+            "C1N(CCOC1)C1N=CC(=CC=1C#N)Br",
+            "N#CC1=C(N2CCOCC2)N=CC(=C1)Br",
+            "C1N(CCOC1)C1=C(C#N)C=C(Br)C=N"
+          ],
+          "unique_candidates": [
+            "N#CC1=C(N2CCOCC2)N=CC(Br)=C1"
+          ],
+          "reranked": [
+            "N#CC1=C(N2CCOCC2)N=CC(Br)=C1"
+          ],
+          "positive_probabilities": [
+            0.9997403025627136
+          ]
+        },
+        {
+          "target": "CCCCC(O)C1=CN=CC2=CC=CC=C12",
+          "raw_beams": [
+            "CCCCC(O)C1=CN=CC2=CC=CC=C12",
+            "CCCCC(O)C1=CN=CC2C1=CC=CC=2",
+            "C1C=CC=C2C=1C=NC=C2C(O)CCCC",
+            "C1C=CC=C2C=1C=NC=C2C(CCCC)O",
+            "C1=CC=C2C(=C1)C=NC=C2C(O)CCCC",
+            "C1=CC=C2C(=C1)C=NC=C2C(CCCC)O",
+            "C12=CC=CC=C2C=NC=C1C(O)CCCC",
+            "C12=CC=CC=C2C=NC=C1C(CCCC)O",
+            "C1C=C2C(=CC=1)C=NC=C2C(O)CCCC",
+            "C1C=C2C(=CC=1)C=NC=C2C(CCCC)O"
+          ],
+          "unique_candidates": [
+            "CCCCC(O)C1=CN=CC2=CC=CC=C12"
+          ],
+          "reranked": [
+            "CCCCC(O)C1=CN=CC2=CC=CC=C12"
+          ],
+          "positive_probabilities": [
+            0.9997742772102356
+          ]
+        },
+        {
+          "target": "CC1=CC=C(CCNC(=O)C2=CN=CN=C2)C=C1",
+          "raw_beams": [
+            "CC1=CC=C(CCNC(=O)C2=CN=CN=C2)C=C1",
+            "CC1=CC=C(CCNC(=O)C2C=NC=NC=2)C=C1",
+            "C1=CC(=CC=C1CCNC(=O)C1C=NC=NC=1)C",
+            "C1=CC(=CC=C1CCNC(=O)C1=CN=CN=C1)C",
+            "C1=CC(=CC=C1C)CCNC(=O)C1C=NC=NC=1",
+            "C1=CC(=CC=C1C)CCNC(C1C=NC=NC=1)=O",
+            "C1=CC(=CC=C1C)CCNC(=O)C1=CN=CN=C1",
+            "N1C=C(C=NC=1)C(=O)NCCC1=CC=C(C=C1)C",
+            "N1C=C(C=NC=1)C(NCCC1C=CC(=CC=1)C)=O",
+            "N1C=C(C=NC=1)C(=O)NCCC1C=CC(=CC=1)C"
+          ],
+          "unique_candidates": [
+            "CC1=CC=C(CCNC(=O)C2=CN=CN=C2)C=C1"
+          ],
+          "reranked": [
+            "CC1=CC=C(CCNC(=O)C2=CN=CN=C2)C=C1"
+          ],
+          "positive_probabilities": [
+            0.9998409748077393
+          ]
+        },
+        {
+          "target": "CC1=CNN=C1C1=CC=CS1",
+          "raw_beams": [
+            "CC1=C(C2=CC=CS2)NN=C1",
+            "CC1=NNC=C1C1=CC=CS1",
+            "CC1=CNN=C1C1=CC=CS1",
+            "C1C=CSC=1C1NN=CC=1C",
+            "C1C=CSC=1C1=C(C=NN1)C",
+            "C1C=CSC=1C1=C(C)C=NN1",
+            "C1C=CSC=1C1C(=CNN=1)C",
+            "C1C=C(SC=1)C1=C(C=NN1)C",
+            "C1C=C(SC=1)C1=C(C)C=NN1",
+            "C1=CSC(=C1)C1=C(C=NN1)C"
+          ],
+          "unique_candidates": [
+            "CC1=C(C2=CC=CS2)NN=C1",
+            "CC1=NNC=C1C1=CC=CS1",
+            "CC1=CNN=C1C1=CC=CS1"
+          ],
+          "reranked": [
+            "CC1=CNN=C1C1=CC=CS1",
+            "CC1=C(C2=CC=CS2)NN=C1",
+            "CC1=NNC=C1C1=CC=CS1"
+          ],
+          "positive_probabilities": [
+            0.999427855014801,
+            0.9993188381195068,
+            0.9992745518684387
+          ]
+        },
+        {
+          "target": "NC1=CC=C(OC2=CC=CC=C2)C=C1",
+          "raw_beams": [
+            "NC1=CC=C(OC2=CC=CC=C2)C=C1",
+            "C1C=C(C=CC=1OC1=CC=CC=C1)N",
+            "C1C=C(C=CC=1OC1C=CC=CC=1)N",
+            "C1C=CC=CC=1OC1=CC=C(C=C1)N",
+            "C1C=CC=CC=1OC1C=CC(N)=CC=1",
+            "C1C=CC=CC=1OC1C=CC(=CC=1)N",
+            "C1C=CC=CC=1OC1=CC=C(N)C=C1",
+            "C1C=C(C=CC=1N)OC1=CC=CC=C1",
+            "C1C=CC=C(C=1)OC1=CC=C(C=C1)N",
+            "C1C=CC=C(C=1)OC1=CC=C(N)C=C1"
+          ],
+          "unique_candidates": [
+            "NC1=CC=C(OC2=CC=CC=C2)C=C1"
+          ],
+          "reranked": [
+            "NC1=CC=C(OC2=CC=CC=C2)C=C1"
+          ],
+          "positive_probabilities": [
+            0.999757707118988
+          ]
+        },
+        {
+          "target": "CC1=CC(C)(C=O)OC1",
+          "raw_beams": [
+            "CC1=CC(C)(C=O)OC1",
+            "CC1=CC(C)(OC1)C=O",
+            "O=CC1(C)C=C(CO1)C",
+            "O=CC1(C)C=C(C)CO1",
+            "O=CC1(C)OCC(C)=C1",
+            "O=CC1(C)OCC(=C1)C",
+            "CC1(C=O)C=C(CO1)C",
+            "O1C(C=O)(C)C=C(C1)C",
+            "O1C(C=O)(C)C=C(C)C1",
+            "C(=O)C1(C)OCC(C)=C1"
+          ],
+          "unique_candidates": [
+            "CC1=CC(C)(C=O)OC1"
+          ],
+          "reranked": [
+            "CC1=CC(C)(C=O)OC1"
+          ],
+          "positive_probabilities": [
+            0.9992121458053589
+          ]
+        },
+        {
+          "target": "CC(=O)N1CCC(C2=NNN=N2)C1",
+          "raw_beams": [
+            "CC(=O)N1CCC(C2=NNN=N2)C1",
+            "CC(=O)N1CCC(C2=NN=N[N-]2)C1",
+            "C1C(CCN1C(=O)C)C1N=NNN=1",
+            "C1C(CCN1C(=O)C)C1=NNN=N1",
+            "C1CN(CC1C1=NNN=N1)C(=O)C",
+            "C1C(CCN1C(C)=O)C1=NNN=N1",
+            "C1CN(CC1C1=NNN=N1)C(C)=O",
+            "C1C(C2=NNN=N2)CCN1C(=O)C",
+            "C1C(C2=NNN=N2)CCN1C(C)=O",
+            "N1N=NC(=N1)C1CCN(C1)C(=O)C"
+          ],
+          "unique_candidates": [
+            "CC(=O)N1CCC(C2=NNN=N2)C1",
+            "CC(=O)N1CCC(C2=NN=N[N-]2)C1"
+          ],
+          "reranked": [
+            "CC(=O)N1CCC(C2=NNN=N2)C1",
+            "CC(=O)N1CCC(C2=NN=N[N-]2)C1"
+          ],
+          "positive_probabilities": [
+            0.9997909665107727,
+            0.9996408224105835
+          ]
+        },
+        {
+          "target": "CC1=CC(C(O)C2=CNN=C2)=CS1",
+          "raw_beams": [
+            "CC1=CC(C(O)C2=CNN=C2)=CS1",
+            "OC(C1C=NNC=1)C1C=C(C)SC=1",
+            "OC(C1C=NNC=1)C1=CSC(C)=C1",
+            "OC(C1C=NNC=1)C1=CSC(=C1)C",
+            "OC(C1C=NNC=1)C1C=C(SC=1)C",
+            "OC(C1=CNN=C1)C1C=C(C)SC=1",
+            "OC(C1=CNN=C1)C1=CSC(C)=C1",
+            "OC(C1=CNN=C1)C1=CSC(=C1)C",
+            "OC(C1=CNN=C1)C1C=C(SC=1)C",
+            "C1(C(O)C2=CNN=C2)C=C(C)SC=1"
+          ],
+          "unique_candidates": [
+            "CC1=CC(C(O)C2=CNN=C2)=CS1"
+          ],
+          "reranked": [
+            "CC1=CC(C(O)C2=CNN=C2)=CS1"
+          ],
+          "positive_probabilities": [
+            0.9996011853218079
+          ]
+        },
+        {
+          "target": "OC1CCCC1NN=CC1=C2N=CC=CN2N=C1",
+          "raw_beams": [
+            "OC1CCCC1NN=CC1=C2N=CC=CN2N=C1",
+            "C(=NNC1CCCC1O)C1=C2N=CC=CN2N=C1",
+            "C(C1=C2N=CC=CN2N=C1)=NNC1CCCC1O",
+            "C(=NNC1CCCC1O)C1C=NN2C=1N=CC=C2",
+            "C(C1C=NN2C=1N=CC=C2)=NNC1CCCC1O",
+            "C(=NNC1C(O)CCC1)C1=C2N=CC=CN2N=C1",
+            "C(=NNC1C(CCC1)O)C1=C2N=CC=CN2N=C1",
+            "C(=NNC1CCCC1O)C1C=NN2C=CC=NC=12",
+            "C(C1=C2N=CC=CN2N=C1)=NNC1C(CCC1)O",
+            "C(C1=C2N=CC=CN2N=C1)=NNC1C(O)CCC1"
+          ],
+          "unique_candidates": [
+            "OC1CCCC1NN=CC1=C2N=CC=CN2N=C1"
+          ],
+          "reranked": [
+            "OC1CCCC1NN=CC1=C2N=CC=CN2N=C1"
+          ],
+          "positive_probabilities": [
+            0.9995775818824768
+          ]
+        },
+        {
+          "target": "CC(C)(C)C1=CN2CCSC2=N1",
+          "raw_beams": [
+            "CC(C)(C)C1=CN2CCSC2=N1",
+            "CC(C1=CN2CCSC2=N1)(C)C",
+            "CC(C1N=C2N(C=1)CCS2)(C)C",
+            "CC(C1=CN2C(=N1)SCC2)(C)C",
+            "CC(C)(C1=CN2CCSC2=N1)C",
+            "CC(C)(C)C1N=C2SCCN2C=1",
+            "CC(C)(C)C1N=C2N(CCS2)C=1",
+            "CC(C)(C)C1N=C2N(C=1)CCS2",
+            "CC(C)(C1N=C2N(C=1)CCS2)C",
+            "C1(C(C)(C)C)N=C2N(C=1)CCS2"
+          ],
+          "unique_candidates": [
+            "CC(C)(C)C1=CN2CCSC2=N1"
+          ],
+          "reranked": [
+            "CC(C)(C)C1=CN2CCSC2=N1"
+          ],
+          "positive_probabilities": [
+            0.9997429251670837
+          ]
+        },
+        {
+          "target": "CCCN1C=C(N2C=C(N)C=CC2=NCC)C=N1",
+          "raw_beams": [
+            "CCCN1C=NC(N2C=C(N)C=CC2=NCC)=C1",
+            "CCCN1C=C(N2C=C(N)C=CC2=NCC)C=N1",
+            "CCCN1C=C(N2N=CC(N)=CC2=NCC)C=C1",
+            "CCCN1C=C(C2=C(N)C=CC(=NCC)N2)C=N1",
+            "CCCN1C=C(N2C=C(N)C=CC2=NCC)N=C1",
+            "CCCN1C=CC(N2C=C(N)C=CC2=NCC)=N1",
+            "CCCN1C=C(N2N=C(C=CC2=NCC)N)C=C1",
+            "CCCN1C=CC(N2C=C(N)C=NC2=NCC)=C1",
+            "CCCN1C=C(N2C=C(N)C=NC2=NCC)C=C1",
+            "CCCN1C=C(C2=C(N)C=CC(=NCC)N2)N=C1"
+          ],
+          "unique_candidates": [
+            "CCCN1C=NC(N2C=C(N)C=CC2=NCC)=C1",
+            "CCCN1C=C(N2C=C(N)C=CC2=NCC)C=N1",
+            "CCCN1C=CC(N2N=CC(N)=CC2=NCC)=C1",
+            "CCCN1C=C(C2=C(N)C=CC(=NCC)N2)C=N1",
+            "CCCN1C=CC(N2C=C(N)C=CC2=NCC)=N1",
+            "CCCN1C=CC(N2N=C(N)C=CC2=NCC)=C1",
+            "CCCN1C=CC(N2C=C(N)C=NC2=NCC)=C1",
+            "CCCN1C=NC(C2=C(N)C=CC(=NCC)N2)=C1"
+          ],
+          "reranked": [
+            "CCCN1C=CC(N2N=C(N)C=CC2=NCC)=C1",
+            "CCCN1C=CC(N2C=C(N)C=NC2=NCC)=C1",
+            "CCCN1C=CC(N2N=CC(N)=CC2=NCC)=C1",
+            "CCCN1C=C(N2C=C(N)C=CC2=NCC)C=N1",
+            "CCCN1C=NC(N2C=C(N)C=CC2=NCC)=C1",
+            "CCCN1C=CC(N2C=C(N)C=CC2=NCC)=N1",
+            "CCCN1C=C(C2=C(N)C=CC(=NCC)N2)C=N1",
+            "CCCN1C=NC(C2=C(N)C=CC(=NCC)N2)=C1"
+          ],
+          "positive_probabilities": [
+            0.9997641444206238,
+            0.9996286630630493,
+            0.999592125415802,
+            0.9995606541633606,
+            0.9994871616363525,
+            0.9989297986030579,
+            0.5002996325492859,
+            0.49373510479927063
+          ]
+        },
+        {
+          "target": "OC1=C(CC2CCCCC2)C=CC(F)=C1",
+          "raw_beams": [
+            "OC1=C(CC2CCCCC2)C=CC(F)=C1",
+            "OC1=C(CC2CCCCC2)C=CC(=C1)F",
+            "C1CCCCC1CC1C=CC(F)=CC=1O",
+            "C1CCCCC1CC1C=CC(=CC=1O)F",
+            "C1C(CCCC1)CC1C=CC(F)=CC=1O",
+            "C(C1CCCCC1)C1C=CC(F)=CC=1O",
+            "C1C(CCCC1)CC1C=CC(=CC=1O)F",
+            "C1CC(CCC1)CC1C=CC(F)=CC=1O",
+            "C1C(CCCC1)CC1=C(O)C=C(F)C=C",
+            "C(C1CCCCC1)C1=C(O)C=C(F)C=C"
+          ],
+          "unique_candidates": [
+            "OC1=C(CC2CCCCC2)C=CC(F)=C1"
+          ],
+          "reranked": [
+            "OC1=C(CC2CCCCC2)C=CC(F)=C1"
+          ],
+          "positive_probabilities": [
+            0.9996028542518616
+          ]
+        },
+        {
+          "target": "CC1=CCC2CC2OC1",
+          "raw_beams": [
+            "CC1=CCC2CC2OC1",
+            "CC1=CC2CC2OCC1",
+            "CC1=CCOC2CC2C1",
+            "C1(C)COC2CC2CC=1",
+            "CC1COC2CC2CC=1",
+            "O1C2CC2C=C(C)CC1",
+            "C1=C(C)COC2CC2C1",
+            "CC1COC2C(C2)CC=1",
+            "C1(C)COC2C(C2)CC=1",
+            "C1=C(C)COC2C(C2)C1"
+          ],
+          "unique_candidates": [
+            "CC1=CCC2CC2OC1",
+            "CC1=CC2CC2OCC1",
+            "CC1=CCOC2CC2C1"
+          ],
+          "reranked": [
+            "CC1=CC2CC2OCC1",
+            "CC1=CCOC2CC2C1",
+            "CC1=CCC2CC2OC1"
+          ],
+          "positive_probabilities": [
+            0.9992369413375854,
+            0.9990724325180054,
+            0.9987850785255432
+          ]
+        },
+        {
+          "target": "CC(C)C1=CCOC1",
+          "raw_beams": [
+            "CC(C)C1=CCOC1",
+            "C1COCC=1C(C)C",
+            "C1OCC=C1C(C)C",
+            "CC(C1COCC=1)C",
+            "CC(C)C1COCC=1",
+            "C1C=C(CO1)C(C)C",
+            "C1C=C(C(C)C)CO1",
+            "O1CC=C(C(C)C)C1",
+            "C1(C(C)C)=CCOC1",
+            "C1(C(C)C)COCC=1"
+          ],
+          "unique_candidates": [
+            "CC(C)C1=CCOC1"
+          ],
+          "reranked": [
+            "CC(C)C1=CCOC1"
+          ],
+          "positive_probabilities": [
+            0.9999245405197144
+          ]
+        },
+        {
+          "target": "CC1=CC=C(CC(=O)NC2=C(C)C=CN=C2)C=C1",
+          "raw_beams": [
+            "CC1=CC=C(CC(=O)NC2=C(C)C=CN=C2)C=C1",
+            "CC1C=CC(=CC=1)CC(=O)NC1C=NC=CC=1C",
+            "CC1C=CC(=CC=1)CC(NC1C=NC=CC=1C)=O",
+            "CC1=CC=C(CC(=O)NC2C=NC=CC=2C)C=C1",
+            "CC1=CC=C(C=C1)CC(NC1C=NC=CC=1C)=O",
+            "CC1=CC=C(C=C1)CC(=O)NC1C=NC=CC=1C",
+            "C1C=C(C=CC=1CC(=O)NC1C=NC=CC=1C)C",
+            "CC1C=CC(=CC=1)CC(=O)NC1=C(C=CN=C1)C",
+            "CC1C=CC(=CC=1)CC(NC1=C(C=CN=C1)C)=O",
+            "CC1C=CC(=CC=1)CC(=O)NC1=C(C)C=CN=C1"
+          ],
+          "unique_candidates": [
+            "CC1=CC=C(CC(=O)NC2=C(C)C=CN=C2)C=C1"
+          ],
+          "reranked": [
+            "CC1=CC=C(CC(=O)NC2=C(C)C=CN=C2)C=C1"
+          ],
+          "positive_probabilities": [
+            0.9990655779838562
+          ]
+        },
+        {
+          "target": "CC1=C2C=CN=CC2=C(C)C2=CC=CC=C12",
+          "raw_beams": [
+            "CC1=C2C=CC=CC2=NC2=CC=CC=C12C",
+            "CC1=C(C)C2=CC=CC=C2C2=CC=CC=C12",
+            "CC1=C(C)C2=CC=CC=C2C2=CC=CN=C12",
+            "CC1=C2C=CC=C(C)C2=NC2=CC=CC=C12",
+            "CC1=C(C)C2=CC=CC=C2C2=CC=CC1=N2",
+            "CC1=C2C=CC=CC2=NC2=CC=CC=C21C",
+            "CC1=C2C=CC=CC2=NC2=CC=CC(C)=C12",
+            "CC1=C2C=CC=CC2=C(C)C2=CC=CC=C12",
+            "CC1=C(C)C2=CC=CC=C2C2=CC=CC=N12",
+            "CC1=C2C=CC=CC2=NC2=C(C)C=CC=C12"
+          ],
+          "unique_candidates": [
+            "CC1=C(C)C2=CC=CC=C2C2=CC=CC=C12",
+            "CC1=C(C)C2=NC=CC=C2C2=CC=CC=C12",
+            "CC1=C2C=CC=C(C)C2=NC2=CC=CC=C12",
+            "CC1=C(C)C2=CC=CC=C2C2=CC=CC1=N2",
+            "CC1=CC=CC2=NC3=CC=CC=C3C(C)=C12",
+            "CC1=C2C=CC=CC2=C(C)C2=CC=CC=C12"
+          ],
+          "reranked": [
+            "CC1=CC=CC2=NC3=CC=CC=C3C(C)=C12",
+            "CC1=C2C=CC=C(C)C2=NC2=CC=CC=C12",
+            "CC1=C(C)C2=NC=CC=C2C2=CC=CC=C12",
+            "CC1=C(C)C2=CC=CC=C2C2=CC=CC1=N2",
+            "CC1=C2C=CC=CC2=C(C)C2=CC=CC=C12",
+            "CC1=C(C)C2=CC=CC=C2C2=CC=CC=C12"
+          ],
+          "positive_probabilities": [
+            0.9991648197174072,
+            0.9991497993469238,
+            0.9982351064682007,
+            0.9955182671546936,
+            3.9780226757102355e-07,
+            2.57478536269673e-08
+          ]
+        },
+        {
+          "target": "C=CCCC(C)NC1=CC=C2C=NC=CC2=C1",
+          "raw_beams": [
+            "C=CCCC(C)NC1=CC=C2C=NC=CC2=C1",
+            "C=CCCC(NC1=CC=C2C=NC=CC2=C1)C",
+            "C=CCCC(C)NC1=CC=C2C=CN=CC2=C1",
+            "C(=C)CCC(NC1=CC=C2C=NC=CC2=C1)C",
+            "C(CC=C)C(C)NC1=CC=C2C=NC=CC2=C1",
+            "C(=C)CCC(C)NC1=CC=C2C=NC=CC2=C1",
+            "C=CCCC(C)NC1=CC=C2C(C=CN=C2)=C1",
+            "C=CCCC(C)NC1=CC=C2C(=C1)C=CN=C2",
+            "C=CCCC(C)NC1=CC=C2C(=C1)C=NC=C2",
+            "C(=C)CCC(C)NC1=CC=C2C(=C1)C=NC=C"
+          ],
+          "unique_candidates": [
+            "C=CCCC(C)NC1=CC=C2C=NC=CC2=C1",
+            "C=CCCC(C)NC1=CC=C2C=CN=CC2=C1"
+          ],
+          "reranked": [
+            "C=CCCC(C)NC1=CC=C2C=CN=CC2=C1",
+            "C=CCCC(C)NC1=CC=C2C=NC=CC2=C1"
+          ],
+          "positive_probabilities": [
+            0.9995388984680176,
+            0.9995017051696777
+          ]
+        },
+        {
+          "target": "CCN1C=CN=C1C1=CC(F)=C(C=O)C=C1",
+          "raw_beams": [
+            "CCN1C=CN=C1C1=CC=C(C=O)C=C1",
+            "CCN1C=CN=C1C1=CC(F)=C(C=O)C=C1",
+            "CCN1C=CN=C1C1=CC=C(C=C1)C=O",
+            "CCN1C=CN=C1C1=CC(C=O)=C(F)C=C1",
+            "CCN1C=CN=C1C1=CC(=C(C=C1)C=O)F",
+            "CCN1C=CN=C1C1=CC(=C(C=O)C=C1)F",
+            "C1(C=CC(=CC=1)C1=NC=CN1CC)C=O",
+            "C1=CC(C2=NC=CN2CC)=CC=C1C=O",
+            "O=CC1=C(C=C(C=C1)C1=NC=CN1CC)F",
+            "CCN1C=CN=C1C1C=CC(C=O)=C(C=1)F"
+          ],
+          "unique_candidates": [
+            "CCN1C=CN=C1C1=CC=C(C=O)C=C1",
+            "CCN1C=CN=C1C1=CC(F)=C(C=O)C=C1",
+            "CCN1C=CN=C1C1=CC(C=O)=C(F)C=C1"
+          ],
+          "reranked": [
+            "CCN1C=CN=C1C1=CC(F)=C(C=O)C=C1",
+            "CCN1C=CN=C1C1=CC(C=O)=C(F)C=C1",
+            "CCN1C=CN=C1C1=CC=C(C=O)C=C1"
+          ],
+          "positive_probabilities": [
+            0.9993798732757568,
+            0.9993610978126526,
+            2.2338957933243364e-05
+          ]
+        },
+        {
+          "target": "CN1C=NC(=N)C=C1O",
+          "raw_beams": [
+            "CN1C=NC(=N)C=C1O",
+            "C1(=CC(=N)N=CN1C)O",
+            "CN1C=NC(=CC1=O)O",
+            "C1C(=N)N=CN(C=1O)C",
+            "C1C(=N)N=CN(C)C=1O",
+            "C1=C(N=CN(C1=N)C)O",
+            "C1(O)=CC(N=CN1C)=N",
+            "CN1C(=CC(=N)N=C1)O",
+            "C1=NC(=CC(N1C)=N)O",
+            "C1=C(N=CN(C)C1=N)O"
+          ],
+          "unique_candidates": [
+            "CN1C=NC(=N)C=C1O",
+            "CN1C=NC(O)=CC1=O",
+            "CN1C=NC(O)=CC1=N"
+          ],
+          "reranked": [
+            "CN1C=NC(O)=CC1=N",
+            "CN1C=NC(=N)C=C1O",
+            "CN1C=NC(O)=CC1=O"
+          ],
+          "positive_probabilities": [
+            0.9997246861457825,
+            0.9994569420814514,
+            0.0009111484396271408
+          ]
+        },
+        {
+          "target": "CC1ON=C(C2=CC=CC=C2)C1C1=CC=CC=C1",
+          "raw_beams": [
+            "CC1ON=C(C2=CC=CC=C2)C1C1=CC=CC=C1",
+            "C1C=CC=CC=1C1=NOC(C1C1C=CC=CC=1)C",
+            "C1C=CC=CC=1C1=NOC(C1C1=CC=CC=C1)C",
+            "C1=CC=CC=C1C1=NOC(C1C1C=CC=CC=1)C",
+            "C1=CC=CC=C1C1=NOC(C1C1=CC=CC=C1)C",
+            "C1C=CC=CC=1C1=NOC(C)C1C1=CC=CC=C1",
+            "C1C=CC=CC=1C1=NOC(C)C1C1C=CC=CC=1",
+            "C1=CC=CC=C1C1=NOC(C)C1C1=CC=CC=C1",
+            "C1=CC=CC=C1C1=NOC(C)C1C1C=CC=CC=1",
+            "C1=CC=C(C=C1)C1=NOC(C1C1C=CC=CC=1)C"
+          ],
+          "unique_candidates": [
+            "CC1ON=C(C2=CC=CC=C2)C1C1=CC=CC=C1"
+          ],
+          "reranked": [
+            "CC1ON=C(C2=CC=CC=C2)C1C1=CC=CC=C1"
+          ],
+          "positive_probabilities": [
+            0.9997121691703796
+          ]
+        }
+      ],
+      "status": "passed",
+      "elapsed_seconds": 136.621
+    },
+    {
+      "task": "spectroscopy.reranking.hc",
+      "title": "IR + Raman + H/C + 候选 → ITM 重排",
+      "backend": "vib2mol_reranking",
+      "domain": "computed",
+      "dataset_name": null,
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/benchmark_data/release_v1_ks200k_hc_nmr_minmax/vib2mol/openspec_test.lmdb",
+        "sha256": "736a234607992865136b23b3d091b26323936f08377362a196fe97ceb3bdb6a1"
+      },
+      "sample_ids": [
+        "CC(C)OCc1nc(C2CCC2)cs1",
+        "CCC(CC(C)C)C(=O)NC1CCC(=O)NC1",
+        "N=c1nc2c(ncn2C2OC(CO)C(O)C2O)c(Cl)[nH]1",
+        "CCNC(c1nccn1C)C1CCCC1",
+        "Cn1cnc(C=CC(=O)NC23CCCC2C3)c1",
+        "NN1C(=O)C2(CCCCCCC2)N=C1O",
+        "COc1ccc2c(c1)CCCO2",
+        "COc1ccc2c(c1)CCC(C)(C)O2",
+        "CN(C)C(=O)CN1CC2CC1CS2",
+        "c1ccc(N2CCOCC2)cc1",
+        "Cc1nocc1C(=O)NC1CCCn2nccc21",
+        "O=S(=O)(Cc1ccccc1)Cc1ccccc1",
+        "O=CNC1C(=O)Nc2ccccc21",
+        "CS(=O)(=O)N1CC=CC12CCCCC2",
+        "CC1CC(O)CNC1=O",
+        "C=C1c2ccccc2C(=O)c2cccc(ON)c21",
+        "Cc1cc(C(F)(F)F)nc(OC(C)C2CC2)n1",
+        "O=c1cncn[nH]c1=O",
+        "O=CCC1(C2CC2)CC1",
+        "C=CCCN(C)C(=O)C1CCNC(=O)C1",
+        "CCc1noc(C)c1C(=O)N=c1cc(C)[nH][nH]1",
+        "C1CC23OCC24NC3C14",
+        "CC(C)c1cc(C(=O)N2CCC(C3CC3)C2)no1",
+        "CC(=O)N1CCC2CN(C)CC21",
+        "O=C(CC(F)(F)F)c1cncc2ccccc12",
+        "CCCC(C)[NH+]1CCC(C)=C(Br)C1",
+        "Cc1ccc(N(C)CCOC2CCOC2)cc1C",
+        "CNC(=O)Nc1nccn(C)c1=O",
+        "O=C1Nc2ccc(F)cc2C1O",
+        "Cc1ccc(Oc2ccc(C=O)c(C)c2)c(C)c1",
+        "Nc1ccc2c(c1)=NC(=O)N=2",
+        "CC1CCC2CC2CC1",
+        "COC1CCN(C(=O)c2ccc(C)o2)C1",
+        "CC(CC#N)N(C)C(=O)C1CSC(=O)N1",
+        "CCCCNC(=S)N(CC1CC1)CC1CC1",
+        "Cc1ccc(O)c(C(=O)NCCC2(C)CC2)c1",
+        "CC1(S(=O)(=O)N2CCCCC2)CC1",
+        "N#Cc1ccc2c(c1)NC(=O)C2",
+        "COC1CCC2(C)C3=CCC4(C)C5CCC(C(C)C)C5(C)CCC4(C)C3CCC2C1(C)C",
+        "CNCCN(C)c1nc2ccccc2s1",
+        "CC(C)CCn1ccncc1=O",
+        "CN(c1ccc2ncsc2c1)S(C)(=O)=O",
+        "N#COCSc1nc2ccccc2s1",
+        "CC(COC(=O)C1(C2CC2)CC1)C(F)(F)F",
+        "N#Cc1cc(Br)cnc1N1CCOCC1",
+        "CCCCC(O)c1cncc2ccccc12",
+        "Cc1ccc(CCNC(=O)c2cncnc2)cc1",
+        "Cc1c[nH]nc1-c1cccs1",
+        "Nc1ccc(Oc2ccccc2)cc1",
+        "CC1=CC(C)(C=O)OC1",
+        "CC(=O)N1CCC(c2nn[nH]n2)C1",
+        "Cc1cc(C(O)c2cn[nH]c2)cs1",
+        "OC1CCCC1NN=Cc1cnn2cccnc12",
+        "CC(C)(C)c1cn2c(n1)SCC2",
+        "CCCn1cc(-n2cc(N)ccc2=NCC)cn1",
+        "Oc1cc(F)ccc1CC1CCCCC1",
+        "CC1=CCC2CC2OC1",
+        "CC(C)C1=CCOC1",
+        "Cc1ccc(CC(=O)Nc2cnccc2C)cc1",
+        "Cc1c2ccccc2c(C)c2cnccc12",
+        "C=CCCC(C)Nc1ccc2cnccc2c1",
+        "CCn1ccnc1-c1ccc(C=O)c(F)c1",
+        "Cn1cnc(=N)cc1O",
+        "CC1ON=C(c2ccccc2)C1c1ccccc1"
+      ],
+      "given_nmr": true,
+      "given_formula": false,
+      "inference_mode": "direct_checkpoint",
+      "sampling": "reservoir",
+      "seed": 42,
+      "selection": {
+        "read": 20390,
+        "duplicate_structure": 3662,
+        "eligible_distinct_structures": 16728,
+        "selected": 64
+      },
+      "source_counts": {
+        "ZINCV2": 28,
+        "SDBS": 2,
+        "PCQM4MV2": 11,
+        "WILEYIR": 1,
+        "ZINCV1": 7,
+        "RXN": 5,
+        "NISTIR": 1,
+        "QM9": 9
+      },
+      "record_ids": [
+        "ZINCV2-ZINC000656476138",
+        "ZINCV2-ZINC000308084709",
+        "SDBS-22820",
+        "PCQM4MV2-1003250",
+        "ZINCV2-ZINC000887030689",
+        "WILEYIR-18576",
+        "ZINCV1-ZINC000028580494",
+        "ZINCV1-ZINC000096180987",
+        "ZINCV2-ZINC000335584018",
+        "RXN-6800",
+        "ZINCV2-ZINC000636371267",
+        "NISTIR-7362",
+        "ZINCV1-ZINC000000406648",
+        "ZINCV2-ZINC000920136187",
+        "QM9-dsgdb9nsd_093224",
+        "PCQM4MV2-237284",
+        "ZINCV2-ZINC001226169912",
+        "QM9-dsgdb9nsd_130725",
+        "QM9-dsgdb9nsd_050998",
+        "ZINCV2-ZINC000342497713",
+        "PCQM4MV2-1035767",
+        "QM9-dsgdb9nsd_041452",
+        "ZINCV2-ZINC000336252943",
+        "PCQM4MV2-100050",
+        "PCQM4MV2-1012750",
+        "ZINCV2-ZINC000306185194",
+        "ZINCV2-ZINC000929297468",
+        "ZINCV2-ZINC000306729660",
+        "ZINCV1-ZINC000000111128",
+        "PCQM4MV2-1083991",
+        "ZINCV1-ZINC000100063390",
+        "QM9-dsgdb9nsd_095237",
+        "ZINCV2-ZINC000170489245",
+        "ZINCV2-ZINC000155809131",
+        "ZINCV2-ZINC000123835923",
+        "ZINCV2-ZINC000348635354",
+        "ZINCV2-ZINC000334681880",
+        "ZINCV2-ZINC000002577875",
+        "SDBS-27970",
+        "RXN-22640",
+        "ZINCV2-ZINC000033951144",
+        "RXN-20644",
+        "PCQM4MV2-240272",
+        "ZINCV2-ZINC000885733638",
+        "RXN-7858",
+        "PCQM4MV2-1013127",
+        "ZINCV2-ZINC000354783905",
+        "ZINCV1-ZINC000000141275",
+        "RXN-19258",
+        "QM9-dsgdb9nsd_074300",
+        "ZINCV2-ZINC000616612362",
+        "ZINCV2-ZINC000306444860",
+        "ZINCV2-ZINC000901333599",
+        "ZINCV1-ZINC000000165090",
+        "ZINCV2-ZINC001174222306",
+        "PCQM4MV2-111041",
+        "QM9-dsgdb9nsd_075348",
+        "QM9-dsgdb9nsd_013868",
+        "ZINCV2-ZINC000336140884",
+        "ZINCV2-ZINC000001761893",
+        "ZINCV2-ZINC000453612420",
+        "PCQM4MV2-1004485",
+        "QM9-dsgdb9nsd_029879",
+        "PCQM4MV2-153703"
+      ],
+      "checkpoint": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/openmolspec-studio-portable/runs/openmolspec-v1-ks1000k/spectrum2structure/vib2mol/ir-raman-hc-generation-v1/seed-624/2026-09-16-07-00-d369d0/artifacts/vib2mol/checkpoints/openspec/ir-raman-kekule_smiles/vib2mol/2026-09-16-07-01-8e4216/best_recall.pth",
+        "sha256": "e81cb178991742a6686b2d31ea191381cc5951aa15f8f7ddeb93c5473b0c0cf1"
+      },
+      "metrics": {
+        "recall_at_1": 1.0,
+        "recall_at_5": 1.0,
+        "recall_at_10": 1.0,
+        "mrr": 1.0,
+        "queries": 64,
+        "candidate_pool": 64,
+        "unique_candidates": 64,
+        "tie_policy": "stable_candidate_order",
+        "top_1_hit_rate": 1.0
+      },
+      "ranking": "itm_positive_probability",
+      "status": "passed",
+      "elapsed_seconds": 211.638
+    }
+  ],
+  "counts": {
+    "passed": 3
+  },
+  "elapsed_seconds": 422.583,
+  "completed_at": "2026-11-15T16:12:07.789433+00:00"
+}

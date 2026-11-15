@@ -21,25 +21,40 @@ def benchmark_page(st):
                      "指标": ", ".join(task["metrics"]), "说明": task["note"]})
     st.dataframe(rows, hide_index=True, width="stretch")
     st.caption("适配器已接入表示有运行入口；通过状态以实际结果为准。NMR 实验域与计算 IR/Raman 分开报告。")
-    result_files = sorted((Path(__file__).resolve().parents[1] / "results").glob("*.json"))
+    result_files = []
+    for path in (Path(__file__).resolve().parents[1] / "results").glob("*.json"):
+        try:
+            payload = json.loads(path.read_text())
+            rows = payload.get("results", [payload] if payload.get("task") else [])
+            if rows and all(isinstance(row, dict) and row.get("task") for row in rows):
+                result_files.append(path)
+        except (ValueError, OSError):
+            continue
+    result_files.sort(key=lambda path: path.stat().st_mtime_ns, reverse=True)
     if result_files:
         selected = st.selectbox("评测记录", result_files, format_func=lambda path: path.name)
         payload = json.loads(selected.read_text())
+        if selected.name in ("smoke_hetero_20261115.json", "v1_pipeline_20261115.json"):
+            st.warning("该历史记录中的 F/P 分数已因输入与预测错配撤回。请查看后续 alignment/protocol audit；其他任务保留其原始运行条件。")
         st.write({"用途": payload.get("purpose"), "样本上限": payload.get("limit"),
                   "设备": payload.get("device"), "状态统计": payload.get("counts")})
         summaries = []
-        for result in payload.get("results", []):
-            entries = result.get("models") or [{"model": result["backend"], "metrics": result.get("metrics", {})}]
+        for result in payload.get("results", [payload] if payload.get("task") else []):
+            entries = result.get("models") or [{"model": result.get("backend", result.get("model", result["task"])), "metrics": result.get("metrics", {})}]
             for entry in entries:
                 summaries.append({"任务": result["task"], "数据集": result.get("dataset_name"),
-                                  "模型": entry["model"], "状态": result["status"],
+                                  "模型": entry["model"], "状态": result.get("status", str(result.get("counts", {}))),
                                   "指标": json.dumps(entry["metrics"], ensure_ascii=False),
                                   "说明": result.get("reason", "")})
         st.dataframe(summaries, hide_index=True, width="stretch")
         st.download_button("下载完整评测 JSON", selected.read_bytes(), selected.name, "application/json")
     else:
         st.info("尚无评测结果。请按使用手册运行 python -m openmolspec_bench run。")
-    st.page_link("https://jiaqingxie.github.io/openmolspec-studio-frontend/", label="使用手册（GitHub Pages 发布后可访问）")
+    import os
+    if os.environ.get("OPENMOLSPEC_DOCS_URL"):
+        st.link_button("Full documentation · Read the Docs", os.environ["OPENMOLSPEC_DOCS_URL"])
+    else:
+        st.caption("Full documentation 栏目提供中英文任务说明与 notebook；Read the Docs 托管地址待确认。")
 
 
 def nmr_page(st, device):
