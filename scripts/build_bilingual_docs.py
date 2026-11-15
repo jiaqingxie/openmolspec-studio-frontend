@@ -114,11 +114,21 @@ def profile(task):
         "multispectral.spectrallm.generation": ("Multispectral structure generation with SpectraLLM", "Predict a structure jointly from one or more spectral modalities using released SpectraLLM weights.", "The official current release is a 32B model. The locally found older 7B adapter refers to a missing base checkpoint and cannot be attached to an arbitrary model. Download the released model or provide its matching base; do not retrain."),
     }
     title, purpose, requirement = missing[id_]
+    if id_ in ("nmr.formula", "spectroscopy.qa"):
+        return (title, purpose, requirement + " A separate local MolSpect-7B zero-shot probe uses real H/C records and the stored chat template, with no supplied formula or structure and a 32-new-token greedy limit.",
+                "Completed diagnostic reports show exact formula accuracy or explicit 13C-entry-count answer accuracy; incomplete runs are excluded.",
+                "The local checkpoint release/stage and prompt compatibility are unverified. This probe is neither an official MolSpectLLM reproduction nor a SpectraLLM32B benchmark, and does not enable the primary task adapter. No training is performed.",
+                "https://github.com/Eurekashen/SpecMol")
     return title, purpose, requirement, "No validated score is emitted while required assets or adapters are missing.", "This task remains explicit in the catalog and is skipped rather than trained to completion.", "https://github.com/OPilgrim/SpectraLLM" if "spectrallm" in id_ else "https://github.com/jiaqingxie/openmolspec-studio-frontend"
 
 
 def profile_zh(task):
     id_ = task.id
+    if id_ in ("nmr.formula", "spectroscopy.qa"):
+        return ("分别检查无给定分子式的预测，以及基于谱图证据的问答；正式适配器仍缺已验证的兼容权重。",
+                "另设本地 MolSpect-7B 零样本探测：输入真实 H/C 谱及问题，使用权重自带聊天模板，不提供分子式或 SMILES，贪心解码最多 32 个新 token。",
+                "只读取已完成的诊断报告，分别报告分子式 exact accuracy 或明确列出的 13C 位移条目计数正确率。未完成运行不汇总成绩。",
+                "本地权重对应的发布版本、训练阶段和提示兼容性未核实；该探测不等于官方 MolSpectLLM 或 SpectraLLM32B 复现，也不会将正式任务标记为可用。全程不训练。")
     if id_.startswith("ms.forward."):
         return ("给定分子结构、加合物、碰撞能和仪器，预测 MS/MS 的 m/z–强度峰列表。",
                 "直接加载作者发布的冻结 checkpoint，调用 predict_mol。用我们测试 CSV 中的实测谱评分，并按谱图 ID、规范分子结构和加合物核对采集元数据。默认每个分子只取一条谱，避免多碰撞能重复分子主导平均值。",
@@ -195,6 +205,20 @@ def observations():
                 result.setdefault(id_, []).append(brief)
             else:
                 result[id_] = [brief]
+    name = "molspect_zeroshot_formula_qa_20261116.json"
+    path = ROOT / "results" / name
+    if path.is_file():
+        payload = json.loads(path.read_text())
+        if payload.get("completed") is True:
+            for task in ("nmr.formula", "spectroscopy.qa"):
+                metrics = payload["metrics"][task]
+                rows = [row for row in payload["records"] if row["task"] == task]
+                if not rows or len(rows) != metrics["examples"] or metrics["accuracy"] != sum(row["correct"] for row in rows) / len(rows):
+                    raise ValueError("MolSpect completed report metrics disagree with records")
+                result[task] = [{"task": task, "status": "diagnostic_only", "model": payload["model"],
+                                 "scope": payload["scope"], "metrics": metrics, "decoding": payload["decoding"],
+                                 "formula_provided_to_model": payload["formula_provided_to_model"],
+                                 "source_file": name, "sample_limit": len(rows)}]
     return result
 
 

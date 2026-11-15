@@ -102,7 +102,9 @@ def main():
             if cell.cell_type == "code":
                 assert cell.execution_count is not None, path
                 assert not any(item.output_type == "error" for item in cell.outputs), path
-        proof.append({"notebook": str(path.relative_to(ROOT)), "executed_file": str(destination_path),
+        resolved = destination_path.resolve()
+        recorded_path = str(resolved.relative_to(ROOT)) if resolved.is_relative_to(ROOT) else str(resolved)
+        proof.append({"notebook": str(path.relative_to(ROOT)), "executed_file": recorded_path,
                       "sha256": hashlib.sha256(destination_path.read_bytes()).hexdigest()})
         print("EXECUTED", path.name, flush=True)
     destination = ROOT / "results/doc_notebook_execution.json"
