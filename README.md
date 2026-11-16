@@ -28,7 +28,7 @@ python -m openmolspec_bench run \
   --output results/my_smoke.json
 ```
 
-统一目录包含 34 个任务配置：25 项已有执行或评分接口，F/P 两项默认禁止正式评分，另外 7 项缺兼容模型或评测条件。覆盖 H/C NMR、Xinyu 四模态 Vib2Mol、gap、构象到 IR/Raman、GLACIER/ICEBERG 和 MAGMa。接口存在不代表精度已验证。结果记录数据与权重 SHA-256、样本、候选池和状态。流程入口只进行推理或已有预测评分。
+统一目录保留 34 个任务配置，其中 31 项继续推进、3 项按用户要求停用（SpectraLLM、分子式预测、谱学 QA）。活跃任务中 27 项已有执行或评分接口（含禁止正式评分的 F/P），B/Si、原子指认及跨溶剂迁移四项仍待验证接入。覆盖 H/C NMR、Xinyu 四模态 Vib2Mol、gap、构象到 IR/Raman、GLACIER/ICEBERG 和 MAGMa。接口存在不代表精度已验证。结果记录数据与权重 SHA-256、样本、候选池和状态。流程入口只进行推理或已有预测评分。
 
 详情见[任务目录](handbook/tasks.md)、[数据格式](handbook/data.md)、[评测口径](handbook/benchmark.md)、[Studio 操作](handbook/studio.md)及[结果](handbook/results.md)。旧核心项目说明仍位于 [docs/openmolspec_core.md](docs/openmolspec_core.md)。
 
@@ -47,3 +47,5 @@ Read the Docs 导入本仓库并使用 `.readthedocs.yaml` 构建；GitHub Actio
 最新证据见 [评测协议](documentation/protocols.zh.md) 和各任务页。旧 F/P 分数因输入与标签错配作废；新推理已对齐，但固态权重的溶液位移参考未核实，不能宣称修复了预测精度。
 
 在线 Vib2Mol 生成使用 beam=10、有效规范化候选去重和 ITM 重排，与本轮 Xinyu 协议评测一致。生成与重排模型的 H/C 归一化不一致或重排失败时明确报错；缺少模态时页面提示离线四模态准确率不适用。
+
+当前模型来源和接入条件见 [后续模型核查](docs/ACTIVE_MODEL_FOLLOWUP.md)。

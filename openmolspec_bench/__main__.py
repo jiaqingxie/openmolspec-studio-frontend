@@ -68,7 +68,8 @@ def main():
             print(json.dumps(records(), ensure_ascii=False, indent=2))
         else:
             for task in TASKS:
-                print(f"{task.id:36s} {task.backend:26s} {task.title}")
+                backend = task.backend if task.enabled else "deferred_by_user"
+                print(f"{task.id:36s} {backend:26s} {task.title}")
         return 0
     if min(args.limit, args.batch_size, args.beam_size, args.vib_beam_size, args.threads) < 1:
         parser.error("limit, batch-size, beam-size and threads must be positive")
@@ -85,7 +86,7 @@ def main():
         parser.error("CUDA unavailable; use --device cpu")
     from .runner import MissingAsset, Runner
     runner = Runner(args)
-    selected = TASKS if "all" in args.tasks else [BY_ID[key] for key in args.tasks]
+    selected = [task for task in TASKS if task.enabled] if "all" in args.tasks else [BY_ID[key] for key in args.tasks]
     started = time.monotonic()
     result = {"schema_version": 1, "release": "1.0.0", "started_at": datetime.now(timezone.utc).isoformat(),
               "purpose": "pipeline_smoke_evaluation", "limit": args.limit,

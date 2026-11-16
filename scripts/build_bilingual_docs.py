@@ -44,6 +44,12 @@ def example(task):
 
 def profile(task):
     id_ = task.id
+    if not task.enabled:
+        title = {"nmr.formula": "Molecular formula prediction", "spectroscopy.qa": "Spectroscopy QA",
+                 "multispectral.spectrallm.generation": "SpectraLLM structure generation"}[id_]
+        return (title, "Deferred at the user's request.", "Excluded from default benchmark runs; explicit requests are skipped.",
+                "Any recorded results below are historical diagnostics only.", "No further model downloads, inference or training are planned for this task.",
+                "https://github.com/jiaqingxie/openmolspec-studio-frontend")
     if id_.startswith("ms.forward."):
         model = id_.split(".")[-1].upper()
         return (f"Molecule to MS/MS with {model}",
@@ -68,7 +74,7 @@ def profile(task):
                 "https://github.com/X1nyuLu/openSpec-alpha")
     if id_.startswith("vibrational.") or id_.startswith("spectroscopy.reranking"):
         if id_ == "vibrational.forward":
-            return ("Conformer to IR and Raman", "Predict vibrational spectra from a fixed molecular geometry with existing Hessian and response models.",
+            return ("Conformer to IR and Raman", "Predict vibrational spectra from a fixed molecular geometry with Xinyu openSpec's Equiformer-v3 Hessian and response checkpoints.",
                     "Use exactly the coordinates associated with the reference Gaussian spectra. The adapter checks that XYZ loading preserves those coordinates, predicts Hessian/response tensors, and reconstructs broadened normalized IR/Raman spectra.",
                     "Compare normalized predicted and reference spectra on the common 1024-point, 400–4000 cm⁻¹ axis. Report channel-wise cosine similarity and intensity MAE.",
                     "The default two real Gaussian examples establish paired execution only. Their held-out status is not audited. An independently generated RDKit conformer must not be substituted and presented as the original reference geometry.",
@@ -101,14 +107,20 @@ def profile(task):
                     "The current solid-state checkpoints still have unverified reference compatibility with solution shifts and large errors after alignment repair. Keep those numbers diagnostic-only; do not add a fitted offset to make the test score smaller.",
                     "A compatible released solution checkpoint or documented reference conversion is required for a valid primary score. No retraining or fitted recalibration is permitted.",
                     "https://github.com/Colin-Jay/NMRNet")
+        if nucleus in ("11B", "29Si"):
+            return (f"Structure to {nucleus} NMR: frozen diagnostic", "Run the released liquid All-nucleus NMRNet checkpoint on existing atom-indexed validation records.",
+                    "Completed 32 distinct molecules per nucleus using the saved scaler and full checkpoint restoration. Sample IDs and atom labels were checked against the exact inference inputs. See results/bsi_frozen_diagnostic_20261116.json and scripts/run_frozen_bsi_diagnostic.py.",
+                    "Diagnostic atom-level MAE/RMSE in ppm; these are not peak-matching scores or validated held-out benchmark results.",
+                    "Nucleus-specific training coverage, training overlap and experimental assignment provenance are unverified. The model has no solvent input. Primary scoring remains disabled; NMRNet++ B/Si-specific weights are still being sought. No fitting was performed.",
+                    "https://github.com/Colin-Jay/NMRNet")
         return (f"Structure to {nucleus} NMR", "Predict chemical shifts for the selected nucleus from a molecular structure, using existing frozen weights where available.",
                 "For H/C, score existing NMRNet and NMRNet++ predictions with their exact metadata. Unassigned experimental peak sets use minimum-error matching and retain peak-count and coverage diagnostics. B/Si currently lack a verified compatible weight/prediction pair.",
                 "Shifts and errors are in ppm. Molecule-macro matched-peak MAE/RMSE alone do not penalize every missing/extra peak; publish matched fraction and peak-count error alongside them.",
                 "A peak-matching score is not atom-assignment accuracy. Missing compatible B/Si weights cause an explicit skip; this project does not train new heads to fill that gap.",
                 "https://github.com/Colin-Jay/NMRNet")
     missing = {
-        "nmr.assignment": ("Peak-to-atom assignment", "Map observed peaks to atoms in a known structure.", "Requires reference atom indices on the exact graph and a compatible pretrained assignment/prediction model. Unassigned H/C peak lists do not provide assignment ground truth."),
-        "nmr.solvent_transfer": ("Cross-solvent chemical-shift transfer", "Predict a spectrum under a target solvent from the same molecule in a source solvent.", "Requires paired experimental records and an existing solvent-conditioned model. A new fitted solvent correction would violate the no-training constraint."),
+        "nmr.assignment": ("Peak-to-atom assignment", "Map observed peaks to atoms in a known structure.", "Candidate approaches are frozen atomwise NMRNet plus matching, or released TransPeakNet H/C HSQC weights and matching code. Requires reference atom indices on the exact graph, symmetry handling and verified experimental assignments. Unassigned H/C peak lists do not provide assignment ground truth."),
+        "nmr.solvent_transfer": ("Cross-solvent chemical-shift transfer", "Predict a spectrum under a target solvent from the same molecule in a source solvent.", "Candidate solvent-conditioned models include NMRNet++ and TransPeakNet. Their relevant weights and paired experimental records must be obtained and verified. Solvent-conditioned forward prediction alone does not validate cross-solvent transfer. A new fitted correction would violate the no-training constraint."),
         "nmr.formula": ("Molecular-formula prediction from spectra", "Predict a molecular formula without providing it as an input.", "The current NMR generator consumes a known formula and therefore cannot establish formula-prediction accuracy. A compatible released model is required."),
         "spectroscopy.qa": ("Spectroscopy question answering", "Answer a question grounded in supplied spectral evidence.", "Requires a reference-answer dataset and compatible frozen QA weights. Generic structure-generation outputs are not substituted for QA answers."),
         "multispectral.spectrallm.generation": ("Multispectral structure generation with SpectraLLM", "Predict a structure jointly from one or more spectral modalities using released SpectraLLM weights.", "The official current release is a 32B model. The locally found older 7B adapter refers to a missing base checkpoint and cannot be attached to an arbitrary model. Download the released model or provide its matching base; do not retrain."),
@@ -119,11 +131,14 @@ def profile(task):
                 "Completed diagnostic reports show exact formula accuracy or explicit 13C-entry-count answer accuracy; incomplete runs are excluded.",
                 "The local checkpoint release/stage and prompt compatibility are unverified. This probe is neither an official MolSpectLLM reproduction nor a SpectraLLM32B benchmark, and does not enable the primary task adapter. No training is performed.",
                 "https://github.com/Eurekashen/SpecMol")
-    return title, purpose, requirement, "No validated score is emitted while required assets or adapters are missing.", "This task remains explicit in the catalog and is skipped rather than trained to completion.", "https://github.com/OPilgrim/SpectraLLM" if "spectrallm" in id_ else "https://github.com/jiaqingxie/openmolspec-studio-frontend"
+    return title, purpose, requirement, "No validated score is emitted while required assets or adapters are missing.", "This task remains explicit in the catalog and is skipped rather than trained to completion.", "https://github.com/siriusxiao62/2dNMR" if id_ in ("nmr.assignment", "nmr.solvent_transfer") else "https://github.com/OPilgrim/SpectraLLM"
 
 
 def profile_zh(task):
     id_ = task.id
+    if not task.enabled:
+        return ("按用户要求暂不推进。", "已从默认评测任务中排除，显式调用也会跳过。",
+                "下方已有结果仅作历史诊断归档。", "该任务不再下载模型、运行推理或训练。")
     if id_ in ("nmr.formula", "spectroscopy.qa"):
         return ("分别检查无给定分子式的预测，以及基于谱图证据的问答；正式适配器仍缺已验证的兼容权重。",
                 "另设本地 MolSpect-7B 零样本探测：输入真实 H/C 谱及问题，使用权重自带聊天模板，不提供分子式或 SMILES，贪心解码最多 32 个新 token。",
@@ -145,7 +160,7 @@ def profile_zh(task):
                 "原 Vib2Mol LMDB 的 gap 为 Hartree，仅乘一次 27.211386245988 转 eV。模型输出按 checkpoint 保存的均值和标准差反归一化，H/C 使用权重内的中心、尺度与参考 ID。报告 MAE/RMSE，并在相同样本上报告训练均值常量基线。",
                 "按文件顺序的首批样本可能来源偏倚，较广的检查使用固定种子的 reservoir 抽样。缺通道与完整输入的成绩必须分开解释。")
     if id_ == "vibrational.forward":
-        return ("从固定分子构象预测 IR/Raman，复用已有 Hessian 和 response 模型。",
+        return ("从固定分子构象预测 IR/Raman，复用 Xinyu openSpec 项目的 Equiformer-v3 Hessian 和 response 权重。",
                 "坐标与参考谱必须来自同一 Gaussian 日志；检查 XYZ 加载后坐标不变，预测 Hessian/响应导数，再经振动模和展宽重建谱图。",
                 "预测与参考均使用 400–4000 cm⁻¹ 的 1024 点轴和 min-max 强度归一化，分别报告 IR/Raman 的余弦相似度及强度 MAE。",
                 "默认两个真实 Gaussian 日志仅用于配对运行检查，未审计其独立测试身份。不能用新生成的 RDKit 构象代替原参考几何后宣称是严格配对精度。")
@@ -171,10 +186,25 @@ def profile_zh(task):
                     "旧预测对应的 LMDB 后来发生变化，保存的 target 与当前标签不一致，旧 MAE 已撤回。冻结权重对带哈希的同一份输入重新推理，可以修复样本配对。",
                     "配对修复后的固相 checkpoint 在实验溶液数据上误差仍很大，且位移参考兼容性未确认，仅保留为诊断，不作为正式溶液模型成绩。",
                     "需要兼容的现成溶液 checkpoint，或作者明确提供的参考转换。不得对测试标签拟合一个偏移来降低误差，也不启动重新训练。")
+        if nucleus in ("11B", "29Si"):
+            return (f"用已训练的液相 All-nucleus NMRNet 对 {nucleus} 验证数据做冻结推理。",
+                    "B、Si 各完成 32 个不同分子，复用保存的 scaler，检查完整加载全部权重，并通过样本 ID 核对原子标签。证据为 results/bsi_frozen_diagnostic_20261116.json；复现脚本为 scripts/run_frozen_bsi_diagnostic.py。",
+                    "报告逐原子 MAE/RMSE，单位 ppm；这是诊断值，不是峰匹配分数或已验证的独立测试成绩。",
+                    "各核训练覆盖、训练重叠及实验原子指认来源尚未核实，且该模型不输入溶剂。正式评分仍停用；继续核查 NMRNet++ 的 B/Si 专用权重，不拟合任何校正。")
         return (f"由分子结构预测 {nucleus} 化学位移，已有兼容权重时进行冻结推理或已有预测评分。",
                 "H/C 读取 NMRNet、NMRNet++ 的预测及对应元数据；未指认实验峰用最小绝对误差匹配，并保留峰数和覆盖率诊断。B/Si 暂无已验证的兼容权重/预测对。",
                 "位移和误差单位均为 ppm。按分子等权计算匹配峰 MAE/RMSE，必须同时报告匹配比例与峰数误差，因为匹配误差本身不惩罚全部缺失峰或额外峰。",
                 "峰匹配误差不是逐原子指认准确率。缺少 B/Si 兼容权重时明确跳过，不为补任务重新训练模型头。")
+    if id_ == "nmr.assignment":
+        return ("给定结构，将谱峰指认到对应原子；需保留原子编号及对称等价关系。",
+                "候选方案是已有 NMRNet 逐原子位移加匹配，或 TransPeakNet 发布的 H/C HSQC 权重及匹配代码。",
+                "需用核实过的实验指认参考计算准确率。仅有未指认峰列表，不能得出原子指认准确率。",
+                "模型方向已找到，兼容权重和原子参考尚未验证接入；不宣称已完成六核指认。")
+    if id_ == "nmr.solvent_transfer":
+        return ("预测同一分子从源溶剂到目标溶剂的化学位移变化。",
+                "候选为带溶剂输入的 NMRNet++、TransPeakNet；需取得对应冻结权重以及同一分子的跨溶剂配对记录。",
+                "按核分别报告目标位移及位移变化误差，核对原子映射、溶剂和实验条件。",
+                "溶剂条件正向预测不自动等于经过验证的跨溶剂迁移；目前未接入，且不通过拟合测试标签做溶剂校正。")
     return (task.note, "本任务需符合输入定义的现成权重、参考数据与适配器。", "缺少必需条件时不产生占位分数。", "保持明确的待接入状态；如果必须重新训练才能完成，则按用户要求跳过。")
 
 
@@ -219,6 +249,20 @@ def observations():
                                  "scope": payload["scope"], "metrics": metrics, "decoding": payload["decoding"],
                                  "formula_provided_to_model": payload["formula_provided_to_model"],
                                  "source_file": name, "sample_limit": len(rows)}]
+    name = "bsi_frozen_diagnostic_20261116.json"
+    path = ROOT / "results" / name
+    if path.is_file():
+        payload = json.loads(path.read_text())
+        if payload.get("completed") is True:
+            for symbol, row in payload["nuclei"].items():
+                task = "nmr.forward." + {"B": "11B", "Si": "29Si"}[symbol]
+                result[task] = [{"task": task, "status": "diagnostic_only",
+                                 "model": "NMRNet liquid All-nucleus fold 0",
+                                 "metrics": {k: row[k] for k in ("mae_ppm", "rmse_ppm")},
+                                 "molecules": row["molecules"], "atoms": row["atoms"],
+                                 "primary_score_eligible": False, "limitations": payload["limitations"],
+                                 "label_alignment_verified": row["label_alignment_verified"],
+                                 "source_file": name, "sample_limit": row["molecules"]}]
     return result
 
 
@@ -258,7 +302,7 @@ def build():
         files[f"protocols{suffix}.md"] = protocol
         datasets = "# " + ("Dataset download" if en else "数据下载") + "\n\n"
         datasets += ("Use the original download/distribution pages and retain their licenses, sample identities, splits and units. Complete datasets and weights are not bundled in this repository.\n\n" if en else "通过原始分发页面下载数据，保留许可、样本 ID、划分和单位。本仓库不打包完整数据或模型权重。\n\n")
-        datasets += "- [MassSpecGym](https://huggingface.co/datasets/roman-bushuiev/MassSpecGym)\n- [NMRNet data and weights](https://zenodo.org/records/19142375)\n- [GLACIER / ICEBERG pretrained assets](https://github.com/coleygroup/ms-pred)\n- [SpectraLLM released models](https://github.com/OPilgrim/SpectraLLM)\n\n"
+        datasets += "- [MassSpecGym](https://huggingface.co/datasets/roman-bushuiev/MassSpecGym)\n- [NMRNet data and weights](https://zenodo.org/records/19142375)\n- [NMRNet++ data and weights](https://zenodo.org/records/18232165)\n- [TransPeakNet code and model assets](https://github.com/siriusxiao62/2dNMR)\n- [GLACIER / ICEBERG pretrained assets](https://github.com/coleygroup/ms-pred)\n\n"
         datasets += ("Our prepared test CSV, NMR JSONL, and portable Gaussian/LMDB assets are configured by local paths. Public OpenMolSpec dataset export URLs must be verified before being added here.\n" if en else "我们已准备的测试 CSV、NMR JSONL、Gaussian/LMDB 资产通过本地路径配置。OpenMolSpec 数据导出下载地址需实际验证后再添加。\n")
         files[f"datasets{suffix}.md"] = datasets
         publication = "# " + ("Publication status" if en else "发布状态") + "\n\n"
@@ -279,6 +323,9 @@ def build():
                 zh_purpose, zh_method, zh_metrics, zh_limits = profile_zh(task)
                 page = f"# {heading}\n\n{zh_purpose}\n\n## 模型与协议\n\n{zh_method}\n\n## 输入与示例\n\n以下仅展示输入格式，不是实测谱或精度结果。\n\n```json\n{json.dumps(example(task), indent=2, ensure_ascii=False)}\n```\n\n## 输出与指标\n\n{zh_metrics}\n\n适配器：`{task.backend}`。数据域：`{task.domain}`。指标字段：`{'`、`'.join(task.metrics)}`。\n\n## 运行推理或评分\n\n"
             page += f"```bash\npython -m openmolspec_bench run --workspace /path/to/OpenMolSpec \\\n  --tasks {task.id} --limit 8 --output results/{slug}.json\n```\n\n"
+            if task.id in ("nmr.forward.11B", "nmr.forward.29Si"):
+                page += ("The primary command above skips unverified scoring. To reproduce both frozen diagnostics in a fresh directory:\n\n" if en else "上方正式接口会跳过未验证评分。复现 B/Si 冻结诊断时，使用全新的输出目录：\n\n")
+                page += "```bash\npython scripts/run_frozen_bsi_diagnostic.py --models-root /path/to/models --output /path/to/new-bsi-run --limit 32\n```\n\n"
             if en:
                 page += f"## Interpretation and limits\n\n{limits}\n\n## Recorded results\n\n"
             else:

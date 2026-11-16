@@ -1,10 +1,10 @@
 # 峰 → 原子指认
 
-需要保留原子编号的实验参考值和匹配模型。
+给定结构，将谱峰指认到对应原子；需保留原子编号及对称等价关系。
 
 ## 模型与协议
 
-本任务需符合输入定义的现成权重、参考数据与适配器。
+候选方案是已有 NMRNet 逐原子位移加匹配，或 TransPeakNet 发布的 H/C HSQC 权重及匹配代码。
 
 ## 输入与示例
 
@@ -24,7 +24,7 @@
 
 ## 输出与指标
 
-缺少必需条件时不产生占位分数。
+需用核实过的实验指认参考计算准确率。仅有未指认峰列表，不能得出原子指认准确率。
 
 适配器：`unavailable`。数据域：`experimental`。指标字段：`assignment_accuracy`。
 
@@ -37,7 +37,7 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 ## 解释与限制
 
-保持明确的待接入状态；如果必须重新训练才能完成，则按用户要求跳过。
+模型方向已找到，兼容权重和原子参考尚未验证接入；不宣称已完成六核指认。
 
 ## 已记录结果
 
@@ -45,7 +45,7 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 [
   {
     "status": "not_evaluated",
-    "reason": "需要保留原子编号的实验参考值和匹配模型。"
+    "reason": "候选为已有逐原子 NMRNet 加匹配，或 TransPeakNet H/C HSQC；需核验原子编号、等价位点和实验指认参考。"
   }
 ]
 ```
@@ -56,4 +56,4 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 ## 来源
 
-[原始实现与发布](https://github.com/jiaqingxie/openmolspec-studio-frontend)
+[原始实现与发布](https://github.com/siriusxiao62/2dNMR)

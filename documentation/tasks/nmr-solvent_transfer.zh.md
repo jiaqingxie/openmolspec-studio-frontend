@@ -1,10 +1,10 @@
 # 跨溶剂化学位移迁移
 
-需要同一分子跨溶剂配对记录及已有可用模型。
+预测同一分子从源溶剂到目标溶剂的化学位移变化。
 
 ## 模型与协议
 
-本任务需符合输入定义的现成权重、参考数据与适配器。
+候选为带溶剂输入的 NMRNet++、TransPeakNet；需取得对应冻结权重以及同一分子的跨溶剂配对记录。
 
 ## 输入与示例
 
@@ -25,7 +25,7 @@
 
 ## 输出与指标
 
-缺少必需条件时不产生占位分数。
+按核分别报告目标位移及位移变化误差，核对原子映射、溶剂和实验条件。
 
 适配器：`unavailable`。数据域：`experimental`。指标字段：`mae_ppm`。
 
@@ -38,7 +38,7 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 ## 解释与限制
 
-保持明确的待接入状态；如果必须重新训练才能完成，则按用户要求跳过。
+溶剂条件正向预测不自动等于经过验证的跨溶剂迁移；目前未接入，且不通过拟合测试标签做溶剂校正。
 
 ## 已记录结果
 
@@ -46,7 +46,7 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 [
   {
     "status": "not_evaluated",
-    "reason": "需要同一分子跨溶剂配对记录及已有可用模型。"
+    "reason": "候选为带溶剂条件的 NMRNet++/TransPeakNet；需取得对应权重及同一分子的跨溶剂配对记录后验证。"
   }
 ]
 ```
@@ -57,4 +57,4 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 ## 来源
 
-[原始实现与发布](https://github.com/jiaqingxie/openmolspec-studio-frontend)
+[原始实现与发布](https://github.com/siriusxiao62/2dNMR)

@@ -4,7 +4,7 @@ Predict a spectrum under a target solvent from the same molecule in a source sol
 
 ## Model and protocol
 
-Requires paired experimental records and an existing solvent-conditioned model. A new fitted solvent correction would violate the no-training constraint.
+Candidate solvent-conditioned models include NMRNet++ and TransPeakNet. Their relevant weights and paired experimental records must be obtained and verified. Solvent-conditioned forward prediction alone does not validate cross-solvent transfer. A new fitted correction would violate the no-training constraint.
 
 ## Inputs and example
 
@@ -46,7 +46,7 @@ This task remains explicit in the catalog and is skipped rather than trained to 
 [
   {
     "status": "not_evaluated",
-    "reason": "需要同一分子跨溶剂配对记录及已有可用模型。"
+    "reason": "候选为带溶剂条件的 NMRNet++/TransPeakNet；需取得对应权重及同一分子的跨溶剂配对记录后验证。"
   }
 ]
 ```
@@ -57,4 +57,4 @@ This task remains explicit in the catalog and is skipped rather than trained to 
 
 ## Source
 
-[Original implementation / release](https://github.com/jiaqingxie/openmolspec-studio-frontend)
+[Original implementation / release](https://github.com/siriusxiao62/2dNMR)

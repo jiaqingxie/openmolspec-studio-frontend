@@ -8,7 +8,7 @@ This is an evidence inventory, not a declaration of completed delivery. No train
 | Follow Xinyu's Vib2Mol protocol | `results/vib2mol_xinyu_random64_20261116.json`, `openmolspec_bench/runner.py`, `openmolspec_ui/inference.py` | Four-modal normalization, beam=10, canonical valid deduplication and ITM reranking implemented. Random 64-sample offline run complete. Online protocol regression tests pass; one real online sample completed direct beam=10 generation and ITM reranking, returning one valid unique candidate. See `results/online_vib2mol_protocol_20261116.json`; this is execution evidence, not an accuracy benchmark. |
 | Audit HOMO–LUMO gap | `results/gap_protocol_random128_20261116.json` | Complete-input frozen inference MAE 0.131446 eV on 128 random distinct structures; fixed training-mean baseline 0.899940 eV. Missing-channel results separately reported. |
 | Add vibrational forward task | `results/vibrational_forward_paired_logs_20261116.json` | Two paired original-geometry examples run; not a held-out accuracy benchmark. |
-| Remaining B/Si forward tasks | `openmolspec_bench/catalog.py` | No verified compatible experimental-domain checkpoint/prediction pairs. Explicit skips; no new model head trained. |
+| Remaining B/Si forward tasks | `results/bsi_frozen_diagnostic_20261116.json` | Liquid All-nucleus NMRNet frozen inference completed: 32 distinct molecules each, B MAE 8.684532 ppm / Si 56.133585 ppm. All parameters loaded and labels aligned. Diagnostic only: nucleus-specific training coverage and experimental assignment provenance unverified; primary adapter remains skipped. |
 | Atom assignment | `openmolspec_bench/catalog.py` | Missing matched atom-indexed experimental references and compatible model. Peak matching is not counted as atom assignment. |
 | Solvent transfer | `openmolspec_bench/catalog.py` | Missing paired solvent-conditioned references and verified compatible frozen model. Explicit skip. |
 | Formula prediction and spectroscopy QA | `openmolspec_bench/molspect.py` | Local complete MolSpect-7B zero-shot experiment completed: four distinct molecules, QA 0/4 and formula exact match 0/4. See `results/molspect_zeroshot_formula_qa_20261116.json`. These are diagnostic scores under an unverified checkpoint/prompt pairing, not official-model reproduction or a validated primary task interface. |
@@ -22,6 +22,10 @@ This is an evidence inventory, not a declaration of completed delivery. No train
 | Dataset Download | `openmolspec_ui/portal.py`, `documentation/datasets.md` | Original distribution links and downloadable input templates/catalog provided. Public OpenMolSpec full-dataset URL remains unavailable; optional OPENMOLSPEC_DATASET_URL is not presented as a published release. |
 | GitHub push | Local commits `c5e68d2`, `38120c3` | Push to origin/release/openmolspec-v1 attempted and failed because proxy DNS does not resolve. No remote publication claimed. |
 
+## Scope revision — 2026-11-16
+
+SpectraLLM, formula prediction and spectroscopy QA are deferred by the user. Their archived evidence above is historical and they are no longer delivery blockers. The catalog retains 34 definitions, with 31 enabled. B/Si, atom assignment, solvent transfer, website and Read the Docs remain active. See [model source audit](ACTIVE_MODEL_FOLLOWUP.md) for concrete candidate models and provenance.
+
 ## Verification scope
 
 - 12 benchmark checks and 6 MS adapter checks passed for evaluation mechanics.
@@ -34,3 +38,7 @@ This is an evidence inventory, not a declaration of completed delivery. No train
 ## External requirements still missing
 
 Network/DNS recovery is required for dependencies, official model downloads and GitHub push. Read the Docs needs an accessible project/account connection and a successful hosted build before a real URL can be reported. Compatible F/P, B/Si, assignment and solvent-transfer assets are necessary for those currently skipped capabilities; they will not be synthesized by training.
+
+## Scope-revision checks
+
+The 12 benchmark checks passed again. All three deferred tasks were directly verified to skip before model/data access. The 68 notebook demonstrations were re-executed and their hashes verified against the new B/Si evidence index. Catalog and bilingual-source consistency, local Markdown links and whitespace checks passed. These checks do not establish hosted publication.

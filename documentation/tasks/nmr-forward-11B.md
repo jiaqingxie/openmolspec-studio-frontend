@@ -1,10 +1,10 @@
-# Structure to 11B NMR
+# Structure to 11B NMR: frozen diagnostic
 
-Predict chemical shifts for the selected nucleus from a molecular structure, using existing frozen weights where available.
+Run the released liquid All-nucleus NMRNet checkpoint on existing atom-indexed validation records.
 
 ## Model and protocol
 
-For H/C, score existing NMRNet and NMRNet++ predictions with their exact metadata. Unassigned experimental peak sets use minimum-error matching and retain peak-count and coverage diagnostics. B/Si currently lack a verified compatible weight/prediction pair.
+Completed 32 distinct molecules per nucleus using the saved scaler and full checkpoint restoration. Sample IDs and atom labels were checked against the exact inference inputs. See results/bsi_frozen_diagnostic_20261116.json and scripts/run_frozen_bsi_diagnostic.py.
 
 ## Inputs and example
 
@@ -35,7 +35,7 @@ The example below illustrates the schema; it is not a measured spectrum or an ac
 
 ## Outputs and metrics
 
-Shifts and errors are in ppm. Molecule-macro matched-peak MAE/RMSE alone do not penalize every missing/extra peak; publish matched fraction and peak-count error alongside them.
+Diagnostic atom-level MAE/RMSE in ppm; these are not peak-matching scores or validated held-out benchmark results.
 
 Metric fields: `matched_peak_mae_ppm`, `matched_peak_rmse_ppm`, `peak_count_mae`, `matched_fraction`. Domain: `experimental`.
 
@@ -46,17 +46,40 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.forward.11B --limit 8 --output results/nmr-forward-11B.json
 ```
 
+The primary command above skips unverified scoring. To reproduce both frozen diagnostics in a fresh directory:
+
+```bash
+python scripts/run_frozen_bsi_diagnostic.py --models-root /path/to/models --output /path/to/new-bsi-run --limit 32
+```
+
 ## Interpretation and limits
 
-A peak-matching score is not atom-assignment accuracy. Missing compatible B/Si weights cause an explicit skip; this project does not train new heads to fill that gap.
+Nucleus-specific training coverage, training overlap and experimental assignment provenance are unverified. The model has no solvent input. Primary scoring remains disabled; NMRNet++ B/Si-specific weights are still being sought. No fitting was performed.
 
 ## Recorded results
 
 ```json
 [
   {
-    "status": "not_evaluated",
-    "reason": "保留六核任务定义；尚未验证可用于此实验域的 checkpoint 和预测文件。"
+    "task": "nmr.forward.11B",
+    "status": "diagnostic_only",
+    "model": "NMRNet liquid All-nucleus fold 0",
+    "metrics": {
+      "mae_ppm": 8.684532299637794,
+      "rmse_ppm": 12.436461034675611
+    },
+    "molecules": 32,
+    "atoms": 32,
+    "primary_score_eligible": false,
+    "limitations": [
+      "Nucleus-specific training coverage is unverified.",
+      "Training overlap with evaluation records is unaudited.",
+      "This model does not condition on solvent.",
+      "Atom labels originate from the local prepared pool; experimental assignment provenance is unverified."
+    ],
+    "label_alignment_verified": true,
+    "source_file": "bsi_frozen_diagnostic_20261116.json",
+    "sample_limit": 32
   }
 ]
 ```

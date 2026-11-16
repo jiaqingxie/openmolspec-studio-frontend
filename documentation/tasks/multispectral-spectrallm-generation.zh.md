@@ -1,10 +1,10 @@
 # 多谱 → 结构（SpectraLLM）
 
-官方新权重为 32B；当前本地仅有旧 7B adapter 且其指定基座缺失。需下载完整官方权重或提供匹配基座，不进行训练。
+按用户要求暂不推进。
 
 ## 模型与协议
 
-本任务需符合输入定义的现成权重、参考数据与适配器。
+已从默认评测任务中排除，显式调用也会跳过。
 
 ## 输入与示例
 
@@ -28,7 +28,7 @@
 
 ## 输出与指标
 
-缺少必需条件时不产生占位分数。
+下方已有结果仅作历史诊断归档。
 
 适配器：`unavailable`。数据域：`mixed`。指标字段：`exact_rate`、`valid_rate`。
 
@@ -41,7 +41,7 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 ## 解释与限制
 
-保持明确的待接入状态；如果必须重新训练才能完成，则按用户要求跳过。
+该任务不再下载模型、运行推理或训练。
 
 ## 已记录结果
 
@@ -49,7 +49,7 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 [
   {
     "status": "not_evaluated",
-    "reason": "官方新权重为 32B；当前本地仅有旧 7B adapter 且其指定基座缺失。需下载完整官方权重或提供匹配基座，不进行训练。"
+    "reason": "用户已明确暂不推进；历史结果仅作归档，不再运行。"
   }
 ]
 ```
@@ -60,4 +60,4 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 ## 来源
 
-[原始实现与发布](https://github.com/OPilgrim/SpectraLLM)
+[原始实现与发布](https://github.com/jiaqingxie/openmolspec-studio-frontend)

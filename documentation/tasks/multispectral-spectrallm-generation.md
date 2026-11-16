@@ -1,10 +1,10 @@
-# Multispectral structure generation with SpectraLLM
+# SpectraLLM structure generation
 
-Predict a structure jointly from one or more spectral modalities using released SpectraLLM weights.
+Deferred at the user's request.
 
 ## Model and protocol
 
-The official current release is a 32B model. The locally found older 7B adapter refers to a missing base checkpoint and cannot be attached to an arbitrary model. Download the released model or provide its matching base; do not retrain.
+Excluded from default benchmark runs; explicit requests are skipped.
 
 ## Inputs and example
 
@@ -28,7 +28,7 @@ The example below illustrates the schema; it is not a measured spectrum or an ac
 
 ## Outputs and metrics
 
-No validated score is emitted while required assets or adapters are missing.
+Any recorded results below are historical diagnostics only.
 
 Metric fields: `exact_rate`, `valid_rate`. Domain: `mixed`.
 
@@ -41,7 +41,7 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 ## Interpretation and limits
 
-This task remains explicit in the catalog and is skipped rather than trained to completion.
+No further model downloads, inference or training are planned for this task.
 
 ## Recorded results
 
@@ -49,7 +49,7 @@ This task remains explicit in the catalog and is skipped rather than trained to 
 [
   {
     "status": "not_evaluated",
-    "reason": "官方新权重为 32B；当前本地仅有旧 7B adapter 且其指定基座缺失。需下载完整官方权重或提供匹配基座，不进行训练。"
+    "reason": "用户已明确暂不推进；历史结果仅作归档，不再运行。"
   }
 ]
 ```
@@ -60,4 +60,4 @@ This task remains explicit in the catalog and is skipped rather than trained to 
 
 ## Source
 
-[Original implementation / release](https://github.com/OPilgrim/SpectraLLM)
+[Original implementation / release](https://github.com/jiaqingxie/openmolspec-studio-frontend)

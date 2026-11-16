@@ -51,9 +51,9 @@
 
 - **nmr.forward.31P**：已拦截旧输入错配；冻结重跑后固相权重的溶液位移参考仍未确认，默认跳过正式评分，仅显式允许跨域诊断。
 
-- **nmr.forward.11B**：保留六核任务定义；尚未验证可用于此实验域的 checkpoint 和预测文件。
+- **nmr.forward.11B**：已用液相 All-nucleus NMRNet 各完成 32 分子冻结诊断；B/Si 训练覆盖与实验标签来源未验证，正式评分仍跳过。
 
-- **nmr.forward.29Si**：保留六核任务定义；尚未验证可用于此实验域的 checkpoint 和预测文件。
+- **nmr.forward.29Si**：已用液相 All-nucleus NMRNet 各完成 32 分子冻结诊断；B/Si 训练覆盖与实验标签来源未验证，正式评分仍跳过。
 
 - **nmr.generation.h**：显式提供分子式；模型按分子式重排 beam，需与无分子式结果分开比较。
 
@@ -69,13 +69,13 @@
 
 - **vibrational.generation**：直接运行已有 Vib2Mol beam 解码，不使用缓存或近邻回放；原始 beam top-1，不进行分子式重排。
 
-- **nmr.assignment**：需要保留原子编号的实验参考值和匹配模型。
+- **nmr.assignment**：候选为已有逐原子 NMRNet 加匹配，或 TransPeakNet H/C HSQC；需核验原子编号、等价位点和实验指认参考。
 
-- **nmr.solvent_transfer**：需要同一分子跨溶剂配对记录及已有可用模型。
+- **nmr.solvent_transfer**：候选为带溶剂条件的 NMRNet++/TransPeakNet；需取得对应权重及同一分子的跨溶剂配对记录后验证。
 
-- **nmr.formula**：现有生成器使用给定分子式；不将其计为分子式预测器。
+- **nmr.formula**：用户已明确暂不推进；历史结果仅作归档，不再运行。
 
-- **spectroscopy.qa**：需要有参考答案的题集和固定模型接口。
+- **spectroscopy.qa**：用户已明确暂不推进；历史结果仅作归档，不再运行。
 
 - **spectroscopy.reranking**：Vib2Mol ITM 正类概率重排显式候选池；候选池由本次选中的不同参考结构构成。
 
@@ -91,4 +91,4 @@
 
 - **ms.annotation.magma**：原算法，无训练；原子索引以 engine_smiles 为准并逐碎片验证，标注不等于实验确认的机制。
 
-- **multispectral.spectrallm.generation**：官方新权重为 32B；当前本地仅有旧 7B adapter 且其指定基座缺失。需下载完整官方权重或提供匹配基座，不进行训练。
+- **multispectral.spectrallm.generation**：用户已明确暂不推进；历史结果仅作归档，不再运行。

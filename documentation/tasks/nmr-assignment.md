@@ -4,7 +4,7 @@ Map observed peaks to atoms in a known structure.
 
 ## Model and protocol
 
-Requires reference atom indices on the exact graph and a compatible pretrained assignment/prediction model. Unassigned H/C peak lists do not provide assignment ground truth.
+Candidate approaches are frozen atomwise NMRNet plus matching, or released TransPeakNet H/C HSQC weights and matching code. Requires reference atom indices on the exact graph, symmetry handling and verified experimental assignments. Unassigned H/C peak lists do not provide assignment ground truth.
 
 ## Inputs and example
 
@@ -45,7 +45,7 @@ This task remains explicit in the catalog and is skipped rather than trained to 
 [
   {
     "status": "not_evaluated",
-    "reason": "需要保留原子编号的实验参考值和匹配模型。"
+    "reason": "候选为已有逐原子 NMRNet 加匹配，或 TransPeakNet H/C HSQC；需核验原子编号、等价位点和实验指认参考。"
   }
 ]
 ```
@@ -56,4 +56,4 @@ This task remains explicit in the catalog and is skipped rather than trained to 
 
 ## Source
 
-[Original implementation / release](https://github.com/jiaqingxie/openmolspec-studio-frontend)
+[Original implementation / release](https://github.com/siriusxiao62/2dNMR)

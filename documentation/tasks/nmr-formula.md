@@ -1,10 +1,10 @@
-# Molecular-formula prediction from spectra
+# Molecular formula prediction
 
-Predict a molecular formula without providing it as an input.
+Deferred at the user's request.
 
 ## Model and protocol
 
-The current NMR generator consumes a known formula and therefore cannot establish formula-prediction accuracy. A compatible released model is required. A separate local MolSpect-7B zero-shot probe uses real H/C records and the stored chat template, with no supplied formula or structure and a 32-new-token greedy limit.
+Excluded from default benchmark runs; explicit requests are skipped.
 
 ## Inputs and example
 
@@ -26,7 +26,7 @@ The example below illustrates the schema; it is not a measured spectrum or an ac
 
 ## Outputs and metrics
 
-Completed diagnostic reports show exact formula accuracy or explicit 13C-entry-count answer accuracy; incomplete runs are excluded.
+Any recorded results below are historical diagnostics only.
 
 Metric fields: `formula_exact_rate`. Domain: `experimental`.
 
@@ -39,7 +39,7 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 ## Interpretation and limits
 
-The local checkpoint release/stage and prompt compatibility are unverified. This probe is neither an official MolSpectLLM reproduction nor a SpectraLLM32B benchmark, and does not enable the primary task adapter. No training is performed.
+No further model downloads, inference or training are planned for this task.
 
 ## Recorded results
 
@@ -72,4 +72,4 @@ The local checkpoint release/stage and prompt compatibility are unverified. This
 
 ## Source
 
-[Original implementation / release](https://github.com/Eurekashen/SpecMol)
+[Original implementation / release](https://github.com/jiaqingxie/openmolspec-studio-frontend)

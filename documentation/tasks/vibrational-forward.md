@@ -1,6 +1,6 @@
 # Conformer to IR and Raman
 
-Predict vibrational spectra from a fixed molecular geometry with existing Hessian and response models.
+Predict vibrational spectra from a fixed molecular geometry with Xinyu openSpec's Equiformer-v3 Hessian and response checkpoints.
 
 ## Model and protocol
 

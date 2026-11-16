@@ -1,6 +1,6 @@
 """One task catalog shared by the command line, Studio, and documentation."""
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 
 
 @dataclass(frozen=True)
@@ -13,6 +13,7 @@ class Task:
     backend: str
     metrics: tuple[str, ...]
     note: str = ""
+    enabled: bool = True
 
 
 TASKS = []
@@ -26,7 +27,7 @@ for nucleus in ("1H", "13C", "19F", "31P", "11B", "29Si"):
         "对已有 NMRNet/NMRNet++ 推理文件评分；无逐原子指认时使用最小代价峰匹配。"
         if nucleus in ("1H", "13C") else
         "已拦截旧输入错配；冻结重跑后固相权重的溶液位移参考仍未确认，默认跳过正式评分，仅显式允许跨域诊断。"
-        if nucleus in ("19F", "31P") else "保留六核任务定义；尚未验证可用于此实验域的 checkpoint 和预测文件。"))
+        if nucleus in ("19F", "31P") else "已用液相 All-nucleus NMRNet 各完成 32 分子冻结诊断；B/Si 训练覆盖与实验标签来源未验证，正式评分仍跳过。"))
 for view, modalities in (("h", ("1H",)), ("c", ("13C",)), ("hc", ("1H", "13C"))):
     for direction in ("s2m", "m2s"):
         TASKS.append(Task(f"nmr.retrieval.{view}.{direction}",
@@ -52,9 +53,9 @@ for id_, title, modalities, backend, metrics, note in (
     ("vibrational.generation", "IR / Raman → SMILES", ("IR", "Raman"), "vib2mol_generation", ("exact_rate", "valid_rate"),
      "直接运行已有 Vib2Mol beam 解码，不使用缓存或近邻回放；原始 beam top-1，不进行分子式重排。"),
     ("nmr.assignment", "峰 → 原子指认", ("1H", "13C", "19F", "31P", "11B", "29Si"), "unavailable", ("assignment_accuracy",),
-     "需要保留原子编号的实验参考值和匹配模型。"),
+     "候选为已有逐原子 NMRNet 加匹配，或 TransPeakNet H/C HSQC；需核验原子编号、等价位点和实验指认参考。"),
     ("nmr.solvent_transfer", "跨溶剂化学位移迁移", ("1H", "13C", "19F", "31P", "11B", "29Si"), "unavailable", ("mae_ppm",),
-     "需要同一分子跨溶剂配对记录及已有可用模型。"),
+     "候选为带溶剂条件的 NMRNet++/TransPeakNet；需取得对应权重及同一分子的跨溶剂配对记录后验证。"),
     ("nmr.formula", "谱图 → 分子式", ("1H", "13C"), "unavailable", ("formula_exact_rate",),
      "现有生成器使用给定分子式；不将其计为分子式预测器。"),
     ("spectroscopy.qa", "谱学问答 / 推理", ("NMR", "IR", "Raman"), "unavailable", ("answer_accuracy",),
@@ -86,6 +87,9 @@ TASKS.append(Task("multispectral.spectrallm.generation", "多谱 → 结构（Sp
                   ("IR", "Raman", "NMR", "MS/MS"), "mixed", "unavailable", ("exact_rate", "valid_rate"),
                   "官方新权重为 32B；当前本地仅有旧 7B adapter 且其指定基座缺失。需下载完整官方权重或提供匹配基座，不进行训练。"))
 
+DEFERRED_BY_USER = {"nmr.formula", "spectroscopy.qa", "multispectral.spectrallm.generation"}
+TASKS = [replace(task, enabled=False, note="用户已明确暂不推进；历史结果仅作归档，不再运行。")
+         if task.id in DEFERRED_BY_USER else task for task in TASKS]
 BY_ID = {task.id: task for task in TASKS}
 
 

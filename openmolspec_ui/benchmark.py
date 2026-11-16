@@ -17,7 +17,7 @@ def benchmark_page(st):
         if family != "全部" and task["family"] != family:
             continue
         rows.append({"任务": task["title"], "ID": task["id"], "谱型": ", ".join(task["modalities"]),
-                     "数据域": task["domain"], "评测适配器": "待接入" if task["backend"] == "unavailable" else task["backend"],
+                     "数据域": task["domain"], "评测适配器": "按用户要求暂不推进" if not task["enabled"] else "待接入" if task["backend"] == "unavailable" else task["backend"],
                      "指标": ", ".join(task["metrics"]), "说明": task["note"]})
     st.dataframe(rows, hide_index=True, width="stretch")
     st.caption("适配器已接入表示有运行入口；通过状态以实际结果为准。NMR 实验域与计算 IR/Raman 分开报告。")

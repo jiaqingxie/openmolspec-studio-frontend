@@ -461,6 +461,8 @@ class Runner:
                                 ("hessian_hi_checkpoint", "hessian_hij_checkpoint", "dedipole_checkpoint", "depolar_checkpoint")}}
 
     def run(self, task, dataset):
+        if not task.enabled:
+            raise MissingAsset("Deferred by the user's explicit scope change; no inference requested")
         if task.backend.startswith("spec2struct"):
             return self.nmr(task, dataset)
         if task.backend == "nmrnet_predictions":

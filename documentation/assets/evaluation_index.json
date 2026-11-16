@@ -1656,5 +1656,51 @@
       "source_file": "molspect_zeroshot_formula_qa_20261116.json",
       "sample_limit": 4
     }
+  ],
+  "nmr.forward.11B": [
+    {
+      "task": "nmr.forward.11B",
+      "status": "diagnostic_only",
+      "model": "NMRNet liquid All-nucleus fold 0",
+      "metrics": {
+        "mae_ppm": 8.684532299637794,
+        "rmse_ppm": 12.436461034675611
+      },
+      "molecules": 32,
+      "atoms": 32,
+      "primary_score_eligible": false,
+      "limitations": [
+        "Nucleus-specific training coverage is unverified.",
+        "Training overlap with evaluation records is unaudited.",
+        "This model does not condition on solvent.",
+        "Atom labels originate from the local prepared pool; experimental assignment provenance is unverified."
+      ],
+      "label_alignment_verified": true,
+      "source_file": "bsi_frozen_diagnostic_20261116.json",
+      "sample_limit": 32
+    }
+  ],
+  "nmr.forward.29Si": [
+    {
+      "task": "nmr.forward.29Si",
+      "status": "diagnostic_only",
+      "model": "NMRNet liquid All-nucleus fold 0",
+      "metrics": {
+        "mae_ppm": 56.13358532078564,
+        "rmse_ppm": 58.105817484466186
+      },
+      "molecules": 32,
+      "atoms": 32,
+      "primary_score_eligible": false,
+      "limitations": [
+        "Nucleus-specific training coverage is unverified.",
+        "Training overlap with evaluation records is unaudited.",
+        "This model does not condition on solvent.",
+        "Atom labels originate from the local prepared pool; experimental assignment provenance is unverified."
+      ],
+      "label_alignment_verified": true,
+      "source_file": "bsi_frozen_diagnostic_20261116.json",
+      "sample_limit": 32
+    }
   ]
 }

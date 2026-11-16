@@ -1,6 +1,6 @@
 # 构象 → IR / Raman
 
-从固定分子构象预测 IR/Raman，复用已有 Hessian 和 response 模型。
+从固定分子构象预测 IR/Raman，复用 Xinyu openSpec 项目的 Equiformer-v3 Hessian 和 response 权重。
 
 ## 模型与协议
 

@@ -4,7 +4,8 @@ Use the original download/distribution pages and retain their licenses, sample i
 
 - [MassSpecGym](https://huggingface.co/datasets/roman-bushuiev/MassSpecGym)
 - [NMRNet data and weights](https://zenodo.org/records/19142375)
+- [NMRNet++ data and weights](https://zenodo.org/records/18232165)
+- [TransPeakNet code and model assets](https://github.com/siriusxiao62/2dNMR)
 - [GLACIER / ICEBERG pretrained assets](https://github.com/coleygroup/ms-pred)
-- [SpectraLLM released models](https://github.com/OPilgrim/SpectraLLM)
 
 Our prepared test CSV, NMR JSONL, and portable Gaussian/LMDB assets are configured by local paths. Public OpenMolSpec dataset export URLs must be verified before being added here.
