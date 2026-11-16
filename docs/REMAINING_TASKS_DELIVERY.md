@@ -125,6 +125,36 @@ proxy; there is no connected RTD account/session or supplied project/build URL.
 No public deployment is claimed. After a hosted build succeeds, set the real
 `OPENMOLSPEC_DOCS_URL` on the frontend.
 
+The later network check identified a more specific blocker: creating either a
+TCP or UDP socket in the agent's execution environment returns
+`PermissionError: [Errno 1] Operation not permitted`. Direct DNS failures do not
+establish a server-wide DNS outage; this execution environment prohibits network
+sockets. Disabling HTTP proxies cannot remove that restriction. RTD credentials
+have not been validated, and no project has been created by this workflow.
+
+`scripts/publish_readthedocs.py` now prepares the authenticated import workflow.
+It uses only Python's standard library, supports `--direct` to bypass HTTP proxies, and
+accepts an RTD token through `READTHEDOCS_TOKEN` or a hidden interactive prompt.
+No credentials are embedded in the script or saved to disk. It checks the remote
+release branch matches the expected commit before any RTD changes, reuses an
+account project for this repository when present, sets the release branch and
+configuration path, triggers `latest`, and optionally watches its build.
+Credentials are restricted to the official RTD API; redirects are refused.
+
+Run these commands from this checkout in a terminal with network access:
+
+```bash
+git push origin release/openmolspec-v1
+python3 scripts/publish_readthedocs.py --apply --wait 600
+```
+
+Without `--apply`, the script only prints its plan. A standalone copy can use
+`--expected-commit <full Git SHA>` instead of discovering the local checkout's
+HEAD. A queued build is not reported as verified: verification requires a
+successful finished build at that exact commit. Public page reachability and
+GitHub webhook integration still need separate checks after creation. The real
+API workflow remains untested because of the execution environment restriction.
+
 ## Validation
 
 24 focused checks passed (12 benchmark, 5 assignment, 5 solvent-reference and 2 HTML-build checks). Both new Streamlit pages completed real button-triggered computations. Four remaining CLI interfaces completed a bounded integration run. All 68 notebook demonstrations were re-executed; source consistency, 82 Markdown pages and the full 150-page HTML build passed.
