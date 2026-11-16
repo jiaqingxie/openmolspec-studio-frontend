@@ -1,8 +1,10 @@
 import importlib.util
+import hashlib
 import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('docs_build',ROOT/'scripts/build_readthedocs.py')
@@ -11,6 +13,29 @@ spec.loader.exec_module(builder)
 
 
 class DocumentationBuildTests(unittest.TestCase):
+    def test_changed_evidence_rejects_saved_notebook_outputs(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            evidence = root / 'evidence.json'
+            evidence.write_text('{"prediction": 1}')
+            notebook = {
+                'cells': [{'cell_type': 'code', 'source': ['print(1)'],
+                           'execution_count': 1, 'outputs': []}],
+                'metadata': {'openmolspec_evidence_files': ['evidence.json']},
+            }
+            with patch.object(builder, 'ROOT', root):
+                notebook['metadata']['openmolspec_execution'] = {
+                    'source_sha256': hashlib.sha256(json.dumps(['print(1)']).encode()).hexdigest(),
+                    'evaluation_index_sha256': 'index',
+                    'evidence_sha256': builder.notebook_evidence_hash(notebook),
+                }
+                path = root / 'example.ipynb'
+                path.write_text(json.dumps(notebook))
+                builder.validate_notebook(path, 'index')
+                evidence.write_text('{"prediction": 2}')
+                with self.assertRaisesRegex(ValueError, 'stale for current evidence'):
+                    builder.validate_notebook(path, 'index')
+
     def test_notebook_cannot_enable_execution_during_publication(self):
         notebook=json.loads((ROOT/'documentation/notebooks/nmr-assignment.ipynb').read_text())
         notebook['metadata']['mystnb']={'execution_mode':'force'}

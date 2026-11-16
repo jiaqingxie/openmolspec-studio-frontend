@@ -1,7 +1,7 @@
 # 评测协议
 
-每次运行记录输入/权重哈希、样本 ID、模态条件、候选池和运行状态。F/P 缓存预测若保存的标签与当前输入不一致，则撤回旧评分。配对修复也不能证明固相到溶液的位移参考兼容。
+所有公开结果图来自实际记录。证据 JSON 保留来源报告哈希。执行成功与科学有效性分开判断；小候选池、准备数据的 split 标签、峰匹配误差，不能宣传成独立泛化或实验原子指认准确率。
 
-Gap 和 Xinyu 的 Vib2Mol checkpoint 使用 IR+Raman+H/C。缺核输入属于消融，分开报告。Gap 标签仅从 Hartree 转换一次为 eV，复用 checkpoint 的 H/C 和目标归一化。Vib2Mol 生成采用规范化、有效去重后的 beam，再按 ITM 正类概率重排。
+完整 IR/Raman/H/C 输入与缺通道消融分别报告。Gap 从 Hartree 到 eV 仅转换一次。MS 在明确采集条件下与全部实测峰比较。本轮没有训练或拟合校准。
 
-MS 使用真实测试 CSV 及匹配的采集元数据。缺碰撞能或仪器时直接跳过，不补造条件。小样本及未完成训练集重叠审计的分数不能作为完整 benchmark 精度。
+[Dataset definitions](datasets.md) · [Model-by-model audit](model-audit.md)

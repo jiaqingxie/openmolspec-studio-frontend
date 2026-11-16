@@ -1,7 +1,13 @@
 # Publication status
 
-The documentation is published at [Read the Docs](https://openmolspec-10.readthedocs.io/en/latest/), with a [Chinese edition](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html). The site contains 150 content pages, including 68 executed notebook previews and their downloads. Use the language switch on each page. The first verified hosted build is [35915674](https://app.readthedocs.org/projects/openmolspec-10/builds/35915674/), from release commit `5e8ce72655105f4a6cd61859c9c98c0574d36955`.
+[English](https://openmolspec-10.readthedocs.io/en/latest/) · [简体中文](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)
 
-Read the Docs builds the `release/openmolspec-v1` branch using the repository-root `.readthedocs.yaml`. Local, CI and hosted builds share `python scripts/build_readthedocs.py --output site --strict` after installing `requirements-docs.txt`. The frontend's Full documentation link uses the live URL by default; `OPENMOLSPEC_DOCS_URL` can override it. Release updates can be triggered with `python scripts/publish_readthedocs.py --apply --project openmolspec-10 --wait 600` after pushing the matching commit.
+Read the Docs builds `release/openmolspec-v1` with the root `.readthedocs.yaml`, Sphinx and the classic RTD theme. The site includes categorized tasks, a real-results gallery, dataset distributions, model review and 70 executed notebooks (including archived-task notices and dataset notebooks). Notebook publication never executes model code.
 
-The site uses Sphinx and the classic `sphinx_rtd_theme`: a hierarchical sidebar, full-text search, breadcrumbs and previous/next navigation. English and Chinese have separate search indexes. MyST-NB renders stored notebook outputs with execution disabled; model code is never run during documentation builds.
+```bash
+python scripts/build_bilingual_docs.py --check
+python scripts/build_readthedocs.py --output site --strict
+python scripts/publish_readthedocs.py --apply --project openmolspec-10 --wait 600
+```
+
+Publish only after pushing the corresponding Git commit. The publication script verifies the exact remote commit and finished RTD build; public pages are checked separately.

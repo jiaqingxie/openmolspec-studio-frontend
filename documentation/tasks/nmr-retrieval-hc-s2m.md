@@ -2,161 +2,124 @@
 
 Rank candidate structures from NMR spectra, or rank candidate spectra from a molecular structure, with the existing dual encoder.
 
-## Model and protocol
+## Current evidence
 
-H-only, C-only and H+C are explicit visibility masks. The spectral encoder does not receive the molecular formula. Canonical isomeric identities define positive matches; the selected dataset supplies the candidate pool.
+Input/output pairing is appropriate; the 32-candidate smoke pool is small. Validate a larger independent library before judging generalization or fine-tuning.
 
-## Inputs and example
+## What goes in
 
-The example below illustrates the schema; it is not a measured spectrum or an accuracy result.
+| Field | Meaning |
+| --- | --- |
+| `query` | HC peak records for s2m; molecular structure for m2s. Direction here: s2m. |
+| `candidate_pool` | Explicit candidate structures or spectra; ranking is restricted to this pool. |
+| `formula` | Not supplied to the spectral encoder. |
+
+## What comes out
+
+| Field | Meaning |
+| --- | --- |
+| `ranked_candidates` | Candidate identity, rank and embedding similarity score. |
+| `recall / MRR` | Report candidate-pool size with every metric; 32-way retrieval is not full-library retrieval. |
+
+## A real recorded example
+
+The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
 ```json
 {
-  "smiles": "CCO",
-  "formula": "C2H6O",
-  "h_nmr": [
-    {
-      "type": "1H NMR",
-      "chemical_shift": "1.20 (t, 3H), 3.65 (q, 2H)"
-    }
-  ],
-  "c_nmr": [
-    {
-      "type": "13C NMR",
-      "chemical_shift": "18.2, 58.3"
-    }
-  ],
-  "modality_mask": [
-    1,
-    1
-  ]
+  "input": {
+    "h_nmr": [
+      {
+        "type": "1H NMR",
+        "chemical_shift": "7.34 (s, 4H), 7.265 (m, 2H), 7.165 (m, 3H), 5.26 (d, J=1.6 Hz, 1H), 5.01 (t, J=1.4 Hz, 1H), 2.61 (t, J=7.8 Hz, 2H), 2.53 (t, J=7.6 Hz, 2H), 1.665 (m, 2H), 1.52 (d, J=7.7 Hz, 2H), 1.33 (s, 9H)"
+      }
+    ],
+    "c_nmr": [
+      {
+        "type": "13C NMR",
+        "chemical_shift": "150.22, 148.03, 142.68, 138.28, 128.36, 128.22, 125.68, 125.58, 125.12, 111.51, 35.72, 35.03, 34.46, 31.32, 31.11, 27.93"
+      }
+    ],
+    "modality_mask": [
+      1,
+      1
+    ]
+  },
+  "reference_smiles": "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+  "output": {
+    "length": 10,
+    "first_values": [
+      {
+        "smiles": "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+        "score": 0.9107388854026794,
+        "reference_match": true
+      },
+      {
+        "smiles": "Cc1ccc(/C=C/C(O)(CCCCCO)c2ccccc2)cc1",
+        "score": 0.3581679165363312,
+        "reference_match": false
+      },
+      {
+        "smiles": "CC(C)(C)C1=CC(=Cc2ccc(Cl)cc2)C=C(C(C)(C)C)C1=O",
+        "score": 0.30377936363220215,
+        "reference_match": false
+      },
+      {
+        "smiles": "CC(C)(C)OC(=O)N[C@H](CCC(=O)c1ccccc1)c1c[nH]c2cc(Cl)ccc12",
+        "score": 0.23662136495113373,
+        "reference_match": false
+      }
+    ]
+  }
 }
 ```
 
-## Outputs and metrics
+![nmr.retrieval.hc.s2m actual results](../assets/gallery/nmr-retrieval-hc-s2m.png)
+
+[SVG](../assets/gallery/nmr-retrieval-hc-s2m.svg) · [PNG](../assets/gallery/nmr-retrieval-hc-s2m.png) · [Full input/output JSON](../assets/examples/nmr-retrieval-hc-s2m.json)
+
+## Actual evaluation results
+
+| Dataset / scope | Model / variant | Metric | Value |
+| --- | --- | --- | ---: |
+| nmrspec_test | recorded model | recall_at_1 | 1 |
+| nmrspec_test | recorded model | mrr | 1 |
+| nmrspec_test | recorded model | queries | 32 |
+| nmrspec_test | recorded model | candidate_pool | 32 |
+| patent_test_10k | recorded model | recall_at_1 | 0.65625 |
+| patent_test_10k | recorded model | mrr | 0.776217 |
+| patent_test_10k | recorded model | queries | 32 |
+| patent_test_10k | recorded model | candidate_pool | 32 |
+| nmrexp_exp_10k | recorded model | recall_at_1 | 0.90625 |
+| nmrexp_exp_10k | recorded model | mrr | 0.9375 |
+| nmrexp_exp_10k | recorded model | queries | 32 |
+| nmrexp_exp_10k | recorded model | candidate_pool | 32 |
+| nmrgym_test | recorded model | recall_at_1 | 0.8125 |
+| nmrgym_test | recorded model | mrr | 0.886979 |
+| nmrgym_test | recorded model | queries | 32 |
+| nmrgym_test | recorded model | candidate_pool | 32 |
+
+Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
+
+## Model and method
+
+H-only, C-only and H+C are explicit visibility masks. The spectral encoder does not receive the molecular formula. Canonical isomeric identities define positive matches; the selected dataset supplies the candidate pool.
 
 Report Recall@1/5/10 and MRR with candidate counts. Byte-encoded candidate SMILES that exceed checkpoint capacity are excluded and counted rather than silently truncated.
 
-Metric fields: `recall_at_1`, `recall_at_5`, `recall_at_10`, `mrr`. Domain: `experimental`.
+## Reproduce
 
-## Run the existing model
+[Notebook with executed figures](../notebooks/nmr-retrieval-hc-s2m.ipynb) · [Quick Start](../quickstart.md)
 
 ```bash
 python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
-  --tasks nmr.retrieval.hc.s2m --limit 8 --output results/nmr-retrieval-hc-s2m.json
+  --tasks nmr.retrieval.hc.s2m --limit 8 --output results/nmr-retrieval-hc-s2m-new.json
 ```
 
-## Interpretation and limits
+## Limits and provenance
 
 Scores from 16, 32 and full-dataset candidate pools are not directly comparable. Existing dataset provenance and train/test overlap still require independent audit before an accuracy claim.
 
-## Recorded results
+- [nmr_documented_examples_20261117_v2.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/nmr_documented_examples_20261117_v2.json) — SHA-256 `669413d6fc0939bdb6826782d41fc13cf12926a672418ecb46303f0b8ba05b99`
 
-```json
-[
-  {
-    "task": "nmr.retrieval.hc.s2m",
-    "dataset_name": "nmrspec_test",
-    "status": "passed",
-    "metrics": {
-      "recall_at_1": 1.0,
-      "recall_at_5": 1.0,
-      "recall_at_10": 1.0,
-      "mrr": 1.0,
-      "queries": 32,
-      "candidate_pool": 32,
-      "unique_candidates": 32,
-      "tie_policy": "stable_candidate_order"
-    },
-    "selection": {
-      "read": 32,
-      "missing_modality": 0,
-      "duplicate_structure": 0,
-      "exceeds_model_capacity": 0
-    },
-    "sampling": "first_distinct_canonical_structures_in_file_order",
-    "source_file": "smoke_nmr_20261115_v2.json",
-    "sample_limit": 32
-  },
-  {
-    "task": "nmr.retrieval.hc.s2m",
-    "dataset_name": "patent_test_10k",
-    "status": "passed",
-    "metrics": {
-      "recall_at_1": 0.65625,
-      "recall_at_5": 0.9375,
-      "recall_at_10": 0.9375,
-      "mrr": 0.7762166501976284,
-      "queries": 32,
-      "candidate_pool": 32,
-      "unique_candidates": 32,
-      "tie_policy": "stable_candidate_order"
-    },
-    "selection": {
-      "read": 173,
-      "missing_modality": 140,
-      "duplicate_structure": 0,
-      "exceeds_model_capacity": 1
-    },
-    "sampling": "first_distinct_canonical_structures_in_file_order",
-    "source_file": "smoke_nmr_20261115_v2.json",
-    "sample_limit": 32
-  },
-  {
-    "task": "nmr.retrieval.hc.s2m",
-    "dataset_name": "nmrexp_exp_10k",
-    "status": "passed",
-    "metrics": {
-      "recall_at_1": 0.90625,
-      "recall_at_5": 1.0,
-      "recall_at_10": 1.0,
-      "mrr": 0.9375,
-      "queries": 32,
-      "candidate_pool": 32,
-      "unique_candidates": 32,
-      "tie_policy": "stable_candidate_order"
-    },
-    "selection": {
-      "read": 50,
-      "missing_modality": 18,
-      "duplicate_structure": 0,
-      "exceeds_model_capacity": 0
-    },
-    "sampling": "first_distinct_canonical_structures_in_file_order",
-    "source_file": "smoke_nmr_20261115_v2.json",
-    "sample_limit": 32
-  },
-  {
-    "task": "nmr.retrieval.hc.s2m",
-    "dataset_name": "nmrgym_test",
-    "status": "passed",
-    "metrics": {
-      "recall_at_1": 0.8125,
-      "recall_at_5": 0.96875,
-      "recall_at_10": 0.96875,
-      "mrr": 0.8869791666666667,
-      "queries": 32,
-      "candidate_pool": 32,
-      "unique_candidates": 32,
-      "tie_policy": "stable_candidate_order"
-    },
-    "selection": {
-      "read": 32,
-      "missing_modality": 0,
-      "duplicate_structure": 0,
-      "exceeds_model_capacity": 0
-    },
-    "sampling": "first_distinct_canonical_structures_in_file_order",
-    "source_file": "smoke_nmr_20261115_v2.json",
-    "sample_limit": 32
-  }
-]
-```
-
-## Notebook
-
-[Open the runnable notebook](../notebooks/nmr-retrieval-hc-s2m.ipynb)
-
-## Source
-
-[Original implementation / release](https://github.com/jiaqingxie/openmolspec-studio-frontend)
+[Original model / 原模型](https://github.com/jiaqingxie/openmolspec-studio-frontend) · [Model review / 模型检查](../model-audit.md)

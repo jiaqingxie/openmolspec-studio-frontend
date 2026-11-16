@@ -10,6 +10,8 @@ import sys
 import tempfile
 import contextlib
 import io
+from concurrent.futures import ThreadPoolExecutor
+from build_readthedocs import notebook_evidence_hash
 
 import nbformat
 from nbclient import NotebookClient
@@ -58,10 +60,13 @@ async def execute_notebook(notebook, runtime):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--limit", type=int)
+    parser.add_argument("--jobs", type=int, default=1, help="Parallel isolated Jupyter kernels")
     parser.add_argument("--engine", choices=["jupyter", "python"], default="jupyter",
                         help="python executes plain-Python cells in process; no Jupyter kernel validation")
     parser.add_argument("--output-dir", type=Path, help="Write executed notebooks separately from source previews")
     args = parser.parse_args()
+    if args.jobs < 1 or (args.engine == 'python' and args.jobs != 1):
+        parser.error('jobs must be positive; the in-process Python engine requires jobs=1')
     runtime = ROOT / ".runtime/doc-notebook-kernels"
     spec_dir = runtime / "kernels/openmolspec-docs"
     spec_dir.mkdir(parents=True, exist_ok=True)
@@ -76,13 +81,13 @@ def main():
     files = sorted((ROOT / "documentation/notebooks").glob("*.ipynb"))
     if args.limit:
         files = files[:args.limit]
-    proof = []
-    for path in files:
+    def run_one(path):
         destination_path = args.output_dir / path.name if args.output_dir else path
         notebook = nbformat.read(path, as_version=4)
         nbformat.validate(notebook)
         source_sha = hashlib.sha256(json.dumps([cell.source for cell in notebook.cells]).encode()).hexdigest()
-        expected = {"evaluation_index_sha256": index_sha, "source_sha256": source_sha, "engine": args.engine}
+        expected = {"evaluation_index_sha256": index_sha, "source_sha256": source_sha, "engine": args.engine,
+                    "evidence_sha256": notebook_evidence_hash(notebook)}
         if any(notebook.metadata.get("openmolspec_execution", {}).get(key) != value for key, value in expected.items()):
             print("EXECUTING", path.name, flush=True)
             if args.engine == "python":
@@ -91,7 +96,7 @@ def main():
                 asyncio.run(execute_notebook(notebook, runtime))
             notebook.metadata["openmolspec_execution"] = {**expected,
                                                          "model_execution_enabled": False, "training_performed": False,
-                                                         "scope": "example_schema_and_recorded_real_evaluation_results"}
+                                                         "scope": "real_input_output_recomputed_diagnostics_and_scientific_figures"}
             nbformat.validate(notebook)
             destination_path.parent.mkdir(parents=True, exist_ok=True)
             nbformat.write(notebook, destination_path)
@@ -104,9 +109,12 @@ def main():
                 assert not any(item.output_type == "error" for item in cell.outputs), path
         resolved = destination_path.resolve()
         recorded_path = str(resolved.relative_to(ROOT)) if resolved.is_relative_to(ROOT) else str(resolved)
-        proof.append({"notebook": str(path.relative_to(ROOT)), "executed_file": recorded_path,
-                      "sha256": hashlib.sha256(destination_path.read_bytes()).hexdigest()})
         print("EXECUTED", path.name, flush=True)
+        return {"notebook": str(path.relative_to(ROOT)), "executed_file": recorded_path,
+                "sha256": hashlib.sha256(destination_path.read_bytes()).hexdigest(),
+                "rich_outputs":sum(output.output_type in ('display_data','execute_result') for cell in notebook.cells if cell.cell_type=='code' for output in cell.outputs)}
+    with ThreadPoolExecutor(max_workers=args.jobs) as pool:
+        proof=list(pool.map(run_one,files))
     destination = ROOT / "results/doc_notebook_execution.json"
     destination.write_text(json.dumps({"executed_notebooks": len(proof), "evaluation_index_sha256": index_sha, "engine": args.engine,
                                        "scope": "recorded_results_not_retraining_or_model_reruns", "notebooks": proof}, indent=2) + "\n")

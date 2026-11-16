@@ -2,100 +2,87 @@
 
 Predict the molecular HOMO–LUMO gap in eV from spectral inputs, using the existing shared spectroscopy Transformer.
 
-## Model and protocol
+## Current evidence
 
-The checkpoint was trained for ir-raman-nmr inputs. Complete-input evaluation supplies both IR/Raman and H/C peaks. Other variants deliberately omit channels and are ablations of the same four-modality checkpoint, not separately trained unimodal models.
+Missing-channel ablation of a four-modal checkpoint. Poor scores do not validate a stand-alone IR/Raman model; use compatible unimodal weights or plan separate adaptation.
 
-## Inputs and example
+## What goes in
 
-The example below illustrates the schema; it is not a measured spectrum or an accuracy result.
+| Field | Meaning |
+| --- | --- |
+| `IR / Raman` | 1024 intensity samples per visible channel, ordered 400→4000 cm⁻¹, using the checkpoint normalization. |
+| `missing channels` | This uses a four-modal checkpoint with channels omitted; it is an ablation, not a separately trained model. |
+
+## What comes out
+
+| Field | Meaning |
+| --- | --- |
+| `gap_ev` | One predicted HOMO–LUMO gap in eV; source Hartree labels are converted once. |
+| `MAE / baseline` | Error against reference and the frozen training-mean constant on the same records. |
+
+## A real recorded example
+
+The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
 ```json
 {
-  "ir": "1024 min-max-normalized intensities",
-  "raman": "1024 min-max-normalized intensities",
-  "wavenumber_cm1": [
-    400,
-    4000
-  ],
-  "nmr_h_shifts_ppm": [
-    1.2,
-    3.65
-  ],
-  "nmr_c_shifts_ppm": [
-    18.2,
-    58.3
-  ],
-  "nmr_reference_id": "must match checkpoint",
-  "formula": "not supplied to Vib2Mol"
+  "sample_id": "ZINCV2-ZINC000666646493",
+  "output": {
+    "gap_ev": 8.8157206550655
+  },
+  "reference": {
+    "gap_ev": 5.227035183991835
+  },
+  "input": {
+    "raman": {
+      "length": 1024,
+      "first_values": [
+        0.007774287834763527,
+        0.010057443752884865,
+        0.0145131079480052,
+        0.01943223364651203
+      ]
+    }
+  }
 }
 ```
 
-## Outputs and metrics
+![vibrational.gap.raman actual results](../assets/gallery/vibrational-gap-raman.png)
+
+[SVG](../assets/gallery/vibrational-gap-raman.svg) · [PNG](../assets/gallery/vibrational-gap-raman.png) · [Full input/output JSON](../assets/examples/vibrational-gap-raman.json)
+
+## Actual evaluation results
+
+| Dataset / scope | Model / variant | Metric | Value |
+| --- | --- | --- | ---: |
+| recorded sample | recorded model | mae_ev | 2.97818 |
+| recorded sample | recorded model | rmse_ev | 3.15661 |
+| recorded sample | recorded model | examples | 128 |
+| recorded sample | Training-mean baseline | mae_ev | 0.89994 |
+| recorded sample | Training-mean baseline | rmse_ev | 1.06962 |
+| recorded sample | Training-mean baseline | examples | 128 |
+
+Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
+
+## Model and method
+
+The checkpoint was trained for ir-raman-nmr inputs. Complete-input evaluation supplies both IR/Raman and H/C peaks. Other variants deliberately omit channels and are ablations of the same four-modality checkpoint, not separately trained unimodal models.
 
 The bundled Vib2Mol LMDB stores gap in Hartree; convert it once to eV using 27.211386245988. The prediction is unnormalized with the checkpoint's stored target mean/std. H/C normalization and reference must agree with the checkpoint. Report MAE/RMSE and the fixed training-mean baseline on exactly the same records.
 
-Metric fields: `mae_ev`, `rmse_ev`. Domain: `computed`.
+## Reproduce
 
-## Run the existing model
+[Notebook with executed figures](../notebooks/vibrational-gap-raman.ipynb) · [Quick Start](../quickstart.md)
 
 ```bash
 python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
-  --tasks vibrational.gap.raman --limit 8 --output results/vibrational-gap-raman.json
+  --tasks vibrational.gap.raman --limit 8 --output results/vibrational-gap-raman-new.json
 ```
 
-## Interpretation and limits
+## Limits and provenance
 
 A small first-record sample may be biased by source order. Use seeded reservoir sampling for broader checks; missing-channel scores must remain separate from complete-input scores.
 
-## Recorded results
+- [gap_protocol_random128_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/gap_protocol_random128_20261116.json) — SHA-256 `e3ab614192106dccc2bb4cf30d4a2ce0259ba6e21207bb52695a0a02ef08d488`
 
-```json
-[
-  {
-    "task": "vibrational.gap.raman",
-    "dataset_name": null,
-    "status": "passed",
-    "metrics": {
-      "mae_ev": 2.9781784993717197,
-      "rmse_ev": 3.156612886408973,
-      "examples": 128
-    },
-    "given_nmr": false,
-    "source_counts": {
-      "ZINCV2": 58,
-      "SDBS": 4,
-      "PCQM4MV2": 20,
-      "WILEYIR": 9,
-      "ZINCV1": 12,
-      "RXN": 6,
-      "QM9": 18,
-      "WILEYRAMAN": 1
-    },
-    "selection": {
-      "read": 20390,
-      "duplicate_structure": 3662,
-      "eligible_distinct_structures": 16728,
-      "selected": 128
-    },
-    "sampling": "reservoir",
-    "seed": 42,
-    "training_mean_baseline": {
-      "constant_ev": 5.645122750946045,
-      "mae_ev": 0.8999401965027582,
-      "rmse_ev": 1.0696170714220543,
-      "examples": 128
-    },
-    "source_file": "gap_protocol_random128_20261116.json",
-    "sample_limit": 128
-  }
-]
-```
-
-## Notebook
-
-[Open the runnable notebook](../notebooks/vibrational-gap-raman.ipynb)
-
-## Source
-
-[Original implementation / release](https://github.com/X1nyuLu/openSpec-alpha)
+[Original model / 原模型](https://github.com/X1nyuLu/openSpec-alpha) · [Model review / 模型检查](../model-audit.md)

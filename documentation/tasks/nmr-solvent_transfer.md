@@ -2,91 +2,116 @@
 
 Estimate target-solvent shifts from a measured source-solvent spectrum using paired experimental references.
 
-## Model and protocol
+## Current evidence
 
-Use reviewed, one-dimensional H/C NMRShiftDB records; exclude calculated-condition entries, unknown/mixed solvents and conflicting repeated atom shifts. Pair the same database atom across solvents. Retrieve the nearest other molecular connectivity by Morgan Tanimoto, then the nearest source shift, and add that reference atom's measured solvent difference. No parameters are fitted. All records sharing the query connectivity, including stereoisomers, are excluded.
+Executable reference baseline; H does not improve on unchanged shifts. A solvent-conditioned model and independent paired data are still needed.
 
-## Inputs and example
+## What goes in
 
-The example below illustrates the schema; it is not a measured spectrum or an accuracy result.
+| Field | Meaning |
+| --- | --- |
+| `structure / nucleus` | Molecular connectivity and 1H or 13C. |
+| `solvents` | Explicit source and target solvents that have paired references. |
+| `source_ppm` | Measured source-solvent shifts in ppm. |
+
+## What comes out
+
+| Field | Meaning |
+| --- | --- |
+| `target_ppm / delta_ppm` | Estimated target shift and solvent difference from an independent reference. |
+| `reference` | Reference identity, spectra/atom IDs, Tanimoto similarity and exclusions. |
+
+## A real recorded example
+
+The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
 ```json
 {
-  "smiles": "CCO",
-  "nucleus": "1H",
-  "source_solvent": "CDCl3",
-  "target_solvent": "DMSO-d6",
-  "source_peaks_ppm": [
-    1.2,
-    3.65
-  ]
+  "input": {
+    "nucleus": "1H",
+    "source_ppm": 1.45,
+    "source_solvent": "CD3OD",
+    "target_solvent": "acetone-d6",
+    "query_connectivity": "C1CCCCC1"
+  },
+  "output": {
+    "source_ppm": 1.45,
+    "predicted_target_ppm": 1.3799999999999997,
+    "predicted_delta_ppm": -0.07000000000000028,
+    "source_solvent": "CD3OD",
+    "target_solvent": "acetone-d6",
+    "nucleus": "1H",
+    "query_connectivity": "C1CCCCC1",
+    "reference": {
+      "identity": "C1COCCO1",
+      "molecule_id": "10016061",
+      "atom_id": "10093018",
+      "source_ppm": 3.66,
+      "target_ppm": 3.59,
+      "source_spectrum_ids": [
+        "20197666"
+      ],
+      "target_spectrum_ids": [
+        "20197080"
+      ]
+    },
+    "tanimoto_similarity": 0.125,
+    "same_connectivity_excluded": true,
+    "method": "nearest_paired_experimental_reference_delta",
+    "model_kind": "retrieval_baseline_not_neural_model",
+    "query_molecule_id": "10811",
+    "query_atom_id": "10046537",
+    "target_reference_ppm": 1.43,
+    "source_spectrum_ids": [
+      "20197663"
+    ],
+    "target_spectrum_ids": [
+      "20197659"
+    ]
+  }
 }
 ```
 
-## Outputs and metrics
+![nmr.solvent_transfer actual results](../assets/gallery/nmr-solvent_transfer.png)
+
+[SVG](../assets/gallery/nmr-solvent_transfer.svg) · [PNG](../assets/gallery/nmr-solvent_transfer.png) · [Full input/output JSON](../assets/examples/nmr-solvent_transfer.json)
+
+## Actual evaluation results
+
+| Dataset / scope | Model / variant | Metric | Value |
+| --- | --- | --- | ---: |
+| recorded evaluation | 13C | atoms | 140 |
+| recorded evaluation | 13C | molecules | 13 |
+| recorded evaluation | 13C | mae_ppm | 1.09429 |
+| recorded evaluation | 13C | unchanged_shift_mae_ppm | 1.16371 |
+| recorded evaluation | 13C | rmse_ppm | 1.90935 |
+| recorded evaluation | 1H | atoms | 156 |
+| recorded evaluation | 1H | molecules | 19 |
+| recorded evaluation | 1H | mae_ppm | 0.137628 |
+| recorded evaluation | 1H | unchanged_shift_mae_ppm | 0.135385 |
+| recorded evaluation | 1H | rmse_ppm | 0.376179 |
+
+Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
+
+## Model and method
+
+Use reviewed, one-dimensional H/C NMRShiftDB records; exclude calculated-condition entries, unknown/mixed solvents and conflicting repeated atom shifts. Pair the same database atom across solvents. Retrieve the nearest other molecular connectivity by Morgan Tanimoto, then the nearest source shift, and add that reference atom's measured solvent difference. No parameters are fitted. All records sharing the query connectivity, including stereoisomers, are excluded.
 
 Report H and C errors separately and compare with leaving the source shift unchanged. The completed run covers 32 distinct molecules and 296 paired atoms. Predictions expose reference molecules, atom/spectrum IDs and similarity.
 
-Metric fields: `mae_ppm`, `unchanged_shift_mae_ppm`. Domain: `experimental`.
+## Reproduce
 
-## Run the existing model
+[Notebook with executed figures](../notebooks/nmr-solvent_transfer.ipynb) · [Quick Start](../quickstart.md)
 
 ```bash
 python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
-  --tasks nmr.solvent_transfer --limit 8 --output results/nmr-solvent_transfer.json
+  --tasks nmr.solvent_transfer --limit 8 --output results/nmr-solvent_transfer-new.json
 ```
 
-## Interpretation and limits
+## Limits and provenance
 
 This is a retrieval baseline, not a pretrained neural solvent model. It does not consistently improve both nuclei over unchanged shifts. The reference library is small, and temperature/concentration/reference conventions are not independently harmonized. Neural solvent checkpoints remain unavailable.
 
-## Recorded results
+- [solvent_transfer_reference32_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/solvent_transfer_reference32_20261116.json) — SHA-256 `7532dc2b785a93aa51323934bb748b768f1bfc7c820809bc2065d0840afc543f`
 
-```json
-[
-  {
-    "task": "nmr.solvent_transfer",
-    "status": "passed",
-    "metrics": {
-      "13C": {
-        "atoms": 140,
-        "molecules": 13,
-        "mae_ppm": 1.0942857142857159,
-        "unchanged_shift_mae_ppm": 1.1637142857142861,
-        "rmse_ppm": 1.9093510490665238
-      },
-      "1H": {
-        "atoms": 156,
-        "molecules": 19,
-        "mae_ppm": 0.13762820512820512,
-        "unchanged_shift_mae_ppm": 0.13538461538461527,
-        "rmse_ppm": 0.3761793421174233
-      }
-    },
-    "counts": {
-      "distinct_molecules": 32,
-      "paired_atoms": 296,
-      "skipped_pairs": 3
-    },
-    "seed": 42,
-    "model_kind": "retrieval_baseline_not_neural_model",
-    "purpose": "leave_one_connectivity_out_reference_baseline",
-    "limitations": [
-      "Existing neural solvent model is not installed; this is a reference-retrieval baseline.",
-      "No parameter fitting or test-label calibration. Query connectivity and stereoisomers excluded.",
-      "Temperature, concentration and original experimental referencing are not independently harmonized.",
-      "Low-similarity references can be inaccurate; a successful run does not establish useful accuracy."
-    ],
-    "source_file": "solvent_transfer_reference32_20261116.json",
-    "sample_limit": 32
-  }
-]
-```
-
-## Notebook
-
-[Open the runnable notebook](../notebooks/nmr-solvent_transfer.ipynb)
-
-## Source
-
-[Original implementation / release](https://nmrshiftdb.nmr.uni-koeln.de/)
+[Original model / 原模型](https://nmrshiftdb.nmr.uni-koeln.de/) · [Model review / 模型检查](../model-audit.md)

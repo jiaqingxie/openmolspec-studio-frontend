@@ -491,11 +491,14 @@ def rank_candidates(candidates: list[tuple[str, float]], formula: str) -> list[d
 def evaluate_generation(model: SpectrumToSmiles, path: Path, max_examples: int,
                         beam_size: int, modality: str = "available",
                         batch_size: int = 1, rank: int = 0, world_size: int = 1,
-                        progress_every: int = 0) -> dict:
+                        progress_every: int = 0, record_predictions: bool = False) -> dict:
     if max_examples < 1 or batch_size < 1:
         raise ValueError("Evaluation needs positive example and batch limits")
     if world_size > 1 and not dist.is_initialized():
         raise RuntimeError("Distributed evaluation requires an initialized process group")
+    if record_predictions and world_size > 1:
+        raise ValueError("Prediction recording requires single-process evaluation")
+    predictions = []
     counts = {"examples": 0, "skipped_missing_modality": 0,
               "valid": 0, "formula_match": 0, "exact": 0}
     encoder = (encode_structured_source
@@ -517,8 +520,16 @@ def evaluate_generation(model: SpectrumToSmiles, path: Path, max_examples: int,
         else:
             candidate_batches = [model.beam_search(source, beam_size)
                                  for source in sources]
-        for (item, _), candidates in zip(pending, candidate_batches):
-            best = rank_candidates(candidates, item["formula"])[0]
+        for (item, mask), candidates in zip(pending, candidate_batches):
+            ranked = rank_candidates(candidates, item["formula"])
+            best = ranked[0]
+            if record_predictions:
+                predictions.append({"input": {"formula": item["formula"],
+                                    "h_nmr": item["h_nmr"] if mask[0] else [],
+                                    "c_nmr": item["c_nmr"] if mask[1] else [],
+                                    "modality_mask": list(mask)},
+                                    "reference_smiles": item["smiles"], "candidates": ranked,
+                                    "exact_match": best["canonical_smiles"] == item["smiles"]})
             counts["examples"] += 1
             counts["valid"] += int(best["valid"])
             counts["formula_match"] += int(best["formula_match"])
@@ -565,6 +576,7 @@ def evaluate_generation(model: SpectrumToSmiles, path: Path, max_examples: int,
     if not counts["examples"]:
         raise ValueError(f"No examples in {path}")
     return {"modality": modality, **counts,
+            **({"predictions": predictions} if record_predictions else {}),
             **{f"{name}_rate": counts[name] / counts["examples"]
                        for name in ("valid", "formula_match", "exact")}}
 

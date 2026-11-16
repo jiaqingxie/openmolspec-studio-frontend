@@ -23,6 +23,11 @@ DOCS = ROOT / "documentation"
 CONFIG = DOCS / "sphinx"
 
 
+def notebook_evidence_hash(book):
+    paths=book.get('metadata',{}).get('openmolspec_evidence_files',[])
+    return hashlib.sha256(json.dumps([(p,hashlib.sha256((ROOT/p).read_bytes()).hexdigest()) for p in paths]).encode()).hexdigest()
+
+
 def validate_notebook(source, evaluation_hash):
     book = json.loads(source.read_text())
     if book.get("metadata", {}).get("mystnb", {}).get("execution_mode", "off") != "off":
@@ -33,6 +38,8 @@ def validate_notebook(source, evaluation_hash):
         raise ValueError(f"Notebook outputs are stale for current source: {source}")
     if execution.get("evaluation_index_sha256") != evaluation_hash:
         raise ValueError(f"Notebook outputs are stale for current evaluation index: {source}")
+    if book.get('metadata',{}).get('openmolspec_evidence_files') and execution.get('evidence_sha256') != notebook_evidence_hash(book):
+        raise ValueError(f"Notebook outputs are stale for current evidence or plotting code: {source}")
     for cell in book["cells"]:
         if cell["cell_type"] == "code":
             if cell.get("execution_count") is None:
@@ -55,6 +62,11 @@ def add_toctree(content, entries):
 
 
 def stage_sources(target, sources, locale):
+    sys.path.insert(0,str(ROOT))
+    sys.path.insert(0,str(ROOT/'scripts'))
+    from documentation_content import GROUPS, group
+    from openmolspec_bench.catalog import TASKS
+    shutil.copytree(DOCS/'assets',target/'assets',dirs_exist_ok=True)
     for source in sources:
         if source_locale(source) != locale:
             continue
@@ -68,9 +80,13 @@ def stage_sources(target, sources, locale):
         # Both locale trees use the same page names; only the output root differs.
         content = re.sub(r"(?<=\.)zh\.(?=(?:md|ipynb)(?:[)#?]))", "", content)
         if relative.as_posix() == "index.md":
-            content = add_toctree(content, ["quickstart", "tasks/index", "notebooks/index",
-                                             "datasets", "protocols", "publication"])
-        elif relative.as_posix() in ("tasks/index.md", "notebooks/index.md"):
+            content = add_toctree(content, ["quickstart", "gallery", "tasks/index", "datasets", "notebooks/index",
+                                             "model-audit", "protocols", "publication"])
+        elif relative.as_posix() == 'tasks/index.md':
+            content = add_toctree(content, [key for key,_,_ in GROUPS])
+        elif relative.parent.as_posix()=='tasks' and relative.stem in [g[0] for g in GROUPS]:
+            content = add_toctree(content,[t.id.replace('.','-') for t in TASKS if group(t)==relative.stem])
+        elif relative.as_posix() == "notebooks/index.md":
             children = sorted(source_relative(p).stem for p in sources
                               if p.parent == source.parent and source_locale(p) == locale
                               and source_relative(p).stem != "index")
@@ -146,6 +162,7 @@ def main():
                 download.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(source, download)
         shutil.copytree(DOCS / "assets", rendered / "assets", dirs_exist_ok=True)
+        shutil.copytree(DOCS / "assets", rendered / "zh/assets", dirs_exist_ok=True)
         count = validate(rendered)
         result = {"completed": True, "content_pages": len(sources), "html_pages": count,
                   "notebook_previews": sum(p.suffix == ".ipynb" for p in sources),

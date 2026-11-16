@@ -2,105 +2,127 @@
 
 使用 Xinyu 保存的 Vib2Mol 模型完成结构检索、SMILES 生成或候选重排。完整输入为 IR+Raman+H/C；仅 IR/Raman 的路径作为缺核消融。
 
-## 模型与协议
+## 当前结论
 
-复用原实现的 encode_spectra、canonical/unique_candidates 与 rerank_candidates。生成默认 beam=10、最大长度 300；先移除无效和重复规范结构，再对前 10 个候选用 ITM 正类概率重排。不提供分子式，也不使用近邻缓存回放。
+已遵循作者生成协议，但同一 64 样本上 ITM 重排使 top-1 从 0.75 降到 0.6875；应先复查这项退化，再考虑重排器适配。
 
-## 输入与示例
+## 输入是什么
 
-以下仅展示输入格式，不是实测谱或精度结果。
+| Field | Meaning |
+| --- | --- |
+| `IR / Raman` | 每个可见通道 1024 个强度点，按 400→4000 cm⁻¹ 排列，并采用 checkpoint 的归一化。 |
+| `1H / 13C` | 逐原子位移数组（ppm），参考 ID 和归一化必须与 checkpoint 一致。 |
+
+## 输出是什么
+
+| Field | Meaning |
+| --- | --- |
+| `SMILES candidates` | 解码后有效、规范化且去重的结构；完整输入路径使用 beam 10 和 ITM 重排。 |
+| `top-k` | 分别报告生成与重排后的 top-k；不提供分子式。 |
+
+## 真实运行案例
+
+下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
 
 ```json
 {
-  "ir": "1024 min-max-normalized intensities",
-  "raman": "1024 min-max-normalized intensities",
-  "wavenumber_cm1": [
-    400,
-    4000
+  "target": "CC(C)OCC1=NC(C2CCC2)=CS1",
+  "raw_beams": {
+    "length": 10,
+    "first_values": [
+      "CC(C)OCC1=NC(C2CCC2)=CS1",
+      "CC(OCC1=NC(=CS1)C1CCC1)C",
+      "CC(OCC1=NC(C2CCC2)=CS1)C",
+      "CC(OCC1SC=C(N=1)C1CCC1)C"
+    ]
+  },
+  "unique_candidates": [
+    "CC(C)OCC1=NC(C2CCC2)=CS1"
   ],
-  "nmr_h_shifts_ppm": [
-    1.2,
-    3.65
+  "reranked": [
+    "CC(C)OCC1=NC(C2CCC2)=CS1"
   ],
-  "nmr_c_shifts_ppm": [
-    18.2,
-    58.3
+  "positive_probabilities": [
+    0.9998494386672974
   ],
-  "nmr_reference_id": "must match checkpoint",
-  "formula": "not supplied to Vib2Mol"
+  "input": {
+    "ir": {
+      "length": 1024,
+      "first_values": [
+        0.005309805274009705,
+        0.005845691077411175,
+        0.006656948011368513,
+        0.007852676324546337
+      ]
+    },
+    "raman": {
+      "length": 1024,
+      "first_values": [
+        0.004348924849182367,
+        0.0044013503938913345,
+        0.0046332464553415775,
+        0.005103452131152153
+      ]
+    },
+    "nmr_h_shifts_ppm": {
+      "length": 17,
+      "first_values": [
+        0.8246750235557556,
+        0.8999750018119812,
+        0.9729750156402588,
+        1.1875749826431274
+      ]
+    },
+    "nmr_c_shifts_ppm": {
+      "length": 11,
+      "first_values": [
+        19.662874221801758,
+        20.252174377441406,
+        22.792875289916992,
+        26.529874801635742
+      ]
+    },
+    "nmr_reference_id": "tms-d6273f14fda3cb5e"
+  }
 }
 ```
 
-## 输出与指标
+![vibrational.generation.hc actual results](../assets/gallery/vibrational-generation-hc.png)
+
+[SVG](../assets/gallery/vibrational-generation-hc.svg) · [PNG](../assets/gallery/vibrational-generation-hc.png) · [Full input/output JSON](../assets/examples/vibrational-generation-hc.json)
+
+## 实际评测结果
+
+| Dataset / scope | Model / variant | Metric | Value |
+| --- | --- | --- | ---: |
+| recorded sample | recorded model | exact_canonical_top1 | 0.75 |
+| recorded sample | recorded model | exact_canonical_top5 | 0.890625 |
+| recorded sample | recorded model | valid_smiles_fraction | 0.959375 |
+| recorded sample | recorded model | examples | 64 |
+| recorded sample | ITM reranked | exact_canonical_top1 | 0.6875 |
+| recorded sample | ITM reranked | exact_canonical_top5 | 0.890625 |
+
+样本量和候选池随每次运行记录。图可能展示单个分子，表格是来源实验的实际汇总，不能混为同一统计范围。
+
+## 模型与方法
+
+复用原实现的 encode_spectra、canonical/unique_candidates 与 rerank_candidates。生成默认 beam=10、最大长度 300；先移除无效和重复规范结构，再对前 10 个候选用 ITM 正类概率重排。不提供分子式，也不使用近邻缓存回放。
 
 检索报告双向 Recall@1/5/10、MRR 和候选池大小。生成同时报告原始 beam 的有效率、规范去重后的 top-1/3/5/10 及重排后的 top-k；重排始终使用明确的候选列表。
 
-适配器：`vib2mol_generation`。数据域：`computed`。指标字段：`exact_canonical_top1`、`exact_canonical_top5`、`valid_smiles_fraction`。
+## 复现方式
 
-## 运行推理或评分
+[Notebook with executed figures](../notebooks/vibrational-generation-hc.ipynb) · [Quick Start](../quickstart.md)
 
 ```bash
 python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
-  --tasks vibrational.generation.hc --limit 8 --output results/vibrational-generation-hc.json
+  --tasks vibrational.generation.hc --limit 8 --output results/vibrational-generation-hc-new.json
 ```
 
-## 解释与限制
+## 边界与来源
 
 生成与重排 checkpoint 的 H/C 参考和归一化缓冲必须一致。小候选池可能让检索分数偏高，必须公布样本 ID、种子和来源组成。
 
-## 已记录结果
+- [vib2mol_xinyu_random64_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/vib2mol_xinyu_random64_20261116.json) — SHA-256 `9f452a28aef3ff5af315cdbe1340c1844f7e3af139896490fba2d268fc970cc8`
 
-```json
-[
-  {
-    "task": "vibrational.generation.hc",
-    "dataset_name": null,
-    "status": "passed",
-    "metrics": {
-      "exact_canonical_top1": 0.75,
-      "exact_canonical_top3": 0.890625,
-      "exact_canonical_top5": 0.890625,
-      "exact_canonical_top10": 0.890625,
-      "valid_smiles_fraction": 0.959375,
-      "duplicate_valid_beams": 455,
-      "examples": 64
-    },
-    "given_nmr": true,
-    "beam_size": 10,
-    "reranked_metrics": {
-      "exact_canonical_top1": 0.6875,
-      "exact_canonical_top3": 0.84375,
-      "exact_canonical_top5": 0.890625,
-      "exact_canonical_top10": 0.890625
-    },
-    "source_counts": {
-      "ZINCV2": 28,
-      "SDBS": 2,
-      "PCQM4MV2": 11,
-      "WILEYIR": 1,
-      "ZINCV1": 7,
-      "RXN": 5,
-      "NISTIR": 1,
-      "QM9": 9
-    },
-    "selection": {
-      "read": 20390,
-      "duplicate_structure": 3662,
-      "eligible_distinct_structures": 16728,
-      "selected": 64
-    },
-    "sampling": "reservoir",
-    "seed": 42,
-    "source_file": "vib2mol_xinyu_random64_20261116.json",
-    "sample_limit": 64
-  }
-]
-```
-
-## Notebook
-
-[打开可运行 notebook](../notebooks/vibrational-generation-hc.ipynb)
-
-## 来源
-
-[原始实现与发布](https://github.com/X1nyuLu/openSpec-alpha)
+[Original model / 原模型](https://github.com/X1nyuLu/openSpec-alpha) · [Model review / 模型检查](../model-audit.md)

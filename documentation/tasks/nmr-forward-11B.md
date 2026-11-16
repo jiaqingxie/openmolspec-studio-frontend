@@ -2,92 +2,84 @@
 
 Run the released liquid All-nucleus NMRNet checkpoint on existing atom-indexed validation records.
 
-## Model and protocol
+## Current evidence
 
-Completed 32 distinct molecules per nucleus using the saved scaler and full checkpoint restoration. Sample IDs and atom labels were checked against the exact inference inputs. See results/bsi_frozen_diagnostic_20261116.json and scripts/run_frozen_bsi_diagnostic.py.
+Diagnostic only: 8.68 ppm MAE, correlation 0.217. Weak discrimination and unaudited coverage; nucleus-specific adaptation is a candidate after data repair.
 
-## Inputs and example
+## What goes in
 
-The example below illustrates the schema; it is not a measured spectrum or an accuracy result.
+| Field | Meaning |
+| --- | --- |
+| `smiles / geometry` | A valid molecular graph and a compatible 3D conformer; atom order must be preserved. |
+| `nucleus` | 11B; the checkpoint must cover this nucleus. |
+| `reference peaks` | Optional measured ppm values for evaluation; not an inference input. |
+
+## What comes out
+
+| Field | Meaning |
+| --- | --- |
+| `prediction_ppm` | Per-atom chemical shifts in ppm, with atom indices or a peak list. |
+| `error / coverage` | Reference-matched errors and coverage; matching does not establish atom assignments. |
+
+## A real recorded example
+
+The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
 ```json
 {
-  "smiles": "CCO",
-  "formula": "C2H6O",
-  "h_nmr": [
-    {
-      "type": "1H NMR",
-      "chemical_shift": "1.20 (t, 3H), 3.65 (q, 2H)"
-    }
-  ],
-  "c_nmr": [
-    {
-      "type": "13C NMR",
-      "chemical_shift": "18.2, 58.3"
-    }
-  ],
-  "modality_mask": [
-    1,
-    1
-  ]
+  "input": {
+    "smiles": "Cc1cnc([B-]23OC(=O)C[C+]2CC(=O)O3)o1",
+    "atom_indices": [
+      5
+    ]
+  },
+  "output": {
+    "prediction_ppm": [
+      26.116743087768555
+    ]
+  },
+  "reference": {
+    "ppm": [
+      7.5
+    ]
+  }
 }
 ```
 
-## Outputs and metrics
+![nmr.forward.11B actual results](../assets/gallery/nmr-forward-11B.png)
+
+[SVG](../assets/gallery/nmr-forward-11B.svg) · [PNG](../assets/gallery/nmr-forward-11B.png) · [Full input/output JSON](../assets/examples/nmr-forward-11B.json)
+
+## Actual evaluation results
+
+| Dataset / scope | Model / variant | Metric | Value |
+| --- | --- | --- | ---: |
+| recorded evaluation | recorded model | mae_ppm | 8.68453 |
+| recorded evaluation | recorded model | rmse_ppm | 12.4365 |
+| recorded evaluation | recorded model | molecules | 32 |
+| recorded evaluation | recorded model | atoms | 32 |
+
+Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
+
+## Model and method
+
+Completed 32 distinct molecules per nucleus using the saved scaler and full checkpoint restoration. Sample IDs and atom labels were checked against the exact inference inputs. See results/bsi_frozen_diagnostic_20261116.json and scripts/run_frozen_bsi_diagnostic.py.
 
 Diagnostic atom-level MAE/RMSE in ppm; these are not peak-matching scores or validated held-out benchmark results.
 
-Metric fields: `mae_ppm`, `rmse_ppm`. Domain: `experimental`.
+## Reproduce
 
-## Run the existing model
+[Notebook with executed figures](../notebooks/nmr-forward-11B.ipynb) · [Quick Start](../quickstart.md)
 
 ```bash
 python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
-  --tasks nmr.forward.11B --limit 8 --output results/nmr-forward-11B.json
+  --tasks nmr.forward.11B --limit 8 --output results/nmr-forward-11B-new.json
 ```
 
-The primary command above runs diagnostic-only inference. To reproduce both nuclei directly in a fresh directory:
-
-```bash
-python scripts/run_frozen_bsi_diagnostic.py --models-root /path/to/models --output /path/to/new-bsi-run --limit 32
-```
-
-## Interpretation and limits
+## Limits and provenance
 
 Nucleus-specific training coverage, training overlap and experimental assignment provenance are unverified. The model has no solvent input. Primary scoring remains disabled; NMRNet++ B/Si-specific weights are still being sought. No fitting was performed.
 
-## Recorded results
+- [bsi_frozen_diagnostic_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/bsi_frozen_diagnostic_20261116.json) — SHA-256 `0f7c1f6c9eae12e644753581f785d76b1824f8311d5fccc7ae4afb98d19c65e6`
 
-```json
-[
-  {
-    "task": "nmr.forward.11B",
-    "status": "diagnostic_only",
-    "model": "NMRNet liquid All-nucleus fold 0",
-    "metrics": {
-      "mae_ppm": 8.684532299637794,
-      "rmse_ppm": 12.436461034675611
-    },
-    "molecules": 32,
-    "atoms": 32,
-    "primary_score_eligible": false,
-    "limitations": [
-      "Nucleus-specific training coverage is unverified.",
-      "Training overlap with evaluation records is unaudited.",
-      "This model does not condition on solvent.",
-      "Atom labels originate from the local prepared pool; experimental assignment provenance is unverified."
-    ],
-    "label_alignment_verified": true,
-    "source_file": "bsi_frozen_diagnostic_20261116.json",
-    "sample_limit": 32
-  }
-]
-```
-
-## Notebook
-
-[Open the runnable notebook](../notebooks/nmr-forward-11B.ipynb)
-
-## Source
-
-[Original implementation / release](https://github.com/Colin-Jay/NMRNet)
+[Original model / 原模型](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)

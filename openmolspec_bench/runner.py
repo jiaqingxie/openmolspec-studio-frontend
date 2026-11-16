@@ -103,9 +103,11 @@ class Runner:
                 selected = Path(directory) / "test.jsonl"
                 selected.write_text("".join(json.dumps(row) + "\n" for row in rows))
                 metrics = evaluate_generation(model, selected, len(rows), self.args.beam_size,
-                                              batch_size=self.args.batch_size)
+                                              batch_size=self.args.batch_size, record_predictions=True)
+            predictions = metrics.pop("predictions")
             return {"metrics": metrics, "checkpoint": self.artifact(checkpoint),
-                    "given_formula": True, "beam_size": self.args.beam_size, **provenance}
+                    "given_formula": True, "beam_size": self.args.beam_size,
+                    "predictions": predictions, **provenance}
         key = (dataset, view)
         if key not in self.encoded:
             if len(rows) < 2:
@@ -126,6 +128,11 @@ class Runner:
             scores = scores.T
         ids = [row["smiles"] for row in rows]
         return {"metrics": retrieval_metrics(scores, ids, ids), "given_formula": False,
+                "examples": [{"query": rows[i], "direction": parts[3],
+                              "ranked_candidates": [{"smiles": ids[j], "score": float(scores[i,j]),
+                                                      "reference_match": ids[j] == ids[i]}
+                                                     for j in np.argsort(-scores[i], kind="stable")[:10]]}
+                             for i in range(min(3, len(rows)))],
                 "checkpoint": self.artifact(checkpoint), **provenance}
 
     def forward(self, task, dataset):
@@ -175,6 +182,9 @@ class Runner:
                                 "inference_mode": "score_existing_predictions",
                                 "selected_references": len(reference), "covered_references": len(predicted),
                                 "sample_ids": identities, "folds": len(files),
+                                "examples": [{"smiles": identity, "reference_ppm": list(ref),
+                                              "prediction_ppm": pred.tolist()}
+                                             for identity, ref, pred in list(zip(identities, expected, predicted))[:3]],
                                 "prediction_files": [self.artifact(file) for file in files],
                                 "metadata": self.artifact(meta)})
         if not results:
@@ -392,6 +402,16 @@ class Runner:
                     "ranking": "raw_beam_top_1_without_reranking", "predictions": predictions}
         if len(rows) < 2:
             raise ValueError("Vibrational retrieval/reranking needs at least two candidates")
+        def ranked_examples(scores):
+            return [{"sample_id": rows[i].get("sample_id", rows[i]["_lmdb_key"]),
+                     "input": {"ir": np.asarray(rows[i]["ir"]).tolist(),
+                               "raman": np.asarray(rows[i]["raman"]).tolist(),
+                               "nmr_h_shifts_ppm": np.asarray(rows[i]["nmr_h_shifts_ppm"]).tolist() if include_nmr else [],
+                               "nmr_c_shifts_ppm": np.asarray(rows[i]["nmr_c_shifts_ppm"]).tolist() if include_nmr else []},
+                     "reference_smiles": ids[i],
+                     "ranked_candidates": [{"smiles": ids[j], "score": float(scores[i,j]), "reference_match": ids[j]==ids[i]}
+                                           for j in np.argsort(-scores[i], kind="stable")[:10]]}
+                    for i in range(min(3,len(rows)))]
         if task.backend == "vib2mol_reranking":
             scores = np.empty((len(rows), len(rows)))
             with torch.inference_mode():
@@ -400,7 +420,7 @@ class Runner:
                     scores[index, order] = ranked
             metrics = retrieval_metrics(scores, ids, ids)
             metrics["top_1_hit_rate"] = metrics["recall_at_1"]
-            return {**provenance, "metrics": metrics, "ranking": "itm_positive_probability"}
+            return {**provenance, "metrics": metrics, "ranking": "itm_positive_probability", "examples": ranked_examples(scores)}
         with torch.inference_mode():
             molecule_ids = tokens["input_ids"].to(device)
             mask = tokens["attention_mask"].to(device)
@@ -410,6 +430,7 @@ class Runner:
             spectral = functional.normalize(torch.cat([encode_spectra(model, data)["proj_output"] for data in inputs]), dim=-1)
             scores = (spectral @ molecular.T).cpu().numpy()
         return {**provenance, "metrics": retrieval_metrics(scores, ids, ids),
+                "examples": ranked_examples(scores),
                 "reverse_metrics": retrieval_metrics(scores.T, ids, ids)}
 
     def vibrational_forward(self):

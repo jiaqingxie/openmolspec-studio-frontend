@@ -1,7 +1,7 @@
 # Evaluation protocols
 
-Every run records input/checkpoint hashes, sample IDs, modality conditions, candidate pools and execution states. F/P cached results whose logged targets disagree with current input labels are invalidated. Correct pairing is necessary but does not establish solid-to-solution reference compatibility.
+All published figures use actual recorded results. Each evidence JSON carries source report hashes. Execution success is separate from scientific validity. Small candidate-pool results, prepared-data split labels and matched-peak errors must not be described as independent generalization or atom-assignment accuracy.
 
-The gap and Xinyu Vib2Mol checkpoints expect IR+Raman+H/C. Missing-channel variants are ablations, reported separately. Gap targets are converted from Hartree to eV once; stored H/C and target normalization is reused. Vib2Mol generation uses canonical unique valid beams and ITM positive-class reranking.
+Complete IR/Raman/H/C input and missing-channel ablations are reported separately. Gap units are converted once from Hartree to eV. MS scores compare with all observed peaks under explicit acquisition conditions. No training or fitted calibration is performed.
 
-MS scores use real held-out CSV spectra and matched acquisition metadata. Missing collision energy/instrument is skipped without imputation. Small samples and unverified training overlap do not establish full-benchmark accuracy.
+[Dataset definitions](datasets.md) · [Model-by-model audit](model-audit.md)

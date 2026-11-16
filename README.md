@@ -1,8 +1,10 @@
-# OpenMolSpec Studio v1.0
+# OpenMolSpec
 
-谱学任务、已有模型推理和可复现评测的统一工作台。支持实验 H/C NMR 候选检索与 SMILES 生成，并保留计算 IR/Raman、谱图到性质和 Vib2Mol 工作流。
+面向化学谱学的数据集与深度学习平台。平台目标是通过 Python 包 `openmolspec` 统一数据加载、模型调用、自主训练和评测，具体范围与验收见[当前平台目标](docs/OPENMOLSPEC_PLATFORM_GOAL.md)。公开 `openmolspec.dataset` / `openmolspec.model` 类接口尚待实现；当前 release 提供数据处理工具、Studio 和冻结模型评测入口。
 
-中英文完整手册已上线：[English](https://openmolspec-10.readthedocs.io/en/latest/) · [简体中文](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)。采用 Sphinx 和经典 `sphinx_rtd_theme`，提供左侧层级目录、全文搜索、上下篇导航和语言切换。共 150 个内容页面（含 68 个已执行的 notebook 预览及下载），另有搜索与索引页。源文件位于 [documentation/](documentation/index.md)；旧 [handbook/](handbook/index.md) 保留历史记录。
+OpenDataLab / WanJuan 清洗所得数据是团队整理的外部实验谱，与 OpenMolSpec 计算谱及接入的外部基准分别报告。当前工作台支持实验 H/C NMR 候选检索与 SMILES 生成，并保留计算 IR/Raman、谱图到性质和 Vib2Mol 工作流。
+
+中英文完整手册已上线：[English](https://openmolspec-10.readthedocs.io/en/latest/) · [简体中文](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)。采用 Sphinx 和经典 `sphinx_rtd_theme`，提供左侧层级目录、全文搜索、上下篇导航和语言切换。共 166 个内容页面（含 70 个经 Jupyter 内核执行的 notebook 预览及下载），另有 35 张真实结果与数据分布图，另有搜索与索引页。源文件位于 [documentation/](documentation/index.md)；旧 [handbook/](handbook/index.md) 保留历史记录。
 
 ## 安装与启动
 

@@ -125,9 +125,9 @@ def profile(task):
                     "Nucleus-specific training coverage, training overlap and experimental assignment provenance are unverified. The model has no solvent input. Primary scoring remains disabled; NMRNet++ B/Si-specific weights are still being sought. No fitting was performed.",
                     "https://github.com/Colin-Jay/NMRNet")
         return (f"Structure to {nucleus} NMR", "Predict chemical shifts for the selected nucleus from a molecular structure, using existing frozen weights where available.",
-                "For H/C, score existing NMRNet and NMRNet++ predictions with their exact metadata. Unassigned experimental peak sets use minimum-error matching and retain peak-count and coverage diagnostics. B/Si currently lack a verified compatible weight/prediction pair.",
+                "For H/C, score existing NMRNet and NMRNet++ predictions with their exact metadata. Unassigned experimental peak sets use minimum-error matching and retain peak-count and coverage diagnostics.",
                 "Shifts and errors are in ppm. Molecule-macro matched-peak MAE/RMSE alone do not penalize every missing/extra peak; publish matched fraction and peak-count error alongside them.",
-                "A peak-matching score is not atom-assignment accuracy. Missing compatible B/Si weights cause an explicit skip; this project does not train new heads to fill that gap.",
+                "A peak-matching score is not atom-assignment accuracy. These H/C results score saved predictions; they do not establish validity for other nuclei.",
                 "https://github.com/Colin-Jay/NMRNet")
     missing = {
         "nmr.assignment": ("Peak-to-atom assignment", "Map observed peaks to atoms in a known structure.", "Candidate approaches are frozen atomwise NMRNet plus matching, or released TransPeakNet H/C HSQC weights and matching code. Requires reference atom indices on the exact graph, symmetry handling and verified experimental assignments. Unassigned H/C peak lists do not provide assignment ground truth."),
@@ -203,9 +203,9 @@ def profile_zh(task):
                     "报告逐原子 MAE/RMSE，单位 ppm；这是诊断值，不是峰匹配分数或已验证的独立测试成绩。",
                     "各核训练覆盖、训练重叠及实验原子指认来源尚未核实，且该模型不输入溶剂。正式评分仍停用；继续核查 NMRNet++ 的 B/Si 专用权重，不拟合任何校正。")
         return (f"由分子结构预测 {nucleus} 化学位移，已有兼容权重时进行冻结推理或已有预测评分。",
-                "H/C 读取 NMRNet、NMRNet++ 的预测及对应元数据；未指认实验峰用最小绝对误差匹配，并保留峰数和覆盖率诊断。B/Si 暂无已验证的兼容权重/预测对。",
+                "H/C 读取 NMRNet、NMRNet++ 的预测及对应元数据；未指认实验峰用最小绝对误差匹配，并保留峰数和覆盖率诊断。",
                 "位移和误差单位均为 ppm。按分子等权计算匹配峰 MAE/RMSE，必须同时报告匹配比例与峰数误差，因为匹配误差本身不惩罚全部缺失峰或额外峰。",
-                "峰匹配误差不是逐原子指认准确率。缺少 B/Si 兼容权重时明确跳过，不为补任务重新训练模型头。")
+                "峰匹配误差不是逐原子指认准确率。这里对 H/C 保存的预测评分，不据此外推其他核种的适用性。")
     if id_ == "nmr.assignment":
         return ("给定结构和实测 H/C 峰，预测逐原子位移并输出候选指认。",
                 "直接加载液相 NMRNet H/C fold-0 权重，固定种子生成构象；完整恢复权重，保存 RDKit AddHs(input SMILES) 的 0 起始原子编号。按拓扑对称性合并位点，再做带未匹配项的最小代价匹配。H/C 默认容差分别为 0.5/5 ppm。",
@@ -278,79 +278,9 @@ def observations():
     return result
 
 
-def notebook(task, language):
-    en = language == "en"
-    title, purpose, method, metrics, limits, source = profile(task)
-    content = [
-        {"cell_type": "markdown", "metadata": {}, "source": [f"# {title if en else task.title}\n\n", purpose if en else task.note or "已有模型推理与任务接口示例。", "\n\n", "This notebook displays recorded real evaluation results. Model inference is opt-in and never trains parameters." if en else "本 notebook 展示已记录的真实评测结果。模型推理需显式开启，始终不进行训练。"]},
-        {"cell_type": "code", "metadata": {}, "execution_count": None, "outputs": [], "source": ["import json, os, sys, subprocess, tempfile\nfrom pathlib import Path\n", "root = next((p for p in [Path.cwd(), *Path.cwd().parents] if (p / 'openmolspec_bench').is_dir()), None)\n", "if root is None:\n    raise RuntimeError('Run this notebook from the cloned OpenMolSpec frontend repository')\n", f"task_id = {task.id!r}\n", f"example_input = {example(task)!r}\n", "print(json.dumps(example_input, indent=2, ensure_ascii=False))"]},
-        {"cell_type": "markdown", "metadata": {}, "source": ["## Recorded evaluation\n\nResults retain their sample size, conditions and source file; an execution pass does not imply accuracy." if en else "## 已记录的评测\n\n保留样本量、输入条件和来源文件；流程执行成功不等于精度达标。"]},
-        {"cell_type": "code", "metadata": {}, "execution_count": None, "outputs": [], "source": ["index = json.loads((root / 'documentation/assets/evaluation_index.json').read_text())\n", "recorded = index.get(task_id, [])\n", "print(json.dumps(recorded or {'status': 'not_evaluated', 'reason': 'Required compatible assets or adapter unavailable'}, indent=2, ensure_ascii=False))"]},
-        {"cell_type": "markdown", "metadata": {}, "source": ["## Optional frozen inference\n\nSet `OPENMOLSPEC_RUN_NOTEBOOK_INFERENCE=1` and configure the workspace and model runtime. Missing weights cause a skip/error, never training." if en else "## 可选：冻结权重推理\n\n设置 `OPENMOLSPEC_RUN_NOTEBOOK_INFERENCE=1` 并配置工作区和模型环境。缺少权重时跳过或报错，不会启动训练。"]},
-        {"cell_type": "code", "metadata": {}, "execution_count": None, "outputs": [], "source": ["if os.environ.get('OPENMOLSPEC_RUN_NOTEBOOK_INFERENCE') == '1':\n", "    runtime = os.environ.get('OPENMOLSPEC_PYTHON', sys.executable)\n", "    workspace = os.environ.get('OPENMOLSPEC_BENCH_ROOT', str(root.parent))\n", "    with tempfile.TemporaryDirectory(prefix='openmolspec-notebook-') as directory:\n", "        command = [runtime, '-m', 'openmolspec_bench', 'run', '--workspace', workspace, '--tasks', task_id, '--limit', '2', '--output', str(Path(directory) / 'result.json')]\n", "        subprocess.run(command, cwd=root, check=True)\n", "        print((Path(directory) / 'result.json').read_text())\n", "else:\n    print('Model execution disabled; recorded evaluation displayed above. No training performed.')"]},
-    ]
-    for index, cell in enumerate(content):
-        cell["id"] = hashlib.sha256(f"{task.id}:{language}:{index}".encode()).hexdigest()[:12]
-    return {"cells": content, "metadata": {"kernelspec": {"display_name": "Python 3", "language": "python", "name": "python3"}, "language_info": {"name": "python"}}, "nbformat": 4, "nbformat_minor": 5}
-
-
 def build():
-    files = {}
-    data = observations()
-    files["assets/evaluation_index.json"] = json.dumps(data, ensure_ascii=False, indent=2) + "\n"
-    for language in ("en", "zh"):
-        en, suffix = language == "en", "" if language == "en" else ".zh"
-        home = "# OpenMolSpec v1.0\n\n" + ("Frozen-model spectroscopy tasks, reproducible evaluation and online prediction. No training is performed. Use the language selector to switch between English and Chinese.\n\n" if en else "整合已有谱学模型、可复现评测与在线推理，不进行训练。通过语言选择器切换英文和中文。\n\n")
-        home += ("- [Tasks](tasks/index.md)\n- [Notebook gallery](notebooks/index.md)\n- [Quick start](quickstart.md)\n- [Evaluation protocol](protocols.md)\n- [Dataset download](datasets.md)\n- [Publication status](publication.md)\n" if en else "- [任务目录](tasks/index.md)\n- [Notebook 展示](notebooks/index.md)\n- [快速开始](quickstart.md)\n- [评测协议](protocols.md)\n- [数据下载](datasets.md)\n- [发布状态](publication.md)\n")
-        files[f"index{suffix}.md"] = home
-        quick = "# " + ("Quick start" if en else "快速开始") + "\n\n```bash\npython3 -m venv .venv\n.venv/bin/python -m pip install -e . -r requirements.txt\nexport OPENMOLSPEC_BENCH_ROOT=/path/to/OpenMolSpec\nexport OPENMOLSPEC_ROOT=/path/to/openmolspec-studio-portable\n.venv/bin/streamlit run app.py\n```\n\n"
-        quick += ("The frontend exposes Tool, Dataset Download, Prediction (Online), and Full documentation. Weights and complete datasets are stored separately from Git.\n\n" if en else "前端提供 Tool、Dataset Download、Prediction (Online)、Full documentation 四个栏目。权重与完整数据独立于 Git 存放。\n\n")
-        quick += "```bash\npython -m openmolspec_bench list\npython -m openmolspec_bench run --workspace /path/to/OpenMolSpec --tasks vibrational.gap.ir_raman_hc --limit 32 --output results/my_run.json\n```\n"
-        quick += "\n```bash\nexport OPENMOLSPEC_NMR_PYTHON=/path/to/nmr-runtime/bin/python\nexport OPENMOLSPEC_MODELS_ROOT=/path/to/models\nexport OPENMOLSPEC_SOLVENT_REFERENCE=/path/to/solvent_reference_library.json\n```\n"
-        files[f"quickstart{suffix}.md"] = quick
-        protocol = "# " + ("Evaluation protocols" if en else "评测协议") + "\n\n"
-        protocol += ("Every run records input/checkpoint hashes, sample IDs, modality conditions, candidate pools and execution states. F/P cached results whose logged targets disagree with current input labels are invalidated. Correct pairing is necessary but does not establish solid-to-solution reference compatibility.\n\n" if en else "每次运行记录输入/权重哈希、样本 ID、模态条件、候选池和运行状态。F/P 缓存预测若保存的标签与当前输入不一致，则撤回旧评分。配对修复也不能证明固相到溶液的位移参考兼容。\n\n")
-        protocol += ("The gap and Xinyu Vib2Mol checkpoints expect IR+Raman+H/C. Missing-channel variants are ablations, reported separately. Gap targets are converted from Hartree to eV once; stored H/C and target normalization is reused. Vib2Mol generation uses canonical unique valid beams and ITM positive-class reranking.\n\n" if en else "Gap 和 Xinyu 的 Vib2Mol checkpoint 使用 IR+Raman+H/C。缺核输入属于消融，分开报告。Gap 标签仅从 Hartree 转换一次为 eV，复用 checkpoint 的 H/C 和目标归一化。Vib2Mol 生成采用规范化、有效去重后的 beam，再按 ITM 正类概率重排。\n\n")
-        protocol += ("MS scores use real held-out CSV spectra and matched acquisition metadata. Missing collision energy/instrument is skipped without imputation. Small samples and unverified training overlap do not establish full-benchmark accuracy.\n" if en else "MS 使用真实测试 CSV 及匹配的采集元数据。缺碰撞能或仪器时直接跳过，不补造条件。小样本及未完成训练集重叠审计的分数不能作为完整 benchmark 精度。\n")
-        files[f"protocols{suffix}.md"] = protocol
-        datasets = "# " + ("Dataset download" if en else "数据下载") + "\n\n"
-        datasets += ("Use the original download/distribution pages and retain their licenses, sample identities, splits and units. Complete datasets and weights are not bundled in this repository.\n\n" if en else "通过原始分发页面下载数据，保留许可、样本 ID、划分和单位。本仓库不打包完整数据或模型权重。\n\n")
-        datasets += "- [MassSpecGym](https://huggingface.co/datasets/roman-bushuiev/MassSpecGym)\n- [NMRNet data and weights](https://zenodo.org/records/19142375)\n- [NMRNet++ data and weights](https://zenodo.org/records/18232165)\n- [TransPeakNet code and model assets](https://github.com/siriusxiao62/2dNMR)\n- [GLACIER / ICEBERG pretrained assets](https://github.com/coleygroup/ms-pred)\n\n"
-        datasets += ("Our prepared test CSV, NMR JSONL, and portable Gaussian/LMDB assets are configured by local paths. Public OpenMolSpec dataset export URLs must be verified before being added here.\n" if en else "我们已准备的测试 CSV、NMR JSONL、Gaussian/LMDB 资产通过本地路径配置。OpenMolSpec 数据导出下载地址需实际验证后再添加。\n")
-        files[f"datasets{suffix}.md"] = datasets
-        publication = "# " + ("Publication status" if en else "发布状态") + "\n\n"
-        publication += ("The documentation is published at [Read the Docs](https://openmolspec-10.readthedocs.io/en/latest/), with a [Chinese edition](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html). The site contains 150 content pages, including 68 executed notebook previews and their downloads. Use the language switch on each page. The first verified hosted build is [35915674](https://app.readthedocs.org/projects/openmolspec-10/builds/35915674/), from release commit `5e8ce72655105f4a6cd61859c9c98c0574d36955`.\n\n" if en else "文档已发布到 [Read the Docs](https://openmolspec-10.readthedocs.io/en/latest/)，可直接打开[中文版](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)。站点包含 150 个内容页面，其中包括 68 个已执行的 notebook 预览及下载；每页提供语言切换。首次验证成功的托管构建为 [35915674](https://app.readthedocs.org/projects/openmolspec-10/builds/35915674/)，对应发布提交 `5e8ce72655105f4a6cd61859c9c98c0574d36955`。\n\n")
-        publication += ("Read the Docs builds the `release/openmolspec-v1` branch using the repository-root `.readthedocs.yaml`. Local, CI and hosted builds share `python scripts/build_readthedocs.py --output site --strict` after installing `requirements-docs.txt`. The frontend's Full documentation link uses the live URL by default; `OPENMOLSPEC_DOCS_URL` can override it. Release updates can be triggered with `python scripts/publish_readthedocs.py --apply --project openmolspec-10 --wait 600` after pushing the matching commit.\n" if en else "Read the Docs 使用仓库根目录 `.readthedocs.yaml` 构建 `release/openmolspec-v1` 分支。安装 `requirements-docs.txt` 后，本地、CI 和托管构建共用 `python scripts/build_readthedocs.py --output site --strict`。前端 Full documentation 默认跳转至实际文档地址，也可通过 `OPENMOLSPEC_DOCS_URL` 覆盖。推送对应提交后，可用 `python scripts/publish_readthedocs.py --apply --project openmolspec-10 --wait 600` 触发发布更新。\n")
-        publication += ("\nThe site uses Sphinx and the classic `sphinx_rtd_theme`: a hierarchical sidebar, full-text search, breadcrumbs and previous/next navigation. English and Chinese have separate search indexes. MyST-NB renders stored notebook outputs with execution disabled; model code is never run during documentation builds.\n" if en else "\n站点使用 Sphinx 与经典 `sphinx_rtd_theme`，提供左侧层级目录、全文搜索、面包屑和上下篇导航。英文和中文拥有独立搜索索引。MyST-NB 仅渲染已保存的 notebook 输出，文档构建始终禁用代码执行。\n")
-        files[f"publication{suffix}.md"] = publication
-        task_index = "# " + ("Task catalog" if en else "任务目录") + "\n\n| ID | " + ("Task | Adapter" if en else "任务 | 适配器") + " |\n| --- | --- | --- |\n"
-        notebook_index = "# " + ("Notebook gallery" if en else "Notebook 展示") + "\n\n" + ("Notebooks display recorded evaluation evidence and include opt-in inference commands. They never train models.\n\n" if en else "Notebook 展示已记录的评测证据，并提供可选推理命令，不进行训练。\n\n")
-        for task in TASKS:
-            slug = task.id.replace(".", "-")
-            title, purpose, method, metrics, limits, source = profile(task)
-            heading = title if en else task.title
-            task_index += f"| `{task.id}` | [{heading}]({slug}.md) | `{task.backend}` |\n"
-            notebook_index += f"- [{heading}]({slug}.ipynb)\n"
-            if en:
-                page = f"# {title}\n\n{purpose}\n\n## Model and protocol\n\n{method}\n\n## Inputs and example\n\nThe example below illustrates the schema; it is not a measured spectrum or an accuracy result.\n\n```json\n{json.dumps(example(task), indent=2)}\n```\n\n## Outputs and metrics\n\n{metrics}\n\nMetric fields: `{'`, `'.join(task.metrics)}`. Domain: `{task.domain}`.\n\n## Run the existing model\n\n"
-            else:
-                zh_purpose, zh_method, zh_metrics, zh_limits = profile_zh(task)
-                page = f"# {heading}\n\n{zh_purpose}\n\n## 模型与协议\n\n{zh_method}\n\n## 输入与示例\n\n以下仅展示输入格式，不是实测谱或精度结果。\n\n```json\n{json.dumps(example(task), indent=2, ensure_ascii=False)}\n```\n\n## 输出与指标\n\n{zh_metrics}\n\n适配器：`{task.backend}`。数据域：`{task.domain}`。指标字段：`{'`、`'.join(task.metrics)}`。\n\n## 运行推理或评分\n\n"
-            page += f"```bash\npython -m openmolspec_bench run --workspace /path/to/OpenMolSpec \\\n  --tasks {task.id} --limit 8 --output results/{slug}.json\n```\n\n"
-            if task.id in ("nmr.forward.11B", "nmr.forward.29Si"):
-                page += ("The primary command above runs diagnostic-only inference. To reproduce both nuclei directly in a fresh directory:\n\n" if en else "上方接口运行诊断推理，不将结果视为已验证的正式精度。直接复现 B/Si 时使用全新的输出目录：\n\n")
-                page += "```bash\npython scripts/run_frozen_bsi_diagnostic.py --models-root /path/to/models --output /path/to/new-bsi-run --limit 32\n```\n\n"
-            if en:
-                page += f"## Interpretation and limits\n\n{limits}\n\n## Recorded results\n\n"
-            else:
-                page += f"## 解释与限制\n\n{zh_limits}\n\n## 已记录结果\n\n"
-            page += "```json\n" + json.dumps(data.get(task.id, [{"status": "not_evaluated", "reason": task.note}]), indent=2, ensure_ascii=False) + "\n```\n\n"
-            page += f"## Notebook\n\n[{'Open the runnable notebook' if en else '打开可运行 notebook'}](../notebooks/{slug}.ipynb)\n\n## {'Source' if en else '来源'}\n\n[{'Original implementation / release' if en else '原始实现与发布'}]({source})\n"
-            files[f"tasks/{slug}{suffix}.md"] = page
-            files[f"notebooks/{slug}{suffix}.ipynb"] = json.dumps(notebook(task, language), ensure_ascii=False, indent=2) + "\n"
-        files[f"tasks/index{suffix}.md"] = task_index
-        files[f"notebooks/index{suffix}.md"] = notebook_index
-    return files
+    from documentation_pages import build_pages
+    return build_pages(TASKS, profile, profile_zh)
 
 
 def main():
