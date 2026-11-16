@@ -1,4 +1,4 @@
-# Optional legacy MkDocs renderer. Read the Docs uses build_readthedocs.py.
+# Optional legacy MkDocs renderer. Production uses Sphinx and sphinx_rtd_theme.
 mkdocs==1.6.1
 mkdocs-material>=9.5,<10
 mkdocs-static-i18n>=1.2,<2

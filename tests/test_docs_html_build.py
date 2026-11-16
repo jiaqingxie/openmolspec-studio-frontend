@@ -11,6 +11,15 @@ spec.loader.exec_module(builder)
 
 
 class DocumentationBuildTests(unittest.TestCase):
+    def test_notebook_cannot_enable_execution_during_publication(self):
+        notebook=json.loads((ROOT/'documentation/notebooks/nmr-assignment.ipynb').read_text())
+        notebook['metadata']['mystnb']={'execution_mode':'force'}
+        with tempfile.TemporaryDirectory() as temporary:
+            path=Path(temporary)/'override.ipynb'
+            path.write_text(json.dumps(notebook))
+            with self.assertRaisesRegex(ValueError,'execution override'):
+                builder.validate_notebook(path,'irrelevant')
+
     def test_changed_notebook_source_cannot_reuse_old_outputs(self):
         notebook=json.loads((ROOT/'documentation/notebooks/nmr-assignment.ipynb').read_text())
         next(c for c in notebook['cells'] if c['cell_type']=='code')['source']=['print("changed example")']
@@ -18,7 +27,7 @@ class DocumentationBuildTests(unittest.TestCase):
             path=Path(temporary)/'changed.ipynb'
             path.write_text(json.dumps(notebook))
             with self.assertRaisesRegex(ValueError,'stale'):
-                builder.notebook_html(path,'irrelevant')
+                builder.validate_notebook(path,'irrelevant')
 
     def test_html_validation_checks_both_files_and_fragments(self):
         with tempfile.TemporaryDirectory() as temporary:

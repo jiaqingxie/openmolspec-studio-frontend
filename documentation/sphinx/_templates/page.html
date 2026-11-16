@@ -1,0 +1,8 @@
+{% extends "!page.html" %}
+
+{% block body %}
+  {% if notebook_download_url %}
+    <p><a class="btn btn-neutral" href="{{ notebook_download_url }}" download>{{ notebook_download_label }}</a></p>
+  {% endif %}
+  {{ super() }}
+{% endblock %}

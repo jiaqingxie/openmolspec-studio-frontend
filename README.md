@@ -2,7 +2,7 @@
 
 谱学任务、已有模型推理和可复现评测的统一工作台。支持实验 H/C NMR 候选检索与 SMILES 生成，并保留计算 IR/Raman、谱图到性质和 Vib2Mol 工作流。
 
-中英文完整手册已上线：[English](https://openmolspec-10.readthedocs.io/en/latest/) · [简体中文](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)。共 150 个 HTML 页面、68 个已执行的 notebook 预览及下载，每个任务附输入示例。源文件位于 [documentation/](documentation/index.md)；旧 [handbook/](handbook/index.md) 保留历史记录。
+中英文完整手册已上线：[English](https://openmolspec-10.readthedocs.io/en/latest/) · [简体中文](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)。采用 Sphinx 和经典 `sphinx_rtd_theme`，提供左侧层级目录、全文搜索、上下篇导航和语言切换。共 150 个内容页面（含 68 个已执行的 notebook 预览及下载），另有搜索与索引页。源文件位于 [documentation/](documentation/index.md)；旧 [handbook/](handbook/index.md) 保留历史记录。
 
 ## 安装与启动
 
@@ -33,6 +33,8 @@ python -m openmolspec_bench run \
 详情见[任务目录](handbook/tasks.md)、[数据格式](handbook/data.md)、[评测口径](handbook/benchmark.md)、[Studio 操作](handbook/studio.md)及[结果](handbook/results.md)。旧核心项目说明仍位于 [docs/openmolspec_core.md](docs/openmolspec_core.md)。
 
 ## 构建使用手册
+
+文档构建使用 Python 3.11 或更新版本。MyST-NB 仅渲染已保存的 notebook 输出，构建时不执行模型代码。
 
 ```bash
 python -m pip install -r requirements-docs.txt

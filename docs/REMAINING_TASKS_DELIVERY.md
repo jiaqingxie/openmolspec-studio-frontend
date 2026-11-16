@@ -100,9 +100,10 @@ of B, Si, assignment and solvent-transfer interfaces.
 
 ## Read the Docs build
 
-The previous local workflow could check sources but could not render HTML because
-the MkDocs/plugin dependencies were unavailable. The publication workflow now uses
-one deterministic Mistune-based builder in local execution, CI and Read the Docs:
+The publication workflow uses Sphinx 8.2.3, the classic `sphinx_rtd_theme` 3.1.0,
+and MyST-NB 1.4.0 in local execution, CI and Read the Docs. The earlier lightweight
+custom HTML renderer was used for the first publication and has been replaced.
+Build with Python 3.11 or newer:
 
 ```bash
 python -m pip install -r requirements-docs.txt
@@ -111,11 +112,13 @@ python scripts/build_bilingual_docs.py --check
 python scripts/build_readthedocs.py --output site --strict
 ```
 
-The build produces **150 HTML pages**, including 68 executed notebook previews,
-English/Chinese page switches, raw notebook downloads and task search. It verifies
+The build produces **150 content pages plus four search/index pages**, including
+68 executed notebook previews, English/Chinese page switches, raw notebook
+downloads, localized full-text search and hierarchical navigation. It verifies
 internal links, fragments and notebook source/evaluation hashes; stale notebook
 outputs fail the build. No model is imported and no Jupyter kernel is started.
-The optional previous MkDocs renderer remains in `requirements-docs-mkdocs.txt`.
+MyST-NB execution is disabled; notebook metadata cannot opt into execution during
+publication. The optional previous MkDocs renderer remains in `requirements-docs-mkdocs.txt`.
 
 `.readthedocs.yaml` uses the platform's supported
 [custom HTML build commands](https://docs.readthedocs.com/platform/stable/build-customization.html)

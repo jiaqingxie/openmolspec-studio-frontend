@@ -1,0 +1,8 @@
+{% extends "!layout.html" %}
+
+{% block sidebartitle %}
+  {{ super() }}
+  <div class="oms-language-switch">
+    <a href="{{ translation_url }}" hreflang="{{ 'en' if locale == 'zh' else 'zh-CN' }}" aria-label="Switch language">{{ translation_label }}</a>
+  </div>
+{% endblock %}

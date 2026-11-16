@@ -1,0 +1,51 @@
+{
+  "checked_at": "2026-11-16T10:05:53.468934+00:00",
+  "scope": "local classic Sphinx theme verification; remote deployment checked separately",
+  "build": {
+    "completed": true,
+    "content_pages": 150,
+    "html_pages": 154,
+    "notebook_previews": 68,
+    "languages": [
+      "en",
+      "zh"
+    ],
+    "internal_links_verified": true,
+    "notebook_source_and_evaluation_hashes_verified": true,
+    "notebook_execution_during_build": false,
+    "renderer": "Sphinx 8.2.3",
+    "theme": "sphinx_rtd_theme 3.1.0",
+    "search_indexes": [
+      "searchindex.js",
+      "zh/searchindex.js"
+    ],
+    "remote_publication_verified": false
+  },
+  "browser": {
+    "sidebar_header_color": "rgb(41, 128, 185)",
+    "translated_heading": "H/C 峰 → 原子指认",
+    "search_en": {
+      "query": "assignment",
+      "results": 6,
+      "assignment_found": true
+    },
+    "search_zh/": {
+      "query": "原子",
+      "results": 6,
+      "assignment_found": true
+    },
+    "notebook_output_cells": 3,
+    "notebook_download_matches": true,
+    "mobile_menu_works": true,
+    "javascript_errors": []
+  },
+  "unit_tests_passed": 10,
+  "source_sha256": {
+    "scripts/build_readthedocs.py": "7d89d6263d22236baf56828af5450d849703dcde9b4f11111f1cb67fdc748431",
+    "requirements-docs.txt": "ecd05c44ff0340b9cd05f67e057bcf16f9960c35f464791333583865bfe020c4",
+    "documentation/sphinx/conf.py": "9bff25b51b23c82cde0cf1da77abccf2b5b4e6d1ed84f16777174bf0659d0108",
+    "documentation/sphinx/_templates/layout.html": "521a2892f55c907e7027e47b1309cf928b82b12c15debe97b99b46451b4e62b7",
+    "documentation/sphinx/_templates/page.html": "61e99517993e7cdf856d249e704753f5a61c1a6a9cd83245fc7e8ed3363b6121",
+    "documentation/sphinx/_static/openmolspec.css": "aca891a28a7290ac5b169a7e123736cac31307ed02ce790d9f39f9aa175659ef"
+  }
+}
