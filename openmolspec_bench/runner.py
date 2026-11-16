@@ -469,6 +469,55 @@ class Runner:
             return self.forward(task, dataset)
         if task.backend == "nmrnet_hetero_predictions":
             return self.hetero(task)
+        if task.backend == "nmrnet_atom_assignment":
+            import subprocess
+            import tempfile
+            path = require(self.args.workspace / "data/align_eval" / dataset / "test.jsonl")
+            with tempfile.TemporaryDirectory(prefix="openmolspec-assignment-run-") as directory:
+                output = Path(directory)/"result.json"
+                command = [self.args.nmr_python, "-m", "openmolspec_bench.assignment",
+                           "--models-root", str(self.args.models_root), "--dataset-jsonl", str(path),
+                           "--nucleus", self.args.assignment_nucleus, "--limit", str(self.args.limit),
+                           "--output", str(output)]
+                done = subprocess.run(command, cwd=Path(__file__).resolve().parents[1])
+                if done.returncode or not output.is_file():
+                    raise RuntimeError("Frozen atom assignment did not complete")
+                result = json.loads(output.read_text())
+                if not result.get("completed"):
+                    raise RuntimeError("Incomplete atom assignment report")
+                return result
+        if task.backend == "nmr_solvent_reference":
+            from .solvent_transfer import evaluate
+            library_path = require(self.args.solvent_library)
+            library = json.loads(library_path.read_text())
+            result = evaluate(library, self.args.limit, self.args.seed)
+            result['library'] = self.artifact(library_path)
+            return result
+        if task.backend == "nmrnet_bsi_diagnostic":
+            import subprocess
+            import tempfile
+            if 'bsi_diagnostic' not in self.encoded:
+                with tempfile.TemporaryDirectory(prefix="openmolspec-bsi-run-") as directory:
+                    destination = Path(directory)/'run'
+                    root = Path(__file__).resolve().parents[1]
+                    command = [self.args.nmr_python, str(root/'scripts/run_frozen_bsi_diagnostic.py'),
+                               '--models-root', str(self.args.models_root), '--output', str(destination),
+                               '--limit', str(self.args.limit)]
+                    done = subprocess.run(command, cwd=root)
+                    if done.returncode or not (destination/'result.json').is_file():
+                        raise RuntimeError('B/Si frozen inference did not complete')
+                    payload = json.loads((destination/'result.json').read_text())
+                    if not payload.get('completed'):
+                        raise RuntimeError('Incomplete B/Si diagnostic')
+                    self.encoded['bsi_diagnostic'] = payload
+            payload = self.encoded['bsi_diagnostic']
+            symbol = {'11B':'B','29Si':'Si'}[task.modalities[0]]
+            row = payload['nuclei'][symbol]
+            return {'metrics': {k: row[k] for k in ('mae_ppm','rmse_ppm')},
+                    'molecules':row['molecules'], 'records':row['records'],
+                    'score_scope':'diagnostic_only', 'primary_score_eligible':False,
+                    'checkpoint_sha256':payload['checkpoint_sha256'], 'checkpoint':payload['checkpoint'],
+                    'manifest':row['manifest'], 'limitations':payload['limitations']}
         if task.backend == "studio_gap":
             return self.gap(task)
         if task.backend == "studio_vibrational_forward":

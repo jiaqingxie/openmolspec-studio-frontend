@@ -48,6 +48,9 @@ def main():
     run.add_argument("--forward-logs", nargs="+", type=Path, help="Paired Gaussian geometry/spectrum logs for frozen forward evaluation")
     run.add_argument("--gap-unit", choices=("auto", "hartree", "eV"), default="auto")
     run.add_argument("--ms-python", default=sys.executable, help="Interpreter containing authors' MS dependencies")
+    run.add_argument("--nmr-python", default=sys.executable, help="Interpreter containing frozen NMRNet dependencies")
+    run.add_argument("--assignment-nucleus", choices=("1H", "13C"), default="13C")
+    run.add_argument("--solvent-library", type=Path, default=Path(__file__).resolve().parents[1]/".runtime/solvent_reference_library.json")
     run.add_argument("--ms-source", type=Path)
     run.add_argument("--ms-weights", type=Path)
     run.add_argument("--ms-input-csv", type=Path)
@@ -98,7 +101,7 @@ def main():
     with args.output.open("x") as stream:
         stream.write(json.dumps(result))
     for task in selected:
-        datasets = args.datasets if task.backend in ("spec2struct_alignment", "spec2struct_generation", "nmrnet_predictions") else [None]
+        datasets = args.datasets if task.backend in ("spec2struct_alignment", "spec2struct_generation", "nmrnet_predictions", "nmrnet_atom_assignment") else [None]
         for dataset in datasets:
             item = {"task": task.id, "title": task.title, "backend": task.backend,
                     "domain": task.domain, "dataset_name": dataset}

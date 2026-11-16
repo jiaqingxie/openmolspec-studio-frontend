@@ -1,0 +1,195 @@
+{
+  "smiles": "CCO",
+  "symbol": "H",
+  "mapped_smiles": "[C:1]([C:2]([O:3][H:9])([H:7])[H:8])([H:4])([H:5])[H:6]",
+  "atom_index_basis": "zero-based RDKit AddHs(input_smiles); atom-map numbers = index + 1",
+  "equivalence": "topological symmetry including chirality; not proof of magnetic equivalence",
+  "assignments": [
+    {
+      "peak_index": 0,
+      "observed_ppm": 1.2,
+      "atom_indices": [
+        3,
+        4,
+        5
+      ],
+      "predicted_ppm": 1.2053828239440918,
+      "absolute_error_ppm": 0.005382823944091841,
+      "other_sites_within_tolerance": []
+    },
+    {
+      "peak_index": 1,
+      "observed_ppm": 3.65,
+      "atom_indices": [
+        6,
+        7
+      ],
+      "predicted_ppm": 3.6812576055526733,
+      "absolute_error_ppm": 0.03125760555267343,
+      "other_sites_within_tolerance": [
+        2
+      ]
+    }
+  ],
+  "unmatched_peak_indices": [
+    2
+  ],
+  "unmatched_sites": [
+    {
+      "atom_indices": [
+        8
+      ],
+      "predicted_ppm": 3.3046348094940186
+    }
+  ],
+  "sites": [
+    {
+      "atom_indices": [
+        3,
+        4,
+        5
+      ],
+      "predicted_ppm": 1.2053828239440918
+    },
+    {
+      "atom_indices": [
+        6,
+        7
+      ],
+      "predicted_ppm": 3.6812576055526733
+    },
+    {
+      "atom_indices": [
+        8
+      ],
+      "predicted_ppm": 3.3046348094940186
+    }
+  ],
+  "tolerance_ppm": 0.5,
+  "matched_fraction": 0.6666666666666666,
+  "assignment_accuracy": null,
+  "accuracy_note": "Predicted assignments; experimental atom labels are not supplied.",
+  "completed": true,
+  "task": "nmr.assignment",
+  "status": "passed",
+  "training_performed": false,
+  "inference_mode": "direct_frozen_checkpoint",
+  "provenance": {
+    "model": "NMRNet liquid H fold 0",
+    "checkpoint": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/H_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_5e-3_bs_16_0.06_400/cv_seed_42_fold_0/checkpoint_best.pt",
+    "checkpoint_sha256": "bb25d02a103a63c54cb4dbd0a010bf5425ffb3c15ba8209cc38bab12f0a2341f",
+    "scaler_sha256": "8a577ddc78e75d58088266a24a18569087fa6942ed368784e591d2c32e20c956",
+    "dictionary_sha256": "94135cb9a9198f988de684cb61e2c372882a3bd59b8320effbae704c38057127",
+    "input_sha256": "479bfab004dac032af99ca8cabb973aa6340a456ebee87be4675fee04ce032d5",
+    "geometry": [
+      {
+        "smiles": "CCO",
+        "atoms": [
+          "C",
+          "C",
+          "O",
+          "H",
+          "H",
+          "H",
+          "H",
+          "H",
+          "H"
+        ],
+        "coordinates_angstrom": [
+          [
+            -0.8883105516433716,
+            0.16700318455696106,
+            -0.027315888553857803
+          ],
+          [
+            0.46575304865837097,
+            -0.5115589499473572,
+            -0.03679533302783966
+          ],
+          [
+            1.4310747385025024,
+            0.3229162096977234,
+            0.5866699814796448
+          ],
+          [
+            -0.8487409949302673,
+            1.1174800395965576,
+            -0.5695241093635559
+          ],
+          [
+            -1.6471213102340698,
+            -0.4704427123069763,
+            -0.4896366000175476
+          ],
+          [
+            -1.196397066116333,
+            0.3978445529937744,
+            0.9977232217788696
+          ],
+          [
+            0.7919970154762268,
+            -0.7224282622337341,
+            -1.0597258806228638
+          ],
+          [
+            0.4246036410331726,
+            -1.4558616876602173,
+            0.5137906670570374
+          ],
+          [
+            1.4671415090560913,
+            1.1550476551055908,
+            0.08481395244598389
+          ]
+        ],
+        "mmff_converged": true
+      }
+    ],
+    "training_performed": false,
+    "command": [
+      "/mnt/shared-storage-user/xiejiaqing/miniconda3/envs/azr/bin/python",
+      "/tmp/openmolspec-atoms-nhx5tl70/infer_checked.py",
+      "/tmp/openmolspec-assignment-x_t0ld2p/run/state_dict_audit.json",
+      "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/nmrnet-orig/uninmr/infer.py",
+      "--user-dir",
+      "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/nmrnet-orig/uninmr",
+      "/tmp/openmolspec-atoms-nhx5tl70",
+      "--valid-subset",
+      "valid",
+      "--results-path",
+      "/tmp/openmolspec-assignment-x_t0ld2p/run",
+      "--saved-dir",
+      "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/H_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_5e-3_bs_16_0.06_400",
+      "--num-workers",
+      "0",
+      "--batch-size",
+      "8",
+      "--task",
+      "uninmr",
+      "--loss",
+      "atom_regloss_mae",
+      "--arch",
+      "unimol_large",
+      "--dict-name",
+      "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/mol_dict.txt",
+      "--path",
+      "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/H_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_5e-3_bs_16_0.06_400/cv_seed_42_fold_0/checkpoint_best.pt",
+      "--selected-atom",
+      "H",
+      "--gaussian-kernel",
+      "--atom-descriptor",
+      "0",
+      "--split-mode",
+      "infer",
+      "--cpu",
+      "--required-batch-size-multiple",
+      "1",
+      "--no-progress-bar"
+    ],
+    "exit_code": 0,
+    "state_dict_audit": {
+      "missing_keys": [],
+      "unexpected_keys": []
+    }
+  }
+}

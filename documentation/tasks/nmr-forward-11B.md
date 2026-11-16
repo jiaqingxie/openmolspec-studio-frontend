@@ -37,7 +37,7 @@ The example below illustrates the schema; it is not a measured spectrum or an ac
 
 Diagnostic atom-level MAE/RMSE in ppm; these are not peak-matching scores or validated held-out benchmark results.
 
-Metric fields: `matched_peak_mae_ppm`, `matched_peak_rmse_ppm`, `peak_count_mae`, `matched_fraction`. Domain: `experimental`.
+Metric fields: `mae_ppm`, `rmse_ppm`. Domain: `experimental`.
 
 ## Run the existing model
 
@@ -46,7 +46,7 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.forward.11B --limit 8 --output results/nmr-forward-11B.json
 ```
 
-The primary command above skips unverified scoring. To reproduce both frozen diagnostics in a fresh directory:
+The primary command above runs diagnostic-only inference. To reproduce both nuclei directly in a fresh directory:
 
 ```bash
 python scripts/run_frozen_bsi_diagnostic.py --models-root /path/to/models --output /path/to/new-bsi-run --limit 32

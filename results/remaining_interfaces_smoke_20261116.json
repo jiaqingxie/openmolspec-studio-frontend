@@ -1,0 +1,2355 @@
+{
+  "schema_version": 1,
+  "release": "1.0.0",
+  "started_at": "2026-11-16T01:41:53.407472+00:00",
+  "purpose": "pipeline_smoke_evaluation",
+  "limit": 2,
+  "device": "cpu",
+  "python": "3.10.18",
+  "torch": "2.6.0+cu124",
+  "implementation_sha256": "4a568cedd370b2ae62c5238f084b712295459c99d641468714399095096d2b0e",
+  "training_performed": false,
+  "results": [
+    {
+      "task": "nmr.forward.11B",
+      "title": "结构 → 11B 峰列表",
+      "backend": "nmrnet_bsi_diagnostic",
+      "domain": "experimental",
+      "dataset_name": null,
+      "metrics": {
+        "mae_ppm": 19.463419198989868,
+        "rmse_ppm": 19.48182607849994
+      },
+      "molecules": 2,
+      "records": [
+        {
+          "source_key": "0000",
+          "smiles": "Cc1cnc([B-]23OC(=O)C[C+]2CC(=O)O3)o1",
+          "atom_indices": [
+            5
+          ],
+          "reference_ppm": [
+            7.5
+          ],
+          "prediction_ppm": [
+            26.116743087768555
+          ]
+        },
+        {
+          "source_key": "0001",
+          "smiles": "CCCCN(CCCC)c1ccnc(B2OC(C)(C)C(C)(C)O2)c1",
+          "atom_indices": [
+            14
+          ],
+          "reference_ppm": [
+            4.599999904632568
+          ],
+          "prediction_ppm": [
+            24.91009521484375
+          ]
+        }
+      ],
+      "score_scope": "diagnostic_only",
+      "primary_score_eligible": false,
+      "checkpoint_sha256": "19b171f04a8b56be01b1a4a6f84ad73d662af7bce0b8ad830fe85e0b48479302",
+      "checkpoint": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/All_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_1e-4_bs_8_0.06_50/cv_seed_42_fold_0/checkpoint_best.pt",
+      "manifest": {
+        "source_path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/pool_B/valid.lmdb",
+        "source_sha256": "798814add0e72ca82c8faa054fc4cceccc92e5ed92fb02dc1c7e2c97f2bc7374",
+        "input_sha256": "22b7c883c94734621d133e9d6d71420f53fa90da2d54e95c0c7fc29d5d8fdd33",
+        "command": [
+          "/mnt/shared-storage-user/xiejiaqing/miniconda3/envs/azr/bin/python",
+          "/tmp/openmolspec-B-all-b8vvd46h/checked_infer.py",
+          "/tmp/openmolspec-bsi-run-ax6wdm01/run/B/state_dict_audit.json",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/nmrnet-orig/uninmr/infer.py",
+          "--user-dir",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/nmrnet-orig/uninmr",
+          "/tmp/openmolspec-B-all-b8vvd46h",
+          "--valid-subset",
+          "valid",
+          "--results-path",
+          "/tmp/openmolspec-bsi-run-ax6wdm01/run/B",
+          "--saved-dir",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/All_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_1e-4_bs_8_0.06_50",
+          "--num-workers",
+          "0",
+          "--batch-size",
+          "1",
+          "--task",
+          "uninmr",
+          "--loss",
+          "atom_regloss_mae",
+          "--arch",
+          "unimol_large",
+          "--dict-name",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/mol_dict.txt",
+          "--path",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/All_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_1e-4_bs_8_0.06_50/cv_seed_42_fold_0/checkpoint_best.pt",
+          "--selected-atom",
+          "B",
+          "--gaussian-kernel",
+          "--atom-descriptor",
+          "0",
+          "--split-mode",
+          "infer",
+          "--cpu",
+          "--required-batch-size-multiple",
+          "1",
+          "--no-progress-bar"
+        ],
+        "training_performed": false,
+        "exit_code": 0
+      },
+      "limitations": [
+        "Nucleus-specific training coverage is unverified.",
+        "Training overlap with evaluation records is unaudited.",
+        "This model does not condition on solvent.",
+        "Atom labels originate from the local prepared pool; experimental assignment provenance is unverified."
+      ],
+      "status": "passed",
+      "elapsed_seconds": 85.862
+    },
+    {
+      "task": "nmr.forward.29Si",
+      "title": "结构 → 29Si 峰列表",
+      "backend": "nmrnet_bsi_diagnostic",
+      "domain": "experimental",
+      "dataset_name": null,
+      "metrics": {
+        "mae_ppm": 58.04745364189148,
+        "rmse_ppm": 58.13637149778362
+      },
+      "molecules": 2,
+      "records": [
+        {
+          "source_key": "0000",
+          "smiles": "CCCCCC/C(=C(/C=O)N1CCOC1=O)[Si](C)(C)c1cc(OC)cc(OC)c1",
+          "atom_indices": [
+            16
+          ],
+          "reference_ppm": [
+            -6.480000019073486
+          ],
+          "prediction_ppm": [
+            54.781612396240234
+          ]
+        },
+        {
+          "source_key": "0001",
+          "smiles": "CCCCCCCC[SiH](CCCCCc1cccs1)c1ccccc1",
+          "atom_indices": [
+            8
+          ],
+          "reference_ppm": [
+            9.380000114440918
+          ],
+          "prediction_ppm": [
+            64.21329498291016
+          ]
+        }
+      ],
+      "score_scope": "diagnostic_only",
+      "primary_score_eligible": false,
+      "checkpoint_sha256": "19b171f04a8b56be01b1a4a6f84ad73d662af7bce0b8ad830fe85e0b48479302",
+      "checkpoint": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/All_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_1e-4_bs_8_0.06_50/cv_seed_42_fold_0/checkpoint_best.pt",
+      "manifest": {
+        "source_path": "/mnt/shared-storage-user/xiejiaqing/models/nmrnetpp/pool_Si/valid.lmdb",
+        "source_sha256": "d42f28c3556c95a7b9049452d7496a8aaa9eb86c660913907f3af655bc38b52a",
+        "input_sha256": "149ad501f465e812ae2117634e1fa22cc46f1e9f2a18309ed426e5f3e7f40452",
+        "command": [
+          "/mnt/shared-storage-user/xiejiaqing/miniconda3/envs/azr/bin/python",
+          "/tmp/openmolspec-Si-all-5g74k6kg/checked_infer.py",
+          "/tmp/openmolspec-bsi-run-ax6wdm01/run/Si/state_dict_audit.json",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/nmrnet-orig/uninmr/infer.py",
+          "--user-dir",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/nmrnet-orig/uninmr",
+          "/tmp/openmolspec-Si-all-5g74k6kg",
+          "--valid-subset",
+          "valid",
+          "--results-path",
+          "/tmp/openmolspec-bsi-run-ax6wdm01/run/Si",
+          "--saved-dir",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/All_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_1e-4_bs_8_0.06_50",
+          "--num-workers",
+          "0",
+          "--batch-size",
+          "1",
+          "--task",
+          "uninmr",
+          "--loss",
+          "atom_regloss_mae",
+          "--arch",
+          "unimol_large",
+          "--dict-name",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/mol_dict.txt",
+          "--path",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/All_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_1e-4_bs_8_0.06_50/cv_seed_42_fold_0/checkpoint_best.pt",
+          "--selected-atom",
+          "Si",
+          "--gaussian-kernel",
+          "--atom-descriptor",
+          "0",
+          "--split-mode",
+          "infer",
+          "--cpu",
+          "--required-batch-size-multiple",
+          "1",
+          "--no-progress-bar"
+        ],
+        "training_performed": false,
+        "exit_code": 0
+      },
+      "limitations": [
+        "Nucleus-specific training coverage is unverified.",
+        "Training overlap with evaluation records is unaudited.",
+        "This model does not condition on solvent.",
+        "Atom labels originate from the local prepared pool; experimental assignment provenance is unverified."
+      ],
+      "status": "passed",
+      "elapsed_seconds": 0.0
+    },
+    {
+      "task": "nmr.assignment",
+      "title": "H/C 峰 → 原子指认",
+      "backend": "nmrnet_atom_assignment",
+      "domain": "experimental",
+      "dataset_name": "nmrspec_test",
+      "completed": true,
+      "status": "passed",
+      "training_performed": false,
+      "inference_mode": "direct_frozen_checkpoint",
+      "purpose": "real_peak_assignment_execution_not_atom_accuracy_benchmark",
+      "dataset": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/OpenMolSpec/data/align_eval/nmrspec_test/test.jsonl",
+        "sha256": "256ca2d733db0103e99aad5855bc66b73e3a0bd2117ce2bd3204b63eff0f67a2"
+      },
+      "selection": {
+        "read": 2,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "symbol": "C",
+      "provenance": {
+        "model": "NMRNet liquid C fold 0",
+        "checkpoint": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/C_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_1e-3_bs_16_0.06_200/cv_seed_42_fold_0/checkpoint_best.pt",
+        "checkpoint_sha256": "0efb06c233a6e851629f695e516d94209963fb60df39194a5dbb20bd3cb9db7b",
+        "scaler_sha256": "f66783695c0d6632f6bdc2c12631609a04c8d5618d91b915abd8c094d9b26f0f",
+        "dictionary_sha256": "94135cb9a9198f988de684cb61e2c372882a3bd59b8320effbae704c38057127",
+        "input_sha256": "3c44bb0fd7d1cf013ce21397364e2b9def1adbd771dbf163d24ccc99d0e61e1f",
+        "geometry": [
+          {
+            "smiles": "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+            "atoms": [
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H"
+            ],
+            "coordinates_angstrom": [
+              [
+                0.8041225075721741,
+                1.7937613725662231,
+                2.2180211544036865
+              ],
+              [
+                0.34051260352134705,
+                1.8249958753585815,
+                0.9567203521728516
+              ],
+              [
+                1.086578130722046,
+                2.5316786766052246,
+                -0.15361100435256958
+              ],
+              [
+                1.5343395471572876,
+                1.6163444519042969,
+                -1.3033323287963867
+              ],
+              [
+                2.4335110187530518,
+                0.44208934903144836,
+                -0.8996801376342773
+              ],
+              [
+                3.7635183334350586,
+                0.8813302516937256,
+                -0.28299450874328613
+              ],
+              [
+                4.644835472106934,
+                -0.3016205132007599,
+                0.03464849665760994
+              ],
+              [
+                4.486108303070068,
+                -0.9989308714866638,
+                1.2400102615356445
+              ],
+              [
+                5.2897562980651855,
+                -2.102508068084717,
+                1.5296450853347778
+              ],
+              [
+                6.255288124084473,
+                -2.521515369415283,
+                0.6161933541297913
+              ],
+              [
+                6.4163312911987305,
+                -1.8390504121780396,
+                -0.5883452296257019
+              ],
+              [
+                5.613417625427246,
+                -0.7350932359695435,
+                -0.8798551559448242
+              ],
+              [
+                -0.9578020572662354,
+                1.1943873167037964,
+                0.6398127675056458
+              ],
+              [
+                -1.1992355585098267,
+                -0.1437816023826599,
+                0.963895320892334
+              ],
+              [
+                -2.4218952655792236,
+                -0.7483686804771423,
+                0.6486448645591736
+              ],
+              [
+                -3.4487154483795166,
+                -0.03916747495532036,
+                -0.001542168902233243
+              ],
+              [
+                -4.779664993286133,
+                -0.7358243465423584,
+                -0.33292505145072937
+              ],
+              [
+                -5.803478717803955,
+                0.17852911353111267,
+                -1.0430302619934082
+              ],
+              [
+                -4.5177812576293945,
+                -1.9382075071334839,
+                -1.265462040901184
+              ],
+              [
+                -5.441699981689453,
+                -1.2372831106185913,
+                0.9687029719352722
+              ],
+              [
+                -3.193251371383667,
+                1.3031680583953857,
+                -0.3216460943222046
+              ],
+              [
+                -1.9682695865631104,
+                1.908977746963501,
+                -0.007948437705636024
+              ],
+              [
+                0.2537277638912201,
+                1.3141921758651733,
+                3.0223710536956787
+              ],
+              [
+                1.7454184293746948,
+                2.2632572650909424,
+                2.4859211444854736
+              ],
+              [
+                0.45934516191482544,
+                3.3312506675720215,
+                -0.566836953163147
+              ],
+              [
+                1.9660618305206299,
+                3.047964572906494,
+                0.2516268491744995
+              ],
+              [
+                0.6503645181655884,
+                1.2148360013961792,
+                -1.8145207166671753
+              ],
+              [
+                2.0612595081329346,
+                2.2279679775238037,
+                -2.0466251373291016
+              ],
+              [
+                2.6330225467681885,
+                -0.15592060983181,
+                -1.7987004518508911
+              ],
+              [
+                1.8982526063919067,
+                -0.22254395484924316,
+                -0.2111053317785263
+              ],
+              [
+                4.289933681488037,
+                1.5582636594772339,
+                -0.9675309062004089
+              ],
+              [
+                3.5997376441955566,
+                1.4511480331420898,
+                0.63870769739151
+              ],
+              [
+                3.7320973873138428,
+                -0.685370922088623,
+                1.9585494995117188
+              ],
+              [
+                5.160706996917725,
+                -2.6363675594329834,
+                2.467285633087158
+              ],
+              [
+                6.880270004272461,
+                -3.3813388347625732,
+                0.8416702747344971
+              ],
+              [
+                7.16644287109375,
+                -2.167711019515991,
+                -1.3026821613311768
+              ],
+              [
+                5.746852874755859,
+                -0.21579179167747498,
+                -1.8259427547454834
+              ],
+              [
+                -0.430819034576416,
+                -0.7374250292778015,
+                1.4539421796798706
+              ],
+              [
+                -2.5566086769104004,
+                -1.7933154106140137,
+                0.9194713830947876
+              ],
+              [
+                -6.069036960601807,
+                1.043679118156433,
+                -0.4243439733982086
+              ],
+              [
+                -6.733564853668213,
+                -0.36157071590423584,
+                -1.257351279258728
+              ],
+              [
+                -5.418361186981201,
+                0.5483419895172119,
+                -2.000474452972412
+              ],
+              [
+                -4.019528865814209,
+                -1.6199796199798584,
+                -2.1889190673828125
+              ],
+              [
+                -5.455264568328857,
+                -2.432724952697754,
+                -1.545615315437317
+              ],
+              [
+                -3.8837406635284424,
+                -2.69753360748291,
+                -0.7947568893432617
+              ],
+              [
+                -6.41044807434082,
+                -1.7077964544296265,
+                0.7636148929595947
+              ],
+              [
+                -5.613839149475098,
+                -0.4101627767086029,
+                1.6676570177078247
+              ],
+              [
+                -4.827365398406982,
+                -1.9823672771453857,
+                1.4859861135482788
+              ],
+              [
+                -3.9365315437316895,
+                1.918073296546936,
+                -0.8213576674461365
+              ],
+              [
+                -1.8249095678329468,
+                2.9550352096557617,
+                -0.2669024169445038
+              ]
+            ],
+            "mmff_converged": true
+          },
+          {
+            "smiles": "CCOC(=O)C1=C(C)NC(C)C(C)(C(=O)[O-])C1c1ccc(-c2ccccc2)cc1",
+            "atoms": [
+              "C",
+              "C",
+              "O",
+              "C",
+              "O",
+              "C",
+              "C",
+              "C",
+              "N",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "O",
+              "O",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "C",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H",
+              "H"
+            ],
+            "coordinates_angstrom": [
+              [
+                -3.2293577194213867,
+                3.8722681999206543,
+                0.4469517767429352
+              ],
+              [
+                -1.873619556427002,
+                3.2516307830810547,
+                0.16742289066314697
+              ],
+              [
+                -2.0281167030334473,
+                1.8800231218338013,
+                -0.20993773639202118
+              ],
+              [
+                -2.045689582824707,
+                0.9867332577705383,
+                0.811954915523529
+              ],
+              [
+                -2.0240306854248047,
+                1.256224274635315,
+                2.0048487186431885
+              ],
+              [
+                -2.1280875205993652,
+                -0.38664165139198303,
+                0.2575037181377411
+              ],
+              [
+                -3.105360984802246,
+                -1.2258034944534302,
+                0.6678923964500427
+              ],
+              [
+                -4.155241012573242,
+                -0.877350389957428,
+                1.6946660280227661
+              ],
+              [
+                -3.22601580619812,
+                -2.4883100986480713,
+                0.0968397706747055
+              ],
+              [
+                -2.6081795692443848,
+                -2.8031692504882812,
+                -1.2087485790252686
+              ],
+              [
+                -3.5161402225494385,
+                -2.2291414737701416,
+                -2.310551881790161
+              ],
+              [
+                -1.1443604230880737,
+                -2.299558639526367,
+                -1.1832674741744995
+              ],
+              [
+                -0.32892197370529175,
+                -3.1882927417755127,
+                -0.21404415369033813
+              ],
+              [
+                -0.6645013093948364,
+                -2.6168079376220703,
+                -2.6178226470947266
+              ],
+              [
+                -0.45563143491744995,
+                -3.838230848312378,
+                -2.876319646835327
+              ],
+              [
+                -0.5855103731155396,
+                -1.6380155086517334,
+                -3.4138271808624268
+              ],
+              [
+                -1.0933562517166138,
+                -0.7805938720703125,
+                -0.8076943159103394
+              ],
+              [
+                0.32851505279541016,
+                -0.29420536756515503,
+                -0.45955026149749756
+              ],
+              [
+                0.8543421626091003,
+                -0.36496031284332275,
+                0.8397281765937805
+              ],
+              [
+                2.1451358795166016,
+                0.09781679511070251,
+                1.120267629623413
+              ],
+              [
+                2.957491874694824,
+                0.6389368176460266,
+                0.1129148080945015
+              ],
+              [
+                4.3163580894470215,
+                1.1221437454223633,
+                0.4088977575302124
+              ],
+              [
+                4.717675685882568,
+                2.4199178218841553,
+                0.05083154886960983
+              ],
+              [
+                6.006893157958984,
+                2.8803322315216064,
+                0.33288082480430603
+              ],
+              [
+                6.918774127960205,
+                2.04811429977417,
+                0.9774938225746155
+              ],
+              [
+                6.542464733123779,
+                0.7570142149925232,
+                1.3393919467926025
+              ],
+              [
+                5.2523088455200195,
+                0.2994333505630493,
+                1.057372808456421
+              ],
+              [
+                2.434281587600708,
+                0.6971096396446228,
+                -1.1866645812988281
+              ],
+              [
+                1.1428351402282715,
+                0.23781362175941467,
+                -1.468153715133667
+              ],
+              [
+                -3.1281776428222656,
+                4.935478687286377,
+                0.6822420358657837
+              ],
+              [
+                -3.7241904735565186,
+                3.373905897140503,
+                1.2865104675292969
+              ],
+              [
+                -3.8881285190582275,
+                3.763378143310547,
+                -0.4208887219429016
+              ],
+              [
+                -1.4005612134933472,
+                3.7653729915618896,
+                -0.6758695840835571
+              ],
+              [
+                -1.2000770568847656,
+                3.357245683670044,
+                1.0258762836456299
+              ],
+              [
+                -5.131162166595459,
+                -1.276849389076233,
+                1.395552635192871
+              ],
+              [
+                -4.296890735626221,
+                0.19886602461338043,
+                1.8229973316192627
+              ],
+              [
+                -3.8912527561187744,
+                -1.3145501613616943,
+                2.662931203842163
+              ],
+              [
+                -4.122244358062744,
+                -2.943199872970581,
+                0.2443402111530304
+              ],
+              [
+                -2.6324501037597656,
+                -3.8960328102111816,
+                -1.3131777048110962
+              ],
+              [
+                -3.2071645259857178,
+                -2.56746244430542,
+                -3.304121494293213
+              ],
+              [
+                -4.550084590911865,
+                -2.563835382461548,
+                -2.165579080581665
+              ],
+              [
+                -3.529331922531128,
+                -1.134747862815857,
+                -2.3111839294433594
+              ],
+              [
+                -0.5668012499809265,
+                -2.975985527038574,
+                0.8333898186683655
+              ],
+              [
+                -0.530759871006012,
+                -4.255307674407959,
+                -0.36834800243377686
+              ],
+              [
+                0.7493112087249756,
+                -3.0541114807128906,
+                -0.35649430751800537
+              ],
+              [
+                -1.4014315605163574,
+                -0.19791249930858612,
+                -1.6883611679077148
+              ],
+              [
+                0.26241612434387207,
+                -0.7842961549758911,
+                1.650704264640808
+              ],
+              [
+                2.5084898471832275,
+                0.03580434247851372,
+                2.14316725730896
+              ],
+              [
+                4.015110969543457,
+                3.0856635570526123,
+                -0.44664880633354187
+              ],
+              [
+                6.294543743133545,
+                3.8882503509521484,
+                0.04753214120864868
+              ],
+              [
+                7.921867370605469,
+                2.4037392139434814,
+                1.1945815086364746
+              ],
+              [
+                7.25096321105957,
+                0.10020258277654648,
+                1.8362284898757935
+              ],
+              [
+                4.9795026779174805,
+                -0.7176638841629028,
+                1.3331103324890137
+              ],
+              [
+                3.0360236167907715,
+                1.0806423425674438,
+                -2.0071372985839844
+              ],
+              [
+                0.7775231599807739,
+                0.2789747714996338,
+                -2.494497060775757
+              ]
+            ],
+            "mmff_converged": false
+          }
+        ],
+        "training_performed": false,
+        "command": [
+          "/mnt/shared-storage-user/xiejiaqing/miniconda3/envs/azr/bin/python",
+          "/tmp/openmolspec-atoms-dfnayg93/infer_checked.py",
+          "/tmp/openmolspec-assignment-bench-9hv34htk/run/state_dict_audit.json",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/nmrnet-orig/uninmr/infer.py",
+          "--user-dir",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/nmrnet-orig/uninmr",
+          "/tmp/openmolspec-atoms-dfnayg93",
+          "--valid-subset",
+          "valid",
+          "--results-path",
+          "/tmp/openmolspec-assignment-bench-9hv34htk/run",
+          "--saved-dir",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/C_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_1e-3_bs_16_0.06_200",
+          "--num-workers",
+          "0",
+          "--batch-size",
+          "8",
+          "--task",
+          "uninmr",
+          "--loss",
+          "atom_regloss_mae",
+          "--arch",
+          "unimol_large",
+          "--dict-name",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/mol_dict.txt",
+          "--path",
+          "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/C_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_1e-3_bs_16_0.06_200/cv_seed_42_fold_0/checkpoint_best.pt",
+          "--selected-atom",
+          "C",
+          "--gaussian-kernel",
+          "--atom-descriptor",
+          "0",
+          "--split-mode",
+          "infer",
+          "--cpu",
+          "--required-batch-size-multiple",
+          "1",
+          "--no-progress-bar"
+        ],
+        "exit_code": 0,
+        "state_dict_audit": {
+          "missing_keys": [],
+          "unexpected_keys": []
+        }
+      },
+      "records": [
+        {
+          "smiles": "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+          "symbol": "C",
+          "mapped_smiles": "[C:1](=[C:2]([C:3]([C:4]([C:5]([C:6]([c:7]1[c:8]([H:33])[c:9]([H:34])[c:10]([H:35])[c:11]([H:36])[c:12]1[H:37])([H:31])[H:32])([H:29])[H:30])([H:27])[H:28])([H:25])[H:26])[c:13]1[c:14]([H:38])[c:15]([H:39])[c:16]([C:17]([C:18]([H:40])([H:41])[H:42])([C:19]([H:43])([H:44])[H:45])[C:20]([H:46])([H:47])[H:48])[c:21]([H:49])[c:22]1[H:50])([H:23])[H:24]",
+          "atom_index_basis": "zero-based RDKit AddHs(input_smiles); atom-map numbers = index + 1",
+          "equivalence": "topological symmetry including chirality; not proof of magnetic equivalence",
+          "assignments": [
+            {
+              "peak_index": 0,
+              "observed_ppm": 150.22,
+              "atom_indices": [
+                15
+              ],
+              "predicted_ppm": 150.09881591796875,
+              "absolute_error_ppm": 0.12118408203124886,
+              "other_sites_within_tolerance": [
+                1
+              ]
+            },
+            {
+              "peak_index": 1,
+              "observed_ppm": 148.03,
+              "atom_indices": [
+                1
+              ],
+              "predicted_ppm": 148.56301879882812,
+              "absolute_error_ppm": 0.5330187988281239,
+              "other_sites_within_tolerance": [
+                13
+              ]
+            },
+            {
+              "peak_index": 2,
+              "observed_ppm": 142.68,
+              "atom_indices": [
+                6
+              ],
+              "predicted_ppm": 142.5129852294922,
+              "absolute_error_ppm": 0.16701477050781932,
+              "other_sites_within_tolerance": [
+                10
+              ]
+            },
+            {
+              "peak_index": 3,
+              "observed_ppm": 138.28,
+              "atom_indices": [
+                12
+              ],
+              "predicted_ppm": 139.7798614501953,
+              "absolute_error_ppm": 1.4998614501953114,
+              "other_sites_within_tolerance": [
+                6
+              ]
+            },
+            {
+              "peak_index": 4,
+              "observed_ppm": 128.36,
+              "atom_indices": [
+                8,
+                10
+              ],
+              "predicted_ppm": 128.52506256103516,
+              "absolute_error_ppm": 0.1650625610351426,
+              "other_sites_within_tolerance": [
+                7,
+                9,
+                11,
+                12
+              ]
+            },
+            {
+              "peak_index": 5,
+              "observed_ppm": 128.22,
+              "atom_indices": [
+                7,
+                11
+              ],
+              "predicted_ppm": 128.53734588623047,
+              "absolute_error_ppm": 0.3173458862304699,
+              "other_sites_within_tolerance": [
+                8,
+                9,
+                11,
+                12
+              ]
+            },
+            {
+              "peak_index": 6,
+              "observed_ppm": 125.68,
+              "atom_indices": [
+                13,
+                21
+              ],
+              "predicted_ppm": 126.19123458862305,
+              "absolute_error_ppm": 0.51123458862304,
+              "other_sites_within_tolerance": [
+                7,
+                8,
+                9,
+                12
+              ]
+            },
+            {
+              "peak_index": 7,
+              "observed_ppm": 125.58,
+              "atom_indices": [
+                9
+              ],
+              "predicted_ppm": 126.21155548095703,
+              "absolute_error_ppm": 0.631555480957033,
+              "other_sites_within_tolerance": [
+                7,
+                8,
+                11,
+                12
+              ]
+            },
+            {
+              "peak_index": 8,
+              "observed_ppm": 125.12,
+              "atom_indices": [
+                14,
+                20
+              ],
+              "predicted_ppm": 125.48467254638672,
+              "absolute_error_ppm": 0.3646725463867142,
+              "other_sites_within_tolerance": [
+                7,
+                8,
+                9,
+                11
+              ]
+            },
+            {
+              "peak_index": 9,
+              "observed_ppm": 111.51,
+              "atom_indices": [
+                0
+              ],
+              "predicted_ppm": 111.92984008789062,
+              "absolute_error_ppm": 0.4198400878906199,
+              "other_sites_within_tolerance": []
+            },
+            {
+              "peak_index": 10,
+              "observed_ppm": 35.72,
+              "atom_indices": [
+                5
+              ],
+              "predicted_ppm": 35.74638366699219,
+              "absolute_error_ppm": 0.026383666992188637,
+              "other_sites_within_tolerance": [
+                2,
+                4,
+                14,
+                15
+              ]
+            },
+            {
+              "peak_index": 11,
+              "observed_ppm": 35.03,
+              "atom_indices": [
+                2
+              ],
+              "predicted_ppm": 34.59314727783203,
+              "absolute_error_ppm": 0.4368527221679699,
+              "other_sites_within_tolerance": [
+                4,
+                5,
+                14,
+                15
+              ]
+            },
+            {
+              "peak_index": 12,
+              "observed_ppm": 34.46,
+              "atom_indices": [
+                16
+              ],
+              "predicted_ppm": 34.164398193359375,
+              "absolute_error_ppm": 0.29560180664062585,
+              "other_sites_within_tolerance": [
+                2,
+                4,
+                5,
+                15
+              ]
+            },
+            {
+              "peak_index": 13,
+              "observed_ppm": 31.32,
+              "atom_indices": [
+                17,
+                18,
+                19
+              ],
+              "predicted_ppm": 31.490569432576496,
+              "absolute_error_ppm": 0.17056943257649593,
+              "other_sites_within_tolerance": [
+                2,
+                3,
+                4,
+                5,
+                14
+              ]
+            },
+            {
+              "peak_index": 14,
+              "observed_ppm": 31.11,
+              "atom_indices": [
+                4
+              ],
+              "predicted_ppm": 30.951845169067383,
+              "absolute_error_ppm": 0.15815483093261662,
+              "other_sites_within_tolerance": [
+                2,
+                3,
+                5,
+                14,
+                15
+              ]
+            },
+            {
+              "peak_index": 15,
+              "observed_ppm": 27.93,
+              "atom_indices": [
+                3
+              ],
+              "predicted_ppm": 27.1068172454834,
+              "absolute_error_ppm": 0.8231827545166013,
+              "other_sites_within_tolerance": [
+                4,
+                15
+              ]
+            }
+          ],
+          "unmatched_peak_indices": [],
+          "unmatched_sites": [],
+          "sites": [
+            {
+              "atom_indices": [
+                0
+              ],
+              "predicted_ppm": 111.92984008789062
+            },
+            {
+              "atom_indices": [
+                1
+              ],
+              "predicted_ppm": 148.56301879882812
+            },
+            {
+              "atom_indices": [
+                2
+              ],
+              "predicted_ppm": 34.59314727783203
+            },
+            {
+              "atom_indices": [
+                3
+              ],
+              "predicted_ppm": 27.1068172454834
+            },
+            {
+              "atom_indices": [
+                4
+              ],
+              "predicted_ppm": 30.951845169067383
+            },
+            {
+              "atom_indices": [
+                5
+              ],
+              "predicted_ppm": 35.74638366699219
+            },
+            {
+              "atom_indices": [
+                6
+              ],
+              "predicted_ppm": 142.5129852294922
+            },
+            {
+              "atom_indices": [
+                7,
+                11
+              ],
+              "predicted_ppm": 128.53734588623047
+            },
+            {
+              "atom_indices": [
+                8,
+                10
+              ],
+              "predicted_ppm": 128.52506256103516
+            },
+            {
+              "atom_indices": [
+                9
+              ],
+              "predicted_ppm": 126.21155548095703
+            },
+            {
+              "atom_indices": [
+                12
+              ],
+              "predicted_ppm": 139.7798614501953
+            },
+            {
+              "atom_indices": [
+                13,
+                21
+              ],
+              "predicted_ppm": 126.19123458862305
+            },
+            {
+              "atom_indices": [
+                14,
+                20
+              ],
+              "predicted_ppm": 125.48467254638672
+            },
+            {
+              "atom_indices": [
+                15
+              ],
+              "predicted_ppm": 150.09881591796875
+            },
+            {
+              "atom_indices": [
+                16
+              ],
+              "predicted_ppm": 34.164398193359375
+            },
+            {
+              "atom_indices": [
+                17,
+                18,
+                19
+              ],
+              "predicted_ppm": 31.490569432576496
+            }
+          ],
+          "tolerance_ppm": 5.0,
+          "matched_fraction": 1.0,
+          "assignment_accuracy": null,
+          "accuracy_note": "Predicted assignments; experimental atom labels are not supplied."
+        },
+        {
+          "smiles": "CCOC(=O)C1=C(C)NC(C)C(C)(C(=O)[O-])C1c1ccc(-c2ccccc2)cc1",
+          "symbol": "C",
+          "mapped_smiles": "[C:1]([C:2]([O:3][C:4](=[O:5])[C:6]1=[C:7]([C:8]([H:35])([H:36])[H:37])[N:9]([H:38])[C:10]([C:11]([H:40])([H:41])[H:42])([H:39])[C:12]([C:13]([H:43])([H:44])[H:45])([C:14](=[O:15])[O-:16])[C:17]1([c:18]1[c:19]([H:47])[c:20]([H:48])[c:21](-[c:22]2[c:23]([H:49])[c:24]([H:50])[c:25]([H:51])[c:26]([H:52])[c:27]2[H:53])[c:28]([H:54])[c:29]1[H:55])[H:46])([H:33])[H:34])([H:30])([H:31])[H:32]",
+          "atom_index_basis": "zero-based RDKit AddHs(input_smiles); atom-map numbers = index + 1",
+          "equivalence": "topological symmetry including chirality; not proof of magnetic equivalence",
+          "assignments": [
+            {
+              "peak_index": 0,
+              "observed_ppm": 168.1,
+              "atom_indices": [
+                3
+              ],
+              "predicted_ppm": 169.51910400390625,
+              "absolute_error_ppm": 1.4191040039062557,
+              "other_sites_within_tolerance": []
+            },
+            {
+              "peak_index": 4,
+              "observed_ppm": 144.0,
+              "atom_indices": [
+                17
+              ],
+              "predicted_ppm": 142.0853271484375,
+              "absolute_error_ppm": 1.9146728515625,
+              "other_sites_within_tolerance": [
+                15,
+                16
+              ]
+            },
+            {
+              "peak_index": 5,
+              "observed_ppm": 141.2,
+              "atom_indices": [
+                21
+              ],
+              "predicted_ppm": 140.38922119140625,
+              "absolute_error_ppm": 0.8107788085937386,
+              "other_sites_within_tolerance": [
+                12,
+                15
+              ]
+            },
+            {
+              "peak_index": 6,
+              "observed_ppm": 139.0,
+              "atom_indices": [
+                20
+              ],
+              "predicted_ppm": 140.2573699951172,
+              "absolute_error_ppm": 1.2573699951171875,
+              "other_sites_within_tolerance": [
+                12,
+                16
+              ]
+            },
+            {
+              "peak_index": 7,
+              "observed_ppm": 128.7,
+              "atom_indices": [
+                23,
+                25
+              ],
+              "predicted_ppm": 128.7144546508789,
+              "absolute_error_ppm": 0.014454650878917619,
+              "other_sites_within_tolerance": [
+                13,
+                14,
+                17,
+                19
+              ]
+            },
+            {
+              "peak_index": 8,
+              "observed_ppm": 128.2,
+              "atom_indices": [
+                18,
+                28
+              ],
+              "predicted_ppm": 128.07968521118164,
+              "absolute_error_ppm": 0.120314788818348,
+              "other_sites_within_tolerance": [
+                14,
+                17,
+                18,
+                19
+              ]
+            },
+            {
+              "peak_index": 9,
+              "observed_ppm": 127.0,
+              "atom_indices": [
+                19,
+                27
+              ],
+              "predicted_ppm": 126.98397827148438,
+              "absolute_error_ppm": 0.016021728515625,
+              "other_sites_within_tolerance": [
+                13,
+                17,
+                18,
+                19
+              ]
+            },
+            {
+              "peak_index": 10,
+              "observed_ppm": 126.9,
+              "atom_indices": [
+                24
+              ],
+              "predicted_ppm": 126.97576904296875,
+              "absolute_error_ppm": 0.07576904296874432,
+              "other_sites_within_tolerance": [
+                13,
+                14,
+                17,
+                18
+              ]
+            },
+            {
+              "peak_index": 11,
+              "observed_ppm": 126.8,
+              "atom_indices": [
+                22,
+                26
+              ],
+              "predicted_ppm": 126.68981552124023,
+              "absolute_error_ppm": 0.11018447875976278,
+              "other_sites_within_tolerance": [
+                13,
+                14,
+                18,
+                19
+              ]
+            },
+            {
+              "peak_index": 14,
+              "observed_ppm": 59.9,
+              "atom_indices": [
+                1
+              ],
+              "predicted_ppm": 59.17812728881836,
+              "absolute_error_ppm": 0.7218727111816392,
+              "other_sites_within_tolerance": [
+                6
+              ]
+            },
+            {
+              "peak_index": 15,
+              "observed_ppm": 51.1,
+              "atom_indices": [
+                11
+              ],
+              "predicted_ppm": 50.45841598510742,
+              "absolute_error_ppm": 0.6415840148925795,
+              "other_sites_within_tolerance": [
+                6
+              ]
+            },
+            {
+              "peak_index": 16,
+              "observed_ppm": 39.2,
+              "atom_indices": [
+                16
+              ],
+              "predicted_ppm": 43.24230194091797,
+              "absolute_error_ppm": 4.042301940917966,
+              "other_sites_within_tolerance": []
+            },
+            {
+              "peak_index": 17,
+              "observed_ppm": 19.8,
+              "atom_indices": [
+                7
+              ],
+              "predicted_ppm": 20.057470321655273,
+              "absolute_error_ppm": 0.2574703216552727,
+              "other_sites_within_tolerance": [
+                9
+              ]
+            },
+            {
+              "peak_index": 18,
+              "observed_ppm": 19.7,
+              "atom_indices": [
+                12
+              ],
+              "predicted_ppm": 19.293432235717773,
+              "absolute_error_ppm": 0.40656776428222585,
+              "other_sites_within_tolerance": [
+                5
+              ]
+            },
+            {
+              "peak_index": 19,
+              "observed_ppm": 14.3,
+              "atom_indices": [
+                0
+              ],
+              "predicted_ppm": 14.498011589050293,
+              "absolute_error_ppm": 0.19801158905029226,
+              "other_sites_within_tolerance": [
+                7,
+                9
+              ]
+            }
+          ],
+          "unmatched_peak_indices": [
+            1,
+            2,
+            3,
+            12,
+            13
+          ],
+          "unmatched_sites": [
+            {
+              "atom_indices": [
+                5
+              ],
+              "predicted_ppm": 96.5701675415039
+            },
+            {
+              "atom_indices": [
+                6
+              ],
+              "predicted_ppm": 154.8041229248047
+            },
+            {
+              "atom_indices": [
+                9
+              ],
+              "predicted_ppm": 56.00575256347656
+            },
+            {
+              "atom_indices": [
+                10
+              ],
+              "predicted_ppm": 14.66994857788086
+            },
+            {
+              "atom_indices": [
+                13
+              ],
+              "predicted_ppm": 178.74998474121094
+            }
+          ],
+          "sites": [
+            {
+              "atom_indices": [
+                0
+              ],
+              "predicted_ppm": 14.498011589050293
+            },
+            {
+              "atom_indices": [
+                1
+              ],
+              "predicted_ppm": 59.17812728881836
+            },
+            {
+              "atom_indices": [
+                3
+              ],
+              "predicted_ppm": 169.51910400390625
+            },
+            {
+              "atom_indices": [
+                5
+              ],
+              "predicted_ppm": 96.5701675415039
+            },
+            {
+              "atom_indices": [
+                6
+              ],
+              "predicted_ppm": 154.8041229248047
+            },
+            {
+              "atom_indices": [
+                7
+              ],
+              "predicted_ppm": 20.057470321655273
+            },
+            {
+              "atom_indices": [
+                9
+              ],
+              "predicted_ppm": 56.00575256347656
+            },
+            {
+              "atom_indices": [
+                10
+              ],
+              "predicted_ppm": 14.66994857788086
+            },
+            {
+              "atom_indices": [
+                11
+              ],
+              "predicted_ppm": 50.45841598510742
+            },
+            {
+              "atom_indices": [
+                12
+              ],
+              "predicted_ppm": 19.293432235717773
+            },
+            {
+              "atom_indices": [
+                13
+              ],
+              "predicted_ppm": 178.74998474121094
+            },
+            {
+              "atom_indices": [
+                16
+              ],
+              "predicted_ppm": 43.24230194091797
+            },
+            {
+              "atom_indices": [
+                17
+              ],
+              "predicted_ppm": 142.0853271484375
+            },
+            {
+              "atom_indices": [
+                18,
+                28
+              ],
+              "predicted_ppm": 128.07968521118164
+            },
+            {
+              "atom_indices": [
+                19,
+                27
+              ],
+              "predicted_ppm": 126.98397827148438
+            },
+            {
+              "atom_indices": [
+                20
+              ],
+              "predicted_ppm": 140.2573699951172
+            },
+            {
+              "atom_indices": [
+                21
+              ],
+              "predicted_ppm": 140.38922119140625
+            },
+            {
+              "atom_indices": [
+                22,
+                26
+              ],
+              "predicted_ppm": 126.68981552124023
+            },
+            {
+              "atom_indices": [
+                23,
+                25
+              ],
+              "predicted_ppm": 128.7144546508789
+            },
+            {
+              "atom_indices": [
+                24
+              ],
+              "predicted_ppm": 126.97576904296875
+            }
+          ],
+          "tolerance_ppm": 5.0,
+          "matched_fraction": 0.75,
+          "assignment_accuracy": null,
+          "accuracy_note": "Predicted assignments; experimental atom labels are not supplied."
+        }
+      ],
+      "metrics": {
+        "molecules": 2,
+        "matched_peaks": 31,
+        "matched_peak_fraction_macro": 0.875,
+        "matched_residual_mae_ppm": 0.6015488437939702,
+        "assignment_accuracy": null
+      },
+      "limitations": [
+        "No experimental atom assignment ground truth supplied.",
+        "Symmetry is topological; conformer/solvent effects can change observed equivalence.",
+        "Residual and coverage are diagnostics, not assignment accuracy.",
+        "Training overlap unverified; frozen model is not solvent-conditioned."
+      ],
+      "elapsed_seconds": 43.094
+    },
+    {
+      "task": "nmr.solvent_transfer",
+      "title": "H/C 跨溶剂位移 · 参考检索基线",
+      "backend": "nmr_solvent_reference",
+      "domain": "experimental",
+      "dataset_name": null,
+      "completed": true,
+      "status": "passed",
+      "training_performed": false,
+      "purpose": "leave_one_connectivity_out_reference_baseline",
+      "model_kind": "retrieval_baseline_not_neural_model",
+      "seed": 42,
+      "limit": 2,
+      "metrics": {
+        "1H": {
+          "atoms": 18,
+          "molecules": 2,
+          "mae_ppm": 0.07666666666666681,
+          "unchanged_shift_mae_ppm": 0.1933333333333333,
+          "rmse_ppm": 0.08544003745317535
+        }
+      },
+      "records": [
+        {
+          "source_ppm": 1.45,
+          "predicted_target_ppm": 1.3799999999999997,
+          "predicted_delta_ppm": -0.07000000000000028,
+          "source_solvent": "CD3OD",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "C1CCCCC1",
+          "reference": {
+            "identity": "C1COCCO1",
+            "molecule_id": "10016061",
+            "atom_id": "10093018",
+            "source_ppm": 3.66,
+            "target_ppm": 3.59,
+            "source_spectrum_ids": [
+              "20197666"
+            ],
+            "target_spectrum_ids": [
+              "20197080"
+            ]
+          },
+          "tanimoto_similarity": 0.125,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10811",
+          "query_atom_id": "10046537",
+          "target_reference_ppm": 1.43,
+          "source_spectrum_ids": [
+            "20197663"
+          ],
+          "target_spectrum_ids": [
+            "20197659"
+          ]
+        },
+        {
+          "source_ppm": 1.45,
+          "predicted_target_ppm": 1.3799999999999997,
+          "predicted_delta_ppm": -0.07000000000000028,
+          "source_solvent": "CD3OD",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "C1CCCCC1",
+          "reference": {
+            "identity": "C1COCCO1",
+            "molecule_id": "10016061",
+            "atom_id": "10093018",
+            "source_ppm": 3.66,
+            "target_ppm": 3.59,
+            "source_spectrum_ids": [
+              "20197666"
+            ],
+            "target_spectrum_ids": [
+              "20197080"
+            ]
+          },
+          "tanimoto_similarity": 0.125,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10811",
+          "query_atom_id": "10046538",
+          "target_reference_ppm": 1.43,
+          "source_spectrum_ids": [
+            "20197663"
+          ],
+          "target_spectrum_ids": [
+            "20197659"
+          ]
+        },
+        {
+          "source_ppm": 1.45,
+          "predicted_target_ppm": 1.3799999999999997,
+          "predicted_delta_ppm": -0.07000000000000028,
+          "source_solvent": "CD3OD",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "C1CCCCC1",
+          "reference": {
+            "identity": "C1COCCO1",
+            "molecule_id": "10016061",
+            "atom_id": "10093018",
+            "source_ppm": 3.66,
+            "target_ppm": 3.59,
+            "source_spectrum_ids": [
+              "20197666"
+            ],
+            "target_spectrum_ids": [
+              "20197080"
+            ]
+          },
+          "tanimoto_similarity": 0.125,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10811",
+          "query_atom_id": "10046539",
+          "target_reference_ppm": 1.43,
+          "source_spectrum_ids": [
+            "20197663"
+          ],
+          "target_spectrum_ids": [
+            "20197659"
+          ]
+        },
+        {
+          "source_ppm": 1.45,
+          "predicted_target_ppm": 1.3799999999999997,
+          "predicted_delta_ppm": -0.07000000000000028,
+          "source_solvent": "CD3OD",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "C1CCCCC1",
+          "reference": {
+            "identity": "C1COCCO1",
+            "molecule_id": "10016061",
+            "atom_id": "10093018",
+            "source_ppm": 3.66,
+            "target_ppm": 3.59,
+            "source_spectrum_ids": [
+              "20197666"
+            ],
+            "target_spectrum_ids": [
+              "20197080"
+            ]
+          },
+          "tanimoto_similarity": 0.125,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10811",
+          "query_atom_id": "10046540",
+          "target_reference_ppm": 1.43,
+          "source_spectrum_ids": [
+            "20197663"
+          ],
+          "target_spectrum_ids": [
+            "20197659"
+          ]
+        },
+        {
+          "source_ppm": 1.45,
+          "predicted_target_ppm": 1.3799999999999997,
+          "predicted_delta_ppm": -0.07000000000000028,
+          "source_solvent": "CD3OD",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "C1CCCCC1",
+          "reference": {
+            "identity": "C1COCCO1",
+            "molecule_id": "10016061",
+            "atom_id": "10093018",
+            "source_ppm": 3.66,
+            "target_ppm": 3.59,
+            "source_spectrum_ids": [
+              "20197666"
+            ],
+            "target_spectrum_ids": [
+              "20197080"
+            ]
+          },
+          "tanimoto_similarity": 0.125,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10811",
+          "query_atom_id": "10046541",
+          "target_reference_ppm": 1.43,
+          "source_spectrum_ids": [
+            "20197663"
+          ],
+          "target_spectrum_ids": [
+            "20197659"
+          ]
+        },
+        {
+          "source_ppm": 1.45,
+          "predicted_target_ppm": 1.3799999999999997,
+          "predicted_delta_ppm": -0.07000000000000028,
+          "source_solvent": "CD3OD",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "C1CCCCC1",
+          "reference": {
+            "identity": "C1COCCO1",
+            "molecule_id": "10016061",
+            "atom_id": "10093018",
+            "source_ppm": 3.66,
+            "target_ppm": 3.59,
+            "source_spectrum_ids": [
+              "20197666"
+            ],
+            "target_spectrum_ids": [
+              "20197080"
+            ]
+          },
+          "tanimoto_similarity": 0.125,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10811",
+          "query_atom_id": "10046542",
+          "target_reference_ppm": 1.43,
+          "source_spectrum_ids": [
+            "20197663"
+          ],
+          "target_spectrum_ids": [
+            "20197659"
+          ]
+        },
+        {
+          "source_ppm": 1.45,
+          "predicted_target_ppm": 1.3799999999999997,
+          "predicted_delta_ppm": -0.07000000000000028,
+          "source_solvent": "CD3OD",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "C1CCCCC1",
+          "reference": {
+            "identity": "C1COCCO1",
+            "molecule_id": "10016061",
+            "atom_id": "10093018",
+            "source_ppm": 3.66,
+            "target_ppm": 3.59,
+            "source_spectrum_ids": [
+              "20197666"
+            ],
+            "target_spectrum_ids": [
+              "20197080"
+            ]
+          },
+          "tanimoto_similarity": 0.125,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10811",
+          "query_atom_id": "10046543",
+          "target_reference_ppm": 1.43,
+          "source_spectrum_ids": [
+            "20197663"
+          ],
+          "target_spectrum_ids": [
+            "20197659"
+          ]
+        },
+        {
+          "source_ppm": 1.45,
+          "predicted_target_ppm": 1.3799999999999997,
+          "predicted_delta_ppm": -0.07000000000000028,
+          "source_solvent": "CD3OD",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "C1CCCCC1",
+          "reference": {
+            "identity": "C1COCCO1",
+            "molecule_id": "10016061",
+            "atom_id": "10093018",
+            "source_ppm": 3.66,
+            "target_ppm": 3.59,
+            "source_spectrum_ids": [
+              "20197666"
+            ],
+            "target_spectrum_ids": [
+              "20197080"
+            ]
+          },
+          "tanimoto_similarity": 0.125,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10811",
+          "query_atom_id": "10046544",
+          "target_reference_ppm": 1.43,
+          "source_spectrum_ids": [
+            "20197663"
+          ],
+          "target_spectrum_ids": [
+            "20197659"
+          ]
+        },
+        {
+          "source_ppm": 1.45,
+          "predicted_target_ppm": 1.3799999999999997,
+          "predicted_delta_ppm": -0.07000000000000028,
+          "source_solvent": "CD3OD",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "C1CCCCC1",
+          "reference": {
+            "identity": "C1COCCO1",
+            "molecule_id": "10016061",
+            "atom_id": "10093018",
+            "source_ppm": 3.66,
+            "target_ppm": 3.59,
+            "source_spectrum_ids": [
+              "20197666"
+            ],
+            "target_spectrum_ids": [
+              "20197080"
+            ]
+          },
+          "tanimoto_similarity": 0.125,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10811",
+          "query_atom_id": "10046545",
+          "target_reference_ppm": 1.43,
+          "source_spectrum_ids": [
+            "20197663"
+          ],
+          "target_spectrum_ids": [
+            "20197659"
+          ]
+        },
+        {
+          "source_ppm": 1.45,
+          "predicted_target_ppm": 1.3799999999999997,
+          "predicted_delta_ppm": -0.07000000000000028,
+          "source_solvent": "CD3OD",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "C1CCCCC1",
+          "reference": {
+            "identity": "C1COCCO1",
+            "molecule_id": "10016061",
+            "atom_id": "10093018",
+            "source_ppm": 3.66,
+            "target_ppm": 3.59,
+            "source_spectrum_ids": [
+              "20197666"
+            ],
+            "target_spectrum_ids": [
+              "20197080"
+            ]
+          },
+          "tanimoto_similarity": 0.125,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10811",
+          "query_atom_id": "10046546",
+          "target_reference_ppm": 1.43,
+          "source_spectrum_ids": [
+            "20197663"
+          ],
+          "target_spectrum_ids": [
+            "20197659"
+          ]
+        },
+        {
+          "source_ppm": 1.45,
+          "predicted_target_ppm": 1.3799999999999997,
+          "predicted_delta_ppm": -0.07000000000000028,
+          "source_solvent": "CD3OD",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "C1CCCCC1",
+          "reference": {
+            "identity": "C1COCCO1",
+            "molecule_id": "10016061",
+            "atom_id": "10093018",
+            "source_ppm": 3.66,
+            "target_ppm": 3.59,
+            "source_spectrum_ids": [
+              "20197666"
+            ],
+            "target_spectrum_ids": [
+              "20197080"
+            ]
+          },
+          "tanimoto_similarity": 0.125,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10811",
+          "query_atom_id": "10046547",
+          "target_reference_ppm": 1.43,
+          "source_spectrum_ids": [
+            "20197663"
+          ],
+          "target_spectrum_ids": [
+            "20197659"
+          ]
+        },
+        {
+          "source_ppm": 1.45,
+          "predicted_target_ppm": 1.3799999999999997,
+          "predicted_delta_ppm": -0.07000000000000028,
+          "source_solvent": "CD3OD",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "C1CCCCC1",
+          "reference": {
+            "identity": "C1COCCO1",
+            "molecule_id": "10016061",
+            "atom_id": "10093018",
+            "source_ppm": 3.66,
+            "target_ppm": 3.59,
+            "source_spectrum_ids": [
+              "20197666"
+            ],
+            "target_spectrum_ids": [
+              "20197080"
+            ]
+          },
+          "tanimoto_similarity": 0.125,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10811",
+          "query_atom_id": "10046548",
+          "target_reference_ppm": 1.43,
+          "source_spectrum_ids": [
+            "20197663"
+          ],
+          "target_spectrum_ids": [
+            "20197659"
+          ]
+        },
+        {
+          "source_ppm": 1.55,
+          "predicted_target_ppm": 1.96,
+          "predicted_delta_ppm": 0.4099999999999999,
+          "source_solvent": "C6D6",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "CC(C)=O",
+          "reference": {
+            "identity": "CC(=O)O",
+            "molecule_id": "10009160",
+            "atom_id": "10078356",
+            "source_ppm": 1.55,
+            "target_ppm": 1.96,
+            "source_spectrum_ids": [
+              "20197042"
+            ],
+            "target_spectrum_ids": [
+              "20197040"
+            ]
+          },
+          "tanimoto_similarity": 0.625,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10007820",
+          "query_atom_id": "10061872",
+          "target_reference_ppm": 2.09,
+          "source_spectrum_ids": [
+            "20196901"
+          ],
+          "target_spectrum_ids": [
+            "20196933"
+          ]
+        },
+        {
+          "source_ppm": 1.55,
+          "predicted_target_ppm": 1.96,
+          "predicted_delta_ppm": 0.4099999999999999,
+          "source_solvent": "C6D6",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "CC(C)=O",
+          "reference": {
+            "identity": "CC(=O)O",
+            "molecule_id": "10009160",
+            "atom_id": "10078356",
+            "source_ppm": 1.55,
+            "target_ppm": 1.96,
+            "source_spectrum_ids": [
+              "20197042"
+            ],
+            "target_spectrum_ids": [
+              "20197040"
+            ]
+          },
+          "tanimoto_similarity": 0.625,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10007820",
+          "query_atom_id": "10061873",
+          "target_reference_ppm": 2.09,
+          "source_spectrum_ids": [
+            "20196901"
+          ],
+          "target_spectrum_ids": [
+            "20196933"
+          ]
+        },
+        {
+          "source_ppm": 1.55,
+          "predicted_target_ppm": 1.96,
+          "predicted_delta_ppm": 0.4099999999999999,
+          "source_solvent": "C6D6",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "CC(C)=O",
+          "reference": {
+            "identity": "CC(=O)O",
+            "molecule_id": "10009160",
+            "atom_id": "10078356",
+            "source_ppm": 1.55,
+            "target_ppm": 1.96,
+            "source_spectrum_ids": [
+              "20197042"
+            ],
+            "target_spectrum_ids": [
+              "20197040"
+            ]
+          },
+          "tanimoto_similarity": 0.625,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10007820",
+          "query_atom_id": "10061874",
+          "target_reference_ppm": 2.09,
+          "source_spectrum_ids": [
+            "20196901"
+          ],
+          "target_spectrum_ids": [
+            "20196933"
+          ]
+        },
+        {
+          "source_ppm": 1.55,
+          "predicted_target_ppm": 1.96,
+          "predicted_delta_ppm": 0.4099999999999999,
+          "source_solvent": "C6D6",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "CC(C)=O",
+          "reference": {
+            "identity": "CC(=O)O",
+            "molecule_id": "10009160",
+            "atom_id": "10078356",
+            "source_ppm": 1.55,
+            "target_ppm": 1.96,
+            "source_spectrum_ids": [
+              "20197042"
+            ],
+            "target_spectrum_ids": [
+              "20197040"
+            ]
+          },
+          "tanimoto_similarity": 0.625,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10007820",
+          "query_atom_id": "10061875",
+          "target_reference_ppm": 2.09,
+          "source_spectrum_ids": [
+            "20196901"
+          ],
+          "target_spectrum_ids": [
+            "20196933"
+          ]
+        },
+        {
+          "source_ppm": 1.55,
+          "predicted_target_ppm": 1.96,
+          "predicted_delta_ppm": 0.4099999999999999,
+          "source_solvent": "C6D6",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "CC(C)=O",
+          "reference": {
+            "identity": "CC(=O)O",
+            "molecule_id": "10009160",
+            "atom_id": "10078356",
+            "source_ppm": 1.55,
+            "target_ppm": 1.96,
+            "source_spectrum_ids": [
+              "20197042"
+            ],
+            "target_spectrum_ids": [
+              "20197040"
+            ]
+          },
+          "tanimoto_similarity": 0.625,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10007820",
+          "query_atom_id": "10061876",
+          "target_reference_ppm": 2.09,
+          "source_spectrum_ids": [
+            "20196901"
+          ],
+          "target_spectrum_ids": [
+            "20196933"
+          ]
+        },
+        {
+          "source_ppm": 1.55,
+          "predicted_target_ppm": 1.96,
+          "predicted_delta_ppm": 0.4099999999999999,
+          "source_solvent": "C6D6",
+          "target_solvent": "acetone-d6",
+          "nucleus": "1H",
+          "query_connectivity": "CC(C)=O",
+          "reference": {
+            "identity": "CC(=O)O",
+            "molecule_id": "10009160",
+            "atom_id": "10078356",
+            "source_ppm": 1.55,
+            "target_ppm": 1.96,
+            "source_spectrum_ids": [
+              "20197042"
+            ],
+            "target_spectrum_ids": [
+              "20197040"
+            ]
+          },
+          "tanimoto_similarity": 0.625,
+          "same_connectivity_excluded": true,
+          "method": "nearest_paired_experimental_reference_delta",
+          "model_kind": "retrieval_baseline_not_neural_model",
+          "query_molecule_id": "10007820",
+          "query_atom_id": "10061877",
+          "target_reference_ppm": 2.09,
+          "source_spectrum_ids": [
+            "20196901"
+          ],
+          "target_spectrum_ids": [
+            "20196933"
+          ]
+        }
+      ],
+      "skipped": [],
+      "counts": {
+        "distinct_molecules": 2,
+        "paired_atoms": 18,
+        "skipped_pairs": 0
+      },
+      "limitations": [
+        "Existing neural solvent model is not installed; this is a reference-retrieval baseline.",
+        "No parameter fitting or test-label calibration. Query connectivity and stereoisomers excluded.",
+        "Temperature, concentration and original experimental referencing are not independently harmonized.",
+        "Low-similarity references can be inaccurate; a successful run does not establish useful accuracy."
+      ],
+      "library": {
+        "path": "/mnt/shared-storage-user/xiejiaqing/OpenMolSpec/studio/.runtime/solvent_reference_library.json",
+        "sha256": "13ad8ea7b5c2c66f0fc5edbc1a2335405498289eb0e6b54c14d9745ceecb4d25"
+      },
+      "elapsed_seconds": 0.381
+    }
+  ],
+  "counts": {
+    "passed": 4
+  },
+  "elapsed_seconds": 129.396,
+  "completed_at": "2026-11-16T01:44:02.808437+00:00"
+}

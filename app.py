@@ -27,7 +27,7 @@ from openmolspec_ui.spectra import (
 )
 from openmolspec_ui.ui import APP_CSS, metric_card, page_hero
 from openmolspec_ui.portal import (OnlinePredictionService, primary_navigation, dataset_page,
-                                  documentation_page, ms_prediction_page)
+                                  documentation_page, ms_prediction_page, assignment_page, solvent_transfer_page)
 
 
 st.set_page_config(
@@ -57,6 +57,8 @@ def sidebar(workflows: bool = True) -> str:
             "工作区",
             (
                 "实验 NMR → 结构",
+                "NMR 峰 → 原子指认",
+                "跨溶剂化学位移",
                 "分子 → MS/MS",
                 "构象 → 谱图",
                 "谱图 → 结构检索",
@@ -561,6 +563,10 @@ elif page == "实验 NMR → 结构":
     nmr_page(st, service.device)
 elif page == "分子 → MS/MS":
     ms_prediction_page(st)
+elif page == "NMR 峰 → 原子指认":
+    assignment_page(st)
+elif page == "跨溶剂化学位移":
+    solvent_transfer_page(st)
 elif page == "构象 → 谱图":
     structure_to_spectrum_page()
 elif page == "谱图 → 结构检索":

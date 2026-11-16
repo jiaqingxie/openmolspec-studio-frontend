@@ -16,8 +16,7 @@ DOCS = ROOT / "documentation"
 
 def example(task):
     if task.id == "nmr.assignment":
-        return {"smiles": "CCO", "nucleus": "13C", "observed_peaks_ppm": [18.2, 58.3],
-                "atom_index_basis": "RDKit molecule reconstructed from the exact input SMILES"}
+        return {"smiles": "CCO", "nucleus": "13C", "peaks_ppm": [18.2, 58.3], "tolerance_ppm": 5.0}
     if task.id == "nmr.solvent_transfer":
         return {"smiles": "CCO", "nucleus": "1H", "source_solvent": "CDCl3", "target_solvent": "DMSO-d6", "source_peaks_ppm": [1.2, 3.65]}
     if task.id == "nmr.formula":
@@ -50,6 +49,18 @@ def profile(task):
         return (title, "Deferred at the user's request.", "Excluded from default benchmark runs; explicit requests are skipped.",
                 "Any recorded results below are historical diagnostics only.", "No further model downloads, inference or training are planned for this task.",
                 "https://github.com/jiaqingxie/openmolspec-studio-frontend")
+    if id_ == "nmr.assignment":
+        return ("H/C peak-to-atom assignment", "Propose atom assignments for measured peaks and a known structure.",
+                "Run the released liquid NMRNet H/C fold-0 checkpoint directly on a seeded 3D conformer. Require complete checkpoint restoration, preserve RDKit AddHs(input SMILES) atom indices, group topological symmetry sites, and use minimum-cost matching with explicit unmatched peaks and sites. Default tolerances are 0.5 ppm for H and 5 ppm for C.",
+                "Report matched fraction, residual MAE and candidate atom indices. The 32-molecule carbon run matched 488 peaks; an additional online hydrogen request completed. assignment_accuracy is null because independent atom-assignment labels were not supplied.",
+                "Residual error is not assignment accuracy. Topological symmetry is not proof of magnetic equivalence. Solvent and conformer ensembles are not modeled; H/C only. See the source JSON for input geometry, checkpoint hash and sample identities.",
+                "https://github.com/Colin-Jay/NMRNet")
+    if id_ == "nmr.solvent_transfer":
+        return ("H/C cross-solvent transfer: experimental-reference baseline", "Estimate target-solvent shifts from a measured source-solvent spectrum using paired experimental references.",
+                "Use reviewed, one-dimensional H/C NMRShiftDB records; exclude calculated-condition entries, unknown/mixed solvents and conflicting repeated atom shifts. Pair the same database atom across solvents. Retrieve the nearest other molecular connectivity by Morgan Tanimoto, then the nearest source shift, and add that reference atom's measured solvent difference. No parameters are fitted. All records sharing the query connectivity, including stereoisomers, are excluded.",
+                "Report H and C errors separately and compare with leaving the source shift unchanged. The completed run covers 32 distinct molecules and 296 paired atoms. Predictions expose reference molecules, atom/spectrum IDs and similarity.",
+                "This is a retrieval baseline, not a pretrained neural solvent model. It does not consistently improve both nuclei over unchanged shifts. The reference library is small, and temperature/concentration/reference conventions are not independently harmonized. Neural solvent checkpoints remain unavailable.",
+                "https://nmrshiftdb.nmr.uni-koeln.de/")
     if id_.startswith("ms.forward."):
         model = id_.split(".")[-1].upper()
         return (f"Molecule to MS/MS with {model}",
@@ -196,15 +207,15 @@ def profile_zh(task):
                 "位移和误差单位均为 ppm。按分子等权计算匹配峰 MAE/RMSE，必须同时报告匹配比例与峰数误差，因为匹配误差本身不惩罚全部缺失峰或额外峰。",
                 "峰匹配误差不是逐原子指认准确率。缺少 B/Si 兼容权重时明确跳过，不为补任务重新训练模型头。")
     if id_ == "nmr.assignment":
-        return ("给定结构，将谱峰指认到对应原子；需保留原子编号及对称等价关系。",
-                "候选方案是已有 NMRNet 逐原子位移加匹配，或 TransPeakNet 发布的 H/C HSQC 权重及匹配代码。",
-                "需用核实过的实验指认参考计算准确率。仅有未指认峰列表，不能得出原子指认准确率。",
-                "模型方向已找到，兼容权重和原子参考尚未验证接入；不宣称已完成六核指认。")
+        return ("给定结构和实测 H/C 峰，预测逐原子位移并输出候选指认。",
+                "直接加载液相 NMRNet H/C fold-0 权重，固定种子生成构象；完整恢复权重，保存 RDKit AddHs(input SMILES) 的 0 起始原子编号。按拓扑对称性合并位点，再做带未匹配项的最小代价匹配。H/C 默认容差分别为 0.5/5 ppm。",
+                "32 个碳谱分子已完成，匹配 488 个峰；另有真实在线氢谱请求。报告覆盖率、残差、原子编号及歧义候选；缺少独立实验指认答案时 assignment_accuracy 为 null。",
+                "匹配残差不等于指认准确率；拓扑对称不保证磁等价。模型不输入溶剂，未做构象系综平均，目前仅覆盖 H/C。")
     if id_ == "nmr.solvent_transfer":
-        return ("预测同一分子从源溶剂到目标溶剂的化学位移变化。",
-                "候选为带溶剂输入的 NMRNet++、TransPeakNet；需取得对应冻结权重以及同一分子的跨溶剂配对记录。",
-                "按核分别报告目标位移及位移变化误差，核对原子映射、溶剂和实验条件。",
-                "溶剂条件正向预测不自动等于经过验证的跨溶剂迁移；目前未接入，且不通过拟合测试标签做溶剂校正。")
+        return ("用跨溶剂实验参考估计目标位移；当前提供无训练的参考检索基线。",
+                "从 NMRShiftDB 审核通过的 H/C 一维数据中排除计算记录、混合/未知溶剂及重复测量冲突，按同一数据库原子配对。先按 Morgan 相似度选其他分子，再选最接近的源位移，加入该参考原子的实测溶剂差。排除查询分子及相同连接关系的所有立体异构体，不拟合参数。",
+                "已跑 32 个不同分子、296 个原子位移对；按 H/C 分别报告 MAE，并与源位移不变的基线比较。输出参考分子、原子/谱图 ID 和相似度。",
+                "这不是神经网络溶剂模型，对两种核尚无稳定收益。参考库较小，温度、浓度及位移参考尚未统一核验；专用神经网络权重仍待取得。")
     return (task.note, "本任务需符合输入定义的现成权重、参考数据与适配器。", "缺少必需条件时不产生占位分数。", "保持明确的待接入状态；如果必须重新训练才能完成，则按用户要求跳过。")
 
 
@@ -213,7 +224,8 @@ def observations():
                  "fp_primary_score_gate_20261116.json",
                  "gap_protocol_audit_20261115.json", "gap_protocol_random128_20261116.json", "vib2mol_xinyu_protocol_20261115.json",
                  "vib2mol_xinyu_random64_20261116.json", "vibrational_forward_paired_logs_20261116.json",
-                 "ms_glacier_32_molecules_20261116.json", "ms_iceberg_32_molecules_20261116.json", "magma_real_test_verified_20261115.json"]
+                 "ms_glacier_32_molecules_20261116.json", "ms_iceberg_32_molecules_20261116.json", "magma_real_test_verified_20261115.json",
+                 "assignment_carbon32_20261116.json", "solvent_transfer_reference32_20261116.json"]
     result = {}
     for name in preferred:
         path = ROOT / "results" / name
@@ -226,7 +238,7 @@ def observations():
             id_ = row.get("task")
             if not id_:
                 continue
-            brief = {key: row[key] for key in ("task", "dataset_name", "status", "metrics", "counts", "reason", "examples", "given_nmr", "beam_size", "reranked_metrics", "source_counts", "selection", "sampling", "seed", "training_mean_baseline", "unique_molecules") if key in row}
+            brief = {key: row[key] for key in ("task", "dataset_name", "status", "metrics", "counts", "reason", "examples", "given_nmr", "beam_size", "reranked_metrics", "source_counts", "selection", "sampling", "seed", "training_mean_baseline", "unique_molecules", "model_kind", "purpose", "limitations") if key in row}
             brief["source_file"] = name
             brief["sample_limit"] = payload.get("limit", len(payload.get("records", [])))
             if "models" in row:
@@ -294,6 +306,7 @@ def build():
         quick = "# " + ("Quick start" if en else "快速开始") + "\n\n```bash\npython3 -m venv .venv\n.venv/bin/python -m pip install -e . -r requirements.txt\nexport OPENMOLSPEC_BENCH_ROOT=/path/to/OpenMolSpec\nexport OPENMOLSPEC_ROOT=/path/to/openmolspec-studio-portable\n.venv/bin/streamlit run app.py\n```\n\n"
         quick += ("The frontend exposes Tool, Dataset Download, Prediction (Online), and Full documentation. Weights and complete datasets are stored separately from Git.\n\n" if en else "前端提供 Tool、Dataset Download、Prediction (Online)、Full documentation 四个栏目。权重与完整数据独立于 Git 存放。\n\n")
         quick += "```bash\npython -m openmolspec_bench list\npython -m openmolspec_bench run --workspace /path/to/OpenMolSpec --tasks vibrational.gap.ir_raman_hc --limit 32 --output results/my_run.json\n```\n"
+        quick += "\n```bash\nexport OPENMOLSPEC_NMR_PYTHON=/path/to/nmr-runtime/bin/python\nexport OPENMOLSPEC_MODELS_ROOT=/path/to/models\nexport OPENMOLSPEC_SOLVENT_REFERENCE=/path/to/solvent_reference_library.json\n```\n"
         files[f"quickstart{suffix}.md"] = quick
         protocol = "# " + ("Evaluation protocols" if en else "评测协议") + "\n\n"
         protocol += ("Every run records input/checkpoint hashes, sample IDs, modality conditions, candidate pools and execution states. F/P cached results whose logged targets disagree with current input labels are invalidated. Correct pairing is necessary but does not establish solid-to-solution reference compatibility.\n\n" if en else "每次运行记录输入/权重哈希、样本 ID、模态条件、候选池和运行状态。F/P 缓存预测若保存的标签与当前输入不一致，则撤回旧评分。配对修复也不能证明固相到溶液的位移参考兼容。\n\n")
@@ -306,7 +319,7 @@ def build():
         datasets += ("Our prepared test CSV, NMR JSONL, and portable Gaussian/LMDB assets are configured by local paths. Public OpenMolSpec dataset export URLs must be verified before being added here.\n" if en else "我们已准备的测试 CSV、NMR JSONL、Gaussian/LMDB 资产通过本地路径配置。OpenMolSpec 数据导出下载地址需实际验证后再添加。\n")
         files[f"datasets{suffix}.md"] = datasets
         publication = "# " + ("Publication status" if en else "发布状态") + "\n\n"
-        publication += ("Read the Docs configuration is provided in `.readthedocs.yaml`. Build with `pip install -r requirements-docs.txt` and `mkdocs build --strict`. The repository has no confirmed live Read the Docs URL yet. A project import and successful hosted build are required before a URL is advertised as published.\n\n" if en else "仓库提供 `.readthedocs.yaml`。安装 `requirements-docs.txt` 后用 `mkdocs build --strict` 构建。目前尚无已确认上线的 Read the Docs URL；只有项目导入和托管构建成功后才会发布实际网址。\n\n")
+        publication += ("Read the Docs configuration is provided in `.readthedocs.yaml`. Build with `pip install -r requirements-docs.txt` and `python scripts/build_readthedocs.py --output site --strict`. The shared local/CI/Read the Docs builder has generated and checked 150 HTML pages with 68 notebook previews, language switches, downloads and internal links. The repository has no confirmed live Read the Docs URL yet. A project import and successful hosted build are required before a URL is advertised as published.\n\n" if en else "仓库提供 `.readthedocs.yaml`。安装 `requirements-docs.txt` 后用 `python scripts/build_readthedocs.py --output site --strict` 构建。本地、CI 和 Read the Docs 使用同一构建脚本，已生成并验证 150 个 HTML 页面、68 个 notebook 预览、语言切换与下载链接。目前尚无已确认上线的 Read the Docs URL；只有项目导入和托管构建成功后才会发布实际网址。\n\n")
         publication += ("Configure `OPENMOLSPEC_DOCS_URL` on the frontend after deployment. The current environment's network proxy does not resolve, so GitHub push, dependency download and Read the Docs account access remain externally blocked.\n" if en else "部署后在前端设置 `OPENMOLSPEC_DOCS_URL`。当前环境的网络代理无法解析，GitHub 推送、依赖下载和 Read the Docs 账户访问仍受外部条件限制。\n")
         files[f"publication{suffix}.md"] = publication
         task_index = "# " + ("Task catalog" if en else "任务目录") + "\n\n| ID | " + ("Task | Adapter" if en else "任务 | 适配器") + " |\n| --- | --- | --- |\n"
@@ -324,7 +337,7 @@ def build():
                 page = f"# {heading}\n\n{zh_purpose}\n\n## 模型与协议\n\n{zh_method}\n\n## 输入与示例\n\n以下仅展示输入格式，不是实测谱或精度结果。\n\n```json\n{json.dumps(example(task), indent=2, ensure_ascii=False)}\n```\n\n## 输出与指标\n\n{zh_metrics}\n\n适配器：`{task.backend}`。数据域：`{task.domain}`。指标字段：`{'`、`'.join(task.metrics)}`。\n\n## 运行推理或评分\n\n"
             page += f"```bash\npython -m openmolspec_bench run --workspace /path/to/OpenMolSpec \\\n  --tasks {task.id} --limit 8 --output results/{slug}.json\n```\n\n"
             if task.id in ("nmr.forward.11B", "nmr.forward.29Si"):
-                page += ("The primary command above skips unverified scoring. To reproduce both frozen diagnostics in a fresh directory:\n\n" if en else "上方正式接口会跳过未验证评分。复现 B/Si 冻结诊断时，使用全新的输出目录：\n\n")
+                page += ("The primary command above runs diagnostic-only inference. To reproduce both nuclei directly in a fresh directory:\n\n" if en else "上方接口运行诊断推理，不将结果视为已验证的正式精度。直接复现 B/Si 时使用全新的输出目录：\n\n")
                 page += "```bash\npython scripts/run_frozen_bsi_diagnostic.py --models-root /path/to/models --output /path/to/new-bsi-run --limit 32\n```\n\n"
             if en:
                 page += f"## Interpretation and limits\n\n{limits}\n\n## Recorded results\n\n"

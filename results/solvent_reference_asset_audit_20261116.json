@@ -1,0 +1,13 @@
+{
+  "completed": true,
+  "source_archive": "/mnt/shared-storage-user/xiejiaqing/data/nmrshiftdb/nmrshiftdb-data-1_3_6.sql.gz",
+  "source_archive_sha256": "f5b2246ae7a65a5dfe36719fb6d006bfa05084c23aa5000c12a4e665e1ba201c",
+  "raw_extraction_sha256": "9a8fc2901e470f21410e898b03b09982a79d65e868ac38108b0b0c5e96d2117b",
+  "library_sha256": "13ad8ea7b5c2c66f0fc5edbc1a2335405498289eb0e6b54c14d9745ceecb4d25",
+  "paired_atoms": 1869,
+  "distinct_connectivities": 53,
+  "query_connectivity_exclusion_verified": true,
+  "metrics_independently_recomputed": true,
+  "training_performed": false,
+  "model_kind": "retrieval_baseline_not_neural_model"
+}

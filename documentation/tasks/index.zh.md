@@ -6,8 +6,8 @@
 | `nmr.forward.13C` | [结构 → 13C 峰列表](nmr-forward-13C.md) | `nmrnet_predictions` |
 | `nmr.forward.19F` | [结构 → 19F 峰列表](nmr-forward-19F.md) | `nmrnet_hetero_predictions` |
 | `nmr.forward.31P` | [结构 → 31P 峰列表](nmr-forward-31P.md) | `nmrnet_hetero_predictions` |
-| `nmr.forward.11B` | [结构 → 11B 峰列表](nmr-forward-11B.md) | `unavailable` |
-| `nmr.forward.29Si` | [结构 → 29Si 峰列表](nmr-forward-29Si.md) | `unavailable` |
+| `nmr.forward.11B` | [结构 → 11B 峰列表](nmr-forward-11B.md) | `nmrnet_bsi_diagnostic` |
+| `nmr.forward.29Si` | [结构 → 29Si 峰列表](nmr-forward-29Si.md) | `nmrnet_bsi_diagnostic` |
 | `nmr.retrieval.h.s2m` | [谱图 → 结构检索 · H](nmr-retrieval-h-s2m.md) | `spec2struct_alignment` |
 | `nmr.retrieval.h.m2s` | [结构 → 谱图检索 · H](nmr-retrieval-h-m2s.md) | `spec2struct_alignment` |
 | `nmr.generation.h` | [谱图 → SMILES · H](nmr-generation-h.md) | `spec2struct_generation` |
@@ -24,8 +24,8 @@
 | `vibrational.forward` | [构象 → IR / Raman](vibrational-forward.md) | `studio_vibrational_forward` |
 | `vibrational.retrieval` | [IR / Raman → 结构检索](vibrational-retrieval.md) | `vib2mol_retrieval` |
 | `vibrational.generation` | [IR / Raman → SMILES](vibrational-generation.md) | `vib2mol_generation` |
-| `nmr.assignment` | [峰 → 原子指认](nmr-assignment.md) | `unavailable` |
-| `nmr.solvent_transfer` | [跨溶剂化学位移迁移](nmr-solvent_transfer.md) | `unavailable` |
+| `nmr.assignment` | [H/C 峰 → 原子指认](nmr-assignment.md) | `nmrnet_atom_assignment` |
+| `nmr.solvent_transfer` | [H/C 跨溶剂位移 · 参考检索基线](nmr-solvent_transfer.md) | `nmr_solvent_reference` |
 | `nmr.formula` | [谱图 → 分子式](nmr-formula.md) | `unavailable` |
 | `spectroscopy.qa` | [谱学问答 / 推理](spectroscopy-qa.md) | `unavailable` |
 | `spectroscopy.reranking` | [谱图 + 候选结构 → 重排](spectroscopy-reranking.md) | `vib2mol_reranking` |

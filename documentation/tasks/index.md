@@ -6,8 +6,8 @@
 | `nmr.forward.13C` | [Structure to 13C NMR](nmr-forward-13C.md) | `nmrnet_predictions` |
 | `nmr.forward.19F` | [Structure to 19F NMR: alignment audit](nmr-forward-19F.md) | `nmrnet_hetero_predictions` |
 | `nmr.forward.31P` | [Structure to 31P NMR: alignment audit](nmr-forward-31P.md) | `nmrnet_hetero_predictions` |
-| `nmr.forward.11B` | [Structure to 11B NMR: frozen diagnostic](nmr-forward-11B.md) | `unavailable` |
-| `nmr.forward.29Si` | [Structure to 29Si NMR: frozen diagnostic](nmr-forward-29Si.md) | `unavailable` |
+| `nmr.forward.11B` | [Structure to 11B NMR: frozen diagnostic](nmr-forward-11B.md) | `nmrnet_bsi_diagnostic` |
+| `nmr.forward.29Si` | [Structure to 29Si NMR: frozen diagnostic](nmr-forward-29Si.md) | `nmrnet_bsi_diagnostic` |
 | `nmr.retrieval.h.s2m` | [NMR retrieval: H, s2m](nmr-retrieval-h-s2m.md) | `spec2struct_alignment` |
 | `nmr.retrieval.h.m2s` | [NMR retrieval: H, m2s](nmr-retrieval-h-m2s.md) | `spec2struct_alignment` |
 | `nmr.generation.h` | [NMR-to-SMILES generation: H](nmr-generation-h.md) | `spec2struct_generation` |
@@ -24,8 +24,8 @@
 | `vibrational.forward` | [Conformer to IR and Raman](vibrational-forward.md) | `studio_vibrational_forward` |
 | `vibrational.retrieval` | [Vib2Mol bidirectional retrieval with IR/Raman only](vibrational-retrieval.md) | `vib2mol_retrieval` |
 | `vibrational.generation` | [Vib2Mol generation with IR/Raman only](vibrational-generation.md) | `vib2mol_generation` |
-| `nmr.assignment` | [Peak-to-atom assignment](nmr-assignment.md) | `unavailable` |
-| `nmr.solvent_transfer` | [Cross-solvent chemical-shift transfer](nmr-solvent_transfer.md) | `unavailable` |
+| `nmr.assignment` | [H/C peak-to-atom assignment](nmr-assignment.md) | `nmrnet_atom_assignment` |
+| `nmr.solvent_transfer` | [H/C cross-solvent transfer: experimental-reference baseline](nmr-solvent_transfer.md) | `nmr_solvent_reference` |
 | `nmr.formula` | [Molecular formula prediction](nmr-formula.md) | `unavailable` |
 | `spectroscopy.qa` | [Spectroscopy QA](spectroscopy-qa.md) | `unavailable` |
 | `spectroscopy.reranking` | [Vib2Mol candidate reranking with IR/Raman only](spectroscopy-reranking.md) | `vib2mol_reranking` |

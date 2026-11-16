@@ -1617,6 +1617,72 @@
       "sample_limit": 2
     }
   ],
+  "nmr.assignment": [
+    {
+      "task": "nmr.assignment",
+      "status": "passed",
+      "metrics": {
+        "molecules": 32,
+        "matched_peaks": 488,
+        "matched_peak_fraction_macro": 0.9392376720501721,
+        "matched_residual_mae_ppm": 0.8991307922920895,
+        "assignment_accuracy": null
+      },
+      "selection": {
+        "read": 32,
+        "missing_modality": 0,
+        "duplicate_structure": 0,
+        "exceeds_model_capacity": 0
+      },
+      "purpose": "real_peak_assignment_execution_not_atom_accuracy_benchmark",
+      "limitations": [
+        "No experimental atom assignment ground truth supplied.",
+        "Symmetry is topological; conformer/solvent effects can change observed equivalence.",
+        "Residual and coverage are diagnostics, not assignment accuracy.",
+        "Training overlap unverified; frozen model is not solvent-conditioned."
+      ],
+      "source_file": "assignment_carbon32_20261116.json",
+      "sample_limit": 32
+    }
+  ],
+  "nmr.solvent_transfer": [
+    {
+      "task": "nmr.solvent_transfer",
+      "status": "passed",
+      "metrics": {
+        "13C": {
+          "atoms": 140,
+          "molecules": 13,
+          "mae_ppm": 1.0942857142857159,
+          "unchanged_shift_mae_ppm": 1.1637142857142861,
+          "rmse_ppm": 1.9093510490665238
+        },
+        "1H": {
+          "atoms": 156,
+          "molecules": 19,
+          "mae_ppm": 0.13762820512820512,
+          "unchanged_shift_mae_ppm": 0.13538461538461527,
+          "rmse_ppm": 0.3761793421174233
+        }
+      },
+      "counts": {
+        "distinct_molecules": 32,
+        "paired_atoms": 296,
+        "skipped_pairs": 3
+      },
+      "seed": 42,
+      "model_kind": "retrieval_baseline_not_neural_model",
+      "purpose": "leave_one_connectivity_out_reference_baseline",
+      "limitations": [
+        "Existing neural solvent model is not installed; this is a reference-retrieval baseline.",
+        "No parameter fitting or test-label calibration. Query connectivity and stereoisomers excluded.",
+        "Temperature, concentration and original experimental referencing are not independently harmonized.",
+        "Low-similarity references can be inaccurate; a successful run does not establish useful accuracy."
+      ],
+      "source_file": "solvent_transfer_reference32_20261116.json",
+      "sample_limit": 32
+    }
+  ],
   "nmr.formula": [
     {
       "task": "nmr.formula",

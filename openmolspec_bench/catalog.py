@@ -21,8 +21,8 @@ for nucleus in ("1H", "13C", "19F", "31P", "11B", "29Si"):
     TASKS.append(Task(
         f"nmr.forward.{nucleus}", f"结构 → {nucleus} 峰列表", "forward", (nucleus,),
         "experimental", ("nmrnet_predictions" if nucleus in ("1H", "13C") else
-                         "nmrnet_hetero_predictions" if nucleus in ("19F", "31P") else "unavailable"),
-        (("mae_ppm", "rmse_ppm") if nucleus in ("19F", "31P") else
+                         "nmrnet_hetero_predictions" if nucleus in ("19F", "31P") else "nmrnet_bsi_diagnostic"),
+        (("mae_ppm", "rmse_ppm") if nucleus in ("19F", "31P", "11B", "29Si") else
          ("matched_peak_mae_ppm", "matched_peak_rmse_ppm", "peak_count_mae", "matched_fraction")),
         "对已有 NMRNet/NMRNet++ 推理文件评分；无逐原子指认时使用最小代价峰匹配。"
         if nucleus in ("1H", "13C") else
@@ -52,10 +52,10 @@ for id_, title, modalities, backend, metrics, note in (
      "已有 Vib2Mol checkpoint 直接编码本次选中样本；提供 IR+Raman，不提供 H/C。"),
     ("vibrational.generation", "IR / Raman → SMILES", ("IR", "Raman"), "vib2mol_generation", ("exact_rate", "valid_rate"),
      "直接运行已有 Vib2Mol beam 解码，不使用缓存或近邻回放；原始 beam top-1，不进行分子式重排。"),
-    ("nmr.assignment", "峰 → 原子指认", ("1H", "13C", "19F", "31P", "11B", "29Si"), "unavailable", ("assignment_accuracy",),
-     "候选为已有逐原子 NMRNet 加匹配，或 TransPeakNet H/C HSQC；需核验原子编号、等价位点和实验指认参考。"),
-    ("nmr.solvent_transfer", "跨溶剂化学位移迁移", ("1H", "13C", "19F", "31P", "11B", "29Si"), "unavailable", ("mae_ppm",),
-     "候选为带溶剂条件的 NMRNet++/TransPeakNet；需取得对应权重及同一分子的跨溶剂配对记录后验证。"),
+    ("nmr.assignment", "H/C 峰 → 原子指认", ("1H", "13C"), "nmrnet_atom_assignment", ("matched_peak_fraction_macro", "matched_residual_mae_ppm", "assignment_accuracy"),
+     "直接运行冻结 NMRNet H/C 权重，加对称位点合并与带容差的全局匹配。原子编号随输出保存；缺实验指认参考时准确率为 null。"),
+    ("nmr.solvent_transfer", "H/C 跨溶剂位移 · 参考检索基线", ("1H", "13C"), "nmr_solvent_reference", ("mae_ppm", "unchanged_shift_mae_ppm"),
+     "无训练的实测参考检索迁移，排除查询分子及同连接关系的立体异构体；已跑 32 分子。不是神经网络模型，专用权重仍待接入。"),
     ("nmr.formula", "谱图 → 分子式", ("1H", "13C"), "unavailable", ("formula_exact_rate",),
      "现有生成器使用给定分子式；不将其计为分子式预测器。"),
     ("spectroscopy.qa", "谱学问答 / 推理", ("NMR", "IR", "Raman"), "unavailable", ("answer_accuracy",),

@@ -37,7 +37,7 @@ B、Si 各完成 32 个不同分子，复用保存的 scaler，检查完整加�
 
 报告逐原子 MAE/RMSE，单位 ppm；这是诊断值，不是峰匹配分数或已验证的独立测试成绩。
 
-适配器：`unavailable`。数据域：`experimental`。指标字段：`matched_peak_mae_ppm`、`matched_peak_rmse_ppm`、`peak_count_mae`、`matched_fraction`。
+适配器：`nmrnet_bsi_diagnostic`。数据域：`experimental`。指标字段：`mae_ppm`、`rmse_ppm`。
 
 ## 运行推理或评分
 
@@ -46,7 +46,7 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.forward.11B --limit 8 --output results/nmr-forward-11B.json
 ```
 
-上方正式接口会跳过未验证评分。复现 B/Si 冻结诊断时，使用全新的输出目录：
+上方接口运行诊断推理，不将结果视为已验证的正式精度。直接复现 B/Si 时使用全新的输出目录：
 
 ```bash
 python scripts/run_frozen_bsi_diagnostic.py --models-root /path/to/models --output /path/to/new-bsi-run --limit 32

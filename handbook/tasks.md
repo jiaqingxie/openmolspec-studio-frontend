@@ -10,8 +10,8 @@
 | `nmr.forward.13C` | 结构 → 13C 峰列表 | 13C | experimental | nmrnet_predictions | matched_peak_mae_ppm, matched_peak_rmse_ppm, peak_count_mae, matched_fraction |
 | `nmr.forward.19F` | 结构 → 19F 峰列表 | 19F | experimental | nmrnet_hetero_predictions | mae_ppm, rmse_ppm |
 | `nmr.forward.31P` | 结构 → 31P 峰列表 | 31P | experimental | nmrnet_hetero_predictions | mae_ppm, rmse_ppm |
-| `nmr.forward.11B` | 结构 → 11B 峰列表 | 11B | experimental | 待接入 | matched_peak_mae_ppm, matched_peak_rmse_ppm, peak_count_mae, matched_fraction |
-| `nmr.forward.29Si` | 结构 → 29Si 峰列表 | 29Si | experimental | 待接入 | matched_peak_mae_ppm, matched_peak_rmse_ppm, peak_count_mae, matched_fraction |
+| `nmr.forward.11B` | 结构 → 11B 峰列表 | 11B | experimental | nmrnet_bsi_diagnostic | mae_ppm, rmse_ppm |
+| `nmr.forward.29Si` | 结构 → 29Si 峰列表 | 29Si | experimental | nmrnet_bsi_diagnostic | mae_ppm, rmse_ppm |
 | `nmr.retrieval.h.s2m` | 谱图 → 结构检索 · H | 1H | experimental | spec2struct_alignment | recall_at_1, recall_at_5, recall_at_10, mrr |
 | `nmr.retrieval.h.m2s` | 结构 → 谱图检索 · H | 1H | experimental | spec2struct_alignment | recall_at_1, recall_at_5, recall_at_10, mrr |
 | `nmr.generation.h` | 谱图 → SMILES · H | 1H | experimental | spec2struct_generation | valid_rate, exact_rate, formula_match_rate |
@@ -28,8 +28,8 @@
 | `vibrational.forward` | 构象 → IR / Raman | IR, Raman | computed | studio_vibrational_forward | ir_cosine_similarity, raman_cosine_similarity, ir_mae, raman_mae |
 | `vibrational.retrieval` | IR / Raman → 结构检索 | IR, Raman | computed | vib2mol_retrieval | recall_at_1, recall_at_5, recall_at_10, mrr |
 | `vibrational.generation` | IR / Raman → SMILES | IR, Raman | computed | vib2mol_generation | exact_rate, valid_rate |
-| `nmr.assignment` | 峰 → 原子指认 | 1H, 13C, 19F, 31P, 11B, 29Si | experimental | 待接入 | assignment_accuracy |
-| `nmr.solvent_transfer` | 跨溶剂化学位移迁移 | 1H, 13C, 19F, 31P, 11B, 29Si | experimental | 待接入 | mae_ppm |
+| `nmr.assignment` | H/C 峰 → 原子指认 | 1H, 13C | experimental | nmrnet_atom_assignment | matched_peak_fraction_macro, matched_residual_mae_ppm, assignment_accuracy |
+| `nmr.solvent_transfer` | H/C 跨溶剂位移 · 参考检索基线 | 1H, 13C | experimental | nmr_solvent_reference | mae_ppm, unchanged_shift_mae_ppm |
 | `nmr.formula` | 谱图 → 分子式 | 1H, 13C | experimental | 待接入 | formula_exact_rate |
 | `spectroscopy.qa` | 谱学问答 / 推理 | NMR, IR, Raman | experimental | 待接入 | answer_accuracy |
 | `spectroscopy.reranking` | 谱图 + 候选结构 → 重排 | IR, Raman | computed | vib2mol_reranking | top_1_hit_rate, mrr |
@@ -69,9 +69,9 @@
 
 - **vibrational.generation**：直接运行已有 Vib2Mol beam 解码，不使用缓存或近邻回放；原始 beam top-1，不进行分子式重排。
 
-- **nmr.assignment**：候选为已有逐原子 NMRNet 加匹配，或 TransPeakNet H/C HSQC；需核验原子编号、等价位点和实验指认参考。
+- **nmr.assignment**：直接运行冻结 NMRNet H/C 权重，加对称位点合并与带容差的全局匹配。原子编号随输出保存；缺实验指认参考时准确率为 null。
 
-- **nmr.solvent_transfer**：候选为带溶剂条件的 NMRNet++/TransPeakNet；需取得对应权重及同一分子的跨溶剂配对记录后验证。
+- **nmr.solvent_transfer**：无训练的实测参考检索迁移，排除查询分子及同连接关系的立体异构体；已跑 32 分子。不是神经网络模型，专用权重仍待接入。
 
 - **nmr.formula**：用户已明确暂不推进；历史结果仅作归档，不再运行。
 

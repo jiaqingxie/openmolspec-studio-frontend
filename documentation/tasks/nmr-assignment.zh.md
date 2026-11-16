@@ -1,10 +1,10 @@
-# 峰 → 原子指认
+# H/C 峰 → 原子指认
 
-给定结构，将谱峰指认到对应原子；需保留原子编号及对称等价关系。
+给定结构和实测 H/C 峰，预测逐原子位移并输出候选指认。
 
 ## 模型与协议
 
-候选方案是已有 NMRNet 逐原子位移加匹配，或 TransPeakNet 发布的 H/C HSQC 权重及匹配代码。
+直接加载液相 NMRNet H/C fold-0 权重，固定种子生成构象；完整恢复权重，保存 RDKit AddHs(input SMILES) 的 0 起始原子编号。按拓扑对称性合并位点，再做带未匹配项的最小代价匹配。H/C 默认容差分别为 0.5/5 ppm。
 
 ## 输入与示例
 
@@ -14,19 +14,19 @@
 {
   "smiles": "CCO",
   "nucleus": "13C",
-  "observed_peaks_ppm": [
+  "peaks_ppm": [
     18.2,
     58.3
   ],
-  "atom_index_basis": "RDKit molecule reconstructed from the exact input SMILES"
+  "tolerance_ppm": 5.0
 }
 ```
 
 ## 输出与指标
 
-需用核实过的实验指认参考计算准确率。仅有未指认峰列表，不能得出原子指认准确率。
+32 个碳谱分子已完成，匹配 488 个峰；另有真实在线氢谱请求。报告覆盖率、残差、原子编号及歧义候选；缺少独立实验指认答案时 assignment_accuracy 为 null。
 
-适配器：`unavailable`。数据域：`experimental`。指标字段：`assignment_accuracy`。
+适配器：`nmrnet_atom_assignment`。数据域：`experimental`。指标字段：`matched_peak_fraction_macro`、`matched_residual_mae_ppm`、`assignment_accuracy`。
 
 ## 运行推理或评分
 
@@ -37,15 +37,37 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 ## 解释与限制
 
-模型方向已找到，兼容权重和原子参考尚未验证接入；不宣称已完成六核指认。
+匹配残差不等于指认准确率；拓扑对称不保证磁等价。模型不输入溶剂，未做构象系综平均，目前仅覆盖 H/C。
 
 ## 已记录结果
 
 ```json
 [
   {
-    "status": "not_evaluated",
-    "reason": "候选为已有逐原子 NMRNet 加匹配，或 TransPeakNet H/C HSQC；需核验原子编号、等价位点和实验指认参考。"
+    "task": "nmr.assignment",
+    "status": "passed",
+    "metrics": {
+      "molecules": 32,
+      "matched_peaks": 488,
+      "matched_peak_fraction_macro": 0.9392376720501721,
+      "matched_residual_mae_ppm": 0.8991307922920895,
+      "assignment_accuracy": null
+    },
+    "selection": {
+      "read": 32,
+      "missing_modality": 0,
+      "duplicate_structure": 0,
+      "exceeds_model_capacity": 0
+    },
+    "purpose": "real_peak_assignment_execution_not_atom_accuracy_benchmark",
+    "limitations": [
+      "No experimental atom assignment ground truth supplied.",
+      "Symmetry is topological; conformer/solvent effects can change observed equivalence.",
+      "Residual and coverage are diagnostics, not assignment accuracy.",
+      "Training overlap unverified; frozen model is not solvent-conditioned."
+    ],
+    "source_file": "assignment_carbon32_20261116.json",
+    "sample_limit": 32
   }
 ]
 ```
@@ -56,4 +78,4 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 ## 来源
 
-[原始实现与发布](https://github.com/siriusxiao62/2dNMR)
+[原始实现与发布](https://github.com/Colin-Jay/NMRNet)

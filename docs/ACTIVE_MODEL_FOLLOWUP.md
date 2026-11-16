@@ -3,15 +3,12 @@
 The user deferred SpectraLLM, formula prediction and spectroscopy QA. These three
 catalog entries are disabled, excluded from `--tasks all`, and skipped even when
 explicitly selected. Their old diagnostic results are retained as history.
-There are 31 active definitions: 27 have existing adapters (including the gated
-F/P diagnostics), and four still lack a validated primary adapter: B, Si,
-atom assignment and solvent transfer. No training or fitted calibration is allowed.
+There are 31 active definitions, all with execution adapters. F/P formal scores remain gated; B/Si are diagnostic-only; solvent transfer is an experimental-reference retrieval baseline. No training or fitted calibration is allowed. The current delivery evidence superseding the initial audit below is in [REMAINING_TASKS_DELIVERY.md](REMAINING_TASKS_DELIVERY.md).
 
 ## Website and documentation
 
 The Streamlit frontend and bilingual Read the Docs sources/configuration exist.
-Local navigation checks and 68 notebook demonstrations passed. The strict MkDocs
-build and public hosting are not verified. A fresh DNS check on 2026-11-16 failed
+The new shared builder generated and validated 150 HTML pages, including 68 notebook previews. Read the Docs and CI now use this tested custom HTML build; public hosting is not verified. A fresh DNS check on 2026-11-16 failed
 for GitHub, Read the Docs and the configured proxy. No public URL is claimed.
 
 ## Conformer → IR/Raman provenance
@@ -64,9 +61,7 @@ error alone is not assignment accuracy.
 [TransPeakNet](https://github.com/siriusxiao62/2dNMR) provides pretrained checkpoint
 files, H/C matching code, an evaluation notebook and an expert-annotated HSQC
 test set. It is a concrete H/C/2D candidate, not evidence of six-nucleus coverage.
-Local NMRNet H/C models are another candidate for 1D assignment. Neither route
-has yet been validated against matched, independently verified atom assignments
-in this workspace. TransPeakNet code/weights were not found in the local model
+Local frozen NMRNet H/C models now power the implemented 1D assignment interface. A 32-molecule carbon run and real H/C online requests completed. Independent experimental atom-assignment accuracy is still unverified. TransPeakNet code/weights were not found in the local model
 directory; download is blocked by network access.
 
 ## Cross-solvent shifts
@@ -87,3 +82,5 @@ For an atom-mapped paired benchmark, a possible protocol to evaluate is
 This is a proposed fixed inference protocol, not a reported result or a fitted
 correction. Model-specific geometry requirements and paired data must be met
 before enabling it.
+
+The cross-solvent reference baseline is now implemented and evaluated on 32 distinct molecules; it does not replace the missing neural checkpoints. See the delivery document for the exact method, errors, unchanged-shift comparison and reference exclusion rules.
