@@ -7,4 +7,5 @@ build:
     - python -m pip install -r requirements-docs.txt
     - python scripts/render_task_catalog.py --check
     - python scripts/build_bilingual_docs.py --check
+    - python scripts/build_sdk_notebooks.py --check
     - python scripts/build_readthedocs.py --output "$READTHEDOCS_OUTPUT/html" --strict

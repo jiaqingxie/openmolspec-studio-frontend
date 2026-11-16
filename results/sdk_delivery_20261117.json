@@ -1,0 +1,83 @@
+{
+  "sdk_version": "1.1.0a1",
+  "training_performed": false,
+  "frozen_inference_paths": [
+    "nmrnet_13C",
+    "nmrnet_1H",
+    "nmr_generation",
+    "nmr_retrieval",
+    "gap",
+    "vib2mol",
+    "vib2mol_retrieval",
+    "vib2mol_reranking",
+    "glacier",
+    "iceberg"
+  ],
+  "benchmark_entry_executed": true,
+  "scope": "functional SDK validation; not independent scientific benchmark",
+  "dataset_cards": 7,
+  "active_task_definitions": 31,
+  "executed_notebooks": 74,
+  "documentation_build": {
+    "completed": true,
+    "content_pages": 174,
+    "html_pages": 178,
+    "notebook_previews": 74,
+    "languages": [
+      "en",
+      "zh"
+    ],
+    "internal_links_verified": true,
+    "notebook_source_and_evaluation_hashes_verified": true,
+    "notebook_execution_during_build": false,
+    "renderer": "Sphinx 8.2.3",
+    "theme": "sphinx_rtd_theme 3.1.0",
+    "search_indexes": [
+      "searchindex.js",
+      "zh/searchindex.js"
+    ],
+    "remote_publication_verified": false
+  },
+  "local_browser_check": {
+    "sidebar_header_color": "rgb(41, 128, 185)",
+    "sdk_guide_visible": true,
+    "training_history_audit_visible": true,
+    "gallery_task_figures": 31,
+    "experimental_data_separated": true,
+    "translated_heading": "H/C 峰 → 原子指认",
+    "search_en": {
+      "query": "assignment",
+      "results": 4,
+      "assignment_found": true
+    },
+    "search_zh/": {
+      "query": "原子",
+      "results": 4,
+      "assignment_found": true
+    },
+    "notebook_output_cells": 4,
+    "notebook_result_figure": true,
+    "notebook_download_matches": true,
+    "mobile_menu_works": true,
+    "javascript_errors": []
+  },
+  "wheel_sha256": "79e4c42210da859c5111fa70844d117c2be5bedf0685932f104d72d538623b1e",
+  "reports": {
+    "sdk_real_inference_20261117.json": "7b9322727edf4b8aa92d4bed0a992b96516573bb8c74e5a836dc98d690a962c0",
+    "sdk_ms_inference_20261117.json": "2eb49ec896a9a04338bee69ca6e2e5b975d84bce138cbf886ef54d48246af1af",
+    "sdk_benchmark_20261117.json": "39fa7b1365beb818ea0a4cd29e826eaa4cee9f53de899a5d48409ef29bdd5ada",
+    "sdk_training_preflight_20261117.json": "7323649d853dc68ea69681dea6d1ceede8a600e422d3b08323732c99e57084fd",
+    "sdk_nmr_input_audit_20261117.json": "881f68f8d8bcda31a96e1f60860cc41b8672a27dc947faf97aba0caf72d4c6bb",
+    "nmr_checkpoint_overlap_20261117.json": "a5fbc8b4be69f554991d8bbf544f30ef5ee08f806c2dde32fca8e06bf7b2ce0f",
+    "sdk_data_integrity_guard_20261117.json": "46f5ce120224435b53e4a2e6eb11d8c37facd08dd36e8e01ee2c43ce39fa2596",
+    "sdk_clean_install_20261117.json": "af74a22d6728c570d2136de8fabe7c806d8fc2d36c1b1dad5ca7ad5470903421",
+    "doc_notebook_execution.json": "6339b03b27527a1b0330dfa1b72974bc7fbbd12f55e3ebc527291634176f6582"
+  },
+  "remaining": [
+    "confirm versioned public dataset URLs and redistribution scope",
+    "obtain explicit authorization for minimal training/save/reload check",
+    "resolve final NMR generator training-file history before independent benchmarks",
+    "run adequately sized independent scientific evaluations",
+    "public package-registry release not performed"
+  ]
+}

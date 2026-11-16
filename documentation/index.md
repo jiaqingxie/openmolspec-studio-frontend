@@ -2,6 +2,7 @@
 
 OpenMolSpec is developing a dataset and deep learning platform for chemical spectroscopy. Its data include curated OpenDataLab experimental spectra, calculated spectra and external benchmarks. This release documents the current tasks, real inputs and outputs, dataset provenance and model evidence. Start with a result you can inspect and reproduce.
 
+- [Python SDK: datasets and models](api.md)
 - [Quick start](quickstart.md)
 - [Photo Gallery: real results](gallery.md)
 - [Tasks by spectroscopy family](tasks/index.md)

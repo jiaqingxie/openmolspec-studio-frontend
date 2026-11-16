@@ -2,6 +2,7 @@
 
 OpenMolSpec 正在建设化学谱学数据集与深度学习平台，覆盖 OpenDataLab 整理的实验谱、计算谱及外部基准。本版本展示当前任务、真实输入输出、数据来源与模型证据。先看一份可检查、可复现的实际结果，再选择适合的问题。
 
+- [Python SDK：数据与模型](api.md)
 - [快速开始](quickstart.md)
 - [Photo Gallery：真实结果图册](gallery.md)
 - [按谱型浏览任务](tasks/index.md)

@@ -2,6 +2,8 @@
 
 Generate candidate molecular structures from experimental H/C NMR with the existing generation checkpoint.
 
+**Evaluation limitation:** molecular overlap with checkpoint-recorded training data is confirmed for several NMR views. The final generator also has a training-file fingerprint discrepancy. These runs do not establish independent generalization.  [Training-history audit / 训练历史审计](../training-overlap.md)
+
 ## Current evidence
 
 Strong dataset dependence: zero exact matches on the 32-example patent and NMRGym checks. Prioritize a clean external test and parsing/token coverage audit; then consider domain fine-tuning.

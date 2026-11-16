@@ -64,3 +64,5 @@ The [official NMRNet++ archive](https://zenodo.org/records/18232165) matches the
 **Not yet a fine-tuning conclusion:** F/P need compatible solution/reference definitions first; assignment needs experimental ground truth; MS and conformer→IR/Raman need larger independent evaluations. MAGMa is an algorithm. Full-input gap has a useful current baseline. SpectraLLM, formula prediction and QA remain deferred.
 
 [Download B/Si audit](assets/reports/bsi_model_review_20261117.json) · [Official archive inventory](assets/reports/nmrnetpp_release_inventory_20261117.json)
+
+**Evaluation limitation:** molecular overlap with checkpoint-recorded training data is confirmed for several NMR views. The final generator also has a training-file fingerprint discrepancy. These runs do not establish independent generalization.  [Training-history audit / 训练历史审计](training-overlap.md)

@@ -1,0 +1,40 @@
+name: Python SDK
+on:
+  push:
+    branches: [main, release/openmolspec-v1]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.10', '3.13']
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install build
+      - run: python -m build --wheel
+      - run: python -m pip install --no-deps dist/*.whl
+      - name: Import installed wheel outside checkout without model dependencies
+        working-directory: /tmp
+        run: |
+          python - <<'PY'
+          import sys
+          from openmolspec.dataset import list_datasets
+          from openmolspec.model import NMRNet, NMRTransformer
+          from openmolspec.task import list_tasks
+          assert len(list_datasets()) == 7
+          assert len(list_tasks()) == 31
+          assert all(name not in sys.modules for name in ('torch', 'numpy', 'rdkit', 'pandas'))
+          PY
+      - run: python -m pip install numpy scipy rdkit
+      - run: python -m unittest discover -s tests -p test_public_sdk.py -v
+      - run: python -m unittest discover -s tests -p test_training_integrity.py -v
+      - uses: actions/upload-artifact@v4
+        with:
+          name: openmolspec-wheel-${{ matrix.python }}
+          path: dist/*.whl

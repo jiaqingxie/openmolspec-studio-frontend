@@ -80,8 +80,8 @@ def stage_sources(target, sources, locale):
         # Both locale trees use the same page names; only the output root differs.
         content = re.sub(r"(?<=\.)zh\.(?=(?:md|ipynb)(?:[)#?]))", "", content)
         if relative.as_posix() == "index.md":
-            content = add_toctree(content, ["quickstart", "gallery", "tasks/index", "datasets", "notebooks/index",
-                                             "model-audit", "protocols", "publication"])
+            content = add_toctree(content, ["quickstart", "api", "gallery", "tasks/index", "datasets", "notebooks/index",
+                                             "model-audit", "training-overlap", "protocols", "publication"])
         elif relative.as_posix() == 'tasks/index.md':
             content = add_toctree(content, [key for key,_,_ in GROUPS])
         elif relative.parent.as_posix()=='tasks' and relative.stem in [g[0] for g in GROUPS]:

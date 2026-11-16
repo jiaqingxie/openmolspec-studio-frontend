@@ -5,6 +5,7 @@ from pathlib import Path
 
 from documentation_content import GROUPS, group, io_contract, results_table, quickstart, datasets_page, model_audit_page, assessment
 from documentation_evidence import compact, load_evidence
+from documentation_overlap import overlap_notice, overlap_page
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -52,18 +53,22 @@ def build_pages(tasks,profile,profile_zh):
     for en in (True,False):
         suffix='' if en else '.zh';language='en' if en else 'zh'
         home='# OpenMolSpec\n\n'+('OpenMolSpec is developing a dataset and deep learning platform for chemical spectroscopy. Its data include curated OpenDataLab experimental spectra, calculated spectra and external benchmarks. This release documents the current tasks, real inputs and outputs, dataset provenance and model evidence. Start with a result you can inspect and reproduce.\n\n' if en else 'OpenMolSpec 正在建设化学谱学数据集与深度学习平台，覆盖 OpenDataLab 整理的实验谱、计算谱及外部基准。本版本展示当前任务、真实输入输出、数据来源与模型证据。先看一份可检查、可复现的实际结果，再选择适合的问题。\n\n')
-        links=[('quickstart.md','Quick start','快速开始'),('gallery.md','Photo Gallery: real results','Photo Gallery：真实结果图册'),('tasks/index.md','Tasks by spectroscopy family','按谱型浏览任务'),('datasets.md','Datasets and distributions','数据集与分布'),('notebooks/index.md','Executed notebooks','已执行 notebook'),('model-audit.md','Model suitability and fine-tuning candidates','模型适用性与潜在微调任务'),('protocols.md','Evaluation protocols','评测协议'),('publication.md','Publication status','发布状态')]
+        links=[('api.md','Python SDK: datasets and models','Python SDK：数据与模型'),('quickstart.md','Quick start','快速开始'),('gallery.md','Photo Gallery: real results','Photo Gallery：真实结果图册'),('tasks/index.md','Tasks by spectroscopy family','按谱型浏览任务'),('datasets.md','Datasets and distributions','数据集与分布'),('notebooks/index.md','Executed notebooks','已执行 notebook'),('model-audit.md','Model suitability and fine-tuning candidates','模型适用性与潜在微调任务'),('protocols.md','Evaluation protocols','评测协议'),('publication.md','Publication status','发布状态')]
         home+='\n'.join(f'- [{a if en else z}]({url})' for url,a,z in links)+'\n\n'
         home+='[![Real IR and Raman prediction](assets/gallery/vibrational-forward.png)](tasks/vibrational-forward.md)\n\n'
         home+=('31 active task definitions. Figures use recorded predictions and references; sample size, source and limitations remain visible. SpectraLLM, formula prediction and QA are deferred.\n' if en else '31 个启用任务定义。所有结果图来自已记录的预测和参考，明确保留样本量、来源与限制。SpectraLLM、分子式预测和 QA 暂不推进。\n')
         files[f'index{suffix}.md']=home
-        files[f'quickstart{suffix}.md']=quickstart(en)
+        files[f'quickstart{suffix}.md']=quickstart(en).replace('\n\n', '\n\n'+('For the new dataset/model classes and training preflight, start with the [Python SDK guide](api.md).\n\n' if en else '新的数据加载、模型类和训练准备入口见 [Python SDK 指南](api.md)。\n\n'), 1)
         files[f'datasets{suffix}.md']=datasets_page(en)
+        files[f'datasets{suffix}.md']+='\n'+overlap_notice(en)
         files[f'model-audit{suffix}.md']=model_audit_page(tasks,en)
+        files[f'model-audit{suffix}.md']+='\n'+overlap_notice(en)
+        files[f'training-overlap{suffix}.md']=overlap_page(en)
         files[f'notebooks/datasets-overview{suffix}.ipynb']=json.dumps(dataset_notebook(en),ensure_ascii=False,indent=2)+'\n'
         task_index='# '+('Tasks by spectroscopy family' if en else '按谱型浏览任务')+'\n\n'
         task_index+=('Choose the kind of evidence you have: NMR peaks, MS/MS peaks, a molecular geometry, or several spectral modalities together. Each task page explains the question, input fields, output fields and a real recorded example.\n\n' if en else '先按手头的信息选择：NMR 峰、MS/MS 峰、分子构象，或多种谱联合。每个任务页面说明解决什么问题、输入字段、输出字段，并展示真实运行案例。\n\n')
         notebook_index='# '+('Executed notebooks' if en else '已执行 notebook')+'\n\n'+('Each active task notebook shows actual input/output data, a run table, executable analysis and a result figure. These notebooks analyze saved inference; they are not placeholders for hypothetical results.\n\n' if en else '每个启用任务的 notebook 都有真实输入输出、运行指标、可执行分析和结果图。它们分析已保存的推理，不是列出“可能得到什么”的占位示例。\n\n')
+        notebook_index+='[SDK: actual NMR inference](sdk-inference.ipynb) · [SDK: training preflight](sdk-training-preflight.ipynb)\n\n'
         notebook_index+=f'[Dataset distributions / 数据分布](datasets-overview.ipynb)\n\n'
         gallery='# Photo Gallery — '+('real results' if en else '真实结果')+'\n\n'
         gallery+=('Every image is generated from saved model outputs or audited dataset counts. Click a figure to open the task, its real example and interpretation. Blue/orange curves are identified in each panel; failed predictions and weak baselines are retained. Figures are generated with Matplotlib and RDKit.\n\n' if en else '每张图来自保存的模型输出或核验后的数据统计。点击图片进入对应任务、真实样本与解释。各图注明曲线含义，保留错误预测和较弱基线。图由 Matplotlib 与 RDKit 生成。\n\n')
@@ -95,6 +100,8 @@ def build_pages(tasks,profile,profile_zh):
             title,purpose,method,metrics,limits,source=profile(task)
             if not en:purpose,method,metrics,limits=profile_zh(task);title=task.title
             page=f'# {title}\n\n{purpose}\n\n'
+            if task.id.startswith(('nmr.retrieval.', 'nmr.generation.')):
+                page+=overlap_notice(en, '../')
             if not task.enabled:
                 page+=('Deferred at the user’s request. No new model result is claimed.\n' if en else '按用户要求暂不推进，本轮不展示新的模型结果。\n')
             else:
@@ -119,5 +126,7 @@ def build_pages(tasks,profile,profile_zh):
             files[f'notebooks/{slug}{suffix}.ipynb']=json.dumps(notebook(task,language),ensure_ascii=False,indent=2)+'\n'
         # Retain protocol/publication details; these pages are maintained below.
         files[f'protocols{suffix}.md']=('# Evaluation protocols\n\n' if en else '# 评测协议\n\n')+('All published figures use actual recorded results. Each evidence JSON carries source report hashes. Execution success is separate from scientific validity. Small candidate-pool results, prepared-data split labels and matched-peak errors must not be described as independent generalization or atom-assignment accuracy.\n\nComplete IR/Raman/H/C input and missing-channel ablations are reported separately. Gap units are converted once from Hartree to eV. MS scores compare with all observed peaks under explicit acquisition conditions. No training or fitted calibration is performed.\n\n' if en else '所有公开结果图来自实际记录。证据 JSON 保留来源报告哈希。执行成功与科学有效性分开判断；小候选池、准备数据的 split 标签、峰匹配误差，不能宣传成独立泛化或实验原子指认准确率。\n\n完整 IR/Raman/H/C 输入与缺通道消融分别报告。Gap 从 Hartree 到 eV 仅转换一次。MS 在明确采集条件下与全部实测峰比较。本轮没有训练或拟合校准。\n\n')+'[Dataset definitions](datasets.md) · [Model-by-model audit](model-audit.md)\n'
-        files[f'publication{suffix}.md']=('# Publication status\n\n' if en else '# 发布状态\n\n')+('[English](https://openmolspec-10.readthedocs.io/en/latest/) · [简体中文](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)\n\n')+('Read the Docs builds `release/openmolspec-v1` with the root `.readthedocs.yaml`, Sphinx and the classic RTD theme. The site includes categorized tasks, a real-results gallery, dataset distributions, model review and 70 executed notebooks (including archived-task notices and dataset notebooks). Notebook publication never executes model code.\n\n' if en else 'Read the Docs 使用根目录 `.readthedocs.yaml` 构建 `release/openmolspec-v1` 分支，采用 Sphinx 与经典 RTD 主题。站点包括分类任务、真实结果图册、数据分布、模型检查及 70 份已执行 notebook（含暂停任务说明和数据分布 notebook）。发布构建不执行模型代码。\n\n')+'```bash\npython scripts/build_bilingual_docs.py --check\npython scripts/build_readthedocs.py --output site --strict\npython scripts/publish_readthedocs.py --apply --project openmolspec-10 --wait 600\n```\n\n'+('Publish only after pushing the corresponding Git commit. The publication script verifies the exact remote commit and finished RTD build; public pages are checked separately.\n' if en else '先推送对应 Git 提交，再发布。发布脚本检查远端精确提交与完成的 RTD 构建，公开页面另行验证。\n')
+        files[f'publication{suffix}.md']=('# Publication status\n\n' if en else '# 发布状态\n\n')+('[English](https://openmolspec-10.readthedocs.io/en/latest/) · [简体中文](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)\n\n')+('Read the Docs builds `release/openmolspec-v1` with the root `.readthedocs.yaml`, Sphinx and the classic RTD theme. The site includes categorized tasks, a real-results gallery, dataset distributions, model review and 74 executed notebooks, including real SDK inference and training preflight. Notebook publication never executes model code.\n\n' if en else 'Read the Docs 使用根目录 `.readthedocs.yaml` 构建 `release/openmolspec-v1` 分支，采用 Sphinx 与经典 RTD 主题。站点包括分类任务、真实结果图册、数据分布、模型检查及 74 份已执行 notebook（含暂停任务说明和数据分布 notebook）。发布构建不执行模型代码。\n\n')+'```bash\npython scripts/build_bilingual_docs.py --check\npython scripts/build_readthedocs.py --output site --strict\npython scripts/publish_readthedocs.py --apply --project openmolspec-10 --wait 600\n```\n\n'+('Publish only after pushing the corresponding Git commit. The publication script verifies the exact remote commit and finished RTD build; public pages are checked separately.\n' if en else '先推送对应 Git 提交，再发布。发布脚本检查远端精确提交与完成的 RTD 构建，公开页面另行验证。\n')
+    for suffix,en in [('',True),('.zh',False)]:
+        files[f'protocols{suffix}.md']+='\n'+overlap_notice(en)
     return {name:(content.rstrip()+'\n' if name.endswith('.md') else content) for name,content in files.items()}

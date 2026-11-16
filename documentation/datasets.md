@@ -75,3 +75,5 @@ MassSpecGym is an external dataset. Our GLACIER/ICEBERG evaluation selected 32 d
 - [This audit: counts, histograms, schemas, file hashes and real examples](assets/dataset_audit.json)
 
 A verified public full OpenMolSpec release URL is not available here yet. The downloadable audit and task examples are available now; they do not replace full data distribution. Public redistribution must follow the original sources. Our computed release snapshot, curated patent view and external evaluation subsets overlap conceptually and must not be summed into a single "total molecules" number.
+
+**Evaluation limitation:** molecular overlap with checkpoint-recorded training data is confirmed for several NMR views. The final generator also has a training-file fingerprint discrepancy. These runs do not establish independent generalization.  [Training-history audit / 训练历史审计](training-overlap.md)

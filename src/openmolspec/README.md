@@ -2,8 +2,10 @@
 
 This is the unified Python package for turning Gaussian logs and source labels
 into OpenMolSpec records, validating them, constructing splits and assembling
-releases. Application models and training workflows live separately in
-`benchmarks/`.
+releases. The public SDK adds `dataset.py`, `model.py`, `task.py`, `benchmark.py` and
+`training.py`. Heavy model runtimes are loaded lazily through `_worker.py`;
+existing upstream implementations remain separate. See the Python SDK guide
+in `documentation/api.md` for the alpha API and its validation limits.
 
 The dependency direction is intentionally layered:
 

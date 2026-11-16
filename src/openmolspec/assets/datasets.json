@@ -1,0 +1,167 @@
+[
+  {
+    "name": "opendatalab_nmr",
+    "version": "prepared-format-2-inchi-v1",
+    "source": "OpenDataLab / WanJuan experimental patent NMR",
+    "origin": "team_curated_external_measurements",
+    "domain": "experimental",
+    "format": "nmr_jsonl",
+    "files": {
+      "train": "train.jsonl",
+      "val": "val.jsonl",
+      "test": "test.jsonl"
+    },
+    "reference_counts": {
+      "input_smiles_rows": 2682840,
+      "inchi_failures": 499,
+      "failed_source_rows": 893,
+      "examples": 2680271,
+      "train": 2174218,
+      "source_rows": 12264496,
+      "smiles_rows": 2682341,
+      "inchi_duplicate_smiles_rows": 2070,
+      "inchi_with_multiple_smiles": 2007,
+      "h_records": 2722790,
+      "c_records": 252158,
+      "h_only": 2432515,
+      "val": 250984,
+      "test": 255069,
+      "h_and_c": 238412,
+      "c_only": 9344
+    },
+    "count_scope": "existing complete-corpus verification report; not rescanned in this documentation audit",
+    "license": "Provider version and redistribution scope require release verification",
+    "source_url": "https://openmolspec-10.readthedocs.io/en/latest/datasets.html",
+    "reference_sha256": {
+      "train": "0dc886524d8729874c09b6530932025e6bec89ba8bd3272d3e222debde9a85be",
+      "val": "484c228b6ada572f52444cfae8e42371b927f411a47ef076d8e26bd957b867ec",
+      "test": "27ec1c9ade321559675dd84a880b1825e525a452d479a966a465eccddc8e79ae"
+    }
+  },
+  {
+    "name": "nmrspec_test",
+    "version": "local-audit-2026-11-17",
+    "source": "NMRSpec / NMRTrans benchmark",
+    "origin": "our_prepared_view_of_external_measurements",
+    "domain": "experimental",
+    "format": "nmr_jsonl",
+    "files": {
+      "test": "test.jsonl"
+    },
+    "reference_counts": {
+      "records": 10000,
+      "unique_canonical_isomeric_smiles": 10000
+    },
+    "reference_sha256": {
+      "test": "256ca2d733db0103e99aad5855bc66b73e3a0bd2117ce2bd3204b63eff0f67a2"
+    },
+    "count_scope": "complete scan of the documented local test view",
+    "license": "See original source terms; redistribution not established by this package",
+    "source_url": "https://openmolspec-10.readthedocs.io/en/latest/datasets.html"
+  },
+  {
+    "name": "patent_test_10k",
+    "version": "local-audit-2026-11-17",
+    "source": "OpenDataLab / WanJuan experimental patent corpus; team-curated InChI view",
+    "origin": "our_prepared_view_of_external_measurements",
+    "domain": "experimental",
+    "format": "nmr_jsonl",
+    "files": {
+      "test": "test.jsonl"
+    },
+    "reference_counts": {
+      "records": 10000,
+      "unique_canonical_isomeric_smiles": 10000
+    },
+    "reference_sha256": {
+      "test": "4f90649fce7bbc0d1aa92056baf46ff28ca15b95880f0af8c269b87057e5808a"
+    },
+    "count_scope": "complete scan of the documented local test view",
+    "license": "See original source terms; redistribution not established by this package",
+    "source_url": "https://openmolspec-10.readthedocs.io/en/latest/datasets.html"
+  },
+  {
+    "name": "nmrexp_exp_10k",
+    "version": "local-audit-2026-11-17",
+    "source": "NMRExp",
+    "origin": "our_prepared_view_of_external_measurements",
+    "domain": "experimental",
+    "format": "nmr_jsonl",
+    "files": {
+      "test": "test.jsonl"
+    },
+    "reference_counts": {
+      "records": 9183,
+      "unique_canonical_isomeric_smiles": 9183
+    },
+    "reference_sha256": {
+      "test": "e074dab3cc749e126bea8abc348a46f895dd033e5b45a21cacb28035741a2d11"
+    },
+    "count_scope": "complete scan of the documented local test view",
+    "license": "See original source terms; redistribution not established by this package",
+    "source_url": "https://openmolspec-10.readthedocs.io/en/latest/datasets.html"
+  },
+  {
+    "name": "nmrgym_test",
+    "version": "local-audit-2026-11-17",
+    "source": "NMRGym",
+    "origin": "our_prepared_view_of_external_measurements",
+    "domain": "experimental",
+    "format": "nmr_jsonl",
+    "files": {
+      "test": "test.jsonl"
+    },
+    "reference_counts": {
+      "records": 10000,
+      "unique_canonical_isomeric_smiles": 10000
+    },
+    "reference_sha256": {
+      "test": "bf8cb0cdcaf19884349e15230206c6110a29b479b1a04bec7ec0b9e5bff3ff9b"
+    },
+    "count_scope": "complete scan of the documented local test view",
+    "license": "See original source terms; redistribution not established by this package",
+    "source_url": "https://openmolspec-10.readthedocs.io/en/latest/datasets.html"
+  },
+  {
+    "name": "openspec_test",
+    "version": "local-audit-2026-11-17",
+    "source": "OpenMolSpec calculated observables; source_dataset identifies molecular-library origins, not experimental spectra",
+    "origin": "OpenMolSpec_computed_spectra",
+    "domain": "computed",
+    "format": "openspec_lmdb",
+    "files": {
+      "test": "openspec_test.lmdb"
+    },
+    "reference_counts": {
+      "records": 20390,
+      "unique_canonical_isomeric_smiles": 16728
+    },
+    "reference_sha256": {
+      "test": "736a234607992865136b23b3d091b26323936f08377362a196fe97ceb3bdb6a1"
+    },
+    "count_scope": "complete scan of the documented local test view",
+    "license": "See original source terms; redistribution not established by this package",
+    "source_url": "https://openmolspec-10.readthedocs.io/en/latest/datasets.html"
+  },
+  {
+    "name": "massspecgym_test",
+    "version": "local-audit-2026-11-17",
+    "source": "MassSpecGym",
+    "origin": "external",
+    "domain": "experimental",
+    "format": "massspecgym_csv",
+    "files": {
+      "test": "MassSpecGym_test_full.csv"
+    },
+    "reference_counts": {
+      "spectra": 17556,
+      "stored_smiles": 3170
+    },
+    "reference_sha256": {
+      "test": "1dc029f5e6ac6709aa5bc1c8986859f3f0f6403ea777740ed465e9e254420937"
+    },
+    "count_scope": "complete scan of local test CSV",
+    "license": "See original dataset terms",
+    "source_url": "https://huggingface.co/datasets/roman-bushuiev/MassSpecGym"
+  }
+]

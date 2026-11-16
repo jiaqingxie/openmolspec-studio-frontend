@@ -75,3 +75,5 @@ MassSpecGym 是外部数据。本项目 GLACIER/ICEBERG 实验选择 32 个不�
 - [This audit: counts, histograms, schemas, file hashes and real examples](assets/dataset_audit.json)
 
 这里尚无经过验证的 OpenMolSpec 完整公开数据下载地址。当前可下载审计统计和任务真实示例，但它们不等于完整数据发布。数据分发应遵循原始来源要求。计算数据版本、专利整理视图和外部评测子集有不同口径及父子关系，不能简单相加成一个“总分子数”。
+
+**评测限制：**多个 NMR 视图已确认与 checkpoint 记录的训练数据存在分子重叠，最终生成模型还存在训练文件哈希不一致。现有运行不能证明独立泛化能力。 [Training-history audit / 训练历史审计](training-overlap.md)

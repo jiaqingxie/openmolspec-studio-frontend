@@ -3,6 +3,14 @@
 The repository separates reusable library code, executable scripts, generated
 artifacts and publication documentation. The complete source layout is below.
 
+## Public SDK
+
+The alpha SDK exposes `openmolspec.dataset`, `openmolspec.model`,
+`openmolspec.training`, `openmolspec.task` and `openmolspec.benchmark`. Dataset
+cards are packaged under `src/openmolspec/assets/`. Optional author runtimes
+are called through `_runtime.py` / `_worker.py`; base data loading imports no
+model libraries. See [the SDK guide](../documentation/api.md).
+
 ## Unified data package
 
 ```text

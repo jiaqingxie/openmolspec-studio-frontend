@@ -1,0 +1,13 @@
+{
+  "base_has_no_third_party_dependencies": true,
+  "wheel_imported_outside_checkout": true,
+  "registered_datasets": 7,
+  "dataset_verification": {
+    "verified": true,
+    "sha256": {
+      "test": "256ca2d733db0103e99aad5855bc66b73e3a0bd2117ce2bd3204b63eff0f67a2"
+    },
+    "scope": "file identity, not an accuracy or license certification"
+  },
+  "original_training_integrity_module_available": true
+}

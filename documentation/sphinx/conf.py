@@ -6,7 +6,7 @@ import posixpath
 project = "OpenMolSpec"
 author = "OpenMolSpec contributors"
 copyright = "2026, OpenMolSpec contributors"
-release = "1.0"
+release = "1.1.0a1"
 extensions = ["myst_nb"]
 source_suffix = {".md": "myst-nb", ".ipynb": "myst-nb"}
 root_doc = "index"
@@ -17,7 +17,7 @@ nb_execution_mode = "off"
 nb_scroll_outputs = True
 nb_ipywidgets_js = {}
 html_theme = "sphinx_rtd_theme"
-html_title = "OpenMolSpec 1.0"
+html_title = "OpenMolSpec"
 html_static_path = ["_static"]
 html_css_files = ["openmolspec.css"]
 templates_path = ["_templates"]

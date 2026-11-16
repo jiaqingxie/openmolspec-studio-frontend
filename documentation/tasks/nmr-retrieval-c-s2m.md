@@ -2,6 +2,8 @@
 
 Rank candidate structures from NMR spectra, or rank candidate spectra from a molecular structure, with the existing dual encoder.
 
+**Evaluation limitation:** molecular overlap with checkpoint-recorded training data is confirmed for several NMR views. The final generator also has a training-file fingerprint discrepancy. These runs do not establish independent generalization.  [Training-history audit / 训练历史审计](../training-overlap.md)
+
 ## Current evidence
 
 Input/output pairing is appropriate; the 32-candidate smoke pool is small. Validate a larger independent library before judging generalization or fine-tuning.

@@ -1,0 +1,7 @@
+{
+  "training_performed": false,
+  "guard": "spec2struct_fork.train.require_data_format",
+  "input_directory": "data/g1_all",
+  "stale_manifest_rejected": true,
+  "reason": "train.jsonl differs from verification.json; verify the current data before training"
+}

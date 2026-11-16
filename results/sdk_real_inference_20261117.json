@@ -1,0 +1,1093 @@
+{
+  "training_performed": false,
+  "client_python": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "runs": {
+    "nmrnet_13C": {
+      "result": {
+        "records": [
+          {
+            "smiles": "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+            "nucleus": "13C",
+            "atom_indices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12,
+              13,
+              14,
+              15,
+              16,
+              17,
+              18,
+              19,
+              20,
+              21
+            ],
+            "prediction_ppm": [
+              111.92984008789062,
+              148.56301879882812,
+              34.59314727783203,
+              27.106813430786133,
+              30.951845169067383,
+              35.74639129638672,
+              142.5129852294922,
+              128.4691619873047,
+              128.4962158203125,
+              126.21155548095703,
+              128.5539093017578,
+              128.6055450439453,
+              139.7798614501953,
+              126.32313537597656,
+              125.47481536865234,
+              150.09881591796875,
+              34.164398193359375,
+              31.407787322998047,
+              31.511058807373047,
+              31.552867889404297,
+              125.4945297241211,
+              126.05933380126953
+            ]
+          }
+        ],
+        "unit": "ppm",
+        "provenance": {
+          "model": "NMRNet liquid C fold 0",
+          "checkpoint": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/C_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_1e-3_bs_16_0.06_200/cv_seed_42_fold_0/checkpoint_best.pt",
+          "checkpoint_sha256": "0efb06c233a6e851629f695e516d94209963fb60df39194a5dbb20bd3cb9db7b",
+          "scaler_sha256": "f66783695c0d6632f6bdc2c12631609a04c8d5618d91b915abd8c094d9b26f0f",
+          "dictionary_sha256": "94135cb9a9198f988de684cb61e2c372882a3bd59b8320effbae704c38057127",
+          "input_sha256": "8ae67c83e05a8fd0ff6da2f2ef04e8c0add79d46984f412480b21196bf01881f",
+          "geometry": [
+            {
+              "smiles": "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+              "atoms": [
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H"
+              ],
+              "coordinates_angstrom": [
+                [
+                  0.8041225075721741,
+                  1.7937613725662231,
+                  2.2180211544036865
+                ],
+                [
+                  0.34051260352134705,
+                  1.8249958753585815,
+                  0.9567203521728516
+                ],
+                [
+                  1.086578130722046,
+                  2.5316786766052246,
+                  -0.15361100435256958
+                ],
+                [
+                  1.5343395471572876,
+                  1.6163444519042969,
+                  -1.3033323287963867
+                ],
+                [
+                  2.4335110187530518,
+                  0.44208934903144836,
+                  -0.8996801376342773
+                ],
+                [
+                  3.7635183334350586,
+                  0.8813302516937256,
+                  -0.28299450874328613
+                ],
+                [
+                  4.644835472106934,
+                  -0.3016205132007599,
+                  0.03464849665760994
+                ],
+                [
+                  4.486108303070068,
+                  -0.9989308714866638,
+                  1.2400102615356445
+                ],
+                [
+                  5.2897562980651855,
+                  -2.102508068084717,
+                  1.5296450853347778
+                ],
+                [
+                  6.255288124084473,
+                  -2.521515369415283,
+                  0.6161933541297913
+                ],
+                [
+                  6.4163312911987305,
+                  -1.8390504121780396,
+                  -0.5883452296257019
+                ],
+                [
+                  5.613417625427246,
+                  -0.7350932359695435,
+                  -0.8798551559448242
+                ],
+                [
+                  -0.9578020572662354,
+                  1.1943873167037964,
+                  0.6398127675056458
+                ],
+                [
+                  -1.1992355585098267,
+                  -0.1437816023826599,
+                  0.963895320892334
+                ],
+                [
+                  -2.4218952655792236,
+                  -0.7483686804771423,
+                  0.6486448645591736
+                ],
+                [
+                  -3.4487154483795166,
+                  -0.03916747495532036,
+                  -0.001542168902233243
+                ],
+                [
+                  -4.779664993286133,
+                  -0.7358243465423584,
+                  -0.33292505145072937
+                ],
+                [
+                  -5.803478717803955,
+                  0.17852911353111267,
+                  -1.0430302619934082
+                ],
+                [
+                  -4.5177812576293945,
+                  -1.9382075071334839,
+                  -1.265462040901184
+                ],
+                [
+                  -5.441699981689453,
+                  -1.2372831106185913,
+                  0.9687029719352722
+                ],
+                [
+                  -3.193251371383667,
+                  1.3031680583953857,
+                  -0.3216460943222046
+                ],
+                [
+                  -1.9682695865631104,
+                  1.908977746963501,
+                  -0.007948437705636024
+                ],
+                [
+                  0.2537277638912201,
+                  1.3141921758651733,
+                  3.0223710536956787
+                ],
+                [
+                  1.7454184293746948,
+                  2.2632572650909424,
+                  2.4859211444854736
+                ],
+                [
+                  0.45934516191482544,
+                  3.3312506675720215,
+                  -0.566836953163147
+                ],
+                [
+                  1.9660618305206299,
+                  3.047964572906494,
+                  0.2516268491744995
+                ],
+                [
+                  0.6503645181655884,
+                  1.2148360013961792,
+                  -1.8145207166671753
+                ],
+                [
+                  2.0612595081329346,
+                  2.2279679775238037,
+                  -2.0466251373291016
+                ],
+                [
+                  2.6330225467681885,
+                  -0.15592060983181,
+                  -1.7987004518508911
+                ],
+                [
+                  1.8982526063919067,
+                  -0.22254395484924316,
+                  -0.2111053317785263
+                ],
+                [
+                  4.289933681488037,
+                  1.5582636594772339,
+                  -0.9675309062004089
+                ],
+                [
+                  3.5997376441955566,
+                  1.4511480331420898,
+                  0.63870769739151
+                ],
+                [
+                  3.7320973873138428,
+                  -0.685370922088623,
+                  1.9585494995117188
+                ],
+                [
+                  5.160706996917725,
+                  -2.6363675594329834,
+                  2.467285633087158
+                ],
+                [
+                  6.880270004272461,
+                  -3.3813388347625732,
+                  0.8416702747344971
+                ],
+                [
+                  7.16644287109375,
+                  -2.167711019515991,
+                  -1.3026821613311768
+                ],
+                [
+                  5.746852874755859,
+                  -0.21579179167747498,
+                  -1.8259427547454834
+                ],
+                [
+                  -0.430819034576416,
+                  -0.7374250292778015,
+                  1.4539421796798706
+                ],
+                [
+                  -2.5566086769104004,
+                  -1.7933154106140137,
+                  0.9194713830947876
+                ],
+                [
+                  -6.069036960601807,
+                  1.043679118156433,
+                  -0.4243439733982086
+                ],
+                [
+                  -6.733564853668213,
+                  -0.36157071590423584,
+                  -1.257351279258728
+                ],
+                [
+                  -5.418361186981201,
+                  0.5483419895172119,
+                  -2.000474452972412
+                ],
+                [
+                  -4.019528865814209,
+                  -1.6199796199798584,
+                  -2.1889190673828125
+                ],
+                [
+                  -5.455264568328857,
+                  -2.432724952697754,
+                  -1.545615315437317
+                ],
+                [
+                  -3.8837406635284424,
+                  -2.69753360748291,
+                  -0.7947568893432617
+                ],
+                [
+                  -6.41044807434082,
+                  -1.7077964544296265,
+                  0.7636148929595947
+                ],
+                [
+                  -5.613839149475098,
+                  -0.4101627767086029,
+                  1.6676570177078247
+                ],
+                [
+                  -4.827365398406982,
+                  -1.9823672771453857,
+                  1.4859861135482788
+                ],
+                [
+                  -3.9365315437316895,
+                  1.918073296546936,
+                  -0.8213576674461365
+                ],
+                [
+                  -1.8249095678329468,
+                  2.9550352096557617,
+                  -0.2669024169445038
+                ]
+              ],
+              "mmff_converged": true
+            }
+          ],
+          "training_performed": false,
+          "command": [
+            "/mnt/shared-storage-user/xiejiaqing/miniconda3/envs/azr/bin/python",
+            "/tmp/openmolspec-atoms-f5opu0um/infer_checked.py",
+            "/tmp/openmolspec-nmrnet-7uzy18lb/run/state_dict_audit.json",
+            "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/nmrnet-orig/uninmr/infer.py",
+            "--user-dir",
+            "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/nmrnet-orig/uninmr",
+            "/tmp/openmolspec-atoms-f5opu0um",
+            "--valid-subset",
+            "valid",
+            "--results-path",
+            "/tmp/openmolspec-nmrnet-7uzy18lb/run",
+            "--saved-dir",
+            "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/C_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_1e-3_bs_16_0.06_200",
+            "--num-workers",
+            "0",
+            "--batch-size",
+            "8",
+            "--task",
+            "uninmr",
+            "--loss",
+            "atom_regloss_mae",
+            "--arch",
+            "unimol_large",
+            "--dict-name",
+            "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/mol_dict.txt",
+            "--path",
+            "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/C_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_1e-3_bs_16_0.06_200/cv_seed_42_fold_0/checkpoint_best.pt",
+            "--selected-atom",
+            "C",
+            "--gaussian-kernel",
+            "--atom-descriptor",
+            "0",
+            "--split-mode",
+            "infer",
+            "--cpu",
+            "--required-batch-size-multiple",
+            "1",
+            "--no-progress-bar"
+          ],
+          "exit_code": 0,
+          "state_dict_audit": {
+            "missing_keys": [],
+            "unexpected_keys": []
+          }
+        },
+        "atom_index_basis": "zero-based RDKit AddHs(input SMILES)",
+        "training_performed": false,
+        "inference_mode": "direct_frozen_checkpoint"
+      },
+      "seconds": 53.09752945974469
+    },
+    "nmrnet_1H": {
+      "result": {
+        "records": [
+          {
+            "smiles": "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+            "nucleus": "1H",
+            "atom_indices": [
+              22,
+              23,
+              24,
+              25,
+              26,
+              27,
+              28,
+              29,
+              30,
+              31,
+              32,
+              33,
+              34,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41,
+              42,
+              43,
+              44,
+              45,
+              46,
+              47,
+              48,
+              49
+            ],
+            "prediction_ppm": [
+              4.995121002197266,
+              5.044968605041504,
+              2.508028507232666,
+              2.6048061847686768,
+              1.5450645685195923,
+              1.6339609622955322,
+              1.620923399925232,
+              1.5946625471115112,
+              2.6037347316741943,
+              2.58282208442688,
+              7.137711048126221,
+              7.262144088745117,
+              7.158233642578125,
+              7.250219821929932,
+              7.1276164054870605,
+              7.35330867767334,
+              7.339231491088867,
+              1.3322885036468506,
+              1.3148975372314453,
+              1.3306219577789307,
+              1.3223950862884521,
+              1.3211060762405396,
+              1.3351513147354126,
+              1.3216050863265991,
+              1.3287379741668701,
+              1.3393607139587402,
+              7.301580429077148,
+              7.352384090423584
+            ]
+          }
+        ],
+        "unit": "ppm",
+        "provenance": {
+          "model": "NMRNet liquid H fold 0",
+          "checkpoint": "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/H_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_5e-3_bs_16_0.06_400/cv_seed_42_fold_0/checkpoint_best.pt",
+          "checkpoint_sha256": "bb25d02a103a63c54cb4dbd0a010bf5425ffb3c15ba8209cc38bab12f0a2341f",
+          "scaler_sha256": "8a577ddc78e75d58088266a24a18569087fa6942ed368784e591d2c32e20c956",
+          "dictionary_sha256": "94135cb9a9198f988de684cb61e2c372882a3bd59b8320effbae704c38057127",
+          "input_sha256": "e48687d3f124484937b4bca02e6407ca3252643f784b6f4a78a44c28c8b62975",
+          "geometry": [
+            {
+              "smiles": "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+              "atoms": [
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "C",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H",
+                "H"
+              ],
+              "coordinates_angstrom": [
+                [
+                  0.8041225075721741,
+                  1.7937613725662231,
+                  2.2180211544036865
+                ],
+                [
+                  0.34051260352134705,
+                  1.8249958753585815,
+                  0.9567203521728516
+                ],
+                [
+                  1.086578130722046,
+                  2.5316786766052246,
+                  -0.15361100435256958
+                ],
+                [
+                  1.5343395471572876,
+                  1.6163444519042969,
+                  -1.3033323287963867
+                ],
+                [
+                  2.4335110187530518,
+                  0.44208934903144836,
+                  -0.8996801376342773
+                ],
+                [
+                  3.7635183334350586,
+                  0.8813302516937256,
+                  -0.28299450874328613
+                ],
+                [
+                  4.644835472106934,
+                  -0.3016205132007599,
+                  0.03464849665760994
+                ],
+                [
+                  4.486108303070068,
+                  -0.9989308714866638,
+                  1.2400102615356445
+                ],
+                [
+                  5.2897562980651855,
+                  -2.102508068084717,
+                  1.5296450853347778
+                ],
+                [
+                  6.255288124084473,
+                  -2.521515369415283,
+                  0.6161933541297913
+                ],
+                [
+                  6.4163312911987305,
+                  -1.8390504121780396,
+                  -0.5883452296257019
+                ],
+                [
+                  5.613417625427246,
+                  -0.7350932359695435,
+                  -0.8798551559448242
+                ],
+                [
+                  -0.9578020572662354,
+                  1.1943873167037964,
+                  0.6398127675056458
+                ],
+                [
+                  -1.1992355585098267,
+                  -0.1437816023826599,
+                  0.963895320892334
+                ],
+                [
+                  -2.4218952655792236,
+                  -0.7483686804771423,
+                  0.6486448645591736
+                ],
+                [
+                  -3.4487154483795166,
+                  -0.03916747495532036,
+                  -0.001542168902233243
+                ],
+                [
+                  -4.779664993286133,
+                  -0.7358243465423584,
+                  -0.33292505145072937
+                ],
+                [
+                  -5.803478717803955,
+                  0.17852911353111267,
+                  -1.0430302619934082
+                ],
+                [
+                  -4.5177812576293945,
+                  -1.9382075071334839,
+                  -1.265462040901184
+                ],
+                [
+                  -5.441699981689453,
+                  -1.2372831106185913,
+                  0.9687029719352722
+                ],
+                [
+                  -3.193251371383667,
+                  1.3031680583953857,
+                  -0.3216460943222046
+                ],
+                [
+                  -1.9682695865631104,
+                  1.908977746963501,
+                  -0.007948437705636024
+                ],
+                [
+                  0.2537277638912201,
+                  1.3141921758651733,
+                  3.0223710536956787
+                ],
+                [
+                  1.7454184293746948,
+                  2.2632572650909424,
+                  2.4859211444854736
+                ],
+                [
+                  0.45934516191482544,
+                  3.3312506675720215,
+                  -0.566836953163147
+                ],
+                [
+                  1.9660618305206299,
+                  3.047964572906494,
+                  0.2516268491744995
+                ],
+                [
+                  0.6503645181655884,
+                  1.2148360013961792,
+                  -1.8145207166671753
+                ],
+                [
+                  2.0612595081329346,
+                  2.2279679775238037,
+                  -2.0466251373291016
+                ],
+                [
+                  2.6330225467681885,
+                  -0.15592060983181,
+                  -1.7987004518508911
+                ],
+                [
+                  1.8982526063919067,
+                  -0.22254395484924316,
+                  -0.2111053317785263
+                ],
+                [
+                  4.289933681488037,
+                  1.5582636594772339,
+                  -0.9675309062004089
+                ],
+                [
+                  3.5997376441955566,
+                  1.4511480331420898,
+                  0.63870769739151
+                ],
+                [
+                  3.7320973873138428,
+                  -0.685370922088623,
+                  1.9585494995117188
+                ],
+                [
+                  5.160706996917725,
+                  -2.6363675594329834,
+                  2.467285633087158
+                ],
+                [
+                  6.880270004272461,
+                  -3.3813388347625732,
+                  0.8416702747344971
+                ],
+                [
+                  7.16644287109375,
+                  -2.167711019515991,
+                  -1.3026821613311768
+                ],
+                [
+                  5.746852874755859,
+                  -0.21579179167747498,
+                  -1.8259427547454834
+                ],
+                [
+                  -0.430819034576416,
+                  -0.7374250292778015,
+                  1.4539421796798706
+                ],
+                [
+                  -2.5566086769104004,
+                  -1.7933154106140137,
+                  0.9194713830947876
+                ],
+                [
+                  -6.069036960601807,
+                  1.043679118156433,
+                  -0.4243439733982086
+                ],
+                [
+                  -6.733564853668213,
+                  -0.36157071590423584,
+                  -1.257351279258728
+                ],
+                [
+                  -5.418361186981201,
+                  0.5483419895172119,
+                  -2.000474452972412
+                ],
+                [
+                  -4.019528865814209,
+                  -1.6199796199798584,
+                  -2.1889190673828125
+                ],
+                [
+                  -5.455264568328857,
+                  -2.432724952697754,
+                  -1.545615315437317
+                ],
+                [
+                  -3.8837406635284424,
+                  -2.69753360748291,
+                  -0.7947568893432617
+                ],
+                [
+                  -6.41044807434082,
+                  -1.7077964544296265,
+                  0.7636148929595947
+                ],
+                [
+                  -5.613839149475098,
+                  -0.4101627767086029,
+                  1.6676570177078247
+                ],
+                [
+                  -4.827365398406982,
+                  -1.9823672771453857,
+                  1.4859861135482788
+                ],
+                [
+                  -3.9365315437316895,
+                  1.918073296546936,
+                  -0.8213576674461365
+                ],
+                [
+                  -1.8249095678329468,
+                  2.9550352096557617,
+                  -0.2669024169445038
+                ]
+              ],
+              "mmff_converged": true
+            }
+          ],
+          "training_performed": false,
+          "command": [
+            "/mnt/shared-storage-user/xiejiaqing/miniconda3/envs/azr/bin/python",
+            "/tmp/openmolspec-atoms-8ch0f9gj/infer_checked.py",
+            "/tmp/openmolspec-nmrnet-_n4m_wdq/run/state_dict_audit.json",
+            "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/nmrnet-orig/uninmr/infer.py",
+            "--user-dir",
+            "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/nmrnet-orig/uninmr",
+            "/tmp/openmolspec-atoms-8ch0f9gj",
+            "--valid-subset",
+            "valid",
+            "--results-path",
+            "/tmp/openmolspec-nmrnet-_n4m_wdq/run",
+            "--saved-dir",
+            "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/H_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_5e-3_bs_16_0.06_400",
+            "--num-workers",
+            "0",
+            "--batch-size",
+            "8",
+            "--task",
+            "uninmr",
+            "--loss",
+            "atom_regloss_mae",
+            "--arch",
+            "unimol_large",
+            "--dict-name",
+            "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/mol_dict.txt",
+            "--path",
+            "/mnt/shared-storage-user/xiejiaqing/models/nmrnet/weights/finetune/liquid/H_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_5e-3_bs_16_0.06_400/cv_seed_42_fold_0/checkpoint_best.pt",
+            "--selected-atom",
+            "H",
+            "--gaussian-kernel",
+            "--atom-descriptor",
+            "0",
+            "--split-mode",
+            "infer",
+            "--cpu",
+            "--required-batch-size-multiple",
+            "1",
+            "--no-progress-bar"
+          ],
+          "exit_code": 0,
+          "state_dict_audit": {
+            "missing_keys": [],
+            "unexpected_keys": []
+          }
+        },
+        "atom_index_basis": "zero-based RDKit AddHs(input SMILES)",
+        "training_performed": false,
+        "inference_mode": "direct_frozen_checkpoint"
+      },
+      "seconds": 45.922854925040156
+    },
+    "nmr_generation": {
+      "result": {
+        "training_performed": false,
+        "inference_mode": "direct_frozen_checkpoint",
+        "provenance": {
+          "checkpoint_sha256": "a06cedbc201d2a4de8e7bece351884aca8c3b1aca68328bf487cd5a87a20f683",
+          "stage": "generate"
+        },
+        "records": [
+          {
+            "candidates": [
+              {
+                "smiles": "C=C(CCCCc1ccc(C(C)(C)C)cc1)c1ccccc1",
+                "canonical_smiles": "C=C(CCCCc1ccc(C(C)(C)C)cc1)c1ccccc1",
+                "score": -1.4133479532080173,
+                "valid": true,
+                "formula_match": true
+              },
+              {
+                "smiles": "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+                "canonical_smiles": "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+                "score": -1.593760827095565,
+                "valid": true,
+                "formula_match": true
+              },
+              {
+                "smiles": "C=C(CCCc1ccc(C(C)(C)C)cc1)Cc1ccccc1",
+                "canonical_smiles": "C=C(CCCc1ccc(C(C)(C)C)cc1)Cc1ccccc1",
+                "score": -3.3677333103558666,
+                "valid": true,
+                "formula_match": true
+              },
+              {
+                "smiles": "C=C(CCCCc1ccccc1)CCCc1ccccc1",
+                "canonical_smiles": "C=C(CCCCc1ccccc1)CCCc1ccccc1",
+                "score": -2.710930214104728,
+                "valid": true,
+                "formula_match": false
+              },
+              {
+                "smiles": "C=C(CCCc1ccc(C(C)(C)C)cc1)c1ccccc1",
+                "canonical_smiles": "C=C(CCCc1ccc(C(C)(C)C)cc1)c1ccccc1",
+                "score": -2.943997462250927,
+                "valid": true,
+                "formula_match": false
+              }
+            ],
+            "given_formula": "C22H28",
+            "modality_mask": [
+              1,
+              1
+            ]
+          }
+        ]
+      },
+      "seconds": 11.619647215120494
+    },
+    "nmr_retrieval": {
+      "result": {
+        "training_performed": false,
+        "inference_mode": "direct_frozen_checkpoint",
+        "provenance": {
+          "checkpoint_sha256": "94e8cf0b1b53863f8909e4eb1317bd5dfbdf396a435cfead0d25d15403fd9f15",
+          "stage": "align"
+        },
+        "given_formula": false,
+        "candidate_pool": 32,
+        "candidates": [
+          {
+            "smiles": "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+            "score": 0.9107390642166138
+          },
+          {
+            "smiles": "Cc1ccc(/C=C/C(O)(CCCCCO)c2ccccc2)cc1",
+            "score": 0.35816797614097595
+          },
+          {
+            "smiles": "CC(C)(C)C1=CC(=Cc2ccc(Cl)cc2)C=C(C(C)(C)C)C1=O",
+            "score": 0.30377939343452454
+          },
+          {
+            "smiles": "CC(C)(C)OC(=O)N[C@H](CCC(=O)c1ccccc1)c1c[nH]c2cc(Cl)ccc12",
+            "score": 0.2366214096546173
+          },
+          {
+            "smiles": "CC1=C2CCCCCCCCCCC2OC1=O",
+            "score": 0.18519020080566406
+          },
+          {
+            "smiles": "COC(=O)c1cc(-c2ccccc2)n(N)c1C",
+            "score": 0.17479395866394043
+          },
+          {
+            "smiles": "Cc1cnn(C2CCc3ccccc32)c1",
+            "score": 0.10219388455152512
+          },
+          {
+            "smiles": "C[C@H]1CCc2ccccc2N1",
+            "score": 0.09225554764270782
+          },
+          {
+            "smiles": "CCOC(=O)C(OS(=O)(=O)c1ccc2ccccc2c1)c1ccc(F)cc1",
+            "score": 0.07981673628091812
+          },
+          {
+            "smiles": "O=C1c2sccc2[C@H]2[C@H]([C@H]3O[C@@H]2c2cc(Br)c(Br)cc23)N1c1cccc2cccnc12",
+            "score": 0.0797962099313736
+          }
+        ]
+      },
+      "seconds": 12.803977428004146
+    },
+    "gap": {
+      "result": {
+        "gap_ev": 5.394753155772362,
+        "unit": "eV",
+        "input_modalities": [
+          "IR",
+          "Raman",
+          "1H",
+          "13C"
+        ],
+        "training_modality": "ir-raman-nmr",
+        "checkpoints": [
+          {
+            "name": "vib2conf_spectrum2property_best.pt",
+            "sha256": "7bbe651ee5c42894f8a3e490bb8d1bc3601df032a00f0c55332b4e8ae8bad412"
+          }
+        ],
+        "training_performed": false,
+        "inference_mode": "direct_frozen_checkpoint",
+        "missing_modality_ablation": false
+      },
+      "seconds": 14.462001211941242
+    },
+    "vib2mol": {
+      "result": {
+        "anchor": null,
+        "anchor_similarity": null,
+        "anchors_used": 0,
+        "beam_size": 10,
+        "ranking": "itm_positive_probability",
+        "input_modalities": [
+          "IR",
+          "Raman",
+          "1H",
+          "13C"
+        ],
+        "candidates": [
+          {
+            "rank": 1,
+            "smiles": "CC(C)OCC1=NC(C2CCC2)=CS1",
+            "score": 0.9998494386672974
+          }
+        ],
+        "mode": "Direct Vib2Mol beam=10 with canonical deduplication and ITM reranking",
+        "checkpoints": [
+          {
+            "name": "best_recall.pth",
+            "sha256": "e81cb178991742a6686b2d31ea191381cc5951aa15f8f7ddeb93c5473b0c0cf1"
+          },
+          {
+            "name": "best_acc.pth",
+            "sha256": "978aae6864104e4581d814a964cbcb04b7207eaa0b74946d3c5a0f886d54db06"
+          }
+        ],
+        "training_performed": false,
+        "inference_mode": "direct_frozen_checkpoint",
+        "missing_modality_ablation": false
+      },
+      "seconds": 65.0868259370327
+    },
+    "vib2mol_retrieval": {
+      "result": {
+        "candidate_pool": 1,
+        "ranking": "cosine_similarity",
+        "candidates": [
+          {
+            "smiles": "CC(C)OCc1nc(C2CCC2)cs1",
+            "score": 0.8956747055053711
+          }
+        ],
+        "checkpoints": [
+          {
+            "name": "best_recall.pth",
+            "sha256": "e81cb178991742a6686b2d31ea191381cc5951aa15f8f7ddeb93c5473b0c0cf1"
+          }
+        ],
+        "training_performed": false,
+        "inference_mode": "direct_frozen_checkpoint",
+        "missing_modality_ablation": false
+      },
+      "seconds": 67.42791176913306
+    },
+    "vib2mol_reranking": {
+      "result": {
+        "candidate_pool": 1,
+        "ranking": "itm_probability",
+        "candidates": [
+          {
+            "smiles": "CC(C)OCc1nc(C2CCC2)cs1",
+            "score": 0.9998494386672974
+          }
+        ],
+        "checkpoints": [
+          {
+            "name": "best_recall.pth",
+            "sha256": "e81cb178991742a6686b2d31ea191381cc5951aa15f8f7ddeb93c5473b0c0cf1"
+          }
+        ],
+        "training_performed": false,
+        "inference_mode": "direct_frozen_checkpoint",
+        "missing_modality_ablation": false
+      },
+      "seconds": 88.72598726395518
+    }
+  },
+  "generation_top1_matches_existing_adapter": true,
+  "retrieval_top10_matches_existing_adapter": true,
+  "gap_matches_existing_adapter": true,
+  "vib2mol_top1_matches_existing_adapter": true,
+  "completed": true
+}

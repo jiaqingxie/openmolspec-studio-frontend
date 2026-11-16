@@ -10,7 +10,7 @@ import sys
 import tempfile
 import contextlib
 import io
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
 from build_readthedocs import notebook_evidence_hash
 
 import nbformat
@@ -48,10 +48,11 @@ async def execute_notebook(notebook, runtime):
         manager = AsyncKernelManager(kernel_name="openmolspec-docs", kernel_spec_manager=specifications,
                                      transport="ipc", cache_ports=False, ip=str(Path(temporary) / "ipc"),
                                      connection_file=str(Path(temporary) / "connection.json"))
-        client = NotebookClient(notebook, km=manager, timeout=60, startup_timeout=30,
+        inference = notebook.metadata.get('openmolspec_model_execution', False)
+        client = NotebookClient(notebook, km=manager, timeout=600 if inference else 60, startup_timeout=30,
                                 resources={"metadata": {"path": str(ROOT)}})
         try:
-            await asyncio.wait_for(client.async_execute(), timeout=120)
+            await asyncio.wait_for(client.async_execute(), timeout=900 if inference else 120)
         finally:
             if manager.has_kernel:
                 await manager.shutdown_kernel(now=True)
@@ -87,7 +88,8 @@ def main():
         nbformat.validate(notebook)
         source_sha = hashlib.sha256(json.dumps([cell.source for cell in notebook.cells]).encode()).hexdigest()
         expected = {"evaluation_index_sha256": index_sha, "source_sha256": source_sha, "engine": args.engine,
-                    "evidence_sha256": notebook_evidence_hash(notebook)}
+                    "evidence_sha256": notebook_evidence_hash(notebook),
+                    "model_execution_enabled": bool(notebook.metadata.get('openmolspec_model_execution'))}
         if any(notebook.metadata.get("openmolspec_execution", {}).get(key) != value for key, value in expected.items()):
             print("EXECUTING", path.name, flush=True)
             if args.engine == "python":
@@ -95,8 +97,8 @@ def main():
             else:
                 asyncio.run(execute_notebook(notebook, runtime))
             notebook.metadata["openmolspec_execution"] = {**expected,
-                                                         "model_execution_enabled": False, "training_performed": False,
-                                                         "scope": "real_input_output_recomputed_diagnostics_and_scientific_figures"}
+                                                         "model_execution_enabled": bool(notebook.metadata.get("openmolspec_model_execution")), "training_performed": False,
+                                                         "scope": "direct_frozen_sdk_inference" if notebook.metadata.get("openmolspec_model_execution") else "real_input_output_recomputed_diagnostics_and_scientific_figures"}
             nbformat.validate(notebook)
             destination_path.parent.mkdir(parents=True, exist_ok=True)
             nbformat.write(notebook, destination_path)
@@ -112,12 +114,20 @@ def main():
         print("EXECUTED", path.name, flush=True)
         return {"notebook": str(path.relative_to(ROOT)), "executed_file": recorded_path,
                 "sha256": hashlib.sha256(destination_path.read_bytes()).hexdigest(),
+                "model_execution_enabled":bool(notebook.metadata.get("openmolspec_model_execution")),
                 "rich_outputs":sum(output.output_type in ('display_data','execute_result') for cell in notebook.cells if cell.cell_type=='code' for output in cell.outputs)}
     with ThreadPoolExecutor(max_workers=args.jobs) as pool:
-        proof=list(pool.map(run_one,files))
+        pending = {pool.submit(run_one, path) for path in files}
+        proof = []
+        while pending:
+            done, pending = wait(pending, timeout=30, return_when=FIRST_COMPLETED)
+            proof.extend(future.result() for future in done)
+            if not done:
+                print(f'Waiting for {len(pending)} notebook executions', flush=True)
+        proof.sort(key=lambda item: item['notebook'])
     destination = ROOT / "results/doc_notebook_execution.json"
     destination.write_text(json.dumps({"executed_notebooks": len(proof), "evaluation_index_sha256": index_sha, "engine": args.engine,
-                                       "scope": "recorded_results_not_retraining_or_model_reruns", "notebooks": proof}, indent=2) + "\n")
+                                       "scope": "saved_result_analysis_and_explicit_sdk_frozen_inference_no_training", "notebooks": proof}, indent=2) + "\n")
     print(f"Notebook demonstrations verified: {len(proof)}", flush=True)
 
 

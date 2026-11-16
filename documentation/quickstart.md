@@ -1,5 +1,7 @@
 # Quick start
 
+For the new dataset/model classes and training preflight, start with the [Python SDK guide](api.md).
+
 Start with a real saved example, then run a model when its external weights and data are available. The repository contains documentation evidence; large model checkpoints and complete datasets are separate.
 
 ## 1. Get the documented release

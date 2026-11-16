@@ -23,6 +23,7 @@ from torch.utils.data import DataLoader, IterableDataset
 from tqdm import tqdm
 
 from .data import clean_text
+from .integrity import verify_training_files
 from .model import PAD, ModelConfig, SpectrumToSmiles, encode_source, encode_target
 from .molecule_tokenizer import encode_molecules
 from .structured import collate_structured_sources, encode_structured_source
@@ -80,6 +81,7 @@ def require_data_format(data_dir: Path) -> dict:
     verification = json.loads(verification_path.read_text(encoding="utf-8"))
     if verification.get("status") != "passed" or verification.get("counts", {}).get("examples") != summary["counts"].get("examples"):
         raise ValueError("Prepared dataset has not passed H/C verification")
+    verify_training_files(data_dir, verification)
     return verification
 
 

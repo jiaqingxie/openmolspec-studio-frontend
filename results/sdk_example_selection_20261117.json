@@ -1,0 +1,148 @@
+{
+  "selection": "first two single-component molecules with 3-25 heavy atoms, CHNOSFClBr elements, matching formula and nuclei; no model-quality selection",
+  "training_performed": false,
+  "counts": {
+    "train": {
+      "rows_examined_before_selection_complete": 1768,
+      "selected": 2
+    },
+    "val": {
+      "rows_examined_before_selection_complete": 209,
+      "selected": 2
+    }
+  },
+  "flagged_examples": [
+    {
+      "split": "train",
+      "row": 7,
+      "issue": "NMR nucleus absent from structure",
+      "record": {
+        "inchi": "InChI=1S/12ClH.O4Si.4Sn/c;;;;;;;;;;;;1-5(2,3)4;;;;/h12*1H;;;;;/q;;;;;;;;;;;;-4;4*+4/p-12",
+        "smiles": "Cl[Sn](Cl)(Cl)O[Si](O[Sn](Cl)(Cl)Cl)(O[Sn](Cl)(Cl)Cl)O[Sn](Cl)(Cl)Cl",
+        "formula": "Cl12O4SiSn4",
+        "h_nmr": [
+          {
+            "type": "1H NMR",
+            "chemical_shift": "0.67 (s, 36H)",
+            "frequency": "500 MHz",
+            "source_line": 569
+          }
+        ],
+        "c_nmr": [],
+        "modality_mask": [
+          1,
+          0
+        ],
+        "scaffold": "acyclic:Cl[Sn](Cl)(Cl)O[Si](O[Sn](Cl)(Cl)Cl)(O[Sn](Cl)(Cl)Cl)O[Sn](Cl)(Cl)Cl",
+        "patent_id": "2024/US20240228518A1-20240711",
+        "year": "2024",
+        "source": "Pistachio",
+        "source_rows": 2,
+        "smiles_variants": 1,
+        "h_smiles": "Cl[Sn](Cl)(Cl)O[Si](O[Sn](Cl)(Cl)Cl)(O[Sn](Cl)(Cl)Cl)O[Sn](Cl)(Cl)Cl",
+        "c_smiles": null,
+        "h_provenance": {
+          "patent_id": "2024/US20240228518A1-20240711",
+          "year": "2024",
+          "source": "Pistachio"
+        },
+        "c_provenance": null
+      }
+    },
+    {
+      "split": "train",
+      "row": 1633,
+      "issue": "NMR nucleus absent from structure",
+      "record": {
+        "inchi": "InChI=1S/3C6F5.Al/c3*7-2-1-3(8)5(10)6(11)4(2)9;",
+        "smiles": "Fc1c(F)c(F)c([Al](c2c(F)c(F)c(F)c(F)c2F)c2c(F)c(F)c(F)c(F)c2F)c(F)c1F",
+        "formula": "C18AlF15",
+        "h_nmr": [
+          {
+            "type": "1H NMR",
+            "chemical_shift": "7.14-7.07 (m, 2H), 7.05-7.01 (m, 1H), 7.00-6.95 (m, 2H), 2.12 (s, 3H)",
+            "frequency": "400 MHz",
+            "solvent": "Toluene-d8",
+            "source_line": 1780
+          }
+        ],
+        "c_nmr": [],
+        "modality_mask": [
+          1,
+          0
+        ],
+        "scaffold": "c1ccc([Al](c2ccccc2)c2ccccc2)cc1",
+        "patent_id": "2022/US11447584-20220920",
+        "year": "2022",
+        "source": "Pistachio",
+        "source_rows": 1,
+        "smiles_variants": 1,
+        "h_smiles": "Fc1c(F)c(F)c([Al](c2c(F)c(F)c(F)c(F)c2F)c2c(F)c(F)c(F)c(F)c2F)c(F)c1F",
+        "c_smiles": null,
+        "h_provenance": {
+          "patent_id": "2022/US11447584-20220920",
+          "year": "2022",
+          "source": "Pistachio"
+        },
+        "c_provenance": null
+      }
+    },
+    {
+      "split": "train",
+      "row": 1637,
+      "issue": "NMR nucleus absent from structure",
+      "record": {
+        "inchi": "InChI=1S/3C6H2Cl4O2.Ta/c3*7-1-2(8)4(10)6(12)5(11)3(1)9;/h3*11-12H;/q;;;+6/p-6",
+        "smiles": "Clc1c(Cl)c(Cl)c2c(c1Cl)O[Ta]13(O2)(Oc2c(Cl)c(Cl)c(Cl)c(Cl)c2O1)Oc1c(Cl)c(Cl)c(Cl)c(Cl)c1O3",
+        "formula": "C18Cl12O6Ta",
+        "h_nmr": [
+          {
+            "type": "1H NMR",
+            "chemical_shift": "7.54 (br, 1H), 4.00 (br, 8H), 1.40 (br, 12H)",
+            "frequency": "400 MHz",
+            "solvent": "CD2Cl2",
+            "source_line": 707
+          },
+          {
+            "type": "1H NMR",
+            "chemical_shift": "16.74 (s, 1H), 4.04 (br, 8H), 1.38 (br, 12H)",
+            "frequency": "400 MHz",
+            "solvent": "CD2Cl2",
+            "source_line": 708
+          }
+        ],
+        "c_nmr": [
+          {
+            "type": "13C NMR",
+            "chemical_shift": "140.4, 123.4, 118.9, 67.9, 14.2",
+            "frequency": "75 MHz",
+            "solvent": "CD2Cl2",
+            "source_line": 709
+          }
+        ],
+        "modality_mask": [
+          1,
+          1
+        ],
+        "scaffold": "c1ccc2c(c1)O[Ta]13(O2)(Oc2ccccc2O1)Oc1ccccc1O3",
+        "patent_id": "2021/US11168100-20211109",
+        "year": "2021",
+        "source": "USPTO",
+        "source_rows": 3,
+        "smiles_variants": 1,
+        "h_smiles": "Clc1c(Cl)c(Cl)c2c(c1Cl)O[Ta]13(O2)(Oc2c(Cl)c(Cl)c(Cl)c(Cl)c2O1)Oc1c(Cl)c(Cl)c(Cl)c(Cl)c1O3",
+        "c_smiles": "Clc1c(Cl)c(Cl)c2c(c1Cl)O[Ta]13(O2)(Oc2c(Cl)c(Cl)c(Cl)c(Cl)c2O1)Oc1c(Cl)c(Cl)c(Cl)c(Cl)c1O3",
+        "h_provenance": {
+          "patent_id": "2021/US11168100-20211109",
+          "year": "2021",
+          "source": "USPTO"
+        },
+        "c_provenance": {
+          "patent_id": "2021/US11168100-20211109",
+          "year": "2021",
+          "source": "USPTO"
+        }
+      }
+    }
+  ]
+}

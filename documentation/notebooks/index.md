@@ -2,6 +2,8 @@
 
 Each active task notebook shows actual input/output data, a run table, executable analysis and a result figure. These notebooks analyze saved inference; they are not placeholders for hypothetical results.
 
+[SDK: actual NMR inference](sdk-inference.ipynb) · [SDK: training preflight](sdk-training-preflight.ipynb)
+
 [Dataset distributions / 数据分布](datasets-overview.ipynb)
 
 ## NMR

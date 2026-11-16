@@ -4,11 +4,18 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "openmolspec"
-version = "1.0.0"
-description = "OpenMolSpec data processing, validation, and release toolkit"
+version = "1.1.0a1"
+description = "Spectroscopy datasets, model interfaces and reproducible learning workflows"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = [
+dependencies = []
+
+[project.optional-dependencies]
+data = ["numpy>=1.26", "pandas>=2", "pyarrow>=14", "rdkit>=2023.9", "lmdb>=1.4"]
+analysis = ["numpy>=1.26", "scipy>=1.10", "matplotlib>=3.8", "rdkit>=2023.9"]
+models = ["numpy>=1.26", "scipy>=1.10", "rdkit>=2023.9", "torch>=2.4", "tqdm>=4.65", "transformers==4.44.2"]
+train = ["numpy>=1.26", "rdkit>=2023.9", "torch>=2.4", "tqdm>=4.65", "transformers==4.44.2"]
+production = [
     "numpy>=1.26",
     "pandas>=2.0",
     "pyarrow>=14",
@@ -17,8 +24,7 @@ dependencies = [
     "matplotlib>=3.7",
     "tqdm>=4.65",
     "PyYAML>=6",
-    "rdkit>=2023.9",
-    "transformers==4.44.2"
+    "rdkit>=2023.9"
 ]
 
 
@@ -31,4 +37,5 @@ where = ["src", "."]
 include = ["openmolspec", "openmolspec.*", "openmolspec_ui", "openmolspec_bench", "spec2struct_fork"]
 
 [tool.setuptools.package-data]
+openmolspec = ["assets/*.json"]
 spec2struct_fork = ["assets/mol_tokenizer/*"]

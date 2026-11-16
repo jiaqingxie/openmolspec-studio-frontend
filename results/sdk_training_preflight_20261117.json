@@ -1,0 +1,80 @@
+{
+  "phase": "awaiting_user_training_authorization",
+  "training_performed": false,
+  "model": "small NMRTransformer integration check, not published NMRNet weights",
+  "records": {
+    "train": 2,
+    "val": 2,
+    "test": 0
+  },
+  "max_optimizer_steps_per_stage": 1,
+  "alignment_plan": {
+    "command": [
+      "/mnt/shared-storage-user/xiejiaqing/miniconda3/envs/azr/bin/python",
+      "-m",
+      "spec2struct_fork.train",
+      "align",
+      "--data-dir",
+      "/mnt/shared-storage-user/xiejiaqing/OpenMolSpec/studio/.runtime/sdk-training-review/data",
+      "--run-dir",
+      "/mnt/shared-storage-user/xiejiaqing/OpenMolSpec/studio/.runtime/sdk-training-review/alignment-run",
+      "--epochs",
+      "1",
+      "--batch-size",
+      "2",
+      "--learning-rate",
+      "0.0001",
+      "--seed",
+      "2026",
+      "--device",
+      "cpu",
+      "--hidden-size",
+      "32",
+      "--heads",
+      "4",
+      "--encoder-layers",
+      "1",
+      "--decoder-layers",
+      "1",
+      "--feedforward-size",
+      "64",
+      "--projection-size",
+      "16",
+      "--max-train-batches",
+      "1",
+      "--max-val-examples",
+      "2"
+    ],
+    "training_performed": false,
+    "validation": "pending until validate() or fit()",
+    "uses_test_split": false,
+    "checkpoint_recovery": "initializes model weights; optimizer/scheduler state is not resumed"
+  },
+  "preflight": {
+    "validated": true,
+    "training_performed": false,
+    "uses_test_split": false,
+    "split_audit": {
+      "identity": "connectivity",
+      "nmr_chemistry_checked": true,
+      "records": {
+        "train": 2,
+        "val": 2
+      },
+      "within_split_duplicates": {
+        "train": 0,
+        "val": 0
+      },
+      "overlaps": [
+        {
+          "left": "train",
+          "right": "val",
+          "molecules": 0
+        }
+      ],
+      "disjoint": true,
+      "scope": "supplied views only; filtered/limited views do not establish full-dataset independence"
+    }
+  },
+  "next_stage": "one generation step from the new alignment checkpoint, then save/load and inference; only if authorized"
+}

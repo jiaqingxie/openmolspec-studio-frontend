@@ -1,5 +1,6 @@
 -r requirements-docs.txt
 numpy>=1.26,<3
+scipy>=1.10
 matplotlib>=3.8,<4
 rdkit>=2024.3
 ipykernel>=6,<8

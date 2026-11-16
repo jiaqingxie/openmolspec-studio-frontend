@@ -64,3 +64,5 @@
 **暂不能直接下“需要微调”的结论：**F/P 先解决溶液域和参考约定；指认先补实验真值；MS、构象→IR/Raman 先扩大独立评测。MAGMa 是算法。完整输入 gap 现有基线有用。SpectraLLM、分子式预测、谱学 QA 继续暂缓。
 
 [Download B/Si audit](assets/reports/bsi_model_review_20261117.json) · [Official archive inventory](assets/reports/nmrnetpp_release_inventory_20261117.json)
+
+**评测限制：**多个 NMR 视图已确认与 checkpoint 记录的训练数据存在分子重叠，最终生成模型还存在训练文件哈希不一致。现有运行不能证明独立泛化能力。 [Training-history audit / 训练历史审计](training-overlap.md)
