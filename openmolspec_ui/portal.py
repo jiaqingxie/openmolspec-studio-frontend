@@ -9,6 +9,7 @@ import sys
 import tempfile
 
 from .inference import OpenMolSpecService
+from .config import documentation_url
 
 
 class OnlinePredictionService(OpenMolSpecService):
@@ -25,9 +26,7 @@ def primary_navigation(st):
     view = st.query_params.get("view", "tool")
     if view not in ("tool", "dataset", "prediction", "documentation"):
         view = "tool"
-    documentation = os.environ.get("OPENMOLSPEC_DOCS_URL", "?view=documentation")
-    if not documentation.startswith(("https://", "http://", "?")):
-        documentation = "?view=documentation"
+    documentation = documentation_url()
     links = [("Tool", "?view=tool", "tool"), ("Dataset Download", "?view=dataset", "dataset"),
              ("Prediction (Online)", "?view=prediction", "prediction"), ("Full documentation", documentation, "documentation")]
     st.markdown('''<style>.oms-nav{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0 22px;border-bottom:1px solid #dfe5dc;margin-bottom:24px}.oms-nav a{padding:10px 18px;border-radius:7px;color:#293c35;text-decoration:none;font-weight:600}.oms-nav a.active{background:#244d3d;color:white}.oms-nav a:hover{background:#e7eee7;color:#173c2d}</style>''', unsafe_allow_html=True)
@@ -59,7 +58,8 @@ def dataset_page(st):
 
 def documentation_page(st):
     st.title("Full documentation")
-    st.info("中英文 HTML 文档和 notebook 预览已通过本地构建。Read the Docs 托管发布尚未确认；发布后导航将跳转到实际网址。")
+    st.link_button("Open full documentation · 中英文完整手册", documentation_url())
+    st.caption("Read the Docs 已上线。下方也可浏览本地任务说明并下载 notebook。")
     root = Path(__file__).resolve().parents[1]
     language = st.selectbox("Language / 语言", ["English", "简体中文"])
     suffix = "" if language == "English" else ".zh"

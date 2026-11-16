@@ -50,11 +50,8 @@ def benchmark_page(st):
         st.download_button("下载完整评测 JSON", selected.read_bytes(), selected.name, "application/json")
     else:
         st.info("尚无评测结果。请按使用手册运行 python -m openmolspec_bench run。")
-    import os
-    if os.environ.get("OPENMOLSPEC_DOCS_URL"):
-        st.link_button("Full documentation · Read the Docs", os.environ["OPENMOLSPEC_DOCS_URL"])
-    else:
-        st.caption("Full documentation 栏目提供中英文任务说明与 notebook；Read the Docs 托管地址待确认。")
+    from .config import documentation_url
+    st.link_button("Full documentation · Read the Docs", documentation_url())
 
 
 def nmr_page(st, device):

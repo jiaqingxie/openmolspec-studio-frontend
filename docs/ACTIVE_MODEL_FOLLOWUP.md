@@ -8,8 +8,13 @@ There are 31 active definitions, all with execution adapters. F/P formal scores 
 ## Website and documentation
 
 The Streamlit frontend and bilingual Read the Docs sources/configuration exist.
-The new shared builder generated and validated 150 HTML pages, including 68 notebook previews. Read the Docs and CI now use this tested custom HTML build; public hosting is not verified. A fresh DNS check on 2026-11-16 failed
-for GitHub, Read the Docs and the configured proxy. No public URL is claimed.
+Read the Docs is now live: [English](https://openmolspec-10.readthedocs.io/en/latest/)
+and [Chinese](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html).
+Hosted build 35915674 and all 150 page bodies / 68 notebook download hashes were
+verified. The `release/openmolspec-v1` branch is pushed and both GitHub checks passed.
+The initial execution-network restriction is resolved; the server's configured
+proxy works. Remote `main` now contains a newer Next.js/FastAPI app, whose expanded
+task/navigation integration remains separate work.
 
 ## Conformer → IR/Raman provenance
 
@@ -29,7 +34,7 @@ lists F/P/B/Si and solvent-aware H/C workflows and links its weights to
 [Zenodo](https://zenodo.org/records/18232165). Its `run_heteroatoms.sh` starts
 training, so it must not be used here. The locally downloaded `checkpoints.zip`
 contains H/C checkpoints but no identifiable B/Si or solvent-specific checkpoint.
-The official remote archive inventory is not yet accessible.
+The official remote archive inventory still needs inspection now that networking is restored.
 
 A different local candidate is the released NMRNet **liquid All-nucleus** model:
 `nmrnet/weights/finetune/liquid/All_mol_pre_all_h_220816_global_0_kener_gauss_atomdes_0_unimol_large_atom_regloss_mae_lr_1e-4_bs_8_0.06_50`.
@@ -62,7 +67,7 @@ error alone is not assignment accuracy.
 files, H/C matching code, an evaluation notebook and an expert-annotated HSQC
 test set. It is a concrete H/C/2D candidate, not evidence of six-nucleus coverage.
 Local frozen NMRNet H/C models now power the implemented 1D assignment interface. A 32-molecule carbon run and real H/C online requests completed. Independent experimental atom-assignment accuracy is still unverified. TransPeakNet code/weights were not found in the local model
-directory; download is blocked by network access.
+directory; downloading and evaluating them remains follow-up work now that networking is restored.
 
 ## Cross-solvent shifts
 

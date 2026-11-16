@@ -2,7 +2,7 @@
 
 谱学任务、已有模型推理和可复现评测的统一工作台。支持实验 H/C NMR 候选检索与 SMILES 生成，并保留计算 IR/Raman、谱图到性质和 Vib2Mol 工作流。
 
-中英文完整手册源文件位于 [documentation/](documentation/index.md)，每个任务附输入示例和 notebook。Read the Docs 发布配置已准备；本地已完整生成并验证 150 个 HTML 页面，公开网址尚未验证。旧 [handbook/](handbook/index.md) 保留历史记录。
+中英文完整手册已上线：[English](https://openmolspec-10.readthedocs.io/en/latest/) · [简体中文](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)。共 150 个 HTML 页面、68 个已执行的 notebook 预览及下载，每个任务附输入示例。源文件位于 [documentation/](documentation/index.md)；旧 [handbook/](handbook/index.md) 保留历史记录。
 
 ## 安装与启动
 
@@ -40,7 +40,7 @@ python scripts/render_task_catalog.py --check
 python scripts/build_readthedocs.py --output site --strict
 ```
 
-Read the Docs 导入本仓库并使用 `.readthedocs.yaml` 构建；GitHub Actions 负责严格文档构建检查。确认真实上线地址后设置 `OPENMOLSPEC_DOCS_URL`，前端 Full documentation 会跳转到该地址。未配置时展示本地文档与发布状态。
+Read the Docs 使用 `.readthedocs.yaml` 构建 `release/openmolspec-v1` 分支；GitHub Actions 负责严格文档构建检查。前端 Full documentation 默认跳转至已上线的手册，可通过 `OPENMOLSPEC_DOCS_URL` 覆盖地址。发布证据见 [RTD 核验记录](results/readthedocs_publication_20261116.json)。
 
 前端导航为 Tool、Dataset Download、Prediction (Online)、Full documentation。在线 MS 推理可通过 `OPENMOLSPEC_MS_PYTHON` 指定包含作者依赖的 Python。模型与数据路径配置见 [快速开始](documentation/quickstart.zh.md)。
 

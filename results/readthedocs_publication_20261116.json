@@ -1,0 +1,1563 @@
+{
+  "verified_at_utc": "2026-11-16T02:53:47.047793+00:00",
+  "documentation_url": "https://openmolspec-10.readthedocs.io/en/latest/",
+  "chinese_url": "https://openmolspec-10.readthedocs.io/en/latest/zh/index.html",
+  "project_slug": "openmolspec-10",
+  "build_id": 35915674,
+  "build_url": "https://app.readthedocs.org/projects/openmolspec-10/builds/35915674/",
+  "expected_commit": "5e8ce72655105f4a6cd61859c9c98c0574d36955",
+  "hosted_build_success": true,
+  "hosted_commit": "5e8ce72655105f4a6cd61859c9c98c0574d36955",
+  "html_pages": 150,
+  "notebook_downloads": 68,
+  "checks": [
+    {
+      "path": "assets/docs.css",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 1371
+    },
+    {
+      "path": "assets/evaluation_index.json",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 51944
+    },
+    {
+      "path": "build-manifest.json",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 277
+    },
+    {
+      "path": "datasets.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 5361
+    },
+    {
+      "path": "downloads/notebooks/ms-annotation-magma.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5300
+    },
+    {
+      "path": "downloads/notebooks/ms-annotation-magma.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5256
+    },
+    {
+      "path": "downloads/notebooks/ms-forward-glacier.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5439
+    },
+    {
+      "path": "downloads/notebooks/ms-forward-glacier.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5377
+    },
+    {
+      "path": "downloads/notebooks/ms-forward-iceberg.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5437
+    },
+    {
+      "path": "downloads/notebooks/ms-forward-iceberg.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5375
+    },
+    {
+      "path": "downloads/notebooks/multispectral-spectrallm-generation.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 4571
+    },
+    {
+      "path": "downloads/notebooks/multispectral-spectrallm-generation.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 4591
+    },
+    {
+      "path": "downloads/notebooks/nmr-assignment.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5381
+    },
+    {
+      "path": "downloads/notebooks/nmr-assignment.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5453
+    },
+    {
+      "path": "downloads/notebooks/nmr-formula.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 4825
+    },
+    {
+      "path": "downloads/notebooks/nmr-formula.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 4835
+    },
+    {
+      "path": "downloads/notebooks/nmr-forward-11B.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5609
+    },
+    {
+      "path": "downloads/notebooks/nmr-forward-11B.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5613
+    },
+    {
+      "path": "downloads/notebooks/nmr-forward-13C.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 11750
+    },
+    {
+      "path": "downloads/notebooks/nmr-forward-13C.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 11706
+    },
+    {
+      "path": "downloads/notebooks/nmr-forward-19F.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5265
+    },
+    {
+      "path": "downloads/notebooks/nmr-forward-19F.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5249
+    },
+    {
+      "path": "downloads/notebooks/nmr-forward-1H.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 11762
+    },
+    {
+      "path": "downloads/notebooks/nmr-forward-1H.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 11718
+    },
+    {
+      "path": "downloads/notebooks/nmr-forward-29Si.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5612
+    },
+    {
+      "path": "downloads/notebooks/nmr-forward-29Si.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5616
+    },
+    {
+      "path": "downloads/notebooks/nmr-forward-31P.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5265
+    },
+    {
+      "path": "downloads/notebooks/nmr-forward-31P.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5249
+    },
+    {
+      "path": "downloads/notebooks/nmr-generation-c.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8656
+    },
+    {
+      "path": "downloads/notebooks/nmr-generation-c.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8617
+    },
+    {
+      "path": "downloads/notebooks/nmr-generation-h.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8655
+    },
+    {
+      "path": "downloads/notebooks/nmr-generation-h.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8616
+    },
+    {
+      "path": "downloads/notebooks/nmr-generation-hc.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8660
+    },
+    {
+      "path": "downloads/notebooks/nmr-generation-hc.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8621
+    },
+    {
+      "path": "downloads/notebooks/nmr-retrieval-c-m2s.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8517
+    },
+    {
+      "path": "downloads/notebooks/nmr-retrieval-c-m2s.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8414
+    },
+    {
+      "path": "downloads/notebooks/nmr-retrieval-c-s2m.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8518
+    },
+    {
+      "path": "downloads/notebooks/nmr-retrieval-c-s2m.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8415
+    },
+    {
+      "path": "downloads/notebooks/nmr-retrieval-h-m2s.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8490
+    },
+    {
+      "path": "downloads/notebooks/nmr-retrieval-h-m2s.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8387
+    },
+    {
+      "path": "downloads/notebooks/nmr-retrieval-h-s2m.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8482
+    },
+    {
+      "path": "downloads/notebooks/nmr-retrieval-h-s2m.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8379
+    },
+    {
+      "path": "downloads/notebooks/nmr-retrieval-hc-m2s.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8495
+    },
+    {
+      "path": "downloads/notebooks/nmr-retrieval-hc-m2s.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8392
+    },
+    {
+      "path": "downloads/notebooks/nmr-retrieval-hc-s2m.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8484
+    },
+    {
+      "path": "downloads/notebooks/nmr-retrieval-hc-s2m.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 8381
+    },
+    {
+      "path": "downloads/notebooks/nmr-solvent_transfer.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 6048
+    },
+    {
+      "path": "downloads/notebooks/nmr-solvent_transfer.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 6068
+    },
+    {
+      "path": "downloads/notebooks/spectroscopy-qa.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 4776
+    },
+    {
+      "path": "downloads/notebooks/spectroscopy-qa.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 4800
+    },
+    {
+      "path": "downloads/notebooks/spectroscopy-reranking-hc.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 6095
+    },
+    {
+      "path": "downloads/notebooks/spectroscopy-reranking-hc.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 6034
+    },
+    {
+      "path": "downloads/notebooks/spectroscopy-reranking.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 4894
+    },
+    {
+      "path": "downloads/notebooks/spectroscopy-reranking.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 4800
+    },
+    {
+      "path": "downloads/notebooks/vibrational-forward.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5035
+    },
+    {
+      "path": "downloads/notebooks/vibrational-forward.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5021
+    },
+    {
+      "path": "downloads/notebooks/vibrational-gap-ir.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 6056
+    },
+    {
+      "path": "downloads/notebooks/vibrational-gap-ir.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5950
+    },
+    {
+      "path": "downloads/notebooks/vibrational-gap-ir_raman.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 6074
+    },
+    {
+      "path": "downloads/notebooks/vibrational-gap-ir_raman.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5968
+    },
+    {
+      "path": "downloads/notebooks/vibrational-gap-ir_raman_hc.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 6088
+    },
+    {
+      "path": "downloads/notebooks/vibrational-gap-ir_raman_hc.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 6036
+    },
+    {
+      "path": "downloads/notebooks/vibrational-gap-raman.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 6064
+    },
+    {
+      "path": "downloads/notebooks/vibrational-gap-raman.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5958
+    },
+    {
+      "path": "downloads/notebooks/vibrational-generation-hc.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 6362
+    },
+    {
+      "path": "downloads/notebooks/vibrational-generation-hc.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 6315
+    },
+    {
+      "path": "downloads/notebooks/vibrational-generation.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 4885
+    },
+    {
+      "path": "downloads/notebooks/vibrational-generation.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 4808
+    },
+    {
+      "path": "downloads/notebooks/vibrational-retrieval-hc.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 6055
+    },
+    {
+      "path": "downloads/notebooks/vibrational-retrieval-hc.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 5983
+    },
+    {
+      "path": "downloads/notebooks/vibrational-retrieval.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 4897
+    },
+    {
+      "path": "downloads/notebooks/vibrational-retrieval.zh.ipynb",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "sha256",
+      "bytes": 4785
+    },
+    {
+      "path": "index.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 5037
+    },
+    {
+      "path": "notebooks/index.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7516
+    },
+    {
+      "path": "notebooks/ms-annotation-magma.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8738
+    },
+    {
+      "path": "notebooks/ms-forward-glacier.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8872
+    },
+    {
+      "path": "notebooks/ms-forward-iceberg.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8870
+    },
+    {
+      "path": "notebooks/multispectral-spectrallm-generation.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8156
+    },
+    {
+      "path": "notebooks/nmr-assignment.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8798
+    },
+    {
+      "path": "notebooks/nmr-formula.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8200
+    },
+    {
+      "path": "notebooks/nmr-forward-11B.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9117
+    },
+    {
+      "path": "notebooks/nmr-forward-13C.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 14792
+    },
+    {
+      "path": "notebooks/nmr-forward-19F.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8824
+    },
+    {
+      "path": "notebooks/nmr-forward-1H.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 14799
+    },
+    {
+      "path": "notebooks/nmr-forward-29Si.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9125
+    },
+    {
+      "path": "notebooks/nmr-forward-31P.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8824
+    },
+    {
+      "path": "notebooks/nmr-generation-c.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11958
+    },
+    {
+      "path": "notebooks/nmr-generation-h.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11957
+    },
+    {
+      "path": "notebooks/nmr-generation-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11967
+    },
+    {
+      "path": "notebooks/nmr-retrieval-c-m2s.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11839
+    },
+    {
+      "path": "notebooks/nmr-retrieval-c-s2m.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11840
+    },
+    {
+      "path": "notebooks/nmr-retrieval-h-m2s.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11812
+    },
+    {
+      "path": "notebooks/nmr-retrieval-h-s2m.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11804
+    },
+    {
+      "path": "notebooks/nmr-retrieval-hc-m2s.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11822
+    },
+    {
+      "path": "notebooks/nmr-retrieval-hc-s2m.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11811
+    },
+    {
+      "path": "notebooks/nmr-solvent_transfer.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9551
+    },
+    {
+      "path": "notebooks/spectroscopy-qa.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8181
+    },
+    {
+      "path": "notebooks/spectroscopy-reranking-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9529
+    },
+    {
+      "path": "notebooks/spectroscopy-reranking.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8460
+    },
+    {
+      "path": "notebooks/vibrational-forward.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8537
+    },
+    {
+      "path": "notebooks/vibrational-gap-ir.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9438
+    },
+    {
+      "path": "notebooks/vibrational-gap-ir_raman.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9486
+    },
+    {
+      "path": "notebooks/vibrational-gap-ir_raman_hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9522
+    },
+    {
+      "path": "notebooks/vibrational-gap-raman.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9461
+    },
+    {
+      "path": "notebooks/vibrational-generation-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9747
+    },
+    {
+      "path": "notebooks/vibrational-generation.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8433
+    },
+    {
+      "path": "notebooks/vibrational-retrieval-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9497
+    },
+    {
+      "path": "notebooks/vibrational-retrieval.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8468
+    },
+    {
+      "path": "protocols.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 5396
+    },
+    {
+      "path": "publication.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 5315
+    },
+    {
+      "path": "quickstart.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 5397
+    },
+    {
+      "path": "tasks/index.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10594
+    },
+    {
+      "path": "tasks/ms-annotation-magma.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7310
+    },
+    {
+      "path": "tasks/ms-forward-glacier.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7557
+    },
+    {
+      "path": "tasks/ms-forward-iceberg.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7555
+    },
+    {
+      "path": "tasks/multispectral-spectrallm-generation.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 6352
+    },
+    {
+      "path": "tasks/nmr-assignment.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7771
+    },
+    {
+      "path": "tasks/nmr-formula.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 6522
+    },
+    {
+      "path": "tasks/nmr-forward-11B.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7901
+    },
+    {
+      "path": "tasks/nmr-forward-13C.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 13345
+    },
+    {
+      "path": "tasks/nmr-forward-19F.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7342
+    },
+    {
+      "path": "tasks/nmr-forward-1H.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 13351
+    },
+    {
+      "path": "tasks/nmr-forward-29Si.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7910
+    },
+    {
+      "path": "tasks/nmr-forward-31P.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7342
+    },
+    {
+      "path": "tasks/nmr-generation-c.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10471
+    },
+    {
+      "path": "tasks/nmr-generation-h.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10470
+    },
+    {
+      "path": "tasks/nmr-generation-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10481
+    },
+    {
+      "path": "tasks/nmr-retrieval-c-m2s.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10363
+    },
+    {
+      "path": "tasks/nmr-retrieval-c-s2m.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10364
+    },
+    {
+      "path": "tasks/nmr-retrieval-h-m2s.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10336
+    },
+    {
+      "path": "tasks/nmr-retrieval-h-s2m.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10328
+    },
+    {
+      "path": "tasks/nmr-retrieval-hc-m2s.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10347
+    },
+    {
+      "path": "tasks/nmr-retrieval-hc-s2m.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10336
+    },
+    {
+      "path": "tasks/nmr-solvent_transfer.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8577
+    },
+    {
+      "path": "tasks/spectroscopy-qa.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 6497
+    },
+    {
+      "path": "tasks/spectroscopy-reranking-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8151
+    },
+    {
+      "path": "tasks/spectroscopy-reranking.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7144
+    },
+    {
+      "path": "tasks/vibrational-forward.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7171
+    },
+    {
+      "path": "tasks/vibrational-gap-ir.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8028
+    },
+    {
+      "path": "tasks/vibrational-gap-ir_raman.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8082
+    },
+    {
+      "path": "tasks/vibrational-gap-ir_raman_hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8121
+    },
+    {
+      "path": "tasks/vibrational-gap-raman.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8054
+    },
+    {
+      "path": "tasks/vibrational-generation-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8428
+    },
+    {
+      "path": "tasks/vibrational-generation.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7139
+    },
+    {
+      "path": "tasks/vibrational-retrieval-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8168
+    },
+    {
+      "path": "tasks/vibrational-retrieval.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7192
+    },
+    {
+      "path": "zh/datasets.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 5186
+    },
+    {
+      "path": "zh/index.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 4882
+    },
+    {
+      "path": "zh/notebooks/index.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7287
+    },
+    {
+      "path": "zh/notebooks/ms-annotation-magma.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8609
+    },
+    {
+      "path": "zh/notebooks/ms-forward-glacier.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8705
+    },
+    {
+      "path": "zh/notebooks/ms-forward-iceberg.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8703
+    },
+    {
+      "path": "zh/notebooks/multispectral-spectrallm-generation.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8077
+    },
+    {
+      "path": "zh/notebooks/nmr-assignment.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8767
+    },
+    {
+      "path": "zh/notebooks/nmr-formula.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8097
+    },
+    {
+      "path": "zh/notebooks/nmr-forward-11B.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8995
+    },
+    {
+      "path": "zh/notebooks/nmr-forward-13C.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 14659
+    },
+    {
+      "path": "zh/notebooks/nmr-forward-19F.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8686
+    },
+    {
+      "path": "zh/notebooks/nmr-forward-1H.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 14666
+    },
+    {
+      "path": "zh/notebooks/nmr-forward-29Si.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9003
+    },
+    {
+      "path": "zh/notebooks/nmr-forward-31P.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8686
+    },
+    {
+      "path": "zh/notebooks/nmr-generation-c.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11811
+    },
+    {
+      "path": "zh/notebooks/nmr-generation-h.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11810
+    },
+    {
+      "path": "zh/notebooks/nmr-generation-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11820
+    },
+    {
+      "path": "zh/notebooks/nmr-retrieval-c-m2s.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11653
+    },
+    {
+      "path": "zh/notebooks/nmr-retrieval-c-s2m.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11654
+    },
+    {
+      "path": "zh/notebooks/nmr-retrieval-h-m2s.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11626
+    },
+    {
+      "path": "zh/notebooks/nmr-retrieval-h-s2m.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11618
+    },
+    {
+      "path": "zh/notebooks/nmr-retrieval-hc-m2s.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11636
+    },
+    {
+      "path": "zh/notebooks/nmr-retrieval-hc-s2m.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 11625
+    },
+    {
+      "path": "zh/notebooks/nmr-solvent_transfer.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9440
+    },
+    {
+      "path": "zh/notebooks/spectroscopy-qa.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8122
+    },
+    {
+      "path": "zh/notebooks/spectroscopy-reranking-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9376
+    },
+    {
+      "path": "zh/notebooks/spectroscopy-reranking.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8241
+    },
+    {
+      "path": "zh/notebooks/vibrational-forward.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8417
+    },
+    {
+      "path": "zh/notebooks/vibrational-gap-ir.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9220
+    },
+    {
+      "path": "zh/notebooks/vibrational-gap-ir_raman.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9268
+    },
+    {
+      "path": "zh/notebooks/vibrational-gap-ir_raman_hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9366
+    },
+    {
+      "path": "zh/notebooks/vibrational-gap-raman.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9243
+    },
+    {
+      "path": "zh/notebooks/vibrational-generation-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9631
+    },
+    {
+      "path": "zh/notebooks/vibrational-generation.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8227
+    },
+    {
+      "path": "zh/notebooks/vibrational-retrieval-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 9312
+    },
+    {
+      "path": "zh/notebooks/vibrational-retrieval.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8213
+    },
+    {
+      "path": "zh/protocols.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 5170
+    },
+    {
+      "path": "zh/publication.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 5075
+    },
+    {
+      "path": "zh/quickstart.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 5290
+    },
+    {
+      "path": "zh/tasks/index.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10392
+    },
+    {
+      "path": "zh/tasks/ms-annotation-magma.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7121
+    },
+    {
+      "path": "zh/tasks/ms-forward-glacier.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7361
+    },
+    {
+      "path": "zh/tasks/ms-forward-iceberg.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7359
+    },
+    {
+      "path": "zh/tasks/multispectral-spectrallm-generation.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 6167
+    },
+    {
+      "path": "zh/tasks/nmr-assignment.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7437
+    },
+    {
+      "path": "zh/tasks/nmr-formula.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 6312
+    },
+    {
+      "path": "zh/tasks/nmr-forward-11B.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7649
+    },
+    {
+      "path": "zh/tasks/nmr-forward-13C.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 13112
+    },
+    {
+      "path": "zh/tasks/nmr-forward-19F.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7033
+    },
+    {
+      "path": "zh/tasks/nmr-forward-1H.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 13117
+    },
+    {
+      "path": "zh/tasks/nmr-forward-29Si.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7659
+    },
+    {
+      "path": "zh/tasks/nmr-forward-31P.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7033
+    },
+    {
+      "path": "zh/tasks/nmr-generation-c.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10263
+    },
+    {
+      "path": "zh/tasks/nmr-generation-h.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10262
+    },
+    {
+      "path": "zh/tasks/nmr-generation-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10273
+    },
+    {
+      "path": "zh/tasks/nmr-retrieval-c-m2s.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10167
+    },
+    {
+      "path": "zh/tasks/nmr-retrieval-c-s2m.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10168
+    },
+    {
+      "path": "zh/tasks/nmr-retrieval-h-m2s.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10140
+    },
+    {
+      "path": "zh/tasks/nmr-retrieval-h-s2m.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10132
+    },
+    {
+      "path": "zh/tasks/nmr-retrieval-hc-m2s.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10151
+    },
+    {
+      "path": "zh/tasks/nmr-retrieval-hc-s2m.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 10140
+    },
+    {
+      "path": "zh/tasks/nmr-solvent_transfer.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8072
+    },
+    {
+      "path": "zh/tasks/spectroscopy-qa.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 6331
+    },
+    {
+      "path": "zh/tasks/spectroscopy-reranking-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7899
+    },
+    {
+      "path": "zh/tasks/spectroscopy-reranking.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 6841
+    },
+    {
+      "path": "zh/tasks/vibrational-forward.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 6892
+    },
+    {
+      "path": "zh/tasks/vibrational-gap-ir.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7703
+    },
+    {
+      "path": "zh/tasks/vibrational-gap-ir_raman.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7757
+    },
+    {
+      "path": "zh/tasks/vibrational-gap-ir_raman_hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7808
+    },
+    {
+      "path": "zh/tasks/vibrational-gap-raman.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7729
+    },
+    {
+      "path": "zh/tasks/vibrational-generation-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 8215
+    },
+    {
+      "path": "zh/tasks/vibrational-generation.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 6831
+    },
+    {
+      "path": "zh/tasks/vibrational-retrieval-hc.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 7886
+    },
+    {
+      "path": "zh/tasks/vibrational-retrieval.html",
+      "http_status": 200,
+      "matches_local": true,
+      "comparison": "article_content",
+      "bytes": 6864
+    }
+  ],
+  "remote_publication_verified": true
+}

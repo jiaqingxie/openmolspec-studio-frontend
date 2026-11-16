@@ -7,6 +7,12 @@ from typing import Iterable
 
 
 APP_ROOT = Path(__file__).resolve().parents[1]
+PUBLIC_DOCUMENTATION_URL = "https://openmolspec-10.readthedocs.io/en/latest/"
+
+
+def documentation_url() -> str:
+    configured = os.environ.get("OPENMOLSPEC_DOCS_URL", "")
+    return configured if configured.startswith(("https://", "http://")) else PUBLIC_DOCUMENTATION_URL
 
 
 def _openmolspec_root() -> Path:

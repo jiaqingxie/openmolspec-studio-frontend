@@ -17,10 +17,10 @@ This is an evidence inventory, not a declaration of completed delivery. No train
 | Official SpectraLLM pretrained test | `documentation/tasks/multispectral-spectrallm-generation.md` | Complete official 32B weights are unavailable locally; older 7B adapter's specified base is missing. Local MolSpect experiment is separately identified. |
 | Detailed English/Chinese task documentation | `documentation/tasks/`, `scripts/build_bilingual_docs.py` | 34 task definitions, paired language pages, examples and recorded result provenance. Source consistency and links checked. |
 | Notebook demonstrations | `documentation/notebooks/`, `results/doc_notebook_execution.json` | 68 notebook files contain executed plain-Python demonstration outputs. IPC restrictions prevent Jupyter kernel validation. These demonstrations display recorded inference results; they do not rerun models. |
-| Read the Docs hosting | `.readthedocs.yaml`, `mkdocs.yml`, `requirements-docs.txt` | Configuration prepared. Custom HTML builder replaces the publication dependency on MkDocs plugins: 150 HTML pages, 68 previews, language switches and downloads validated locally. Hosted build/live URL remain unverified because network/account access is unavailable. |
-| Frontend navigation | `openmolspec_ui/portal.py`, `app.py` | Tool, Dataset Download, Prediction (Online), Full documentation routes implemented and AppTest checked. External documentation jump needs a verified OPENMOLSPEC_DOCS_URL after publication. |
+| Read the Docs hosting | `results/readthedocs_publication_20261116.json` | Published at https://openmolspec-10.readthedocs.io/en/latest/ . Build 35915674 succeeded at the expected release commit; all 150 public page bodies and 68 notebook download hashes matched locally built artifacts. |
+| Frontend navigation | `openmolspec_ui/portal.py`, `app.py` | Four requested routes implemented and AppTest checked in the release Streamlit app; Full documentation now defaults to the verified RTD URL. Integration into the newer Next.js/FastAPI app on remote main remains pending. |
 | Dataset Download | `openmolspec_ui/portal.py`, `documentation/datasets.md` | Original distribution links and downloadable input templates/catalog provided. Public OpenMolSpec full-dataset URL remains unavailable; optional OPENMOLSPEC_DATASET_URL is not presented as a published release. |
-| GitHub push | Local commits `c5e68d2`, `38120c3` | Push to origin/release/openmolspec-v1 attempted and failed because proxy DNS does not resolve. No remote publication claimed. |
+| GitHub push | Release commit `5e8ce72655105f4a6cd61859c9c98c0574d36955` | Pushed to origin/release/openmolspec-v1. GitHub Documentation and Benchmark integration checks passed. |
 
 ## Scope revision — 2026-11-16
 
@@ -37,7 +37,7 @@ SpectraLLM, formula prediction and spectroscopy QA are deferred by the user. The
 
 ## External requirements still missing
 
-Network/DNS recovery is required for dependencies, official model downloads and GitHub push. Read the Docs needs an accessible project/account connection and a successful hosted build before a real URL can be reported. Compatible F/P references, validated B/Si training coverage, experimental atom-assignment ground truth and specialized neural solvent checkpoints remain scientific/model requirements. The executable assignment and reference-transfer baseline do not fill these accuracy requirements; no missing weights will be synthesized by training.
+Network access, GitHub push and hosted documentation are now verified. Compatible F/P references, validated B/Si training coverage, experimental atom-assignment ground truth and specialized neural solvent checkpoints remain scientific/model requirements. The executable assignment and reference-transfer baseline do not fill these accuracy requirements; no missing weights will be synthesized by training. The newer Next.js/FastAPI frontend on main also needs the expanded task/navigation integration before the overall website goal is complete.
 
 ## Scope-revision checks
 

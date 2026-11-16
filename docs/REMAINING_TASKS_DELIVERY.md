@@ -119,18 +119,27 @@ The optional previous MkDocs renderer remains in `requirements-docs-mkdocs.txt`.
 
 `.readthedocs.yaml` uses the platform's supported
 [custom HTML build commands](https://docs.readthedocs.com/platform/stable/build-customization.html)
-and writes to `$READTHEDOCS_OUTPUT/html`. A real hosted build has not been verified:
-the current environment cannot resolve GitHub, Read the Docs or its configured
-proxy; there is no connected RTD account/session or supplied project/build URL.
-No public deployment is claimed. After a hosted build succeeds, set the real
-`OPENMOLSPEC_DOCS_URL` on the frontend.
+and writes to `$READTHEDOCS_OUTPUT/html`. The documentation is now published:
 
-The later network check identified a more specific blocker: creating either a
-TCP or UDP socket in the agent's execution environment returns
-`PermissionError: [Errno 1] Operation not permitted`. Direct DNS failures do not
-establish a server-wide DNS outage; this execution environment prohibits network
-sockets. Disabling HTTP proxies cannot remove that restriction. RTD credentials
-have not been validated, and no project has been created by this workflow.
+- [English](https://openmolspec-10.readthedocs.io/en/latest/)
+- [简体中文](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)
+- [First verified hosted build 35915674](https://app.readthedocs.org/projects/openmolspec-10/builds/35915674/)
+
+The existing account project `openmolspec-10` was reused. Its previous builds
+failed with `config:path:default-not-found`. The published release branch now
+contains the root `.readthedocs.yaml`; RTD's default branch is
+`release/openmolspec-v1`, with that explicit configuration path.
+`results/readthedocs_publication_20261116.json` verifies commit
+`5e8ce72655105f4a6cd61859c9c98c0574d36955`, all 150 public HTML page bodies,
+all 68 notebook download hashes, and the manifest/evaluation/CSS assets.
+GitHub Documentation and Benchmark integration checks also passed for that commit.
+
+The initial command environment denied socket creation. After network access was
+enabled, the server's configured HTTP proxy successfully reached GitHub and RTD;
+direct HTTPS connections timed out. Publication uses the working proxy. The
+public documentation CDN rejected Python's default User-Agent with Cloudflare
+1010; verification with a browser User-Agent returned the actual published pages.
+No credentials are sent when checking public pages.
 
 `scripts/publish_readthedocs.py` now prepares the authenticated import workflow.
 It uses only Python's standard library, supports `--direct` to bypass HTTP proxies, and
@@ -151,10 +160,16 @@ python3 scripts/publish_readthedocs.py --apply --wait 600
 Without `--apply`, the script only prints its plan. A standalone copy can use
 `--expected-commit <full Git SHA>` instead of discovering the local checkout's
 HEAD. A queued build is not reported as verified: verification requires a
-successful finished build at that exact commit. Public page reachability and
-GitHub webhook integration still need separate checks after creation. The real
-API workflow remains untested because of the execution environment restriction.
+successful finished build at that exact commit. Public page reachability was
+checked separately as recorded above. Automatic GitHub-to-RTD rebuilds are not
+yet independently verified; the authenticated script can trigger them explicitly.
+
+The release frontend now links to the verified RTD URL by default, with an
+optional `OPENMOLSPEC_DOCS_URL` override. Remote `main` has independently moved to
+a Next.js/FastAPI frontend; bringing the expanded prediction pages/navigation into
+that frontend remains separate work. Publishing this documentation branch does
+not establish that the newer web frontend has been deployed with these changes.
 
 ## Validation
 
-24 focused checks passed (12 benchmark, 5 assignment, 5 solvent-reference and 2 HTML-build checks). Both new Streamlit pages completed real button-triggered computations. Four remaining CLI interfaces completed a bounded integration run. All 68 notebook demonstrations were re-executed; source consistency, 82 Markdown pages and the full 150-page HTML build passed.
+24 focused checks passed (12 benchmark, 5 assignment, 5 solvent-reference and 2 HTML-build checks), followed by 7 publication workflow checks. Both new Streamlit pages completed real button-triggered computations. Four remaining CLI interfaces completed a bounded integration run. All 68 notebook demonstrations were re-executed; source consistency, 82 Markdown pages and the full 150-page HTML build passed. The hosted publication audit verified 221 public resources.
