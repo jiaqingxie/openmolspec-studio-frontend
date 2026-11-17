@@ -1,10 +1,6 @@
-# MS/MS 峰 → MAGMa 候选碎片标注
+# MS/MS 碎片指认
 
-从已知分子枚举候选碎片，用质量误差匹配实测 MS/MS 谱峰，无需模型训练。
-
-## 示例与评测
-
-这是算法标注，不是可微调神经模型；应改进匹配和验证。
+为实测 MS/MS 峰寻找对应的分子碎片。
 
 ## 输入是什么
 
@@ -18,11 +14,11 @@
 | Field | Meaning |
 | --- | --- |
 | `peak_annotations` | 候选碎片、分子式、质量误差及 engine_smiles 上的原子/键编号。 |
-| `interpretation` | 算法给出的候选解释，不是已实验确认的唯一裂解机制。 |
+| `interpretation` | 候选碎片结构及匹配质量误差。 |
 
 ## 真实运行案例
 
-下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
+下面展示示例的输入、预测与参考。下载 JSON 可获取完整数值数组及更多示例。
 
 ![ms.annotation.magma actual results](../assets/gallery/ms-annotation-magma.png)
 
@@ -292,15 +288,14 @@
 | Dataset / scope | Model / variant | Metric | Value |
 | --- | --- | --- | ---: |
 | recorded evaluation | recorded model | matched_peak_fraction | 0.568182 |
+| recorded evaluation | recorded model | annotated_spectra | 2 |
 | recorded evaluation | recorded model | checked_fragments | 1534 |
-
-样本量和候选池随每次运行记录。图可能展示单个分子，表格是来源实验的实际汇总，不能混为同一统计范围。
 
 ## 模型与方法
 
-保留 MAGMa v8 原来的规范化和默认 10 ppm 容差。片段原子编号按引擎实际使用的 engine_smiles 解释，逐片检查原子元素计数、原子范围和键连接；不能直接套到输入 SMILES 的原子顺序。
+MAGMa 枚举分子图的碎片，并与实测峰的质量进行匹配。每条指认包含碎片分子式、质量误差及原子／键编号。
 
-报告匹配谱峰比例、成功标注谱图数及检查的碎片数。候选片段和根到片段路径是算法解释，不能当作实验确认的唯一碎裂机制。
+报告峰匹配覆盖率及 ppm 单位的质量误差。
 
 ## 复现方式
 
@@ -325,10 +320,6 @@ result = benchmark.run('ms.annotation.magma', output='new-algorithm-results.json
 
 此任务是算法流程，可调整参考库或匹配规则；没有神经网络参数和训练 loss。具体匹配目标与数据来源见上文。
 
-## 数据要求与引用
-
-氢迁移、图深度、断键数等字段沿用原算法语义。默认规范化会改变原子顺序，必须保留 engine_smiles；不擅自改动枚举和匹配算法。
-
 <details><summary>来源报告与 SHA-256 指纹</summary>
 
 - [magma_real_test_verified_20261115.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/magma_real_test_verified_20261115.json) — SHA-256 `e65563b00863389105f5eae392d493167d693ac4ca38b9f1abfbd40942d1946b`
@@ -336,4 +327,9 @@ result = benchmark.run('ms.annotation.magma', output='new-algorithm-results.json
 </details>
 
 
-[Original model / 原模型](https://github.com/Dsadd4/MassSpecGym-MAGMA-annotation) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/Dsadd4/MassSpecGym-MAGMA-annotation) · [Model review / 模型检查](../model-audit.md)
+
+## 参考文献
+
+- Ridder, L., van der Hooft, J. J. J. & Verhoeven, S. Automatic Compound Annotation from Mass Spectrometry Data Using MAGMa. Mass Spectrometry 3, S0033 (2014). doi:10.5702/massspectrometry.S0033. [Source](https://doi.org/10.5702/massspectrometry.S0033)
+- Bushuiev, R., Bushuiev, A., de Jonge, N. F., Young, A., et al. MassSpecGym: A benchmark for the discovery and identification of molecules. Advances in Neural Information Processing Systems 37, Datasets and Benchmarks Track (2024). arXiv:2410.23326. [Source](https://arxiv.org/abs/2410.23326)

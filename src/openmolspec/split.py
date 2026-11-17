@@ -13,7 +13,24 @@ import tempfile
 
 
 def scaffold_group_id(scaffold):
-    """Key an achiral scaffold without splitting isotope/protonation variants."""
+    """Generate a connectivity-based key for a molecular scaffold.
+
+    Parameters
+    ----------
+    scaffold : str
+        Scaffold SMILES or a 14-letter standard InChIKey connectivity block.
+        The optional prefix ``'scaffold:'`` is accepted.
+
+    Returns
+    -------
+    str
+        ``'scaffold:'`` followed by the normalized connectivity block.
+
+    Raises
+    ------
+    ValueError
+        If the scaffold cannot be assigned a standard molecular identity.
+    """
     from rdkit import Chem
     if scaffold.startswith('scaffold:'):
         scaffold=scaffold[len('scaffold:'):]
@@ -25,10 +42,26 @@ def scaffold_group_id(scaffold):
 
 
 def molecular_group(smiles, method='scaffold'):
-    """Return the standard identity and an achiral, identity-normalized group.
+    """Assign a standard molecular identity and a split-group key.
 
-    Standard InChI round-tripping precedes scaffold extraction, so alternative
-    mobile-H representations of one standard identity cannot change its group.
+    Parameters
+    ----------
+    smiles : str
+        Molecular structure to group.
+    method : {'scaffold', 'random'}, default 'scaffold'
+        Scaffold grouping uses an achiral Bemis–Murcko scaffold after standard
+        InChI normalization. Random grouping uses molecular connectivity.
+
+    Returns
+    -------
+    tuple of (str, str, rdkit.Chem.Mol)
+        Full standard InChIKey, group key and parsed input molecule. Acyclic
+        molecules use connectivity as their scaffold-group fallback.
+
+    Raises
+    ------
+    ValueError
+        If the structure, identity conversion or grouping method is invalid.
     """
     from rdkit import Chem
     from rdkit.Chem.Scaffolds import MurckoScaffold
@@ -48,12 +81,46 @@ def molecular_group(smiles, method='scaffold'):
 
 def split_records(records, destination, *, method='scaffold', seed=2026,
                   ratios=(.8,.1,.1), source='user_supplied', domain='experimental'):
-    """Write new train/val/test JSONLs, grouping identical molecular connectivity.
+    """Export deterministic grouped training, validation and test files.
 
-    ``random`` hashes connectivity identities; ``scaffold`` hashes achiral
-    Bemis–Murcko scaffolds, using connectivity for molecules with no ring scaffold.
-    Ratios are expected proportions, not exact row counts. Whole groups never
-    cross splits, and assignments do not depend on record order or modality.
+    Parameters
+    ----------
+    records : iterable of dict
+        Spectroscopy records containing ``smiles`` or ``kekule_smiles``.
+        Other molecular, spectral and acquisition fields are preserved.
+    destination : str or pathlib.Path
+        New directory for three JSONL files and ``split-manifest.json``.
+    method : {'scaffold', 'random'}, default 'scaffold'
+        Group molecules by achiral normalized scaffold or connectivity.
+    seed : int, default 2026
+        Seed incorporated into the deterministic SHA-256 group assignment.
+    ratios : tuple of float, default (0.8, 0.1, 0.1)
+        Training, validation and test proportions; nonnegative and summing to
+        one. Complete groups are assigned together, so row counts vary.
+    source : str, default 'user_supplied'
+        Data-source label written to the manifest.
+    domain : {'experimental', 'computed'}, default 'experimental'
+        Origin of the spectra written to the manifest.
+
+    Returns
+    -------
+    dict
+        Manifest with per-file counts and SHA-256 values, grouping policy,
+        source fingerprint, requested ratios, seed and original split counts.
+
+    Raises
+    ------
+    FileExistsError
+        If the destination already exists.
+    ValueError
+        If records or settings are invalid, or one connectivity receives
+        conflicting scaffold roles. Exports are staged before publication.
+
+    Examples
+    --------
+    >>> manifest = split_records(records, 'my-data', method='scaffold', seed=42)
+    >>> manifest['groups_disjoint']
+    True
     """
     from rdkit import rdBase
     if method not in ('random','scaffold'):raise ValueError('method must be random or scaffold')

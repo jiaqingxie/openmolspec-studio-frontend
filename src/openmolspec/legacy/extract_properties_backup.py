@@ -27,6 +27,7 @@ class LogParser(GaussianLogParser):
 
 
 def process_log_file_with_report(task):
+    """Process a molecular log and return its processing-report entry."""
     sample_id, path, smiles_dict = task
     parser = LogParser(path, sample_id, smiles_dict)
     if "atom" in parser.properties:
@@ -46,6 +47,7 @@ def process_log_file_with_report(task):
 
 
 def main():
+    """Run the extract properties backup command-line workflow."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--file-dict", required=True)
     parser.add_argument("--smiles-dict", required=True)

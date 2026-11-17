@@ -72,6 +72,7 @@ def _distribution_summary(frame: pd.DataFrame) -> Dict[str, object]:
 
 
 def plot_distribution(frame: pd.DataFrame, output: Path) -> None:
+    """Draw the chemical-space distributions of the aligned molecular data."""
     plt.rcParams.update({
         "font.size": 13,
         "axes.titlesize": 16,
@@ -188,6 +189,7 @@ def plot_distribution(frame: pd.DataFrame, output: Path) -> None:
 
 
 def main() -> None:
+    """Run the plot align chemical distribution command-line workflow."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--align",

@@ -1,35 +1,65 @@
-# Benchmarks 统一评测
+# 基准评测
 
-软件能运行、冻结模型有效、增加训练数据带来提升，是三个不同问题。这里分别列出当前证据。
+OpenMolSpec 为 NMR、质谱、振动光谱与多谱联合定义了基准任务。本目录列出全部活跃任务、保存的评测结果，以及训练实验配置。
 
-## 实际训练链路检查
+## 任务基准
 
-NMRTransformer 两个阶段均使用两个真实训练记录、两个验证记录，各完成一次优化器更新，没有使用测试样本。Checkpoint 保存、配置重载及重复推理一致性检查通过。这是成功的软件链路验证，不是学习曲线或模型精度结论。[报告](assets/reports/sdk_training_roundtrip_20261117.json) · [训练 API](api.md)。
+| 类别 | 任务数 | 内容 |
+| --- | --- | --- |
+| [核磁共振 NMR](benchmarks/nmr.md) | 17 | 任务定义、输入、指标与运行结果。 |
+| [质谱 MS](benchmarks/ms.md) | 3 | 任务定义、输入、指标与运行结果。 |
+| [红外 / 拉曼 IR / Raman](benchmarks/vibrational.md) | 7 | 任务定义、输入、指标与运行结果。 |
+| [多谱联合](benchmarks/multimodal.md) | 4 | 任务定义、输入、指标与运行结果。 |
 
-## 排除训练／验证身份后的检索
+## 训练基准配置
 
-每个来源选取 512 个 H/C 完整分子评估冻结编码器。按 InChIKey 连接关系排除与哈希匹配的编码器 train/val 文件重叠的身份，包括立体异构体。固定种子 42 选择候选池，H、C、H+C 消融使用完全相同的分子与候选身份，不提供分子式。该权重使用 byte 编码和 512-token 输入预算，超长 NMR 文本按原编码器规则截断。
+[生产基准结果](benchmarks/production.md)列出保存的 200k／1M 实验，包括 Hessian、H/C 位移、响应张量、分子性质与结构生成。
 
-![Filtered retrieval modality comparison](assets/gallery/filtered-retrieval.png)
+配置目录包含 53 个 YAML 实验，记录输入通道、目标、架构、数据版本、随机种子和优化器预算。[查看全部配置](benchmarks/training.md)。
 
-[SVG](assets/gallery/filtered-retrieval.svg) · [Full report](assets/reports/nmr_filtered_retrieval_20261117.json)
+| 基准类别 | 输入 → 输出 | 模型 |
+| --- | --- | --- |
+| structure2property | 三维结构 → 能量、HOMO、LUMO、能隙、偶极矩和零点振动能 | Equiformer-v3 |
+| structure2spectrum | 三维结构 → IR/Raman 数组 | Equiformer-v3 |
+| structure2observables | 三维结构 → 标量与张量可观测量 | Equiformer-v3 |
+| structure2nmr | 三维结构 → 逐原子 H/C 化学位移 | Equiformer-v3 |
+| structure2hessian | 三维结构 → Hessian 张量块 | Equiformer-v3 |
+| structure2response | 三维结构 → 偶极矩／极化率导数 | Equiformer-v3 |
+| spectrum2structure | 光谱 → 分子结构 | Vib2Mol |
+| spectrum2property | 光谱 → 量子化学性质 | Vib2Conf / shared spectroscopy Transformer |
+| spectrum2conformer | 光谱 → 三维构象；协议定义 | Vib2Conf |
 
-| Source | H R@1 | C R@1 | H+C R@1 | H+C R@5 | H+C R@10 |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| `nmrspec_test` | 97.5% | 62.1% | 98.8% | 99.6% | 99.8% |
-| `patent_test_10k` | 77.9% | 36.9% | 80.5% | 92.0% | 94.5% |
-| `nmrexp_exp_10k` | 92.0% | 62.1% | 93.2% | 99.8% | 99.8% |
-| `nmrgym_test` | 26.4% | 36.1% | 48.8% | 77.5% | 87.9% |
+## 评测指标
 
-表格为谱到分子检索。完整报告还包括反向检索、逐查询排名、随机打乱配对的对照，以及基于固定候选池的 2,000 次 bootstrap 区间。这些控制不能证明未知预训练历史、骨架或来源文档独立；仍可能存在相关分子。缺通道结果是同一 checkpoint 的消融，不是独立训练的模型。
+回归任务以目标单位报告 MAE 与 RMSE；检索报告给定候选池上的 Recall@k 和平均倒数排名；结构生成报告规范化结构 top-k 准确率及有效 SMILES 比例；谱预测使用余弦和熵相似度比较数值强度。
 
-[输入预算审计](assets/reports/nmr_filtered_token_budget_20261117.json)确认没有候选 SMILES 超长；部分谱文本超过该权重的输入预算，评分保留原模型预处理限制。
+$$\mathrm{MAE}=\frac1N\sum_{i=1}^{N}|\hat y_i-y_i|,\qquad \mathrm{RMSE}=\sqrt{\frac1N\sum_{i=1}^{N}(\hat y_i-y_i)^2}.$$
+
+$$\mathrm{Recall@}k=\frac1N\sum_i\mathbf{1}[r_i\leq k],\qquad \mathrm{MRR}=\frac1N\sum_i\frac1{r_i}.$$
+
+## 运行评测
 
 ```bash
-python scripts/evaluate_filtered_nmr.py \
-  --workspace /path/to/OpenMolSpec \
-  --work runs/filtered-retrieval \
-  --output results/filtered-retrieval.json --limit 512
+python -m openmolspec_bench list
+python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
+  --tasks nmr.retrieval.hc.s2m nmr.generation.hc \
+  --alignment-checkpoint /path/to/alignment.pt \
+  --generation-checkpoint /path/to/generation.pt \
+  --limit 64 --sampling reservoir --seed 42 --output results/nmr.json
 ```
 
-[Data comparison](corpus-comparison.md) · [Data splits](data/splits.md) · [Model review](model-audit.md)
+按任务指南指定所需模型文件。结果 JSON 保存预测、目标值、数据设置、指标与模型指纹。
+
+## 其他任务定义
+
+分子式预测、谱学 QA 与 SpectraLLM 生成在任务注册表中列为暂缓任务。
+
+## 参考文献
+
+- OpenMolSpec contributors. OpenMolSpec: Chemical spectroscopy datasets, models and learning workflows. Software release v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0)
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)
+- Yang, L., Yang, Z., Xie, J., Wang, Y., Gao, B., Fu, T., Wei, X., Sun, J., Wu, J., He, C., Li, Y. & Gu, Q. NMRTrans: Structure Elucidation from Experimental NMR Spectra via Set Transformers. arXiv:2602.10158 (2026). [Source](https://arxiv.org/abs/2602.10158)
+- Fang, Z., Yang, C., Yu, H., Luo, H., He, H., Xie, J., Yang, Z. & Xia, J. NMRGym: A Comprehensive Benchmark for Nuclear Magnetic Resonance Based Molecular Structure Elucidation. arXiv:2601.15763 (2026). [Source](https://arxiv.org/abs/2601.15763)
+- Bushuiev, R., Bushuiev, A., de Jonge, N. F., Young, A., et al. MassSpecGym: A benchmark for the discovery and identification of molecules. Advances in Neural Information Processing Systems 37, Datasets and Benchmarks Track (2024). arXiv:2410.23326. [Source](https://arxiv.org/abs/2410.23326)
+- Yuan, M., Zou, Z. & Hu, W. QMe14S, A Comprehensive and Efficient Spectral Dataset for Small Organic Molecules. arXiv:2501.18876 (2025). [Source](https://arxiv.org/abs/2501.18876)
+- Zou, Z., Zhang, Y., Liang, L., Wei, M., Leng, J., Jiang, J., Luo, Y. & Hu, W. A deep learning model for predicting selected organic molecular spectra. Nature Computational Science 3, 957–964 (2023). doi:10.1038/s43588-023-00550-y. [Source](https://www.nature.com/articles/s43588-023-00550-y)

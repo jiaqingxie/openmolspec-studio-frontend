@@ -1,10 +1,6 @@
-# 谱图 → 结构检索 · HC
+# 谱到结构检索：¹H + ¹³C
 
-用已有双编码器，从 NMR 谱检索候选分子，或由分子检索候选谱。
-
-## 示例与评测
-
-输入输出对应合理，但目前主要是 32 候选的小池检查。先评更大的独立候选库，再判断泛化和微调需求。
+为查询分子或谱图寻找最匹配的候选。
 
 ## 输入是什么
 
@@ -19,11 +15,11 @@
 | Field | Meaning |
 | --- | --- |
 | `ranked_candidates` | 候选 ID、排名与嵌入相似度分数。 |
-| `recall / MRR` | 每个指标都应同时给出候选池大小；32 候选检索不代表全库检索。 |
+| `recall / MRR` | Recall@1/5/10、MRR 及对应候选池大小。 |
 
 ## 真实运行案例
 
-下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
+下面展示示例的输入、预测与参考。下载 JSON 可获取完整数值数组及更多示例。
 
 ![nmr.retrieval.hc.s2m actual results](../assets/gallery/nmr-retrieval-hc-s2m.png)
 
@@ -87,29 +83,43 @@
 | Dataset / scope | Model / variant | Metric | Value |
 | --- | --- | --- | ---: |
 | nmrspec_test | recorded model | recall_at_1 | 1 |
+| nmrspec_test | recorded model | recall_at_5 | 1 |
+| nmrspec_test | recorded model | recall_at_10 | 1 |
 | nmrspec_test | recorded model | mrr | 1 |
 | nmrspec_test | recorded model | queries | 32 |
 | nmrspec_test | recorded model | candidate_pool | 32 |
+| nmrspec_test | recorded model | unique_candidates | 32 |
+| nmrspec_test | recorded model | tie_policy | stable_candidate_order |
 | patent_test_10k | recorded model | recall_at_1 | 0.65625 |
+| patent_test_10k | recorded model | recall_at_5 | 0.9375 |
+| patent_test_10k | recorded model | recall_at_10 | 0.9375 |
 | patent_test_10k | recorded model | mrr | 0.776217 |
 | patent_test_10k | recorded model | queries | 32 |
 | patent_test_10k | recorded model | candidate_pool | 32 |
+| patent_test_10k | recorded model | unique_candidates | 32 |
+| patent_test_10k | recorded model | tie_policy | stable_candidate_order |
 | nmrexp_exp_10k | recorded model | recall_at_1 | 0.90625 |
+| nmrexp_exp_10k | recorded model | recall_at_5 | 1 |
+| nmrexp_exp_10k | recorded model | recall_at_10 | 1 |
 | nmrexp_exp_10k | recorded model | mrr | 0.9375 |
 | nmrexp_exp_10k | recorded model | queries | 32 |
 | nmrexp_exp_10k | recorded model | candidate_pool | 32 |
+| nmrexp_exp_10k | recorded model | unique_candidates | 32 |
+| nmrexp_exp_10k | recorded model | tie_policy | stable_candidate_order |
 | nmrgym_test | recorded model | recall_at_1 | 0.8125 |
+| nmrgym_test | recorded model | recall_at_5 | 0.96875 |
+| nmrgym_test | recorded model | recall_at_10 | 0.96875 |
 | nmrgym_test | recorded model | mrr | 0.886979 |
 | nmrgym_test | recorded model | queries | 32 |
 | nmrgym_test | recorded model | candidate_pool | 32 |
-
-样本量和候选池随每次运行记录。图可能展示单个分子，表格是来源实验的实际汇总，不能混为同一统计范围。
+| nmrgym_test | recorded model | unique_candidates | 32 |
+| nmrgym_test | recorded model | tie_policy | stable_candidate_order |
 
 ## 模型与方法
 
-H-only、C-only、H+C 使用明确的可见性 mask，谱编码器不接收分子式。规范异构 SMILES 用于判定对应关系，所选测试分子构成本次候选池。
+双编码器将分子结构与 NMR 峰表映射到同一表征空间，并按嵌入相似度排序。
 
-报告 Recall@1/5/10、MRR、查询数和候选数。byte 分子编码器遇到超长 SMILES 时排除并计数，补取后续合格记录，不截断分子结构。
+报告 Recall@1/5/10、平均倒数排名及候选数。
 
 ## 复现方式
 
@@ -142,10 +152,6 @@ $$L_{\rm align}=\tfrac12[\mathrm{CE}(SM^\top/\tau,I)+\mathrm{CE}(MS^\top/\tau,I)
 
 生成使用 token 交叉熵，可按配置加入联合对齐项。对齐使用归一化谱学／分子表征的双向对比交叉熵；ITM 配置增加正负配对分类项。具体目标与权重以训练配置为准。
 
-## 数据要求与引用
-
-16、32 和全库候选的成绩不能直接比较。数据来源和训练/测试重叠仍需单独审计。JSONL 中的 smiles 是评测目标或候选身份，不作为谱编码器的输入。
-
 <details><summary>来源报告与 SHA-256 指纹</summary>
 
 - [nmr_documented_examples_20261117_v2.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/nmr_documented_examples_20261117_v2.json) — SHA-256 `669413d6fc0939bdb6826782d41fc13cf12926a672418ecb46303f0b8ba05b99`
@@ -153,4 +159,10 @@ $$L_{\rm align}=\tfrac12[\mathrm{CE}(SM^\top/\tau,I)+\mathrm{CE}(MS^\top/\tau,I)
 </details>
 
 
-[Original model / 原模型](https://github.com/jiaqingxie/openmolspec-studio-frontend) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/jiaqingxie/openmolspec-studio-frontend) · [Model review / 模型检查](../model-audit.md)
+
+## 参考文献
+
+- Yang, L., Yang, Z., Xie, J., Wang, Y., Gao, B., Fu, T., Wei, X., Sun, J., Wu, J., He, C., Li, Y. & Gu, Q. NMRTrans: Structure Elucidation from Experimental NMR Spectra via Set Transformers. arXiv:2602.10158 (2026). [Source](https://arxiv.org/abs/2602.10158)
+- Fang, Z., Yang, C., Yu, H., Luo, H., He, H., Xie, J., Yang, Z. & Xia, J. NMRGym: A Comprehensive Benchmark for Nuclear Magnetic Resonance Based Molecular Structure Elucidation. arXiv:2601.15763 (2026). [Source](https://arxiv.org/abs/2601.15763)
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)

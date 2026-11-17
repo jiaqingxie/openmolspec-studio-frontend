@@ -1,5 +1,5 @@
-# Spectroscopy QA
+# 谱学问答 / 推理
 
-Deferred at the user's request.
+Additional spectroscopy task.
 
 Deferred at the user’s request. No new model result is claimed.

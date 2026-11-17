@@ -87,6 +87,7 @@ def _overlap(left: pd.DataFrame, right: pd.DataFrame, field: str) -> int:
 
 
 def build_splits(config: Mapping[str, Any]) -> Dict[str, Any]:
+    """Build the configured molecular training, validation and test partitions."""
     release_root = output_dir(config)
     catalog_dir = release_root / "catalog"
     destination = release_root / "splits"

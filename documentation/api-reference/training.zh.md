@@ -1,6 +1,7 @@
-# Training
+---
+orphan: true
+---
 
-```{automodule} openmolspec.training
-:members:
-:show-inheritance:
-```
+# API reference
+
+[OpenMolSpec API reference](module-training.md)

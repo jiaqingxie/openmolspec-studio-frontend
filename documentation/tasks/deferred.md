@@ -1,9 +1,9 @@
 # Deferred tasks
 
-Task pages contain actual examples and measured results. A diagnostic status is not a validated production accuracy claim.
+Choose a task to see its purpose, inputs, outputs, model call and examples.
 
 | Task / input → output | Task ID |
 | --- | --- |
-| [Molecular formula prediction](nmr-formula.md) | `nmr.formula` |
-| [Spectroscopy QA](spectroscopy-qa.md) | `spectroscopy.qa` |
-| [SpectraLLM structure generation](multispectral-spectrallm-generation.md) | `multispectral.spectrallm.generation` |
+| [谱图 → 分子式](nmr-formula.md) | `nmr.formula` |
+| [谱学问答 / 推理](spectroscopy-qa.md) | `spectroscopy.qa` |
+| [多谱 → 结构（SpectraLLM）](multispectral-spectrallm-generation.md) | `multispectral.spectrallm.generation` |

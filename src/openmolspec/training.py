@@ -15,7 +15,32 @@ from .dataset import SpectraSplit, audit_splits, sha256
 
 
 def prepare_nmr_training(train, validation, destination):
-    """Export compatible H/C data after rejecting held-out roles and molecular overlap."""
+    """Prepare train/validation files for NMRTransformer training.
+
+    Parameters
+    ----------
+    train : openmolspec.dataset.SpectraSplit
+        Experimental H/C NMR training view with role ``'train'``.
+    validation : openmolspec.dataset.SpectraSplit
+        Validation view with role ``'val'``. Records contain ``smiles``,
+        ``formula``, ``h_nmr``, ``c_nmr`` and a channel mask.
+    destination : str or pathlib.Path
+        New directory for the prepared JSONLs and verification files.
+
+    Returns
+    -------
+    pathlib.Path
+        Directory containing ``train.jsonl``, ``val.jsonl``, ``summary.json``
+        and ``verification.json``.
+
+    Raises
+    ------
+    ValueError
+        If split roles, molecular formulae, nucleus labels or cross-split
+        molecular identities disagree with the training format.
+    FileExistsError
+        If the destination already exists.
+    """
     from rdkit import Chem
     from rdkit.Chem import rdMolDescriptors
     if not isinstance(train, SpectraSplit) or not isinstance(validation, SpectraSplit):
@@ -71,6 +96,50 @@ def prepare_nmr_training(train, validation, destination):
 
 @dataclass
 class TrainingPlan:
+    """Training configuration for the NMR dual encoder or molecular generator.
+
+    Parameters
+    ----------
+    data_dir : str or pathlib.Path
+        Prepared directory returned by :func:`prepare_nmr_training`.
+    run_dir : str or pathlib.Path
+        New directory for logs, configuration and model checkpoints.
+    stage : {'align', 'generate'}, default 'align'
+        Dual-encoder alignment or autoregressive SMILES generation.
+    checkpoint : str or None, default None
+        Weights used to initialize the selected stage.
+    alignment_checkpoint : str or None, default None
+        Spectral/molecular encoder checkpoint used by the generation stage.
+    python : str, default sys.executable
+        Interpreter of the training environment.
+    device : str, default 'cpu'
+        Torch training device.
+    epochs : int, default 10
+        Number of training epochs.
+    batch_size : int, default 32
+        Number of examples per minibatch, at least two.
+    learning_rate : float, default 0.0001
+        Optimizer learning rate.
+    seed : int, default 2026
+        Seed for model initialization and data order.
+    parameters : dict, optional
+        Stage-specific options. Alignment accepts ``hidden_size``, ``heads``,
+        ``encoder_layers``, ``decoder_layers``, ``feedforward_size``,
+        ``projection_size``, ``alignment_temperature``, ``input_representation``,
+        ``max_source_tokens``, ``max_val_examples`` and ``early_stop_patience``.
+        Generation accepts ``alignment_loss_weight``, ``max_val_batches``,
+        ``generate_examples`` and ``beam_size``. Both stages accept
+        ``max_train_batches``, ``shuffle_buffer``, ``drop_h_prob``,
+        ``drop_c_prob``, ``log_every`` and ``tqdm``.
+
+    Examples
+    --------
+    >>> plan = TrainingPlan('prepared-nmr', 'runs/encoder',
+    ...     epochs=20, batch_size=64, device='cuda:0')
+    >>> settings = plan.describe()
+    >>> validation = plan.validate()
+    >>> result = plan.run()
+    """
     data_dir: str | Path
     run_dir: str | Path
     stage: str = 'align'
@@ -103,6 +172,7 @@ class TrainingPlan:
 
     @property
     def command(self):
+        """list of str: Training command with the current plan's arguments."""
         values = {'data_dir': self.data_dir, 'run_dir': self.run_dir, 'epochs': self.epochs,
                   'batch_size': self.batch_size, 'learning_rate': self.learning_rate,
                   'seed': self.seed, 'device': self.device, **self.parameters}
@@ -116,11 +186,33 @@ class TrainingPlan:
         return command
 
     def describe(self):
+        """Return the training command and configuration summary.
+
+        Returns
+        -------
+        dict
+            Command arguments, validation state and checkpoint settings.
+        """
         return {'command': self.command, 'training_performed': False,
                 'validation': 'pending until validate() or fit()', 'uses_test_split': False,
                 'checkpoint_recovery': 'initializes model weights; optimizer/scheduler state is not resumed'}
 
     def validate(self):
+        """Check the prepared data, checksums, roles and checkpoint files.
+
+        Returns
+        -------
+        dict
+            ``validated=True`` with the train/validation split audit.
+
+        Raises
+        ------
+        ValueError
+            If data metadata, file checksums, batch sizes or split identities
+            fail the training requirements.
+        FileNotFoundError
+            If a configured initialization checkpoint is absent.
+        """
         summary = json.loads((self.data_dir / 'summary.json').read_text())
         verification = json.loads((self.data_dir / 'verification.json').read_text())
         if summary.get('format_version') != 2 or verification.get('status') != 'passed':
@@ -147,7 +239,22 @@ class TrainingPlan:
         return {'validated': True, 'training_performed': False, 'uses_test_split': False, 'split_audit': audit}
 
     def run(self):
-        """Run only when explicitly called; never invoked by plan creation or documentation."""
+        """Train, validate and return the best checkpoint.
+
+        Returns
+        -------
+        dict
+            ``checkpoint`` path, its ``checkpoint_sha256`` and training status.
+            The run directory also contains ``plan.json``, ``training.log``
+            and ``result.json``.
+
+        Raises
+        ------
+        FileExistsError
+            If the run directory already exists.
+        RuntimeError
+            If the trainer finishes without a best checkpoint.
+        """
         if self.run_dir.exists():
             raise FileExistsError('Choose a new run directory to preserve existing training artifacts')
         validation = self.validate()

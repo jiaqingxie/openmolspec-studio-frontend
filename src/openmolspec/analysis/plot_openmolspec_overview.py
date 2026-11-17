@@ -316,6 +316,7 @@ def clean_axis(ax) -> None:
 
 def overview_plot(root: Path, output: Path) -> None:
 
+    """Draw the OpenMolSpec dataset overview panels."""
     summary, source = load_local_summary(root)
 
     molecules = MOLECULES.copy()
@@ -1052,6 +1053,7 @@ def overview_plot(root: Path, output: Path) -> None:
 
 def main() -> None:
 
+    """Run the plot openmolspec overview command-line workflow."""
     parser = argparse.ArgumentParser(
         description=__doc__
     )

@@ -10,3 +10,9 @@ Spectra connect physical observables to molecular structure, dynamics and acquis
 | [NMR inversion](../inversion/index.md) | Relaxation/diffusion kernels, ill-conditioning, nonnegative regularization | [Relaxation distribution](../notebooks/theory-nmr-inversion.ipynb) |
 
 All four tutorials execute numerical simulations with declared parameters. Experimental and computed dataset examples live under [Data](../data/index.md).
+
+## References
+
+- Zou, Z., Zhang, Y., Liang, L., Wei, M., Leng, J., Jiang, J., Luo, Y. & Hu, W. A deep learning model for predicting selected organic molecular spectra. Nature Computational Science 3, 957–964 (2023). doi:10.1038/s43588-023-00550-y. [Source](https://www.nature.com/articles/s43588-023-00550-y)
+- Yuan, M., Zou, Z. & Hu, W. QMe14S, A Comprehensive and Efficient Spectral Dataset for Small Organic Molecules. arXiv:2501.18876 (2025). [Source](https://arxiv.org/abs/2501.18876)
+- OpenMolSpec contributors. openSpec models and benchmark training workflows. Source archive, v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks)

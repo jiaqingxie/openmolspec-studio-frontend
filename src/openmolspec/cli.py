@@ -18,6 +18,7 @@ STAGES = ("manifest", "freq", "nmr", "validate", "dedup", "split", "all")
 
 
 def load_config(path: str):
+    """Read the workflow configuration from its source file."""
     with open(path, encoding="utf-8") as handle:
         return yaml.safe_load(handle)
 
@@ -28,6 +29,7 @@ def _workers(config):
 
 
 def main():
+    """Run the cli command-line workflow."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", default="configs/default.yaml")
     parser.add_argument("--stage", choices=STAGES, default="all")

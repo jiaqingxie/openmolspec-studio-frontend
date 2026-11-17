@@ -280,7 +280,16 @@ def observations():
 
 def build():
     from documentation_pages import build_pages
-    return build_pages(TASKS, profile, profile_zh)
+    from build_api_reference import build as build_api
+    from manual_profiles import profile as user_profile,profile_zh as user_profile_zh
+    pages=build_pages(TASKS, user_profile, user_profile_zh)
+    pages.update(build_api())
+    from manual_benchmarks import pages as benchmark_pages
+    from manual_sdk import pages as sdk_pages
+    for en in [True,False]:
+        pages.update(benchmark_pages(TASKS,en))
+        pages.update(sdk_pages(en))
+    return pages
 
 
 def main():
@@ -306,7 +315,10 @@ def main():
                 failures.append(name)
         else:
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(content)
+            if name.endswith('.ipynb'):
+                from documentation_notebooks import write_notebook
+                write_notebook(path,json.loads(content))
+            else:path.write_text(content)
     if failures:
         raise SystemExit("Regenerate bilingual documentation: " + ", ".join(failures))
     print(f"Bilingual task docs prepared for {len(TASKS)} tasks")

@@ -31,3 +31,9 @@ For conformer-to-spectrum evaluation, use the coordinates associated with the re
 - [MLatom](https://xacs.xmu.edu.cn/docs/mlatom/): computational spectroscopy workflows.
 - [QM9S](https://www.nature.com/articles/s43588-023-00550-y): calculated spectra and molecular response properties.
 - [QMe14S](https://arxiv.org/abs/2501.18876): calculated spectra spanning a broader element set.
+
+## References
+
+- Zou, Z., Zhang, Y., Liang, L., Wei, M., Leng, J., Jiang, J., Luo, Y. & Hu, W. A deep learning model for predicting selected organic molecular spectra. Nature Computational Science 3, 957–964 (2023). doi:10.1038/s43588-023-00550-y. [Source](https://www.nature.com/articles/s43588-023-00550-y)
+- Yuan, M., Zou, Z. & Hu, W. QMe14S, A Comprehensive and Efficient Spectral Dataset for Small Organic Molecules. arXiv:2501.18876 (2025). [Source](https://arxiv.org/abs/2501.18876)
+- OpenMolSpec contributors. openSpec models and benchmark training workflows. Source archive, v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks)

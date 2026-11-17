@@ -1,141 +1,172 @@
-# Python SDK — OpenMolSpec v1.0
+# Python SDK
 
-The package provides dataset loading, model facades, training preparation and benchmark entry points. The base installation has no third-party dependencies. In this release, frozen inference has real execution evidence; the training launcher has completed one encoder step and one generator step, including checkpoint save, configuration reload and identical repeated inference on tiny train/validation examples. This checks software integration, not learning performance.
+OpenMolSpec provides streaming datasets, spectroscopy model classes, training plans and benchmark runners. This guide explains how these interfaces fit together. Follow [Quick start](quickstart.md) for installation and your first prediction.
 
-## Install
-
-The [versioned release](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0) provides the wheel and checksum. For data loading and model interfaces, install it directly into your environment:
-
-```bash
-python -m pip install "https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/download/v1.0/openmolspec-1.0.0-py3-none-any.whl"
-```
-
-For the notebooks, source code and optional dependencies, clone the repository:
-
-```bash
-git clone --branch release/openmolspec-v1 https://github.com/jiaqingxie/openmolspec-studio-frontend.git
-cd openmolspec-studio-frontend
-python3 -m venv .venv
-.venv/bin/python -m pip install .
-# Optional local data formats and analysis:
-.venv/bin/python -m pip install '.[data,analysis]'
-# Optional packaged NMR Transformer training dependencies:
-# .venv/bin/python -m pip install '.[train]'
-```
-
-The package is distributed through GitHub Releases. NMRNet, Vib2Mol and MS models use their author environments, selected with `python=`. Only OpenMolSpec modules are exposed to that interpreter; its torch/numpy versions are preserved. Original production-processing commands now require `pip install ".[production]"`.
-
-## Dataset loading, provenance and splits
+## Dataset objects
 
 ```python
 from openmolspec.dataset import molspectra, list_datasets
 
-print([card['name'] for card in list_datasets()])
-data = molspectra('opendatalab_nmr', root='/path/to/hc_nmr_inchi_v1')
-splits = data.get_split()       # existing train / val / test files
-rows = splits['test'].head(3)   # streaming; does not load the full corpus
-hc = splits['test'].select(modalities=['1H', '13C'], limit=32)
+print([card["name"] for card in list_datasets()])
+data = molspectra("opendatalab_nmr", root="data/nmr")
+splits = data.get_split()
+rows = splits["test"].head(3)
+paired = splits["train"].select(modalities=["1H", "13C"], limit=100)
 print(data.summary())
-# data.verify()                # hash complete files against the audited version
+print(data.verify())
 ```
 
-| Registered name | Format | Domain / origin |
+`MolecularSpectra` groups the named splits. Each `SpectraSplit` reads records as you iterate, keeping memory usage bounded. `select` combines channel filters and a row limit; `head` reads a small list. `verify` checks the complete local files against the dataset version.
+
+| Registered name | Format | Description |
 | --- | --- | --- |
-| `opendatalab_nmr` | `train.jsonl`, `val.jsonl`, `test.jsonl` | Team-curated external experimental NMR |
-| `nmrspec_test`, `patent_test_10k`, `nmrexp_exp_10k`, `nmrgym_test` | `test.jsonl` | Prepared experimental evaluation views |
-| `openspec_test` | `openspec_test.lmdb` | OpenMolSpec calculated observables |
-| `massspecgym_test` | `MassSpecGym_test_full.csv` | External experimental MS/MS |
-| `massspecgym_1_5` | Versioned `MassSpecGym.tsv`, filtered by its native fold | External experimental MS/MS; v1.5 |
+| `opendatalab_nmr` | `nmr_jsonl` | Cleaned experimental H/C NMR. |
+| `nmrspec_test` | `nmr_jsonl` | NMRSpec / NMRTrans |
+| `patent_test_10k` | `nmr_jsonl` | OpenDataLab H/C evaluation subset. |
+| `nmrexp_exp_10k` | `nmr_jsonl` | Prepared NMRexp evaluation view. |
+| `nmrgym_test` | `nmr_jsonl` | NMRGym |
+| `openspec_test` | `openspec_lmdb` | Computed multimodal spectra and properties. |
+| `massspecgym_test` | `massspecgym_csv` | Prepared MS/MS evaluation CSV. |
+| `massspecgym_1_5` | `massspecgym_tsv` | MassSpecGym v1.5 TSV with source folds. |
+| `opendatalab_nmr_prepared` | `nmr_jsonl` | Original prepared H/C files. |
+| `opendatalab_ir` | `jsonl` | Cleaned experimental IR |
+| `opendatalab_19f` | `jsonl` | Cleaned experimental 19F |
+| `opendatalab_31p` | `jsonl` | Cleaned experimental 31P |
+| `opendatalab_ms` | `jsonl` | Cleaned experimental MS |
+| `opendatalab_11b` | `jsonl` | Cleaned experimental 11B |
+| `opendatalab_raman` | `jsonl` | Cleaned experimental RAMAN |
+| `opendatalab_29si` | `jsonl` | Cleaned experimental 29SI |
 
-Pass a directory or, for a single-file test view, the file itself. Legacy LMDB requires explicit `trusted=True` because it contains Python pickles. Record fields are preserved; `_openmolspec` adds dataset, domain, split, source-file locator and available modalities. Missing acquisition conditions are not fabricated. Card counts describe audited versions, not arbitrary local files; `verify()` rejects changed files. Full dataset downloads are not silently performed. Verified public release URLs and redistribution scope remain pending; see [data sources and counts](datasets.md).
+Each record retains its source fields. `_openmolspec` adds the dataset, domain, split, file locator and detected channels. The [Data guide](data/index.md) describes numerical fields, units, acquisition conditions and cleaned counts.
 
-`audit_splits(data.get_split())` recomputes structural identities with RDKit and a disk-backed index. Default connectivity grouping keeps stereoisomers together. Results apply only to the supplied views; checking a small subset does not establish full-corpus or pretrained-model independence.
+## Import your own measurements
 
-## NMRNet: actual frozen inference
+```python
+from openmolspec.dataset import MolecularSpectra
+
+custom = MolecularSpectra.from_jsonl(
+    splits={"train": "my-train.jsonl", "val": "my-val.jsonl"},
+    name="my_measurements", domain="experimental")
+print(custom["train"].head(1))
+```
+
+Use the H/C JSONL schema for `format="nmr_jsonl"`. For heteronuclear shifts, optical peak lists or general spectral dictionaries, choose `format="jsonl"`. The reader recognizes `nucleus` with `peaks_ppm`, `modality` with `wavenumber_cm1`, and numerical mass-spectral `peaks`.
+
+## Model interfaces
+
+| Class | Input → output | Training route |
+| --- | --- | --- |
+| `NMRNet` | SMILES → ¹H/¹³C shifts; structure + peaks → assignments | [NMRNet](tasks/nmr-forward-13C.md) |
+| `NMRTransformer(stage="align")` | NMR + candidates → ranking | `training_plan`, `fit` |
+| `NMRTransformer(stage="generate")` | NMR + formula → molecular structures | `training_plan`, `fit` |
+| `GapModel` | IR + Raman + H/C → gap (eV) | [openSpec](tasks/vibrational-gap-ir_raman_hc.md) |
+| `Vib2Mol` | Spectra → structures or candidate ranking | [openSpec](tasks/vibrational-generation-hc.md) |
+| `MSPredictor` | Molecule + acquisition conditions → MS/MS | [ms-pred](tasks/ms-forward-glacier.md) |
+
+Select each model’s dependencies through `python=`. This lets a lightweight OpenMolSpec client call the environment containing the author model implementation and its weights.
+
+### NMRNet
 
 ```python
 from openmolspec.model import NMRNet
 
 model = NMRNet.from_pretrained(
-    '/path/to/models', nucleus='13C', python='/path/to/nmr-env/bin/python'
-)
-result = model.predict([row['smiles'] for row in rows])
-print(result['records'])       # atom_indices + prediction_ppm
-print(result['provenance']['checkpoint_sha256'])
-model.save_config('nmrnet-config.json')
-restored = NMRNet.from_config('nmrnet-config.json')
+    "models", nucleus="13C", python="/path/to/nmr-env/bin/python")
+prediction = model.predict("CCO")
+print(prediction["records"][0]["atom_indices"])
+print(prediction["records"][0]["prediction_ppm"])
+assignments = model.assign("CCO", [18.2, 58.3], tolerance_ppm=5.0)
 ```
 
-The model root contains original `nmrnet/nmrnet-orig` source and `nmrnet/weights/finetune/liquid` assets. This adapter runs liquid H/C fold 0 on CPU with the original scaler. Atom indices follow zero-based RDKit AddHs(input SMILES), and the generated geometry is recorded. Training overlap and solvent effects remain unverified. B/Si/F/P are not exposed as validated NMRNet variants. [Original assets](https://zenodo.org/records/19142375).
+The model directory contains `nmrnet/nmrnet-orig` and `nmrnet/weights`. The liquid-state fold-0 adapter predicts H/C shifts on CPU. Atom indices use the zero-based RDKit graph after adding hydrogens. The assignment output links measured peak indices to predicted atom sites and includes residuals and alternative matches.
 
-To run the [SDK inference notebook](notebooks/sdk-inference.ipynb), install `requirements-docs-examples.txt` and the package, then configure:
-
-```bash
-export OPENMOLSPEC_MODELS_ROOT=/path/to/models
-export OPENMOLSPEC_NMR_PYTHON=/path/to/nmr-env/bin/python
-```
-
-That notebook actually calls `model.predict`, prints checkpoint identity, compares real experimental peaks and renders a figure. Peak matching is not experimental atom-assignment accuracy.
-
-## Model interfaces
-
-| Class | Input → output | SDK training |
-| --- | --- | --- |
-| `NMRNet` | SMILES → H/C atom shifts; `assign` adds measured peaks | No |
-| `NMRTransformer(stage='align')` | NMR query + explicit candidates → ranking | Existing alignment trainer |
-| `NMRTransformer(stage='generate')` | NMR + known formula → SMILES | Existing generator; alignment checkpoint required |
-| `GapModel` | IR/Raman/H/C → gap in eV | No |
-| `Vib2Mol` | IR/Raman/H/C → SMILES; `retrieve(..., rerank=True)` uses ITM on supplied candidates | No |
-| `MSPredictor(model='glacier' or 'iceberg')` | Structure + adduct, collision energy, instrument → MS/MS | No |
-
-Vibrational inputs are `ir`, `raman` (1024 values each), `nmr_h`, `nmr_c` (ppm arrays), with checkpoint-compatible reference and normalization. Missing channels are rejected unless `allow_missing_modalities=True`, which marks the run as an ablation. NMR retrieval excludes formula input; generation requires it. All model facades support configuration save/load: this saves paths and settings, not copies of weights.
-
-## Prepare and train your own NMR data
+### NMRTransformer
 
 ```python
-from openmolspec.dataset import MolecularSpectra
-from openmolspec.training import prepare_nmr_training
 from openmolspec.model import NMRTransformer
 
-custom = MolecularSpectra.from_jsonl(
-    splits={'train': 'train.jsonl', 'val': 'val.jsonl'},
-    name='my_experiment', domain='experimental',
-)
-prepared = prepare_nmr_training(custom['train'], custom['val'], 'prepared-nmr')
-model = NMRTransformer(stage='align', device='cpu')
-plan = model.training_plan(prepared, run_dir='runs/my-alignment', epochs=10, batch_size=32)
-print(plan.describe())
-print(plan.validate())
-# result = model.fit(plan)     # launches training; use a new run directory
+query = data["test"].head(1)[0]
+aligner = NMRTransformer.from_pretrained(
+    "alignment.pt", stage="align", python="/path/to/nmr-env/bin/python")
+ranking = aligner.retrieve(query, ["CCO", "CCCO", "COC"], top_k=3)
+generator = NMRTransformer.from_pretrained(
+    "generation.pt", stage="generate",
+    python="/path/to/nmr-env/bin/python")
+candidates = generator.predict(query, beam_size=5)
 ```
 
-Records require `smiles`, `formula`, `h_nmr`, `c_nmr` and optional `[has_H, has_C]` masks. Preparation checks formulas, nuclei and train/validation connectivity overlap. `select` preserves split roles; an existing test view cannot be supplied as training data. Training rechecks file hashes and overlap before launching and creates a new log, plan and best-checkpoint hash. Generation training additionally requires `alignment_checkpoint=`. Pretrained initialization restores weights, not optimizer/scheduler state.
+Retrieval ranks the supplied molecular candidates from their spectral/molecular embeddings. Generation uses the NMR channels and the known `formula` in the query. Returned candidates include SMILES, validity, formula agreement and model scores.
 
-The [executed preflight notebook](notebooks/sdk-training-preflight.ipynb) uses two real records from each original OpenDataLab train/validation split. It runs data preparation and validation, **not training**. A separate actual training run has now verified both stages. The [training integration report](assets/reports/sdk_training_roundtrip_20261117.json) records two training and two validation records, one optimizer step per stage, checkpoint hashes and save/reload inference equality. These records retain their original split roles; no test examples are used. No learning-performance claim is made. One source inconsistency encountered during example selection was a hydrogen-free `BrOBr` structure with a ¹H record; training preparation now rejects absent-nucleus records, while raw loaders retain them for inspection.
+### Vibrational and property models
 
-## Task discovery and benchmark execution
+```python
+import json
+from pathlib import Path
+from openmolspec.model import GapModel, Vib2Mol
+
+inputs = json.loads(Path(
+    "documentation/assets/harness/vibrational-request.json").read_text())["inputs"]
+gap_model = GapModel(root="openspec-models", python="/path/to/openspec-env/bin/python")
+gap = gap_model.predict(inputs)
+structure_model = Vib2Mol(root="openspec-models", python="/path/to/openspec-env/bin/python")
+structures = structure_model.predict(inputs)
+```
+
+IR and Raman inputs each contain 1,024 normalized intensities on the 400–4,000 cm⁻¹ grid. `nmr_h` and `nmr_c` contain ppm shifts using the checkpoint reference. `GapModel` returns energy gaps in eV. `Vib2Mol` generates molecular candidates; its `retrieve` method ranks a supplied candidate library.
+
+### Mass-spectrum prediction
+
+```python
+from openmolspec.model import MSPredictor
+
+ms = MSPredictor(model="glacier", source="ms-pred",
+    weights="glacier-weights", python="/path/to/ms-env/bin/python")
+prediction = ms.predict(smiles="CCO", adduct="[M+H]+",
+    collision_energy=20.0, instrument="Orbitrap")
+print(prediction)
+```
+
+Supply the molecular structure, adduct, collision energy and instrument used for the desired spectrum. Choose `model="iceberg"` for the ICEBERG adapter. See the task guides for model assets and spectral comparison settings.
+
+## Training and checkpoint reuse
+
+```python
+from openmolspec.training import prepare_nmr_training
+
+prepared = prepare_nmr_training(custom["train"], custom["val"], "prepared-nmr")
+model = NMRTransformer(stage="align", device="cpu")
+plan = model.training_plan(
+    prepared, run_dir="runs/my-encoder", epochs=10, batch_size=32)
+print(plan.describe())
+print(plan.validate())
+trained = model.fit(plan)
+model.save_config("trained-model.json")
+restored = NMRTransformer.from_config("trained-model.json")
+```
+
+Preparation validates the molecular formula, nucleus labels and train/validation identity separation. `fit` launches the configured training stage and selects the best validation checkpoint. For a generator, use `stage="generate"` and supply its alignment checkpoint. The [training tutorial](notebooks/sdk-training-preflight.ipynb) explains every preparation step and inspects saved training/checkpoint results.
+
+## Evaluation and numerical inversion
 
 ```python
 from openmolspec.task import list_tasks
 from openmolspec.benchmark import Benchmark
 
-print(list_tasks(group='nmr'))
-bench = Benchmark(workspace='/path/to/OpenMolSpec', python='/path/to/runtime/bin/python')
-report = bench.run('nmr.retrieval.hc.s2m', datasets=['nmrspec_test'],
-                   limit=32, output='results/my-benchmark.json')
+print(list_tasks(group="nmr"))
+benchmark = Benchmark(workspace="/path/to/OpenMolSpec",
+    python="/path/to/nmr-env/bin/python", alignment_checkpoint="alignment.pt", nmr_python="/path/to/nmr-env/bin/python")
+report = benchmark.run("nmr.retrieval.hc.s2m", datasets=["nmrspec_test"],
+    limit=64, output="results/my-retrieval.json")
 ```
 
-The 31 active adapters remain accessible; deferred tasks are excluded. A completed adapter does not establish model accuracy or independent validation. Interpret scores with the [model audit](model-audit.md) and [evaluation protocols](protocols.md).
+Use [Benchmarks](benchmarks.md) for task metrics and experiment configurations. The inversion module provides nonnegative regularized recovery of relaxation and diffusion distributions; see [NMR inversion](inversion/index.md). The complete [API reference](api-reference/index.md) includes signatures, parameters and return values.
 
+## References
 
-A full chemistry check of the four local evaluation JSONLs inspected 39,183 records. Five records in the 10,000-record patent view had a recorded nucleus absent from the structure (five H flags; two of those also C flags). The other three views had no flags under these checks. This is not an audit of every raw spectrum or of the full 2.68-million-identity corpus. [Download audit](assets/reports/sdk_nmr_input_audit_20261117.json).
-
-
-To reproduce the software integration check from this repository:
-
-```bash
-python scripts/verify_sdk_training.py \
-  --python /path/to/nmr-env/bin/python \
-  --work runs/sdk-training-check \
-  --output results/sdk-training-check.json
-```
+- OpenMolSpec contributors. OpenMolSpec: Chemical spectroscopy datasets, models and learning workflows. Software release v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0)
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)
+- Yang, L., Yang, Z., Xie, J., Wang, Y., Gao, B., Fu, T., Wei, X., Sun, J., Wu, J., He, C., Li, Y. & Gu, Q. NMRTrans: Structure Elucidation from Experimental NMR Spectra via Set Transformers. arXiv:2602.10158 (2026). [Source](https://arxiv.org/abs/2602.10158)
+- OpenMolSpec contributors. openSpec models and benchmark training workflows. Source archive, v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks)
+- Wang, R.-X., Wang, R. & Coley, C. W. GLACIER: Rethinking Mass Spectrum Prediction as an Object Detection Problem. NeurIPS 2026. arXiv:2606.29161 (2026). [Source](https://arxiv.org/abs/2606.29161)
+- Wang, R., Manjrekar, M., Mahjour, B., Avila-Pacheco, J., et al. Neural Spectral Prediction for Structure Elucidation with Tandem Mass Spectrometry. bioRxiv (2025). doi:10.1101/2025.05.28.656653. [Source](https://doi.org/10.1101/2025.05.28.656653)
+- NMRInversions.jl contributors. NMRInversions.jl: inversion of NMR relaxation and diffusion measurements. Software and theory documentation. Accessed 18 November 2026. [Source](https://github.com/aris-mav/NMRInversions.jl)

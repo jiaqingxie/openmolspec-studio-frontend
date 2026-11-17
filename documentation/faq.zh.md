@@ -1,19 +1,33 @@
-# 常见问题
+# 常用流程
 
-**从什么输入开始？** 已知结构可用于正向预测和峰指认；谱学输入可用于检索与生成；弛豫／扩散时域信号使用 Inversion，见[任务目录](tasks/index.md)。
+## 选择输入
 
-**实验 IR 峰表能作为完整曲线吗？** 稀疏峰位不包含连续实测强度，应保留其表示类型，使用对应输入的适配器。
+结构用于谱预测，结构与峰用于指认，谱用于检索或生成，时域信号用于数值反演。见[任务](tasks/index.md)。
 
-**零谱或常数谱如何处理？** 回查原始记录与处理映射。常数数组不能直接除以零极差做 min–max 归一化，Data 页面单独报告它们。
+## 读取峰表
 
-**为什么数据量与论文不同？** 谱条目、化合物记录、去重身份和构象是不同单位；本地过滤视图也可能小于原论文。请查看数据卡的版本与统计范围。
+NMR 使用 ppm 位置，MS 使用 m/z–强度对，IR/Raman 使用 cm⁻¹ 位置及可用强度。构建密集光谱时，将网格和展宽参数与数组一起保存。
 
-**能自定义划分吗？** `split_records` 可导出随机或骨架分组的新数据集和清单，固定 benchmark 仍保留原始划分，见[数据划分](data/splits.md)。
+## 选择模型环境
 
-**怎样微调？** 每个[任务页](tasks/index.md)列出训练目标、SDK 计划或作者训练实现，数据、标签与实验条件需匹配目标函数。
+通过 `python=` 指定安装了模型依赖的解释器，在模型类中指定 checkpoint 或模型根目录。见 [SDK](api.md)。
 
-**预测一致但响应哈希不同？** 临时文件等运行元数据可能变化，Spectra Harness 因此同时记录完整响应与预测哈希。
+## 训练自己的数据
 
-**原子编号如何理解？** NMR 指认按指定输入图使用从 0 开始的 RDKit 索引，并说明显式氢约定；MAGMa 使用输出的 engine 图。结果必须与其分子图和索引约定一起保存。
+使用 `MolecularSpectra.from_jsonl` 导入训练／验证文件，再通过 `prepare_nmr_training` 准备数据，创建训练计划并调用 `model.fit(plan)`。
 
-**教程需要什么环境？** 安装包、教程依赖和有许可的 Arial 字体。系统未安装时，用 `OPENMOLSPEC_ARIAL_FONT` 指向 TTF。模型教程还需要对应作者环境及权重；理论模拟使用 NumPy／SciPy 和 Matplotlib。
+## 创建数据划分
+
+使用 `split_records` 按连接关系随机分组或按骨架划分，再从 manifest 查看数量、分组策略和文件哈希。见[划分](data/splits.md)。
+
+## 把预测映射到原子
+
+NMRNet 使用 RDKit AddHs 后的 0 起始原子编号，MAGMa 使用 `engine_smiles` 图上的编号。绘制指认时同时保留返回的图和编号。
+
+## 运行教程
+
+克隆 release 分支并安装 `requirements-docs-examples.txt`。科学绘图使用 Arial，可通过 `OPENMOLSPEC_ARIAL_FONT` 指定本机 TTF；SDK 推理教程另外配置模型路径。
+
+## 连接 Agent
+
+通过 Python、JSON 命令行请求或 MCP 使用 Spectra Harness。先发现任务、验证请求，再执行并读取 `result`。见 [Agent Harness](harness.md)。

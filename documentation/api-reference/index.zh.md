@@ -1,9 +1,11 @@
-# API 接口参考
+# API 参考
 
-类和函数签名从包源码生成，完整调用流程见 [SDK 指南](../api.md)。
+API 按包模块组织。每项接口提供函数签名、参数、返回值和源代码入口。数据加载与模型调用从前两项开始；处理新的计算数据可使用后面的解析、清洗与发布模块。
 
-- [Datasets and splits](datasets.md)
-- [Models](models.md)
-- [Training](training.md)
-- [Inversion](inversion.md)
-- [Spectra Harness](harness.md)
+- [数据访问](category-data.md)
+- [模型](category-models.md)
+- [训练与评测](category-learning.md)
+- [谱学与数据结构](category-spectroscopy.md)
+- [数据处理与发布](category-processing.md)
+- [Agent 工具](category-agents.md)
+- [工具函数](category-utilities.md)

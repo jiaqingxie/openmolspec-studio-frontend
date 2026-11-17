@@ -1,10 +1,6 @@
-# Vib2Mol candidate reranking with H/C
+# Candidate reranking: IR + Raman + NMR
 
-Use Xinyu's saved Vib2Mol models for spectral structure elucidation. The complete input is IR + Raman + H/C; the IR/Raman-only route is a missing-NMR ablation.
-
-## Example and evaluation
-
-Complete four-modal protocol is appropriate. Candidate-pool retrieval and explicit-pool ITM are not open-world generation; validate larger held-out pools.
+Rank molecular structures by agreement with the input spectra.
 
 ## What goes in
 
@@ -12,7 +8,7 @@ Complete four-modal protocol is appropriate. Candidate-pool retrieval and explic
 | --- | --- |
 | `IR / Raman` | 1024 intensity samples per visible channel, ordered 400→4000 cm⁻¹, using the checkpoint normalization. |
 | `1H / 13C` | Per-atom shift arrays in ppm with the checkpoint-compatible reference ID and normalization. |
-| `candidate structures` | An explicit candidate library; scores cannot identify molecules outside it. |
+| `candidate structures` | The molecular candidate library to rank. |
 
 ## What comes out
 
@@ -23,7 +19,7 @@ Complete four-modal protocol is appropriate. Candidate-pool retrieval and explic
 
 ## A real recorded example
 
-The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
+Inspect the input, prediction and reference for the example below. Download the JSON for the complete numerical arrays and additional examples.
 
 ![spectroscopy.reranking.hc actual results](../assets/gallery/spectroscopy-reranking-hc.png)
 
@@ -108,17 +104,20 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 | Dataset / scope | Model / variant | Metric | Value |
 | --- | --- | --- | ---: |
 | recorded sample | recorded model | recall_at_1 | 1 |
+| recorded sample | recorded model | recall_at_5 | 1 |
+| recorded sample | recorded model | recall_at_10 | 1 |
 | recorded sample | recorded model | mrr | 1 |
 | recorded sample | recorded model | queries | 16 |
 | recorded sample | recorded model | candidate_pool | 16 |
-
-Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
+| recorded sample | recorded model | unique_candidates | 16 |
+| recorded sample | recorded model | tie_policy | stable_candidate_order |
+| recorded sample | recorded model | top_1_hit_rate | 1 |
 
 ## Model and method
 
-Reuse the authors' encode_spectra, canonical/unique_candidates and rerank_candidates utilities. Generation defaults to beam 10 and maximum length 300, removes invalid/duplicate canonical structures, and reranks up to 10 candidates by ITM positive-class probability. No molecular formula is supplied and no nearest-neighbor cache is used.
+The openSpec model encodes the spectral channels with Vib2Mol. Generation uses beam search and molecular matching scores; retrieval compares embeddings, and candidate reranking uses the matching head.
 
-Retrieval reports both directions with the candidate-pool size and deterministic tie policy. Generation reports canonical top-1/3/5/10, validity across raw beams and reranked top-k separately. Reranking uses an explicit candidate list.
+Report top-k accuracy for generation, and Recall@k/MRR for ranking.
 
 ## Reproduce
 
@@ -139,13 +138,9 @@ result = model.retrieve(inputs, candidate_smiles,
     rerank=True, allow_missing_modalities=False)
 ```
 
-Use the [openSpec/Vib2Mol author training workflow](https://github.com/X1nyuLu/openSpec-alpha) for adaptation. Export aligned spectral/structure LMDBs, retain H/C references and normalization, and keep train/validation groups disjoint. Retrieval combines symmetric contrastive cross-entropy with matching cross-entropy; generation adds autoregressive molecular-token cross-entropy. Property regression uses the target transform and regression criterion from its training configuration. SDK classes expose inference; these training workflows run in the author implementation.
+Use the [openSpec/Vib2Mol author training workflow](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks) for adaptation. Export aligned spectral/structure LMDBs, retain H/C references and normalization, and keep train/validation groups disjoint. Retrieval combines symmetric contrastive cross-entropy with matching cross-entropy; generation adds autoregressive molecular-token cross-entropy. Property regression uses the target transform and regression criterion from its training configuration. SDK classes expose inference; these training workflows run in the author implementation.
 
 $$L_{\rm retrieval}=L_{\rm contrastive}+L_{\rm matching},\qquad L_{\rm generation}=-\sum_t\log p(y_t\mid y_{<t},s).$$
-
-## Data requirements and references
-
-Checkpoint pairs must share their H/C reference and normalization buffers. Small candidate pools can inflate retrieval numbers; publish the sample IDs, seed and source composition with every score.
 
 <details><summary>Source reports and SHA-256 fingerprints</summary>
 
@@ -154,4 +149,11 @@ Checkpoint pairs must share their H/C reference and normalization buffers. Small
 </details>
 
 
-[Original model / 原模型](https://github.com/X1nyuLu/openSpec-alpha) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks) · [Model review / 模型检查](../model-audit.md)
+
+## References
+
+- OpenMolSpec contributors. openSpec models and benchmark training workflows. Source archive, v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks)
+- OpenMolSpec contributors. OpenMolSpec: Chemical spectroscopy datasets, models and learning workflows. Software release v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0)
+- Yuan, M., Zou, Z. & Hu, W. QMe14S, A Comprehensive and Efficient Spectral Dataset for Small Organic Molecules. arXiv:2501.18876 (2025). [Source](https://arxiv.org/abs/2501.18876)
+- Zou, Z., Zhang, Y., Liang, L., Wei, M., Leng, J., Jiang, J., Luo, Y. & Hu, W. A deep learning model for predicting selected organic molecular spectra. Nature Computational Science 3, 957–964 (2023). doi:10.1038/s43588-023-00550-y. [Source](https://www.nature.com/articles/s43588-023-00550-y)

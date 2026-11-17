@@ -42,11 +42,13 @@ COVERAGE = np.array([
 
 
 def read_json(path: Path) -> dict:
+    """Read a JSON document from a file."""
     with path.open(encoding="utf-8") as handle:
         return json.load(handle)
 
 
 def current_openmolspec_counts(root: Path) -> tuple[int, int, int, int, int]:
+    """Read the molecular and spectrum counts for the current release."""
     analysis = read_json(root / "reports/analysis/summary.json")
     return (
         analysis["unique_canonical_smiles"],
@@ -58,6 +60,7 @@ def current_openmolspec_counts(root: Path) -> tuple[int, int, int, int, int]:
 
 
 def plot_comparison(root: Path, output: Path) -> None:
+    """Plot the selected dataset statistics and reference collections."""
     (
         unique_molecules,
         trajectory_frames,
@@ -156,6 +159,7 @@ def plot_comparison(root: Path, output: Path) -> None:
 
 
 def main() -> None:
+    """Run the plot dataset statistics command-line workflow."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--output", type=Path,

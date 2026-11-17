@@ -1,65 +1,84 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>OpenMolSpec v1.0 · Chemical spectroscopy datasets and models</title>
-  <meta name="description" content="A million scale dataset and platform for chemical spectroscopic deep learning. Explore NMR, MS, IR and Raman datasets, model workflows and executed tutorials.">
-  <link rel="canonical" href="https://jiaqingxie.github.io/openmolspec.github.io/">
-  <link rel="icon" href="assets/brand/mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="site.css"><script src="site.js" defer></script>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OpenMolSpec v1.0 · Chemical spectroscopy and deep learning</title>
+<meta name="description" content="A million scale dataset and platform for chemical spectroscopic deep learning. NMR, MS, IR and Raman datasets, models and tutorials.">
+<link rel="canonical" href="https://jiaqingxie.github.io/openmolspec.github.io/">
+<link rel="icon" href="assets/brand/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="site.css"><script src="site.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="header"><div class="wrap header-row">
-  <a href="#" class="brand"><img src="assets/brand/openmolspec-light.svg" alt="OpenMolSpec v1.0" width="245" height="56"></a>
-  <button class="menu-toggle" aria-controls="nav" aria-expanded="false">Menu ☰</button>
-  <nav id="nav" aria-label="Main navigation"><a href="#data">Data</a><a href="#tasks">Tasks</a><a href="#tutorials">Tutorials</a><a href="#theory">Theory</a><a href="#gallery">Gallery</a><a href="https://openmolspec-10.readthedocs.io/en/latest/">Docs ↗</a></nav>
+<a href="#main" class="brand"><img src="assets/brand/mark.svg" alt="" width="32" height="32"><span>OpenMolSpec <small>v1.0</small></span></a>
+<button class="menu-toggle" aria-controls="nav" aria-expanded="false">Menu</button>
+<nav id="nav" aria-label="Main navigation"><a href="#examples">Examples</a><a href="#data">Data</a><a href="#tasks">Tasks</a><a href="#tutorials">Tutorials</a><a href="#gallery">Gallery</a><a href="docs/">Documentation ↗</a></nav>
 </div></header>
-<main id="main">
-<section class="hero wrap">
-  <div class="hero-copy"><p class="eyebrow">NMR · MS · IR · RAMAN</p><h1>OpenMolSpec</h1><p class="hero-title">A million scale dataset and platform for chemical spectroscopic deep learning.</p><p class="intro">Explore experimental measurements and computed observables. Choose a task, load data, call a model and build a reproducible learning workflow.</p>
-  <div class="actions"><a class="button" href="#data">Explore the data</a><a class="button secondary" href="https://openmolspec-10.readthedocs.io/en/latest/quickstart.html">Quick Start →</a><a class="plain-link" href="https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1">Python package ↗</a></div>
-  </div>
-  <figure class="hero-result"><a href="https://openmolspec-10.readthedocs.io/en/latest/tasks/vibrational-forward.html"><img src="assets/gallery/vibrational-forward.png" alt="Actual model predictions and paired Gaussian reference IR and Raman spectra" width="1600" height="800"></a><figcaption>Recorded result · geometry → IR / Raman. Predictions and reference use the same geometry. <a href="https://openmolspec-10.readthedocs.io/en/latest/tasks/vibrational-forward.html">Inspect the example →</a></figcaption></figure>
-</section>
-<div class="wrap stats">__STATS__</div>
-<section id="data" class="section wrap">
-  <div class="section-heading"><div><p class="eyebrow">DATA</p><h2>Start from the measurements.</h2></div><a href="https://openmolspec-10.readthedocs.io/en/latest/data/index.html">Data cards, distributions and splits →</a></div>
-  <p class="section-intro">OpenDataLab identifies the team-curated experimental collection. External resources retain their original citations. Experimental and computed data, spectral entries and molecular identities are reported separately.</p>
-  <div class="table-scroll"><table class="data-table"><thead><tr><th>Source / view</th><th>Domain</th><th>Verified local scope</th><th>Details</th></tr></thead><tbody>__DATA_ROWS__</tbody></table></div>
-  <p class="note">Collections can overlap and use different counting units. Each data card records its source, version, quality checks and access conditions. Fixed benchmarks and custom random / scaffold splits have separate manifests.</p>
-  <div class="data-figures">__DATA_FIGURES__</div>
-</section>
-<section id="tasks" class="section section-tint"><div class="wrap">
-  <div class="section-heading"><div><p class="eyebrow">TASKS</p><h2>Choose the question you want to answer.</h2></div><a href="https://openmolspec-10.readthedocs.io/en/latest/model-audit.html">Models, adaptation and losses →</a></div>
-  <p class="section-intro">Every task guide explains its purpose, inputs, outputs, model call, training route and objective, alongside recorded results.</p>
-  <div class="filters" data-filter-target="tasks" role="group" aria-label="Filter tasks"><button data-filter="all" aria-pressed="true">All tasks</button><button data-filter="nmr" aria-pressed="false">NMR</button><button data-filter="ms" aria-pressed="false">MS</button><button data-filter="vibrational" aria-pressed="false">IR / Raman</button><button data-filter="multimodal" aria-pressed="false">Multimodal</button></div>
-  <div class="table-scroll"><table class="task-table"><thead><tr><th>Task</th><th>Input</th><th>Output</th></tr></thead><tbody id="task-rows">__TASK_ROWS__</tbody></table></div>
-</div></section>
-<section id="tutorials" class="section wrap">
-  <div class="section-heading"><div><p class="eyebrow">TUTORIALS</p><h2>Read the code. Inspect the result.</h2></div><a href="https://openmolspec-10.readthedocs.io/en/latest/notebooks/index.html">All executed tutorials →</a></div>
-  <div class="tutorial-grid">__TUTORIALS__</div>
-  <div class="code-panel"><div><h3>A familiar Python interface.</h3><p>Use versioned local datasets and explicit model assets. Quick Start covers installation, inputs and the first reproducible result.</p><a href="https://openmolspec-10.readthedocs.io/en/latest/api.html">Dataset and model guide →</a></div><pre><code>from openmolspec.dataset import molspectra
+<main id="main" class="wrap">
+<section class="hero">
+<h1><img src="assets/brand/mark.svg" alt="" width="60" height="60">OpenMolSpec</h1>
+<p class="hero-title">Chemical spectroscopy and deep learning</p>
+<p>OpenMolSpec provides molecular spectroscopy datasets and Python tools for NMR, mass spectrometry, infrared and Raman spectroscopy. Load cleaned experimental data, predict spectra and molecular properties, identify structures, and train models on your own data.</p>
+<p>__INTRO_COUNTS__</p>
+<p class="actions"><a href="docs/quickstart.html">Quick start</a><a href="docs/">Documentation</a><a href="https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1">Source code</a><a href="docs/zh/index.html">中文手册</a></p>
+<pre><code>from openmolspec.dataset import molspectra
 from openmolspec.model import NMRNet
 
-data = molspectra("opendatalab_nmr", root="/path/to/data")
+data = molspectra("opendatalab_nmr", root="data/nmr")
+sample = data["test"].head(1)[0]
 model = NMRNet.from_pretrained(
-    "/path/to/models", nucleus="13C",
-    python="/path/to/nmr-env/bin/python")
-result = model.predict("CCO")</code></pre></div>
+    "models", nucleus="13C", python="/path/to/nmr-env/bin/python")
+result = model.predict(sample["smiles"])</code></pre>
 </section>
-<section id="theory" class="section section-tint"><div class="wrap">
-  <div class="section-heading"><div><p class="eyebrow">THEORY &amp; INVERSION</p><h2>Connect the learning task to the physics.</h2></div></div>
-  <div class="theory-grid"><a href="https://openmolspec-10.readthedocs.io/en/latest/theory/nmr.html"><span>01</span><h3>Nuclear magnetic resonance</h3><p>Chemical shifts, spin coupling, FID and Fourier transforms.</p></a><a href="https://openmolspec-10.readthedocs.io/en/latest/theory/ms.html"><span>02</span><h3>Mass spectrometry</h3><p>Ion masses, adducts, isotope envelopes and fragmentation.</p></a><a href="https://openmolspec-10.readthedocs.io/en/latest/theory/vibrational.html"><span>03</span><h3>Infrared &amp; Raman</h3><p>Normal modes, selection rules, response tensors and broadening.</p></a><a href="https://openmolspec-10.readthedocs.io/en/latest/inversion/index.html"><span>04</span><h3>NMR inversion</h3><p>Relaxation and diffusion kernels, regularization and recovered distributions.</p></a></div>
-  <p class="note">Spectra Harness connects NMR, MS and vibrational model calls through Python, CLI and MCP. <a href="https://openmolspec-10.readthedocs.io/en/latest/harness.html">Usage and real execution records →</a></p>
-</div></section>
-<section id="gallery" class="section wrap">
-  <div class="section-heading"><div><p class="eyebrow">PHOTO GALLERY</p><h2>Explore the actual results.</h2></div><span class="gallery-count">__FIGURE_COUNT__ scientific figures</span></div>
-  <p class="section-intro">Recorded model outputs, RDKit candidate structures and complete-file data statistics. Open a figure to inspect it at full size; follow its guide for inputs, outputs and evaluation conditions.</p>
-  <div class="filters" data-filter-target="gallery" role="group" aria-label="Filter gallery"><button data-filter="all" aria-pressed="true">All figures</button><button data-filter="nmr" aria-pressed="false">NMR</button><button data-filter="ms" aria-pressed="false">MS</button><button data-filter="vibrational" aria-pressed="false">IR / Raman</button><button data-filter="multimodal" aria-pressed="false">Multimodal</button><button data-filter="data" aria-pressed="false">Data</button></div>
-  <div class="gallery-grid">__GALLERY__</div>
+<section id="examples" class="section">
+<h2>Examples</h2>
+<p>Each example includes the model input, its saved output and a tutorial explaining the workflow.</p>
+<div class="example-grid">__EXAMPLES__</div>
+<h3>Explore a molecule in 3D</h3>
+<p>Select a molecule from the HOMO–LUMO gap prediction examples. Drag to rotate and scroll to zoom. The model combines IR, Raman and H/C NMR spectra to predict the energy gap.</p>
+<label for="conformer-select">Molecule </label><select id="conformer-select" aria-label="Select a molecular example"></select>
+<div id="conformer-viewer" role="img" aria-label="Interactive three-dimensional molecular conformer"></div>
+<p id="conformer-result" aria-live="polite">Loading molecular coordinates…</p>
+<p><a href="docs/tasks/vibrational-gap-ir_raman_hc.html">Inputs, outputs and gap prediction tutorial →</a></p>
 </section>
+<section id="data" class="section">
+<h2>Data</h2>
+<p>The OpenMolSpec collection contains cleaned experimental spectra from OpenDataLab. The table also introduces the external experimental and computed resources used in the model workflows, with descriptions of each usable view.</p>
+<div class="table-scroll"><table class="data-table"><thead><tr><th>Dataset / view</th><th>Category</th><th>Description</th><th>Usable data</th></tr></thead><tbody>__DATA_ROWS__</tbody></table></div>
+<div class="data-figures">__DATA_FIGURES__</div>
+<p><a href="docs/data/index.html">Data fields, experimental conditions, access and train/test splits →</a></p>
+</section>
+<section id="tasks" class="section">
+<h2>Tasks</h2>
+<p>Choose a spectroscopy family to see the available tasks. Each task guide explains the model, inputs, outputs and evaluation.</p>
+<div class="filters" data-filter-target="tasks" role="group" aria-label="Filter tasks"><button data-filter="all" aria-pressed="true">All</button><button data-filter="nmr" aria-pressed="false">NMR</button><button data-filter="ms" aria-pressed="false">MS</button><button data-filter="vibrational" aria-pressed="false">IR / Raman</button><button data-filter="multimodal" aria-pressed="false">Multimodal</button></div>
+<div class="table-scroll"><table class="task-table"><thead><tr><th>Task</th><th>Input</th><th>Output</th></tr></thead><tbody id="task-rows">__TASK_ROWS__</tbody></table></div>
+</section>
+<section id="tutorials" class="section">
+<h2>Tutorials</h2>
+<p>Follow the code, inspect its output and use the same workflow with your own data.</p>
+<div class="tutorial-grid">__TUTORIALS__</div>
+<p><a href="docs/notebooks/index.html">All tutorials →</a></p>
+</section>
+<section id="theory" class="section">
+<h2>Spectroscopy and agent tools</h2>
+<ul>
+<li><a href="docs/theory/nmr.html">NMR</a>: chemical shifts, spin coupling, FID and Fourier transforms.</li>
+<li><a href="docs/theory/ms.html">Mass spectrometry</a>: ion masses, adducts, isotope envelopes and fragmentation.</li>
+<li><a href="docs/theory/vibrational.html">IR and Raman</a>: normal modes, selection rules and spectral broadening.</li>
+<li><a href="docs/inversion/index.html">NMR inversion</a>: recover relaxation and diffusion distributions.</li>
+<li><a href="docs/harness.html">Agent Harness</a>: call spectroscopy tools from Python, the command line or MCP.</li>
+</ul>
+</section>
+<section id="gallery" class="section">
+<h2>Gallery</h2>
+<p>Browse __FIGURE_COUNT__ figures showing model predictions, generated structures, peak assignments and data distributions. Select a figure to enlarge it.</p>
+<div class="filters" data-filter-target="gallery" role="group" aria-label="Filter gallery"><button data-filter="all" aria-pressed="true">All</button><button data-filter="nmr" aria-pressed="false">NMR</button><button data-filter="ms" aria-pressed="false">MS</button><button data-filter="vibrational" aria-pressed="false">IR / Raman</button><button data-filter="multimodal" aria-pressed="false">Multimodal</button><button data-filter="data" aria-pressed="false">Data</button></div>
+<div class="gallery-grid">__GALLERY__</div>
+</section>
+<section id="references" class="section"><h2>References</h2><ol>__REFERENCES__</ol></section>
 </main>
-<footer><div class="wrap footer-row"><div><img src="assets/brand/openmolspec-dark.svg" alt="OpenMolSpec v1.0" width="230" height="52"><p>Chemical spectroscopy datasets, models and reproducible workflows.</p></div><div><a href="https://openmolspec-10.readthedocs.io/en/latest/">Documentation</a><a href="https://openmolspec-10.readthedocs.io/en/latest/zh/index.html">中文文档</a><a href="https://openmolspec-10.readthedocs.io/en/latest/citations.html">Citations &amp; sources</a><a href="https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1">Source code</a></div></div></footer>
-<dialog id="figure-dialog" aria-label="Scientific figure"><button class="close-dialog" aria-label="Close figure">Close ×</button><img alt=""><a class="figure-guide" target="_blank" rel="noopener">Open source guide →</a></dialog>
+<footer><div class="wrap"><p>OpenMolSpec v1.0 · <a href="docs/">Documentation</a> · <a href="https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1">GitHub</a></p></div></footer>
+<dialog id="figure-dialog" aria-label="Scientific figure"><button class="close-dialog" aria-label="Close figure">Close ×</button><img alt=""><a class="figure-guide" target="_blank" rel="noopener">Open tutorial →</a></dialog>
 </body></html>

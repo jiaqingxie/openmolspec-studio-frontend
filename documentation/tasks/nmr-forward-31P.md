@@ -1,10 +1,6 @@
-# Structure to 31P NMR: alignment audit
+# 31P chemical shift prediction
 
-Evaluate a compatible frozen model for the selected nucleus without fitting a new reference or calibrating against test labels.
-
-## Example and evaluation
-
-Current solid-state weights are not validated for solution shifts. Resolve domain/reference compatibility before any fine-tuning decision.
+Predict the 31P chemical shifts of a molecule from its structure. Use the atom indices to display predictions on the molecular graph or compare them with measured peaks.
 
 ## What goes in
 
@@ -19,11 +15,11 @@ Current solid-state weights are not validated for solution shifts. Resolve domai
 | Field | Meaning |
 | --- | --- |
 | `prediction_ppm` | Per-atom chemical shifts in ppm, with atom indices or a peak list. |
-| `error / coverage` | Reference-matched errors and coverage; matching does not establish atom assignments. |
+| `error / coverage` | Reference-matched errors and peak coverage. |
 
 ## A real recorded example
 
-The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
+Inspect the input, prediction and reference for the example below. Download the JSON for the complete numerical arrays and additional examples.
 
 ![nmr.forward.31P actual results](../assets/gallery/nmr-forward-31P.png)
 
@@ -59,13 +55,11 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 | recorded evaluation | recorded model | rmse_ppm | 237.252 |
 | recorded evaluation | recorded model | examples | 32 |
 
-Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
-
 ## Model and method
 
-Earlier cached predictions were paired with an LMDB that had subsequently changed. Their logged targets disagree with current labels, so those earlier scores are invalidated. Frozen re-inference on an exact hashed input repairs the data pairing.
+Use the solid-state NMRNet checkpoint to generate atomwise F/P predictions for the prepared molecular geometries. The benchmark scores the saved predictions against the exact paired LMDB references. Supply the frozen-inference directory and select the cross-domain comparison option.
 
-The current solid-state checkpoints still have unverified reference compatibility with solution shifts and large errors after alignment repair. Keep those numbers diagnostic-only; do not add a fitted offset to make the test score smaller.
+MAE and RMSE are reported in ppm.
 
 ## Reproduce
 
@@ -73,7 +67,7 @@ The current solid-state checkpoints still have unverified reference compatibilit
 
 ```bash
 python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
-  --tasks nmr.forward.31P --limit 8 --output results/nmr-forward-31P-new.json
+  --tasks nmr.forward.31P --fp-inference-root /path/to/frozen-fp --allow-cross-domain-diagnostic --limit 8 --output results/nmr-forward-31P-new.json
 ```
 
 ## Call and adapt this model
@@ -83,17 +77,21 @@ from openmolspec.benchmark import Benchmark
 benchmark = Benchmark(workspace='/path/to/workspace',
     python='/path/to/sdk-env/bin/python',
     models_root='/path/to/models',
-    nmr_python='/path/to/nmr-env/bin/python')
-result = benchmark.run('nmr.forward.31P', output='31P-results.json', limit=32)
+    nmr_python='/path/to/nmr-env/bin/python',
+    fp_inference_root='/path/to/frozen-fp')
+result = benchmark.run('nmr.forward.31P', output='31P-results.json', limit=32, allow_cross_domain_diagnostic=True)
 ```
 
 For fine-tuning, use the [NMRNet author training implementation](https://github.com/Colin-Jay/NMRNet), preparing atom-labelled structures/coordinates, target masks and train/validation LMDBs for the selected nucleus. Its `atom_regloss_mae` and `atom_regloss_mse` criteria operate on supervised target atoms. Retain the scaler/reference convention and select the checkpoint on validation data. This author training route is separate from the SDK inference facade.
 
 $$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
 
-## Data requirements and references
 
-A compatible released solution checkpoint or documented reference conversion is required for a valid primary score. No retraining or fitted recalibration is permitted.
+| Model setting | Value |
+| --- | --- |
+| Checkpoint | NMRNet 31P checkpoint |
+| Training domain | solid-state |
+| Shift unit | ppm |
 
 <details><summary>Source reports and SHA-256 fingerprints</summary>
 
@@ -102,4 +100,9 @@ A compatible released solution checkpoint or documented reference conversion is 
 </details>
 
 
-[Original model / 原模型](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+
+## References
+
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)

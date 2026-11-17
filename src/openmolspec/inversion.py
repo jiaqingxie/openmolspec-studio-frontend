@@ -7,7 +7,32 @@ from dataclasses import dataclass
 
 
 def kernel(samples, grid, *, experiment='T2'):
-    """Construct T1/T2 kernels (same time unit) or diffusion kernel (b*D unitless)."""
+    """Construct a relaxation or diffusion inversion matrix.
+
+    Parameters
+    ----------
+    samples : array-like of shape (n_samples,)
+        Strictly increasing, finite, nonnegative acquisition coordinates.
+        Relaxation experiments use time; diffusion experiments use b-values.
+    grid : array-like of shape (n_bins,)
+        Strictly increasing positive relaxation times or diffusion constants.
+        Relaxation times use the same unit as ``samples``; diffusion units
+        are chosen so that ``samples * grid`` is dimensionless.
+    experiment : {'T2', 'T1_saturation', 'T1_inversion', 'diffusion'}
+        Select exponential decay, saturation recovery, inversion recovery,
+        or diffusion attenuation. Defaults to ``'T2'``.
+
+    Returns
+    -------
+    numpy.ndarray of shape (n_samples, n_bins)
+        Matrix mapping discrete component amplitudes to the measured signal.
+
+    Raises
+    ------
+    ValueError
+        If coordinates are invalid, either vector has fewer than three values,
+        or the experiment name is unsupported.
+    """
     import numpy as np
     x=np.asarray(samples,dtype=float);tau=np.asarray(grid,dtype=float)
     if x.ndim!=1 or tau.ndim!=1 or len(x)<3 or len(tau)<3:
@@ -26,6 +51,26 @@ def kernel(samples, grid, *, experiment='T2'):
 
 @dataclass
 class InversionResult:
+    """Recovered nonnegative distribution and its fitted signal.
+
+    Parameters
+    ----------
+    grid : numpy.ndarray
+        Relaxation-time or diffusion-constant bins supplied to :func:`invert`.
+    weights : numpy.ndarray
+        Nonnegative discrete amplitudes, one per grid bin.
+    fitted_signal : numpy.ndarray
+        Signal reconstructed by multiplying the kernel by ``weights``.
+    residuals : numpy.ndarray
+        Observed signal minus the reconstructed signal.
+    alpha : float
+        Regularization strength used by the solver.
+    experiment : str
+        Kernel selected for the inversion.
+    diagnostics : dict
+        Solver convergence, iteration count, residual error, penalty norm,
+        matrix condition number and coordinate counts.
+    """
     grid: object
     weights: object
     fitted_signal: object
@@ -37,11 +82,46 @@ class InversionResult:
 
 def invert(samples, signal, grid, *, experiment='T2', alpha=0.01,
            penalty='curvature', noise_std=None):
-    """Minimize ||W(Kf-g)||² + alpha*||Lf||² subject to f>=0.
+    """Recover nonnegative amplitudes with Tikhonov regularization.
 
-    ``weights`` are nonnegative discrete bin amplitudes, not a density per unit T.
-    Curvature acts on an equally spaced log grid. Baseline and phase correction
-    are the caller's responsibility. Alpha is supplied explicitly.
+    Parameters
+    ----------
+    samples : array-like of shape (n_samples,)
+        Acquisition coordinates accepted by :func:`kernel`.
+    signal : array-like of shape (n_samples,)
+        Finite observed signal, with baseline and phase corrections applied.
+    grid : array-like of shape (n_bins,)
+        Positive component coordinates. Curvature regularization requires an
+        equally spaced logarithmic grid.
+    experiment : str, default 'T2'
+        Relaxation or diffusion kernel; see :func:`kernel`.
+    alpha : float, default 0.01
+        Nonnegative regularization strength.
+    penalty : {'curvature', 'identity'}, default 'curvature'
+        Second-difference smoothing on the log grid or amplitude regularization.
+    noise_std : float or array-like, optional
+        Positive standard deviation used to weight each residual. A scalar
+        applies the same weight to all measurements.
+
+    Returns
+    -------
+    InversionResult
+        Discrete bin amplitudes, fitted signal, residuals and solver diagnostics.
+        The objective is ``||W(Kf - signal)||² + alpha * ||Lf||²`` with ``f >= 0``.
+
+    Raises
+    ------
+    ValueError
+        If inputs, noise weights or regularization settings are invalid.
+    RuntimeError
+        If the bounded least-squares solver does not converge.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> times = np.linspace(0, 1, 40)
+    >>> bins = np.geomspace(0.01, 2, 80)
+    >>> recovered = invert(times, np.exp(-times / 0.2), bins, alpha=0.01)
     """
     import numpy as np
     from scipy.optimize import lsq_linear

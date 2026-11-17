@@ -1,6 +1,7 @@
-# Spectra Harness
+---
+orphan: true
+---
 
-```{automodule} openmolspec.harness
-:members:
-:show-inheritance:
-```
+# API reference
+
+[OpenMolSpec API reference](module-harness.md)

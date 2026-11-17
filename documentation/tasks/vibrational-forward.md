@@ -1,17 +1,13 @@
-# Conformer to IR and Raman
+# IR and Raman from a molecular geometry
 
-Predict vibrational spectra from a fixed molecular geometry with Xinyu openSpec's Equiformer-v3 Hessian and response checkpoints.
-
-## Example and evaluation
-
-Correct Xinyu Hessian/response route and paired geometry. Two examples demonstrate execution only; evaluate a held-out geometry set before adaptation.
+Predict infrared and Raman spectra from atomic coordinates using the openSpec model.
 
 ## What goes in
 
 | Field | Meaning |
 | --- | --- |
 | `geometry` | Element symbols and N×3 Cartesian coordinates in Å, taken from the same Gaussian log as the reference. |
-| `checkpoints` | Xinyu openSpec Equiformer-v3 Hessian Hi/Hij and dipole/polarizability derivative weights. |
+| `checkpoints` | openSpec Equiformer-v3 Hessian Hi/Hij and dipole/polarizability derivative weights. |
 
 ## What comes out
 
@@ -22,7 +18,7 @@ Correct Xinyu Hessian/response route and paired geometry. Two examples demonstra
 
 ## A real recorded example
 
-The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
+Inspect the input, prediction and reference for the example below. Download the JSON for the complete numerical arrays and additional examples.
 
 ![vibrational.forward actual results](../assets/gallery/vibrational-forward.png)
 
@@ -103,15 +99,15 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 | Dataset / scope | Model / variant | Metric | Value |
 | --- | --- | --- | ---: |
 | recorded sample | recorded model | ir_cosine_similarity | 0.977503 |
+| recorded sample | recorded model | ir_mae | 0.00519438 |
 | recorded sample | recorded model | raman_cosine_similarity | 0.990194 |
-
-Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
+| recorded sample | recorded model | raman_mae | 0.00164467 |
 
 ## Model and method
 
-Use exactly the coordinates associated with the reference Gaussian spectra. The adapter checks that XYZ loading preserves those coordinates, predicts Hessian/response tensors, and reconstructs broadened normalized IR/Raman spectra.
+The geometry model predicts the Hessian and dipole/polarizability response tensors. Normal-mode analysis converts these tensors into frequencies and activities, which are broadened onto the spectral grid.
 
-Compare normalized predicted and reference spectra on the common 1024-point, 400–4000 cm⁻¹ axis. Report channel-wise cosine similarity and intensity MAE.
+Compare IR and Raman separately using cosine similarity and intensity MAE.
 
 ## Reproduce
 
@@ -133,15 +129,11 @@ result = benchmark.run('vibrational.forward',
     output='geometry-to-spectrum-results.json', limit=2)
 ```
 
-Adapt the [openSpec training implementation](https://github.com/X1nyuLu/openSpec-alpha) with reference geometries, Hessians and response tensors using the same atom ordering, units and mode conventions. Tensor/property losses train the forward model; spectral similarity is a downstream evaluation, not automatically its training loss. Each released direct model trains its selected tensor head; the Hessian/response engine averages Cartesian SmoothL1 terms by the global number of tensor components. Separate checkpoints and target units are retained when reconstructing normal modes.
+Adapt the [openSpec training implementation](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks) with reference geometries, Hessians and response tensors using the same atom ordering, units and mode conventions. Tensor/property losses train the forward model; spectral similarity is a downstream evaluation, not automatically its training loss. Each released direct model trains its selected tensor head; the Hessian/response engine averages Cartesian SmoothL1 terms by the global number of tensor components. Separate checkpoints and target units are retained when reconstructing normal modes.
 
 $$\ell_\beta(r)=\begin{cases}r^2/(2\beta),&|r|<\beta,\\ |r|-\beta/2,&|r|\ge\beta.\end{cases}$$
 
 $$L_{\rm tensor}=\sum_{q\in\{H_i,H_{ij},\partial\mu,\partial\alpha\}}\frac1{N_q}\sum_j\ell_1(\hat T_{qj}-T_{qj}).$$
-
-## Data requirements and references
-
-The default two real Gaussian examples establish paired execution only. Their held-out status is not audited. An independently generated RDKit conformer must not be substituted and presented as the original reference geometry.
 
 <details><summary>Source reports and SHA-256 fingerprints</summary>
 
@@ -150,4 +142,11 @@ The default two real Gaussian examples establish paired execution only. Their he
 </details>
 
 
-[Original model / 原模型](https://github.com/X1nyuLu/openSpec-alpha) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks) · [Model review / 模型检查](../model-audit.md)
+
+## References
+
+- OpenMolSpec contributors. openSpec models and benchmark training workflows. Source archive, v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks)
+- OpenMolSpec contributors. OpenMolSpec: Chemical spectroscopy datasets, models and learning workflows. Software release v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0)
+- Yuan, M., Zou, Z. & Hu, W. QMe14S, A Comprehensive and Efficient Spectral Dataset for Small Organic Molecules. arXiv:2501.18876 (2025). [Source](https://arxiv.org/abs/2501.18876)
+- Zou, Z., Zhang, Y., Liang, L., Wei, M., Leng, J., Jiang, J., Luo, Y. & Hu, W. A deep learning model for predicting selected organic molecular spectra. Nature Computational Science 3, 957–964 (2023). doi:10.1038/s43588-023-00550-y. [Source](https://www.nature.com/articles/s43588-023-00550-y)

@@ -23,12 +23,14 @@ get_raman_intensity = raman_intensity
 
 
 def get_raman_spectrum(freq, raman_activity, x_axis=None):
+    """Construct a Raman spectrum from vibrational frequencies and activities."""
     import numpy as np
     grid = x_axis if x_axis is not None else np.linspace(400, 4000, 1024)
     return raman_intensity(grid, lorentzian_broadening(freq, raman_activity, grid, sigma=12))
 
 
 def get_ir_spectrum(freq, ir_intensity, x_axis=None):
+    """Construct an infrared spectrum from vibrational frequencies and intensities."""
     import numpy as np
     grid = x_axis if x_axis is not None else np.linspace(400, 4000, 1024)
     return lorentzian_broadening(freq, ir_intensity, grid, sigma=20)
@@ -42,17 +44,20 @@ class LogParser(GaussianLogParser):
 
 
 def init_worker(smiles_dict):
+    """Initialize shared inputs used by the parallel extraction workers."""
     global global_smiles_dict
     global_smiles_dict = smiles_dict
 
 
 def process_log(task):
+    """Extract molecular properties and spectra from one source log."""
     sample_id, path = task
     parser = LogParser(path, sample_id, global_smiles_dict)
     return parser.properties if "atom" in parser.properties else None
 
 
 def process_log_with_report(task):
+    """Extract one source log and attach structured processing metadata."""
     sample_id, path = task
     parser = LogParser(path, sample_id, global_smiles_dict)
     if "atom" in parser.properties:
@@ -72,6 +77,7 @@ def process_log_with_report(task):
 
 
 def main():
+    """Run the extract properties command-line workflow."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--file-dict", default="datasets/openspec_freq_files.json")
     parser.add_argument("--smiles-dict", default="datasets/openspec_smiles.json")

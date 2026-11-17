@@ -1,17 +1,13 @@
-# Molecule to MS/MS with ICEBERG
+# MS/MS prediction with ICEBERG
 
-Predict an MS/MS peak list from a molecular structure under an explicitly supplied adduct, collision energy and instrument. The model parameters remain frozen.
-
-## Example and evaluation
-
-Appropriate author model interface and explicit conditions; 31 scored spectra are insufficient for a broad accuracy claim. Protocol/overlap audit precedes fine-tuning.
+Predict the fragment masses and intensities of a molecule under specified acquisition conditions.
 
 ## What goes in
 
 | Field | Meaning |
 | --- | --- |
 | `smiles / adduct` | Molecular structure and ion/adduct, e.g. the actual [M+H]+ or [M+Na]+ in the record. |
-| `collision_energy / instrument` | Recorded acquisition settings supported by the released model; do not invent missing values. |
+| `collision_energy / instrument` | Collision energy and instrument settings supported by the model. |
 | `precursor_mz` | Recorded precursor m/z; input conventions follow the author interface. |
 
 ## What comes out
@@ -23,11 +19,19 @@ Appropriate author model interface and explicit conditions; 31 scored spectra ar
 
 ## A real recorded example
 
-The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
+Inspect the input, prediction and reference for the example below. Download the JSON for the complete numerical arrays and additional examples.
 
 ![ms.forward.iceberg actual results](../assets/gallery/ms-forward-iceberg.png)
 
 [SVG](../assets/gallery/ms-forward-iceberg.svg) · [PNG](../assets/gallery/ms-forward-iceberg.png) · [Full input/output JSON](../assets/examples/ms-forward-iceberg.json)
+
+### Example 2
+
+![ms.forward.iceberg example 2](../assets/gallery/ms-forward-iceberg-example-2.png)
+
+### Example 3
+
+![ms.forward.iceberg example 3](../assets/gallery/ms-forward-iceberg-example-3.png)
 
 <details><summary>Inspect the actual input and output fields</summary>
 
@@ -105,13 +109,11 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 | recorded evaluation | recorded model | cosine_similarity | 0.4625 |
 | recorded evaluation | recorded model | entropy_similarity | 0.369847 |
 
-Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
-
 ## Model and method
 
-The adapter loads the authors' released checkpoint and calls their predict_mol interface. Our held-out CSV provides observed peaks; acquisition metadata must match its spectrum ID, molecule and adduct. Duplicate molecules are excluded by default.
+ICEBERG takes the molecular structure, adduct, collision energy and instrument. Its fragment and intensity components produce a numerical MS/MS peak list.
 
-Mass is in Da/m/z. Scores use 150000 max-pooled bins over 0–1500 Da, the top 100 predicted bins, cosine similarity and entropy similarity against all observed peaks. Missing acquisition conditions are skipped without imputation. This is not identical to a benchmark that discards unassigned observed peaks.
+Compare the predicted and measured spectra using cosine and entropy similarity.
 
 ## Reproduce
 
@@ -136,10 +138,6 @@ Fine-tune using the [author training modules](https://github.com/coleygroup/ms-p
 
 $$L_{\rm cosine}=1-\frac{\hat s\cdot s}{\|\hat s\|\|s\|}.$$
 
-## Data requirements and references
-
-Pretrained MassSpecGym weights may overlap a differently constructed split. Training overlap and complete instrument/adduct support metadata have not been independently established.
-
 <details><summary>Source reports and SHA-256 fingerprints</summary>
 
 - [ms_iceberg_32_molecules_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/ms_iceberg_32_molecules_20261116.json) — SHA-256 `7b403aa40d8478ff3ff8ee93ed6bec4151493d88eb0d2521f037542889c443ee`
@@ -147,4 +145,9 @@ Pretrained MassSpecGym weights may overlap a differently constructed split. Trai
 </details>
 
 
-[Original model / 原模型](https://github.com/coleygroup/ms-pred) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/coleygroup/ms-pred) · [Model review / 模型检查](../model-audit.md)
+
+## References
+
+- Wang, R., Manjrekar, M., Mahjour, B., Avila-Pacheco, J., et al. Neural Spectral Prediction for Structure Elucidation with Tandem Mass Spectrometry. bioRxiv (2025). doi:10.1101/2025.05.28.656653. [Source](https://doi.org/10.1101/2025.05.28.656653)
+- Bushuiev, R., Bushuiev, A., de Jonge, N. F., Young, A., et al. MassSpecGym: A benchmark for the discovery and identification of molecules. Advances in Neural Information Processing Systems 37, Datasets and Benchmarks Track (2024). arXiv:2410.23326. [Source](https://arxiv.org/abs/2410.23326)

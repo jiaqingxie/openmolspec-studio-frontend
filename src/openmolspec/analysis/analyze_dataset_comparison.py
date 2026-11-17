@@ -33,11 +33,13 @@ REFERENCE = pd.DataFrame({
 
 
 def read_json(path: Path) -> dict:
+    """Read a JSON document from a file."""
     with path.open(encoding="utf-8") as handle:
         return json.load(handle)
 
 
 def mol_descriptors(smiles: str) -> dict:
+    """Compute molecular size and composition descriptors from a SMILES string."""
     mol = Chem.MolFromSmiles(smiles) if isinstance(smiles, str) else None
     if mol is None:
         return {"valid_smiles": False}
@@ -56,6 +58,7 @@ def mol_descriptors(smiles: str) -> dict:
 
 
 def descriptor_table(manifest: pd.DataFrame, cache_path: Path) -> pd.DataFrame:
+    """Build a table of molecular descriptors for the supplied records."""
     if cache_path.exists():
         return pd.read_parquet(cache_path)
     unique = manifest[["inchikey", "canonical_smiles"]].dropna().drop_duplicates("inchikey")
@@ -71,6 +74,7 @@ def descriptor_table(manifest: pd.DataFrame, cache_path: Path) -> pd.DataFrame:
 
 
 def trajectory_total(root: Path) -> int:
+    """Extract the total trajectory count from dataset summary metadata."""
     frame_total = 0
     report_dir = root / "reports/opt_trajectories"
     for path in report_dir.glob("*.json"):
@@ -178,11 +182,13 @@ def build_analysis(
 
 
 def ecdf(series: pd.Series) -> tuple[np.ndarray, np.ndarray]:
+    """Compute empirical cumulative-distribution coordinates for numerical values."""
     values = np.sort(series.dropna().to_numpy())
     return values, np.arange(1, len(values) + 1) / len(values)
 
 
 def plot(desc: pd.DataFrame, source: pd.DataFrame, summary: dict, output: Path) -> None:
+    """Plot the molecular dataset comparison."""
     reference = REFERENCE.copy()
     reference.loc[reference["dataset"].eq("OpenMolSpec"), "molecules"] = summary["unique_inchikey"]
     reference.loc[reference["dataset"].eq("OpenMolSpec"), "configurations"] = summary["trajectory_frames"]
@@ -281,6 +287,7 @@ def plot(desc: pd.DataFrame, source: pd.DataFrame, summary: dict, output: Path) 
 
 
 def main() -> None:
+    """Run the analyze dataset comparison command-line workflow."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument(

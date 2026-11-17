@@ -152,10 +152,12 @@ def repository_root() -> Path:
 
 
 def resolve(root: Path, path: Path) -> Path:
+    """Resolve a configured input or output path."""
     return path if path.is_absolute() else root / path
 
 
 def compact_count(value: float, _position: float | None = None) -> str:
+    """Format a count with a compact magnitude suffix."""
     if value >= 1_000_000:
         millions = value / 1_000_000
         return f"{millions:.2f}M" if millions < 10 else f"{millions:.1f}M"
@@ -253,6 +255,7 @@ def load_align_composition(
     cache_path: Path,
     rebuild_cache: bool,
 ) -> pd.DataFrame:
+    """Read the composition statistics of the aligned release."""
     expected_rows = pd.read_parquet(align_path, columns=["inchikey"]).shape[0]
     if cache_path.exists() and not rebuild_cache:
         cached = pd.read_parquet(cache_path)
@@ -269,6 +272,7 @@ def load_align_composition(
 
 
 def element_prevalence(values: Iterable[object]) -> pd.Series:
+    """Compute elemental prevalence from molecular composition counts."""
     counts: Counter[str] = Counter()
     for value in values:
         if pd.isna(value):
@@ -548,6 +552,7 @@ def plot_overview(
     trajectory_frames: int,
     output: Path,
 ) -> dict[str, object]:
+    """Draw the aligned-release composition overview."""
     plt.rcParams.update({
         "font.family": "DejaVu Sans",
         "font.size": 10,
@@ -754,6 +759,7 @@ def plot_overview(
 
 
 def main() -> None:
+    """Run the plot align overview command-line workflow."""
     root_default = repository_root()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=root_default)

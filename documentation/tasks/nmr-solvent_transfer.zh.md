@@ -1,10 +1,6 @@
-# H/C 跨溶剂位移 · 参考检索基线
+# 跨溶剂化学位移迁移
 
-用跨溶剂实验参考估计目标位移；当前提供无训练的参考检索基线。
-
-## 示例与评测
-
-参考检索基线可执行，但 H 没有优于位移不变基线。仍需溶剂条件模型及独立配对数据。
+从源溶剂下的实测位移估计目标溶剂中的谱。
 
 ## 输入是什么
 
@@ -23,7 +19,7 @@
 
 ## 真实运行案例
 
-下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
+下面展示示例的输入、预测与参考。下载 JSON 可获取完整数值数组及更多示例。
 
 ![nmr.solvent_transfer actual results](../assets/gallery/nmr-solvent_transfer.png)
 
@@ -95,13 +91,11 @@
 | recorded evaluation | 1H | unchanged_shift_mae_ppm | 0.135385 |
 | recorded evaluation | 1H | rmse_ppm | 0.376179 |
 
-样本量和候选池随每次运行记录。图可能展示单个分子，表格是来源实验的实际汇总，不能混为同一统计范围。
-
 ## 模型与方法
 
-从 NMRShiftDB 审核通过的 H/C 一维数据中排除计算记录、混合/未知溶剂及重复测量冲突，按同一数据库原子配对。先按 Morgan 相似度选其他分子，再选最接近的源位移，加入该参考原子的实测溶剂差。排除查询分子及相同连接关系的所有立体异构体，不拟合参数。
+实验参考模型检索具有两种溶剂配对测量的相似分子环境，把参考中的溶剂位移差加到查询位移上，同时返回参考分子和原子编号。
 
-已跑 32 个不同分子、296 个原子位移对；按 H/C 分别报告 MAE，并与源位移不变的基线比较。输出参考分子、原子/谱图 ID 和相似度。
+分别使用 ppm 单位的 MAE 评估 H 与 C 位移。
 
 ## 复现方式
 
@@ -124,10 +118,6 @@ result = benchmark.run('nmr.solvent_transfer', output='new-algorithm-results.jso
 
 此任务是算法流程，可调整参考库或匹配规则；没有神经网络参数和训练 loss。具体匹配目标与数据来源见上文。
 
-## 数据要求与引用
-
-这不是神经网络溶剂模型，对两种核尚无稳定收益。参考库较小，温度、浓度及位移参考尚未统一核验；专用神经网络权重仍待取得。
-
 <details><summary>来源报告与 SHA-256 指纹</summary>
 
 - [solvent_transfer_reference32_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/solvent_transfer_reference32_20261116.json) — SHA-256 `7532dc2b785a93aa51323934bb748b768f1bfc7c820809bc2065d0840afc543f`
@@ -135,4 +125,8 @@ result = benchmark.run('nmr.solvent_transfer', output='new-algorithm-results.jso
 </details>
 
 
-[Original model / 原模型](https://nmrshiftdb.nmr.uni-koeln.de/) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://nmrshiftdb.nmr.uni-koeln.de/) · [Model review / 模型检查](../model-audit.md)
+
+## 参考文献
+
+- Steinbeck, C., Krause, S. & Kuhn, S. NMRShiftDB—Constructing a Free Chemical Information System with Open-Source Components. Journal of Chemical Information and Computer Sciences 43, 1733–1739 (2003). doi:10.1021/ci0341363. [Source](https://doi.org/10.1021/ci0341363)

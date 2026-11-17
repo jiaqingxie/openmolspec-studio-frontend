@@ -1,6 +1,6 @@
-# Tutorials 教程
+# 教程
 
-每个启用任务的 notebook 都有真实输入输出、运行指标、可执行分析和结果图。它们分析已保存的推理，不是列出“可能得到什么”的占位示例。
+通过教程学习如何加载谱图、调用模型、理解输出并评估预测。每个任务都配有说明、代码、运行结果和图。
 
 [SDK: actual NMR inference](sdk-inference.ipynb) · [SDK: training preflight](sdk-training-preflight.ipynb)
 

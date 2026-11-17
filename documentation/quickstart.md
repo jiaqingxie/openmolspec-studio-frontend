@@ -1,90 +1,120 @@
 # Quick start
 
-For the new dataset/model classes and training preflight, start with the [Python SDK guide](api.md).
+This tutorial takes you from installation to loading an NMR record, predicting chemical shifts and training a model with your own data. Run the commands from the cloned repository so the example files are available.
 
-Start with a real saved example, then run a model when its external weights and data are available. The repository contains documentation evidence; large model checkpoints and complete datasets are separate.
+## 1. Install OpenMolSpec
 
-## 1. Get the documented release
-
-Use Python 3.11 or newer for the documentation environment. The public documentation follows the release branch below; the newer frontend on `main` has a different application layout.
+Use Python 3.10 or newer. Create an environment and install the package with data-format and plotting dependencies.
 
 ```bash
 git clone --branch release/openmolspec-v1 https://github.com/jiaqingxie/openmolspec-studio-frontend.git
 cd openmolspec-studio-frontend
-python3 -m venv .venv-docs
-.venv-docs/bin/python -m pip install -r requirements-docs-examples.txt
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e ".[data,analysis]"
 ```
 
-## 2. Reproduce the first figure without model downloads
+For an existing installation, the [v1.0 release](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0) also provides a wheel. The release branch contains the current dataset cards and manual examples.
 
-This command reads the actual 128-sample frozen gap predictions, recomputes MAE/RMSE and draws the reference/prediction figure. It does not rerun the model.
+## 2. Read your first spectrum
+
+Start with the three NMRSpec example molecules included in the repository. `MolecularSpectra` creates a dataset with named splits; a split streams records from its file. `head(1)` reads the first record.
+
+```python
+from openmolspec.dataset import MolecularSpectra
+
+examples = MolecularSpectra.from_jsonl(
+    splits={"test": "documentation/assets/sdk-nmr-test-examples.jsonl"},
+    name="nmrspec_examples", domain="experimental")
+record = examples["test"].head(1)[0]
+print(record["smiles"])
+print(record["formula"])
+print(record["c_nmr"])
+```
+
+`smiles` describes the molecule, `formula` stores its molecular formula, and `h_nmr`/`c_nmr` contain the experimental spectral records. `_openmolspec` records the dataset name, split and available channels.
+
+## 3. Load a complete dataset
+
+For the cleaned OpenDataLab H/C collection, put `train.jsonl`, `val.jsonl` and `test.jsonl` in `data/nmr`, then open the registered dataset.
+
+```python
+from openmolspec.dataset import molspectra, list_datasets
+
+print([card["name"] for card in list_datasets()])
+data = molspectra("opendatalab_nmr", root="data/nmr")
+paired = data["train"].select(modalities=["1H", "13C"], limit=100)
+for molecule in paired.head(3):
+    print(molecule["smiles"], molecule["h_peaks_ppm"])
+print(data.verify())
+```
+
+The channel filter selects molecules containing both H and C spectra. `verify()` checks the local files against the dataset version. See [Data](data/index.md) for cleaned counts, per-nucleus files, experimental conditions and other supported resources.
+
+## 4. Predict chemical shifts
+
+NMRNet uses its released model files and Python environment. Set `models_root` to the directory containing `nmrnet/`, and `python` to the interpreter with the NMRNet dependencies. The [model guide](tasks/nmr-forward-13C.md) describes the files and nucleus settings.
+
+```python
+from openmolspec.model import NMRNet
+
+model = NMRNet.from_pretrained(
+    "models", nucleus="13C", python="/path/to/nmr-env/bin/python")
+result = model.predict("CCO")
+print(result["records"][0]["atom_indices"])
+print(result["records"][0]["prediction_ppm"])
+```
+
+The ethanol example returns carbon atom indices `[0, 1]` and shifts of approximately `[17.774, 57.774]` ppm. Atom indices follow zero-based RDKit atom ordering after adding hydrogens. Use these indices to attach each shift to the molecular graph.
+
+## 5. Compare with measurements and save the result
+
+```python
+import json
+from pathlib import Path
+from openmolspec.benchmark import evaluate_nmr
+
+metrics = evaluate_nmr(result, [[18.2, 58.3]])
+print(metrics)
+Path("ethanol-prediction.json").write_text(json.dumps(result, indent=2))
+model.save_config("nmrnet-config.json")
+restored = NMRNet.from_config("nmrnet-config.json")
+```
+
+`evaluate_nmr` matches predicted and observed peak positions and returns the error and matching coverage. The JSON result contains the atomwise predictions and model provenance. The configuration file records the model settings for later use.
+
+## 6. Train with your own NMR data
+
+Install the training dependencies. Prepare separate training and validation JSONL files using the H/C schema in [Data](data/nmr.md): every record supplies a molecular structure, formula, spectrum text and channel mask.
 
 ```bash
-.venv-docs/bin/python -m pip install -e .
-# Set this to an Arial TTF file installed or licensed on your machine:
-export OPENMOLSPEC_ARIAL_FONT=/path/to/Arial.ttf
-.venv-docs/bin/python - <<'PY'
-import sys
-sys.path.insert(0, 'scripts')
-from documentation_evidence import load_evidence, recompute, render
-task = 'vibrational.gap.ir_raman_hc'
-evidence = load_evidence(task)
-print(recompute(evidence))
-render(task, evidence).savefig('my-first-result.png', dpi=180)
-PY
+python -m pip install -e ".[train]"
 ```
 
-Expected recomputed MAE is approximately **0.131446 eV**. Open `my-first-result.png`, then compare the [real-results gallery](gallery.md) and [complete-input gap task](tasks/vibrational-gap-ir_raman_hc.md).
+```python
+from openmolspec.dataset import MolecularSpectra
+from openmolspec.training import prepare_nmr_training
+from openmolspec.model import NMRTransformer
 
-## 3. Run the notebook cells
-
-```bash
-.venv-docs/bin/jupyter lab documentation/notebooks/vibrational-gap-ir_raman_hc.ipynb
+custom = MolecularSpectra.from_jsonl(
+    splits={"train": "train.jsonl", "val": "val.jsonl"},
+    name="my_nmr", domain="experimental")
+prepared = prepare_nmr_training(
+    custom["train"], custom["val"], "prepared-nmr")
+model = NMRTransformer(stage="align", device="cpu")
+plan = model.training_plan(
+    prepared, run_dir="runs/my-encoder", epochs=10, batch_size=32)
+print(plan.validate())
+trained = model.fit(plan)
+print(trained)
 ```
 
-Select the Python kernel from `.venv-docs`, then Run All. Cells show the actual input, actual output, recomputed diagnostics and a figure. Full arrays are stored in `documentation/assets/examples/`; abbreviated previews state their array length. Source result filenames and SHA-256 hashes accompany each notebook.
+Preparation checks formulas, nucleus labels and train/validation molecular overlap. The alignment stage learns a shared spectrum–molecule representation. For structure generation, use `stage="generate"` and provide the saved alignment checkpoint. The [training tutorial](notebooks/sdk-training-preflight.ipynb) walks through preparation, configuration, checkpoint saving and reloading.
 
-## 4. Prepare frozen-model inference
+## Next steps
 
-Model runtimes are separate from the lightweight documentation environment. Install the original model dependencies in their own environments. See [dataset sources](datasets.md) and [model suitability](model-audit.md) before choosing a task. The expected workspace is:
-
-```text
-workspace/
-  OpenMolSpec/
-    studio/                     # this checkout
-    data/align_eval/<dataset>/test.jsonl
-    runs/<run-id>/best.pt        # existing NMR encoder/generator
-  models/                       # NMRNet / NMRNet++ released assets
-  openmolspec-studio-portable/   # Xinyu models, normalization, test LMDB
-```
-
-```bash
-python -m openmolspec_bench list
-python -m openmolspec_bench run   --workspace /path/to/workspace/OpenMolSpec   --portable-root /path/to/workspace/openmolspec-studio-portable   --tasks vibrational.gap.ir_raman_hc   --limit 32 --sampling reservoir --seed 42 --device cpu   --output results/my-gap-run.json
-```
-
-Run this command with a Python interpreter containing the original model dependencies. The complete-input task needs IR, Raman and both H/C channels with the checkpoint reference. Each output path must be new. `--limit` controls example count; it does not train or change the model.
-
-For NMR assignment, explicitly select the dataset, model root and NMR runtime:
-
-```bash
-python -m openmolspec_bench run   --workspace /path/to/workspace/OpenMolSpec   --models-root /path/to/workspace/models   --nmr-python /path/to/nmr-runtime/bin/python   --tasks nmr.assignment --datasets nmrspec_test   --assignment-nucleus 13C --limit 2   --output results/my-assignment-run.json
-```
-
-## 5. Read the result correctly
-
-- `status=passed` means the adapter completed; scientific suitability is assessed separately.
-- `metrics` contains actual scores; `sample_ids`, hashes and conditions define what was evaluated.
-- `skipped` means required assets, conditions or a valid reference are missing. Read `reason`; no score should be invented.
-- F/P formal solution scores remain blocked; B/Si results are diagnostic. Cross-solvent transfer is a reference-retrieval baseline.
-- A small candidate pool, unknown training overlap or absent assignment labels limits the claim you can make.
-
-## 6. Build the bilingual website
-
-```bash
-.venv-docs/bin/python scripts/build_bilingual_docs.py --check
-.venv-docs/bin/python scripts/build_readthedocs.py --output site --strict
-.venv-docs/bin/python -m http.server 8000 --directory site
-```
-
-Open `http://localhost:8000/`; use the language switch for Chinese. Documentation builds render saved notebook outputs and never launch model inference.
+- [Tasks](tasks/index.md): inputs, outputs and model calls for every spectroscopy task.
+- [Tutorials](notebooks/index.md): executed examples, plots and explanations.
+- [API reference](api-reference/index.md): classes, signatures, parameters and return values.
+- [Agent Harness](harness.md): Python, CLI and MCP spectroscopy tools.

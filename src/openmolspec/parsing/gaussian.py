@@ -92,6 +92,7 @@ class GaussianLogParser:
             self.error_message = str(exc)
 
     def parse_all(self):
+        """Parse molecular geometry, properties and spectra from the Gaussian log."""
         self._parse_coordinates()
         self._parse_archive_properties()
         self._parse_text_properties()

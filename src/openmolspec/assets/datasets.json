@@ -1,7 +1,7 @@
 [
   {
     "name": "opendatalab_nmr",
-    "version": "prepared-format-2-inchi-v1",
+    "version": "cleaned-2026-11-18",
     "source": "OpenDataLab / WanJuan experimental patent NMR",
     "origin": "team_curated_external_measurements",
     "domain": "experimental",
@@ -12,30 +12,21 @@
       "test": "test.jsonl"
     },
     "reference_counts": {
-      "input_smiles_rows": 2682840,
-      "inchi_failures": 499,
-      "failed_source_rows": 893,
-      "examples": 2680271,
-      "train": 2174218,
-      "source_rows": 12264496,
-      "smiles_rows": 2682341,
-      "inchi_duplicate_smiles_rows": 2070,
-      "inchi_with_multiple_smiles": 2007,
-      "h_records": 2722790,
-      "c_records": 252158,
-      "h_only": 2432515,
-      "val": 250984,
-      "test": 255069,
-      "h_and_c": 238412,
-      "c_only": 9344
+      "examples": 2678511,
+      "h_records": 2720828,
+      "c_records": 252015,
+      "train": 2172790,
+      "val": 250836,
+      "test": 254885,
+      "h_and_c": 238226
     },
-    "count_scope": "existing complete-corpus verification report; not rescanned in this documentation audit",
+    "count_scope": "complete scan of cleaned numerical H/C NMR; numeric shifts, structure and nucleus validation",
     "license": "Provider version and redistribution scope require release verification",
-    "source_url": "https://openmolspec-10.readthedocs.io/en/latest/datasets.html",
+    "source_url": "https://jiaqingxie.github.io/openmolspec.github.io/#data",
     "reference_sha256": {
-      "train": "0dc886524d8729874c09b6530932025e6bec89ba8bd3272d3e222debde9a85be",
-      "val": "484c228b6ada572f52444cfae8e42371b927f411a47ef076d8e26bd957b867ec",
-      "test": "27ec1c9ade321559675dd84a880b1825e525a452d479a966a465eccddc8e79ae"
+      "train": "a166fd379cfe0fb33d62fb08d842a4bbb5f691dbadd26d20795e1e5e6b76cf8c",
+      "val": "63d6cb768983e7a8496c7ce4512e28fc8d44a2f7ce83b9794d655afec8f7400a",
+      "test": "ec8488804259d92ea47d487caff12d4868c8770f47e03dbc24b2c341ed3e9fa9"
     }
   },
   {
@@ -193,5 +184,254 @@
     "source_url": "https://huggingface.co/datasets/roman-bushuiev/MassSpecGym",
     "citation": "https://arxiv.org/abs/2410.23326",
     "update_citation": "https://arxiv.org/abs/2606.19624"
+  },
+  {
+    "name": "opendatalab_nmr_prepared",
+    "version": "prepared-format-2-inchi-v1",
+    "source": "OpenDataLab / WanJuan experimental patent NMR",
+    "origin": "team_curated_external_measurements",
+    "domain": "experimental",
+    "format": "nmr_jsonl",
+    "files": {
+      "train": "train.jsonl",
+      "val": "val.jsonl",
+      "test": "test.jsonl"
+    },
+    "reference_counts": {
+      "input_smiles_rows": 2682840,
+      "inchi_failures": 499,
+      "failed_source_rows": 893,
+      "examples": 2680271,
+      "train": 2174218,
+      "source_rows": 12264496,
+      "smiles_rows": 2682341,
+      "inchi_duplicate_smiles_rows": 2070,
+      "inchi_with_multiple_smiles": 2007,
+      "h_records": 2722790,
+      "c_records": 252158,
+      "h_only": 2432515,
+      "val": 250984,
+      "test": 255069,
+      "h_and_c": 238412,
+      "c_only": 9344
+    },
+    "count_scope": "existing complete-corpus verification report; not rescanned in this documentation audit",
+    "license": "Provider version and redistribution scope require release verification",
+    "source_url": "https://openmolspec-10.readthedocs.io/en/latest/datasets.html",
+    "reference_sha256": {
+      "train": "0dc886524d8729874c09b6530932025e6bec89ba8bd3272d3e222debde9a85be",
+      "val": "484c228b6ada572f52444cfae8e42371b927f411a47ef076d8e26bd957b867ec",
+      "test": "27ec1c9ade321559675dd84a880b1825e525a452d479a966a465eccddc8e79ae"
+    }
+  },
+  {
+    "name": "opendatalab_ir",
+    "version": "cleaned-2026-11-18",
+    "source": "OpenDataLab / WanJuan MolSpectra v1.0.3",
+    "origin": "team_curated_external_measurements",
+    "domain": "experimental",
+    "format": "jsonl",
+    "files": {
+      "train": "IR-train.jsonl",
+      "val": "IR-val.jsonl",
+      "test": "IR-test.jsonl"
+    },
+    "reference_counts": {
+      "spectra": 177759,
+      "molecules": 168197,
+      "splits": {
+        "train": 143791,
+        "val": 16686,
+        "test": 17282
+      }
+    },
+    "count_scope": "complete cleaned numerical peak-list view",
+    "license": "Provider version and redistribution scope require release verification",
+    "source_url": "https://jiaqingxie.github.io/openmolspec.github.io/#data",
+    "reference_sha256": {
+      "train": "2765efe454e8efb5a5738f435a9d049f0f87619730f1c89f075fe5ebd8bb82c7",
+      "val": "f4c1d399b08a29d3d61aaf5c6b672c42385930822ad0f00cce2074e636ecce8f",
+      "test": "bb1f34f6a02ac7b66300da7591684e8d106a16fd5749b0e23ce226a7152fe357"
+    }
+  },
+  {
+    "name": "opendatalab_19f",
+    "version": "cleaned-2026-11-18",
+    "source": "OpenDataLab / WanJuan MolSpectra v1.0.3",
+    "origin": "team_curated_external_measurements",
+    "domain": "experimental",
+    "format": "jsonl",
+    "files": {
+      "train": "19F-train.jsonl",
+      "val": "19F-val.jsonl",
+      "test": "19F-test.jsonl"
+    },
+    "reference_counts": {
+      "spectra": 56679,
+      "molecules": 50402,
+      "splits": {
+        "train": 46303,
+        "val": 5011,
+        "test": 5365
+      }
+    },
+    "count_scope": "complete cleaned numerical peak-list view",
+    "license": "Provider version and redistribution scope require release verification",
+    "source_url": "https://jiaqingxie.github.io/openmolspec.github.io/#data",
+    "reference_sha256": {
+      "train": "3db8729edbb3dec890670c3124619ff11b0e81a0d1ecbd28b62b8bdc5cf1e7b1",
+      "val": "eb5e5e58250611bdb59a09bf723a8232d6b8ccdbf7c55c472ed52ccc10234948",
+      "test": "0606749f2d4dea385e28867934a0df4a8e3a90c1ebfb38c249c818cdf912575d"
+    }
+  },
+  {
+    "name": "opendatalab_31p",
+    "version": "cleaned-2026-11-18",
+    "source": "OpenDataLab / WanJuan MolSpectra v1.0.3",
+    "origin": "team_curated_external_measurements",
+    "domain": "experimental",
+    "format": "jsonl",
+    "files": {
+      "train": "31P-train.jsonl",
+      "val": "31P-val.jsonl",
+      "test": "31P-test.jsonl"
+    },
+    "reference_counts": {
+      "spectra": 21662,
+      "molecules": 18238,
+      "splits": {
+        "train": 17739,
+        "val": 2248,
+        "test": 1675
+      }
+    },
+    "count_scope": "complete cleaned numerical peak-list view",
+    "license": "Provider version and redistribution scope require release verification",
+    "source_url": "https://jiaqingxie.github.io/openmolspec.github.io/#data",
+    "reference_sha256": {
+      "train": "865d9a2a49bb91d410d7eb542954822c807a4991d8a452b55e954116be6479d9",
+      "val": "23c24f45fcfd1a1b8885eeacdf7adb7aeb5958016416e7b1d15b351d5cf35a55",
+      "test": "bbbc3ed7fd48313cf30760b2aa5e34501ef14c08efb3f545c1f5a49d51ceaf47"
+    }
+  },
+  {
+    "name": "opendatalab_ms",
+    "version": "cleaned-2026-11-18",
+    "source": "OpenDataLab / WanJuan MolSpectra v1.0.3",
+    "origin": "team_curated_external_measurements",
+    "domain": "experimental",
+    "format": "jsonl",
+    "files": {
+      "train": "MS-train.jsonl",
+      "val": "MS-val.jsonl",
+      "test": "MS-test.jsonl"
+    },
+    "reference_counts": {
+      "spectra": 5233,
+      "molecules": 4980,
+      "splits": {
+        "train": 4266,
+        "val": 467,
+        "test": 500
+      }
+    },
+    "count_scope": "complete cleaned numerical peak-list view",
+    "license": "Provider version and redistribution scope require release verification",
+    "source_url": "https://jiaqingxie.github.io/openmolspec.github.io/#data",
+    "reference_sha256": {
+      "train": "a209a9c9b22822ea4eef08f27ce3f5fcc06c84e316655a6235e08f62c50cf0ef",
+      "val": "d5213fc25f3df1e3f0e94cd24eba5607d9faf57cdd7b9950808df4b4a7424fd1",
+      "test": "a5d59ff45c403f4ddc2e71d508e8bfe393ab919889911622fadfb95bde70906f"
+    }
+  },
+  {
+    "name": "opendatalab_11b",
+    "version": "cleaned-2026-11-18",
+    "source": "OpenDataLab / WanJuan MolSpectra v1.0.3",
+    "origin": "team_curated_external_measurements",
+    "domain": "experimental",
+    "format": "jsonl",
+    "files": {
+      "train": "11B-train.jsonl",
+      "val": "11B-val.jsonl",
+      "test": "11B-test.jsonl"
+    },
+    "reference_counts": {
+      "spectra": 1140,
+      "molecules": 1017,
+      "splits": {
+        "train": 967,
+        "val": 81,
+        "test": 92
+      }
+    },
+    "count_scope": "complete cleaned numerical peak-list view",
+    "license": "Provider version and redistribution scope require release verification",
+    "source_url": "https://jiaqingxie.github.io/openmolspec.github.io/#data",
+    "reference_sha256": {
+      "train": "f5e7035b6c4fb9cc21d38b57233608a14f0cf724b14e8e43b61f69c423e208cd",
+      "val": "6519bba92e9fab8826df90b9ba15545c3e6dc7916167a7748c112016d12269aa",
+      "test": "a4ac560ea464a935efb3e76352bd1662e77632e6d31751f694c496e971463353"
+    }
+  },
+  {
+    "name": "opendatalab_raman",
+    "version": "cleaned-2026-11-18",
+    "source": "OpenDataLab / WanJuan MolSpectra v1.0.3",
+    "origin": "team_curated_external_measurements",
+    "domain": "experimental",
+    "format": "jsonl",
+    "files": {
+      "train": "Raman-train.jsonl",
+      "val": "Raman-val.jsonl",
+      "test": "Raman-test.jsonl"
+    },
+    "reference_counts": {
+      "spectra": 42,
+      "molecules": 39,
+      "splits": {
+        "train": 34,
+        "val": 3,
+        "test": 5
+      }
+    },
+    "count_scope": "complete cleaned numerical peak-list view",
+    "license": "Provider version and redistribution scope require release verification",
+    "source_url": "https://jiaqingxie.github.io/openmolspec.github.io/#data",
+    "reference_sha256": {
+      "train": "08bf4709328d997723ab7158f8adf7d051df54ebd8b405ec70d20fbb5993c2fe",
+      "val": "f83d6a9f5181ceb99a90c10356fafa418a77ad726dff72b19903f6b7253d83c5",
+      "test": "d39c5d1e32209f55d7ba154e3a68a0125ebfab0dfe06afffb0b8791a2cae165d"
+    }
+  },
+  {
+    "name": "opendatalab_29si",
+    "version": "cleaned-2026-11-18",
+    "source": "OpenDataLab / WanJuan MolSpectra v1.0.3",
+    "origin": "team_curated_external_measurements",
+    "domain": "experimental",
+    "format": "jsonl",
+    "files": {
+      "train": "29Si-train.jsonl",
+      "val": "29Si-val.jsonl",
+      "test": "29Si-test.jsonl"
+    },
+    "reference_counts": {
+      "spectra": 726,
+      "molecules": 636,
+      "splits": {
+        "train": 630,
+        "val": 61,
+        "test": 35
+      }
+    },
+    "count_scope": "complete cleaned numerical peak-list view",
+    "license": "Provider version and redistribution scope require release verification",
+    "source_url": "https://jiaqingxie.github.io/openmolspec.github.io/#data",
+    "reference_sha256": {
+      "train": "3f71a2212872e4a102a858d5b6d95a4dd57435f13162b0f077d5d1b54e9fed7f",
+      "val": "ee875b4a85bc11fc9987d50410cf31a2b670dc0b24ba4f2f6f817b3b55753dc5",
+      "test": "0d4c6e7bfad538adeff2c504ecbf31968e4133606e41308f6b8bb9ae8cf0db0f"
+    }
   }
 ]

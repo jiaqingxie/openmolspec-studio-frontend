@@ -737,6 +737,7 @@ def _save(fig: plt.Figure, output_dir: Path, name: str) -> None:
 
 
 def figure_convergence(table: pd.DataFrame, output_dir: Path) -> None:
+    """Plot geometry-optimization convergence statistics."""
     if table.empty:
         return
     _fig_style()
@@ -761,6 +762,7 @@ def figure_convergence(table: pd.DataFrame, output_dir: Path) -> None:
 
 
 def figure_modality_success(table: pd.DataFrame, output_dir: Path) -> None:
+    """Plot extraction success for each spectroscopy modality."""
     if table.empty:
         return
     _fig_style()
@@ -783,6 +785,7 @@ def figure_modality_success(table: pd.DataFrame, output_dir: Path) -> None:
 
 
 def figure_imaginary_frequency(core_features: pd.DataFrame, output_dir: Path) -> None:
+    """Plot the distribution of imaginary vibrational frequencies."""
     _fig_style()
     fig, axes = plt.subplots(1, 2, figsize=(10, 3.8))
     counts = core_features["n_imaginary"].dropna().astype(int)
@@ -809,6 +812,7 @@ def figure_outlier_detection(
     nmr_features: pd.DataFrame,
     output_dir: Path,
 ) -> None:
+    """Plot the numerical outlier summary."""
     _fig_style()
     fig, axes = plt.subplots(2, 2, figsize=(10, 7.5))
 
@@ -859,6 +863,7 @@ def figure_outlier_detection(
 
 
 def figure_conformer_distribution(conformer_table: pd.DataFrame, output_dir: Path) -> None:
+    """Plot the conformer-count distribution across molecules."""
     if conformer_table.empty:
         return
     _fig_style()
@@ -876,6 +881,7 @@ def figure_molecular_distributions(
     element_table: pd.DataFrame,
     output_dir: Path,
 ) -> None:
+    """Plot molecular size and composition distributions."""
     _fig_style()
     fig, axes = plt.subplots(2, 2, figsize=(10, 7.5))
 
@@ -1101,6 +1107,7 @@ def run(
 
 
 def main() -> None:
+    """Run the stats command-line workflow."""
     parser = argparse.ArgumentParser(description="Compute OpenSpec publication validation statistics")
     parser.add_argument("--output", default="reports/publication")
     parser.add_argument("--pickle", default="artifacts/processed/openspec.pickle")

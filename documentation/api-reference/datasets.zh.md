@@ -1,11 +1,7 @@
-# Datasets and splits
+---
+orphan: true
+---
 
-```{automodule} openmolspec.dataset
-:members:
-:show-inheritance:
-```
+# API reference
 
-```{automodule} openmolspec.split
-:members:
-:show-inheritance:
-```
+[OpenMolSpec API reference](module-datasets.md)

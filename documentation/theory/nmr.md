@@ -22,7 +22,7 @@ $$s(t)=\sum_k A_k\exp(-t/T_{2,k}^{*})\exp[i(2\pi\nu_k t+\phi_k)].$$
 
 The Fourier transform maps frequency components into a spectrum. Acquisition duration controls nominal frequency resolution, sampling controls bandwidth, and the Nyquist limit constrains unaliased offsets. Apodization changes line width and noise; zero filling interpolates the display without adding acquired information. Phase and baseline processing affect peak picking and intensity interpretation.
 
-The [Fourier tutorial](../notebooks/theory-nmr-fourier.ipynb) constructs a complex FID from three known frequencies, transforms it and checks the recovered dominant frequency. It uses Hz offsets rather than pretending to have a calibrated ppm reference.
+The [Fourier tutorial](../notebooks/theory-nmr-fourier.ipynb) constructs a complex FID from three known frequencies, transforms it and checks the recovered dominant frequency. Its frequency axis uses offsets in Hz.
 
 ## Relaxation and inverse problems
 
@@ -32,3 +32,8 @@ Longitudinal recovery is characterized by $T_1$; transverse decay by $T_2$. Effe
 
 - [NMRInversions.jl theory](https://aris-mav.github.io/NMRInversions.jl/stable/theory/), for relaxation and diffusion inversion.
 - [MLatom documentation](https://xacs.xmu.edu.cn/docs/mlatom/), for molecular simulations and computational spectroscopy workflows.
+
+## References
+
+- NMRInversions.jl contributors. NMRInversions.jl: inversion of NMR relaxation and diffusion measurements. Software and theory documentation. Accessed 18 November 2026. [Source](https://github.com/aris-mav/NMRInversions.jl)
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)

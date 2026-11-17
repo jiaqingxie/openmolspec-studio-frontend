@@ -64,8 +64,8 @@ def collect():
             b['plot']={'kind':'ranking','candidates':b['examples'][0]['output'],'label':'Dual encoder scores; first query; 32 candidates'}
         else:
             model=r['models'][0];ex=model['examples'][0]
-            b['examples']=[{'input':{'smiles':ex['smiles']},'output':{'prediction_ppm':ex['prediction_ppm'],'model':model['model']},
-                            'reference':{'peaks_ppm':ex['reference_ppm']}}]
+            b['examples']=[{'input':{'smiles':item['smiles']},'output':{'prediction_ppm':item['prediction_ppm'],'model':model['model']},
+                            'reference':{'peaks_ppm':item['reference_ppm']}} for item in model['examples'][:3]]
             b['plot']={'kind':'nmr_peaks',**ex,'label':model['model']+'; first recorded molecule'}
     name='bsi_frozen_diagnostic_20261116.json'
     for symbol,r in read(name)['nuclei'].items():
@@ -138,8 +138,9 @@ def collect():
         name=f'ms_{model}_32_molecules_20261116.json';r=read(name);b=attach(r['task'],name,r)
         rows=[x for x in r['records'] if x['status']=='passed'];x=rows[0]
         peaks=sorted(sorted(x['predicted_peaks'],key=lambda v:v[1],reverse=True)[:100])
-        b['examples']=[{'input':{k:x[k] for k in ('smiles','adduct','collision_energy','instrument','precursor_mz')},
-                        'sample_id':x['spec_id'],'output':{'predicted_peaks_top100':peaks},'reference':{'observed_peaks':x['reference_peaks']},'metrics':x['metrics']}]
+        b['examples']=[{'input':{k:item[k] for k in ('smiles','adduct','collision_energy','instrument','precursor_mz')},
+                        'sample_id':item['spec_id'],'output':{'predicted_peaks_top100':sorted(sorted(item['predicted_peaks'],key=lambda v:v[1],reverse=True)[:100])},
+                        'reference':{'observed_peaks':item['reference_peaks']},'metrics':item['metrics']} for item in rows[:3]]
         b['plot']={'kind':'ms','predicted':peaks,'reference':x['reference_peaks'],'label':model.upper()+'; '+x['spec_id']+'; top 100 predicted peaks'}
     name='assignment_carbon32_20261116.json';r=read(name);b=attach(r['task'],name,r)
     b['examples']=[{'input':{'smiles':x['smiles'],'nucleus':'13C','peaks_ppm':[a['observed_ppm'] for a in sorted(x['assignments'],key=lambda a:a['peak_index'])],
@@ -189,10 +190,20 @@ def collect():
     return bundles
 
 
-def render(task_id, evidence=None):
+def render(task_id, evidence=None, *, example_index=0):
     """Return a reproducible Matplotlib figure from numerical inference evidence."""
+    import copy
     from documentation_figures import render_task
-    return render_task(task_id, evidence or load_evidence(task_id))
+    bundle=evidence or load_evidence(task_id)
+    if example_index:
+        bundle=copy.deepcopy(bundle);example=bundle['examples'][example_index]
+        bundle['examples']=[example];plot=bundle['plot']
+        if plot['kind']=='ms':
+            plot.update(predicted=example['output']['predicted_peaks_top100'],reference=example['reference']['observed_peaks'])
+        elif plot['kind']=='molecules' and task_id.startswith('nmr.generation.'):
+            plot.update(reference=example['reference_smiles'],predicted=example['candidates'][0].get('canonical_smiles') or example['candidates'][0].get('smiles'))
+        else:raise ValueError('Individual-example figures are defined for NMR generation and MS prediction')
+    return render_task(task_id,bundle)
 
 
 def recompute(evidence):
@@ -243,8 +254,8 @@ def main():
 
 def render_datasets(save=True):
     import matplotlib.pyplot as plt
-    from documentation_figures import render_datasets as draw
-    figures = draw(json.loads((ASSETS/'dataset_audit.json').read_text()))
+    from build_manual_examples import distributions
+    figures = distributions()
     if save:
         for name, fig in figures.items():
             for ext in ('svg', 'png'):

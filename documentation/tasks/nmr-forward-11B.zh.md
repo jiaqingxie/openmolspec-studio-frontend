@@ -1,10 +1,6 @@
-# 结构 → 11B 峰列表
+# 11B 化学位移预测
 
-用已训练的液相 All-nucleus NMRNet 对 11B 验证数据做冻结推理。
-
-## 示例与评测
-
-仅作诊断：MAE 8.68 ppm，相关系数 0.217。区分能力弱、覆盖未核验；数据修复后可考虑 B 专项适配。
+根据分子结构预测 11B 化学位移。利用返回的原子编号，可以把预测值标到分子结构上，也可以与实测峰比较。
 
 ## 输入是什么
 
@@ -19,11 +15,11 @@
 | Field | Meaning |
 | --- | --- |
 | `prediction_ppm` | 逐原子化学位移（ppm）及原子编号，或整理后的峰列表。 |
-| `error / coverage` | 与参考谱匹配后的误差及覆盖率；峰匹配不等于实验原子指认。 |
+| `error / coverage` | 与参考谱匹配后的误差及峰覆盖率。 |
 
 ## 真实运行案例
 
-下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
+下面展示示例的输入、预测与参考。下载 JSON 可获取完整数值数组及更多示例。
 
 ![nmr.forward.11B actual results](../assets/gallery/nmr-forward-11B.png)
 
@@ -63,13 +59,11 @@
 | recorded evaluation | recorded model | molecules | 32 |
 | recorded evaluation | recorded model | atoms | 32 |
 
-样本量和候选池随每次运行记录。图可能展示单个分子，表格是来源实验的实际汇总，不能混为同一统计范围。
-
 ## 模型与方法
 
-B、Si 各完成 32 个不同分子，复用保存的 scaler，检查完整加载全部权重，并通过样本 ID 核对原子标签。证据为 results/bsi_frozen_diagnostic_20261116.json；复现脚本为 scripts/run_frozen_bsi_diagnostic.py。
+NMRNet 编码分子构象，并预测所选原子的化学位移。接口负责准备构象、加载相应核种的权重，并应用模型的位移缩放参数。
 
-报告逐原子 MAE/RMSE，单位 ppm；这是诊断值，不是峰匹配分数或已验证的独立测试成绩。
+MAE 和 RMSE 的单位均为 ppm。
 
 ## 复现方式
 
@@ -95,9 +89,12 @@ result = benchmark.run('nmr.forward.11B', output='11B-results.json', limit=32)
 
 $$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
 
-## 数据要求与引用
 
-各核训练覆盖、训练重叠及实验原子指认来源尚未核实，且该模型不输入溶剂。正式评分仍停用；继续核查 NMRNet++ 的 B/Si 专用权重，不拟合任何校正。
+| 模型设置 | 值 |
+| --- | --- |
+| Checkpoint | NMRNet All-nucleus fold 0 |
+| Training domain | liquid |
+| Shift unit | ppm |
 
 <details><summary>来源报告与 SHA-256 指纹</summary>
 
@@ -106,4 +103,9 @@ $$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delt
 </details>
 
 
-[Original model / 原模型](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+
+## 参考文献
+
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)

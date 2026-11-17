@@ -52,7 +52,7 @@ $$s(t)=\sum_k A_k\exp(-t/T_{2,k}^{*})\exp[i(2\pi\nu_k t+\phi_k)].$$
 
 The Fourier transform maps frequency components into a spectrum. Acquisition duration controls nominal frequency resolution, sampling controls bandwidth, and the Nyquist limit constrains unaliased offsets. Apodization changes line width and noise; zero filling interpolates the display without adding acquired information. Phase and baseline processing affect peak picking and intensity interpretation.
 
-The [Fourier tutorial](../notebooks/theory-nmr-fourier.ipynb) constructs a complex FID from three known frequencies, transforms it and checks the recovered dominant frequency. It uses Hz offsets rather than pretending to have a calibrated ppm reference.
+The [Fourier tutorial](../notebooks/theory-nmr-fourier.ipynb) constructs a complex FID from three known frequencies, transforms it and checks the recovered dominant frequency. Its frequency axis uses offsets in Hz.
 
 ## Relaxation and inverse problems
 
@@ -86,7 +86,7 @@ $$s(t)=\sum_k A_k\exp(-t/T_{2,k}^{*})\exp[i(2\pi\nu_k t+\phi_k)].$$
 
 傅里叶变换把频率成分转为频谱。采集时长决定名义频率分辨率，采样间隔决定带宽，Nyquist 条件限定无混叠频率范围。加窗会改变线宽和噪声；补零增加显示采样点，但不增加原始采集信息。相位和基线处理也影响峰提取与强度解释。
 
-[傅里叶教程](../notebooks/theory-nmr-fourier.ipynb)用三个已知频率生成复数 FID，执行变换，并检查恢复的主频。示例使用 Hz 偏移；没有实验参考频率时，不把它包装成已校准的 ppm 谱。
+[傅里叶教程](../notebooks/theory-nmr-fourier.ipynb)用三个已知频率生成复数 FID，执行变换，并检查恢复的主频。示例的频率轴使用 Hz 偏移。
 
 ## 弛豫与逆问题
 
@@ -103,13 +103,13 @@ $T_1$ 描述纵向恢复，$T_2$ 描述横向衰减，$T_2^*$ 还包含磁场不
 
 A mass spectrometer measures ions. The observed coordinate is mass-to-charge ratio, $m/z$, rather than neutral molecular mass. Protonation, deprotonation, sodium adduction, charge state and electron mass conventions affect the mapping from a molecular formula to an ion. Exact monoisotopic mass, nominal mass and average molecular weight serve different purposes.
 
-An isolated reported m/z can help constrain molecular identity. It does not contain the fragment intensities needed to train or evaluate an MS/MS spectrum predictor. [Data](../data/index.md) distinguishes these record forms.
+An isolated reported m/z helps constrain molecular identity. Use complete m/z–intensity peak lists for MS/MS learning and evaluation. [Data](../data/index.md) distinguishes these record forms.
 
 ## Isotope patterns and resolving power
 
 Natural isotope abundances produce a distribution of ion masses. In a carbon-only illustration, the number of ¹³C atoms follows a binomial distribution. Real envelopes also depend on hydrogen, nitrogen, oxygen, sulfur, halogens and the ion composition. Resolving power is commonly expressed as $R=m/\Delta m$, with the width convention specified, often FWHM.
 
-The [isotope tutorial](../notebooks/theory-ms-isotopes.ipynb) normalizes a carbon-only probability distribution and shows two resolving powers. It is a teaching simulation of an isotope envelope, not an experimental fragmentation spectrum.
+The [isotope tutorial](../notebooks/theory-ms-isotopes.ipynb) normalizes a carbon-only probability distribution and shows two resolving powers. It illustrates how isotope abundance and resolving power shape the envelope.
 
 ## Tandem mass spectrometry
 
@@ -137,7 +137,7 @@ For vectors $x$ and $y$, cosine similarity is $(x\cdot y)/(\|x\|\|y\|)$. Peak to
 
 天然同位素丰度形成不同离子质量的概率分布。仅考虑碳的教学模型中，¹³C 数目服从二项分布；真实同位素包络还受其他元素及离子组成影响。分辨率常记为 $R=m/\Delta m$，需要说明峰宽定义，例如半峰全宽 FWHM。
 
-[同位素教程](../notebooks/theory-ms-isotopes.ipynb)计算归一化的碳同位素概率并比较两种分辨率。它模拟同位素包络，不代表实验 MS/MS 碎裂谱。
+[同位素教程](../notebooks/theory-ms-isotopes.ipynb)计算归一化的碳同位素概率并比较两种分辨率。它展示同位素丰度和仪器分辨率如何影响包络。
 
 ## 串联质谱
 
@@ -286,7 +286,7 @@ NMR 反演从时域测量恢复弛豫时间或扩散系数分布。本栏把 [NM
 
 ## 为什么需要正则化
 
-相近指数成分产生的时域信号很相似，核矩阵因此病态：微小噪声可能显著改变恢复分布。重建残差很小，不代表分布唯一，也不代表分辨出了相近的物理组分。
+相近指数成分产生的时域信号很相似，核矩阵因此病态：微小噪声可能显著改变恢复分布。使用正则化与相关实验信息约束可行分布，并根据噪声水平和核矩阵的分辨能力解释组分。
 
 当前求解目标为：
 

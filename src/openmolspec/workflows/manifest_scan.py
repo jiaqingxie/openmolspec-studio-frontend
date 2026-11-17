@@ -428,6 +428,7 @@ def label_candidates(
 
 
 def load_labels(candidates: Iterable[Path]) -> Tuple[Dict[str, Any], Optional[Path], Optional[str]]:
+    """Read molecular labels for matching source log files."""
     for path in candidates:
         if not path.is_file():
             continue
@@ -791,6 +792,7 @@ def write_outputs(
     *,
     write_compatibility_json: bool = True,
 ) -> Dict[str, Any]:
+    """Write the scanned source manifest and its summary files."""
     output_dir.mkdir(parents=True, exist_ok=True)
     frame.to_parquet(output_dir / "openspec_manifest.parquet", index=False)
     audit = audit.reindex(columns=AUDIT_FIELDS)
@@ -855,6 +857,7 @@ def write_outputs(
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments into an argparse namespace."""
     parser = argparse.ArgumentParser(description="Build the OpenSpec frequency/NMR manifest")
     parser.add_argument("--freq-root", default="/inspire/hdd/project/chemicalreaction/luxinyu-240207020178/hpc/mols/freq")
     parser.add_argument("--nmr-root", default="/inspire/hdd/project/chemicalreaction/luxinyu-240207020178/hpc/mols/nmr")
@@ -891,6 +894,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
+    """Run the manifest scan command-line workflow."""
     args = parse_args()
     if args.workers <= 0:
         args.workers = os.cpu_count() or 1

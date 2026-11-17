@@ -207,6 +207,7 @@ def export_pickle(
     compression: Optional[str] = "lzf",
     workers: int = 1,
 ) -> Dict[str, Any]:
+    """Export selected release records as Python pickle data."""
     if shard_size < 1:
         raise ValueError("shard_size must be positive")
     frame = pd.read_pickle(source)
@@ -264,6 +265,7 @@ def export_pickle(
 
 
 def export_release(config: Mapping[str, Any], only: Optional[str] = None) -> Dict[str, Any]:
+    """Export the configured molecular release formats."""
     options = config["release"]["export"]
     destination = output_dir(config) / "payload"
     compression = options.get("compression", "lzf")

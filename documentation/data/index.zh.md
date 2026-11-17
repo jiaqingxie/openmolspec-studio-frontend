@@ -1,24 +1,66 @@
-# Data
+# 数据
 
-按谱型及实验／计算来源选择数据。团队整理的专利库标注来源为 OpenDataLab；其他资源保留引用。谱条目、分子结构身份、构象帧是不同计数单位。
+通过统一的数据接口加载实验测量与计算光谱。本节介绍清洗后可用的数据、字段、实验条件，以及训练、验证和测试文件。
 
-| 数据类别 | 内容 |
-| --- | --- |
-| [核磁共振](nmr.md) | OpenDataLab 实验 NMR 与外部 H/C、杂核资源 |
-| [质谱](ms.md) | OpenDataLab 质量记录、MassSpecGym v1.5 与其他实验谱 |
-| [红外／拉曼](vibrational.md) | 实验峰表，以及 OpenMolSpec、QM9S、QMe14S 计算谱 |
-| [多谱联合](multimodal.md) | 同记录共现测量与明确对齐的多模态视图 |
+## OpenMolSpec 实验数据集
 
-[Dataset loading](../api.md) · [Benchmark and custom splits](splits.md) · [Distributions](../datasets.md) · [Corpus comparison](../corpus-comparison.md)
+| 数据集 | 分类 | 内容描述 | 清洗后可用数量 |
+| --- | --- | --- | --- |
+| [H/C NMR](nmr.md) | 实验 NMR | 氢碳化学位移、结构、分子式、谱文本与采集信息。 | 2,678,511 个分子 |
+| [11B](nmr.md) | 实验 | 硼化学位移及含硼分子结构。 | 1,140 条谱; 1,017 个分子 |
+| [19F](nmr.md) | 实验 | 氟化学位移及含氟分子结构。 | 56,679 条谱; 50,402 个分子 |
+| [29Si](nmr.md) | 实验 | 硅化学位移及含硅分子结构。 | 726 条谱; 636 个分子 |
+| [31P](nmr.md) | 实验 | 磷化学位移及含磷分子结构。 | 21,662 条谱; 18,238 个分子 |
+| [MS](ms.md) | 实验 | 数值化 m/z–强度峰表及对应分子结构。 | 5,233 条谱; 4,980 个分子 |
+| [IR](vibrational.md) | 实验 | 实验红外峰位置及对应分子结构。 | 177,759 条谱; 168,197 个分子 |
+| [Raman](vibrational.md) | 实验 | 实验拉曼峰位置及对应分子结构。 | 42 条谱; 39 个分子 |
 
-原始集合包含 **34,292,837 条表征条目**，其中 **32,901,847 条**归为 NMR、MS、IR 或 Raman；其余保留色谱及其他表征标签。各任务可用数量按数据卡中的字段与质量层级分别报告。
+本数据集由 OpenDataLab / WanJuan MolSpectra v1.0.3 清洗整理。H/C 按标准分子身份组织，其他视图保留去重后的数值谱及实验条件。
 
-## 标准分子身份
+![Cleaned experimental spectroscopy coverage](../assets/gallery/data-cleaned-experimental.png)
 
-完整结构／骨架资格检查保留 **3,245,902 个完整标准 InChIKey 身份**；其中 **3,235,816 个**至少具有一条 NMR、MS、IR 或 Raman 记录，进入固定 v1 分组。这里统计分子身份，与测量条目数及整理后的 H/C 视图分开。
+![Cleaned molecular distributions](../assets/gallery/data-cleaned-nmr.png)
 
-![OpenDataLab molecular distributions](../assets/gallery/data-opendatalab-chemistry.png)
+全部 2,678,511 条清洗后 H/C 记录的分子大小与分子量分布；最右侧一格包含更大的分子。[SVG](../assets/gallery/data-cleaned-nmr.svg) · [PDF](../assets/gallery/data-cleaned-nmr.pdf)
 
-[SVG](../assets/gallery/data-opendatalab-chemistry.svg) · [PDF](../assets/gallery/data-opendatalab-chemistry.pdf)
+## 外部实验资源
 
-[Qualification and exclusions / 检查与排除范围](../assets/reports/opendatalab_structure_qualification_20261117.json)
+| 数据集／视图 | 分类 | 内容描述 | 可用条目 |
+| --- | --- | --- | --- |
+| NMRexp v2 | NMR | 按核种整理的实验 NMR Parquet 视图，数量见核种表。 | [NMR](nmr.md) |
+| NMRSpec / NMRTrans | NMR | 用于谱结构检索、结构生成的 H/C 谱与目标结构。 | 10,000 |
+| NMRGym | NMR | 实验 NMR 分子结构解析测试视图。 | 10,000 |
+| MassSpecGym v1.5 | MS/MS | 具有结构和采集字段、可用于前向预测的数值串联质谱。 | 119,029 |
+| MassBank | MS/MS | 含有效分子结构的数值 MS2 谱。 | 120,512 |
+
+## 计算光谱
+
+| 数据集／视图 | 分类 | 内容描述 | 可用条目 |
+| --- | --- | --- | --- |
+| OpenMolSpec / openSpec test | IR / Raman / NMR | 配对光谱、分子结构和量子化学性质，用于多模态学习。 | 20,390 |
+| QMe14S | IR / Raman | 覆盖 14 种元素、两通道均为有限且非常数值的 IR/Raman 配对数组。 | 184,252 |
+
+## 加载数据
+
+```python
+from openmolspec.dataset import molspectra
+
+data = molspectra("opendatalab_nmr", root="data/nmr")
+record = data["test"].head(1)[0]
+print(record["smiles"])
+print(record["h_peaks_ppm"])
+paired = data["train"].select(modalities=["1H", "13C"])
+```
+
+将清洗后的 `train.jsonl`、`val.jsonl`、`test.jsonl` 放在 `data/nmr` 目录。[NMR 数据指南](nmr.md)解释字段，[划分指南](splits.md)说明如何构建自己的数据集。[下载计数与分布](../assets/cleaned-data-summary.json)。
+
+## 参考文献
+
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)
+- Wang, J.-J., Jin, Y., Zhi, C.-Y., et al. NMRexp: A database of 3.3 million experimental NMR spectra. Scientific Data 12, 1954 (2025). doi:10.1038/s41597-025-06245-5. [Source](https://www.nature.com/articles/s41597-025-06245-5)
+- Yang, L., Yang, Z., Xie, J., Wang, Y., Gao, B., Fu, T., Wei, X., Sun, J., Wu, J., He, C., Li, Y. & Gu, Q. NMRTrans: Structure Elucidation from Experimental NMR Spectra via Set Transformers. arXiv:2602.10158 (2026). [Source](https://arxiv.org/abs/2602.10158)
+- Fang, Z., Yang, C., Yu, H., Luo, H., He, H., Xie, J., Yang, Z. & Xia, J. NMRGym: A Comprehensive Benchmark for Nuclear Magnetic Resonance Based Molecular Structure Elucidation. arXiv:2601.15763 (2026). [Source](https://arxiv.org/abs/2601.15763)
+- Bushuiev, R., Bushuiev, A., de Jonge, N. F., Young, A., et al. MassSpecGym: A benchmark for the discovery and identification of molecules. Advances in Neural Information Processing Systems 37, Datasets and Benchmarks Track (2024). arXiv:2410.23326. [Source](https://arxiv.org/abs/2410.23326)
+- Horai, H., Arita, M., Kanaya, S., et al. MassBank: a public repository for sharing mass spectral data for life sciences. Journal of Mass Spectrometry 45, 703–714 (2010). doi:10.1002/jms.1777. [Source](https://doi.org/10.1002/jms.1777)
+- Yuan, M., Zou, Z. & Hu, W. QMe14S, A Comprehensive and Efficient Spectral Dataset for Small Organic Molecules. arXiv:2501.18876 (2025). [Source](https://arxiv.org/abs/2501.18876)
+- OpenMolSpec contributors. OpenMolSpec: Chemical spectroscopy datasets, models and learning workflows. Software release v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0)

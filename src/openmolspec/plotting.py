@@ -4,6 +4,19 @@ from pathlib import Path
 
 
 def arial_path():
+    """Find and register Arial for scientific plots and molecular drawings.
+
+    Returns
+    -------
+    str
+        Absolute TTF path, selected from ``OPENMOLSPEC_ARIAL_FONT``, the local
+        plotting runtime or Matplotlib's installed fonts.
+
+    Raises
+    ------
+    RuntimeError
+        If Arial is unavailable. Set ``OPENMOLSPEC_ARIAL_FONT`` to its TTF file.
+    """
     from matplotlib import font_manager
     candidates=[os.environ.get('OPENMOLSPEC_ARIAL_FONT',''),
                 str(Path(__file__).resolve().parents[2]/'.runtime/fonts/Arial.TTF')]
@@ -18,6 +31,14 @@ def arial_path():
 
 
 def figure_style():
+    """Apply the shared typography and vector-export settings to Matplotlib.
+
+    Returns
+    -------
+    None
+        Updates ``matplotlib.rcParams`` with Arial, compact labels, open axes,
+        editable SVG text and embedded TrueType PDF fonts.
+    """
     import matplotlib.pyplot as plt
     arial_path()
     plt.rcParams.update({'font.family':'Arial','font.sans-serif':['Arial'],'font.size':9,

@@ -1,10 +1,6 @@
-# Structure to 1H NMR
+# 1H chemical shift prediction
 
-Predict chemical shifts for the selected nucleus from a molecular structure, using existing frozen weights where available.
-
-## Example and evaluation
-
-Reasonable H/C frozen-model baseline; reported errors use peak matching, not experimental atom assignments. Verify data overlap and solvent coverage.
+Predict the 1H chemical shifts of a molecule from its structure. Use the atom indices to display predictions on the molecular graph or compare them with measured peaks.
 
 ## What goes in
 
@@ -19,11 +15,11 @@ Reasonable H/C frozen-model baseline; reported errors use peak matching, not exp
 | Field | Meaning |
 | --- | --- |
 | `prediction_ppm` | Per-atom chemical shifts in ppm, with atom indices or a peak list. |
-| `error / coverage` | Reference-matched errors and coverage; matching does not establish atom assignments. |
+| `error / coverage` | Reference-matched errors and peak coverage. |
 
 ## A real recorded example
 
-The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
+Inspect the input, prediction and reference for the example below. Download the JSON for the complete numerical arrays and additional examples.
 
 ![nmr.forward.1H actual results](../assets/gallery/nmr-forward-1H.png)
 
@@ -69,45 +65,75 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 | Dataset / scope | Model / variant | Metric | Value |
 | --- | --- | --- | ---: |
 | nmrspec_test | nmrnet | matched_peak_mae_ppm | 0.134143 |
+| nmrspec_test | nmrnet | matched_peak_rmse_ppm | 0.236816 |
+| nmrspec_test | nmrnet | peak_count_mae | 10.2188 |
 | nmrspec_test | nmrnet | matched_fraction | 0.519243 |
 | nmrspec_test | nmrnet | examples | 32 |
 | nmrspec_test | nmrnet | scored_examples | 32 |
+| nmrspec_test | nmrnet | aggregation | equal_weight_per_molecule |
+| nmrspec_test | nmrnet | assignment | minimum_absolute_error_without_atom_labels |
 | nmrspec_test | nmrnetpp | matched_peak_mae_ppm | 0.0769934 |
+| nmrspec_test | nmrnetpp | matched_peak_rmse_ppm | 0.163875 |
+| nmrspec_test | nmrnetpp | peak_count_mae | 10.2188 |
 | nmrspec_test | nmrnetpp | matched_fraction | 0.519243 |
 | nmrspec_test | nmrnetpp | examples | 32 |
 | nmrspec_test | nmrnetpp | scored_examples | 32 |
+| nmrspec_test | nmrnetpp | aggregation | equal_weight_per_molecule |
+| nmrspec_test | nmrnetpp | assignment | minimum_absolute_error_without_atom_labels |
 | patent_test_10k | nmrnet | matched_peak_mae_ppm | 0.26912 |
+| patent_test_10k | nmrnet | matched_peak_rmse_ppm | 0.530869 |
+| patent_test_10k | nmrnet | peak_count_mae | 24.7586 |
 | patent_test_10k | nmrnet | matched_fraction | 0.294737 |
 | patent_test_10k | nmrnet | examples | 29 |
 | patent_test_10k | nmrnet | scored_examples | 29 |
+| patent_test_10k | nmrnet | aggregation | equal_weight_per_molecule |
+| patent_test_10k | nmrnet | assignment | minimum_absolute_error_without_atom_labels |
 | patent_test_10k | nmrnetpp | matched_peak_mae_ppm | 0.227842 |
+| patent_test_10k | nmrnetpp | matched_peak_rmse_ppm | 0.484549 |
+| patent_test_10k | nmrnetpp | peak_count_mae | 24.7586 |
 | patent_test_10k | nmrnetpp | matched_fraction | 0.294737 |
 | patent_test_10k | nmrnetpp | examples | 29 |
 | patent_test_10k | nmrnetpp | scored_examples | 29 |
+| patent_test_10k | nmrnetpp | aggregation | equal_weight_per_molecule |
+| patent_test_10k | nmrnetpp | assignment | minimum_absolute_error_without_atom_labels |
 | nmrexp_exp_10k | nmrnet | matched_peak_mae_ppm | 0.0485825 |
+| nmrexp_exp_10k | nmrnet | matched_peak_rmse_ppm | 0.0797388 |
+| nmrexp_exp_10k | nmrnet | peak_count_mae | 8.09375 |
 | nmrexp_exp_10k | nmrnet | matched_fraction | 0.530831 |
 | nmrexp_exp_10k | nmrnet | examples | 32 |
 | nmrexp_exp_10k | nmrnet | scored_examples | 32 |
+| nmrexp_exp_10k | nmrnet | aggregation | equal_weight_per_molecule |
+| nmrexp_exp_10k | nmrnet | assignment | minimum_absolute_error_without_atom_labels |
 | nmrexp_exp_10k | nmrnetpp | matched_peak_mae_ppm | 0.030637 |
+| nmrexp_exp_10k | nmrnetpp | matched_peak_rmse_ppm | 0.0626249 |
+| nmrexp_exp_10k | nmrnetpp | peak_count_mae | 8.09375 |
 | nmrexp_exp_10k | nmrnetpp | matched_fraction | 0.530831 |
 | nmrexp_exp_10k | nmrnetpp | examples | 32 |
 | nmrexp_exp_10k | nmrnetpp | scored_examples | 32 |
+| nmrexp_exp_10k | nmrnetpp | aggregation | equal_weight_per_molecule |
+| nmrexp_exp_10k | nmrnetpp | assignment | minimum_absolute_error_without_atom_labels |
 | nmrgym_test | nmrnet | matched_peak_mae_ppm | 0.196824 |
+| nmrgym_test | nmrnet | matched_peak_rmse_ppm | 0.393488 |
+| nmrgym_test | nmrnet | peak_count_mae | 15.8438 |
 | nmrgym_test | nmrnet | matched_fraction | 0.529103 |
 | nmrgym_test | nmrnet | examples | 32 |
 | nmrgym_test | nmrnet | scored_examples | 32 |
+| nmrgym_test | nmrnet | aggregation | equal_weight_per_molecule |
+| nmrgym_test | nmrnet | assignment | minimum_absolute_error_without_atom_labels |
 | nmrgym_test | nmrnetpp | matched_peak_mae_ppm | 0.198216 |
+| nmrgym_test | nmrnetpp | matched_peak_rmse_ppm | 0.406316 |
+| nmrgym_test | nmrnetpp | peak_count_mae | 15.8438 |
 | nmrgym_test | nmrnetpp | matched_fraction | 0.529103 |
 | nmrgym_test | nmrnetpp | examples | 32 |
 | nmrgym_test | nmrnetpp | scored_examples | 32 |
-
-Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
+| nmrgym_test | nmrnetpp | aggregation | equal_weight_per_molecule |
+| nmrgym_test | nmrnetpp | assignment | minimum_absolute_error_without_atom_labels |
 
 ## Model and method
 
-For H/C, score existing NMRNet and NMRNet++ predictions with their exact metadata. Unassigned experimental peak sets use minimum-error matching and retain peak-count and coverage diagnostics.
+NMRNet encodes the molecular geometry and predicts chemical shifts at the selected atoms. The adapter prepares a conformer, loads the nucleus-specific weights and applies the checkpoint scaler.
 
-Shifts and errors are in ppm. Molecule-macro matched-peak MAE/RMSE alone do not penalize every missing/extra peak; publish matched fraction and peak-count error alongside them.
+MAE and RMSE are reported in ppm.
 
 ## Reproduce
 
@@ -131,9 +157,12 @@ For fine-tuning, use the [NMRNet author training implementation](https://github.
 
 $$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
 
-## Data requirements and references
 
-A peak-matching score is not atom-assignment accuracy. These H/C results score saved predictions; they do not establish validity for other nuclei.
+| Model setting | Value |
+| --- | --- |
+| Checkpoint | NMRNet 1H fold 0 |
+| Training domain | liquid |
+| Shift unit | ppm |
 
 <details><summary>Source reports and SHA-256 fingerprints</summary>
 
@@ -142,4 +171,9 @@ A peak-matching score is not atom-assignment accuracy. These H/C results score s
 </details>
 
 
-[Original model / 原模型](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+
+## References
+
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)

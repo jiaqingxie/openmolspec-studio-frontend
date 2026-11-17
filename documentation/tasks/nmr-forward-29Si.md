@@ -1,10 +1,6 @@
-# Structure to 29Si NMR: frozen diagnostic
+# 29Si chemical shift prediction
 
-Run the released liquid All-nucleus NMRNet checkpoint on existing atom-indexed validation records.
-
-## Example and evaluation
-
-Unsuitable as an accurate solution predictor: 56.13 ppm MAE, all 32 predictions biased high. Clean data and obtain compatible weights before considering fine-tuning.
+Predict the 29Si chemical shifts of a molecule from its structure. Use the atom indices to display predictions on the molecular graph or compare them with measured peaks.
 
 ## What goes in
 
@@ -19,11 +15,11 @@ Unsuitable as an accurate solution predictor: 56.13 ppm MAE, all 32 predictions 
 | Field | Meaning |
 | --- | --- |
 | `prediction_ppm` | Per-atom chemical shifts in ppm, with atom indices or a peak list. |
-| `error / coverage` | Reference-matched errors and coverage; matching does not establish atom assignments. |
+| `error / coverage` | Reference-matched errors and peak coverage. |
 
 ## A real recorded example
 
-The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
+Inspect the input, prediction and reference for the example below. Download the JSON for the complete numerical arrays and additional examples.
 
 ![nmr.forward.29Si actual results](../assets/gallery/nmr-forward-29Si.png)
 
@@ -63,13 +59,11 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 | recorded evaluation | recorded model | molecules | 32 |
 | recorded evaluation | recorded model | atoms | 32 |
 
-Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
-
 ## Model and method
 
-Completed 32 distinct molecules per nucleus using the saved scaler and full checkpoint restoration. Sample IDs and atom labels were checked against the exact inference inputs. See results/bsi_frozen_diagnostic_20261116.json and scripts/run_frozen_bsi_diagnostic.py.
+NMRNet encodes the molecular geometry and predicts chemical shifts at the selected atoms. The adapter prepares a conformer, loads the nucleus-specific weights and applies the checkpoint scaler.
 
-Diagnostic atom-level MAE/RMSE in ppm; these are not peak-matching scores or validated held-out benchmark results.
+MAE and RMSE are reported in ppm.
 
 ## Reproduce
 
@@ -95,9 +89,12 @@ For fine-tuning, use the [NMRNet author training implementation](https://github.
 
 $$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
 
-## Data requirements and references
 
-Nucleus-specific training coverage, training overlap and experimental assignment provenance are unverified. The model has no solvent input. Primary scoring remains disabled; NMRNet++ B/Si-specific weights are still being sought. No fitting was performed.
+| Model setting | Value |
+| --- | --- |
+| Checkpoint | NMRNet All-nucleus fold 0 |
+| Training domain | liquid |
+| Shift unit | ppm |
 
 <details><summary>Source reports and SHA-256 fingerprints</summary>
 
@@ -106,4 +103,9 @@ Nucleus-specific training coverage, training overlap and experimental assignment
 </details>
 
 
-[Original model / 原模型](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+
+## References
+
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)

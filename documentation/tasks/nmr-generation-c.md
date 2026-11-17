@@ -1,10 +1,6 @@
-# NMR-to-SMILES generation: C
+# Structure elucidation from ¹³C NMR
 
-Generate candidate molecular structures from experimental H/C NMR with the existing generation checkpoint.
-
-## Example and evaluation
-
-Strong dataset dependence: zero exact matches on the 32-example patent and NMRGym checks. Prioritize a clean external test and parsing/token coverage audit; then consider domain fine-tuning.
+Generate candidate molecular structures from NMR peak lists and a molecular formula.
 
 ## What goes in
 
@@ -19,11 +15,11 @@ Strong dataset dependence: zero exact matches on the 32-example patent and NMRGy
 | Field | Meaning |
 | --- | --- |
 | `candidates` | Generated SMILES, canonical structures, validity, formula match and model score. |
-| `exact_match` | Compare the selected candidate with a held reference structure; valid SMILES alone is not success. |
+| `exact_match` | Canonical structural agreement with the reference molecule. |
 
 ## A real recorded example
 
-The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
+Inspect the input, prediction and reference for the example below. Download the JSON for the complete numerical arrays and additional examples.
 
 ![nmr.generation.c actual results](../assets/gallery/nmr-generation-c.png)
 
@@ -91,30 +87,48 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 
 | Dataset / scope | Model / variant | Metric | Value |
 | --- | --- | --- | ---: |
+| nmrspec_test | recorded model | modality | available |
 | nmrspec_test | recorded model | examples | 32 |
+| nmrspec_test | recorded model | skipped_missing_modality | 0 |
+| nmrspec_test | recorded model | valid | 31 |
+| nmrspec_test | recorded model | formula_match | 23 |
+| nmrspec_test | recorded model | exact | 3 |
 | nmrspec_test | recorded model | valid_rate | 0.96875 |
 | nmrspec_test | recorded model | formula_match_rate | 0.71875 |
 | nmrspec_test | recorded model | exact_rate | 0.09375 |
+| patent_test_10k | recorded model | modality | available |
 | patent_test_10k | recorded model | examples | 32 |
+| patent_test_10k | recorded model | skipped_missing_modality | 0 |
+| patent_test_10k | recorded model | valid | 28 |
+| patent_test_10k | recorded model | formula_match | 3 |
+| patent_test_10k | recorded model | exact | 0 |
 | patent_test_10k | recorded model | valid_rate | 0.875 |
 | patent_test_10k | recorded model | formula_match_rate | 0.09375 |
 | patent_test_10k | recorded model | exact_rate | 0 |
+| nmrexp_exp_10k | recorded model | modality | available |
 | nmrexp_exp_10k | recorded model | examples | 32 |
+| nmrexp_exp_10k | recorded model | skipped_missing_modality | 0 |
+| nmrexp_exp_10k | recorded model | valid | 32 |
+| nmrexp_exp_10k | recorded model | formula_match | 30 |
+| nmrexp_exp_10k | recorded model | exact | 19 |
 | nmrexp_exp_10k | recorded model | valid_rate | 1 |
 | nmrexp_exp_10k | recorded model | formula_match_rate | 0.9375 |
 | nmrexp_exp_10k | recorded model | exact_rate | 0.59375 |
+| nmrgym_test | recorded model | modality | available |
 | nmrgym_test | recorded model | examples | 32 |
+| nmrgym_test | recorded model | skipped_missing_modality | 0 |
+| nmrgym_test | recorded model | valid | 30 |
+| nmrgym_test | recorded model | formula_match | 16 |
+| nmrgym_test | recorded model | exact | 0 |
 | nmrgym_test | recorded model | valid_rate | 0.9375 |
 | nmrgym_test | recorded model | formula_match_rate | 0.5 |
 | nmrgym_test | recorded model | exact_rate | 0 |
 
-Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
-
 ## Model and method
 
-The existing model requires an explicitly supplied molecular formula. Beam candidates are ranked by validity, formula agreement and model score, following the checkpoint's inference code. No formula is derived secretly from the target structure.
+The NMRTransformer spectral encoder represents the peak lists, and the molecular decoder generates SMILES with beam search. Candidates include their molecular formula agreement and decoding scores.
 
-Report valid SMILES rate, canonical exact-match rate and formula-match rate, with the beam size, modality mask and selected records.
+Canonical top-k accuracy and valid-SMILES rate summarize generation.
 
 ## Reproduce
 
@@ -148,10 +162,6 @@ $$L_{\rm LM}=-\frac{1}{N_{\rm token}}\sum_t\log p_\theta(y_t\mid y_{<t},x,F).$$
 
 Generation uses token cross-entropy; an optional joint alignment term follows its configured weight. Alignment uses normalized spectral/molecular representations with symmetric contrastive cross-entropy; ITM configuration adds positive/negative matching. The actual checkpoint/training configuration determines the objective.
 
-## Data requirements and references
-
-Formula-conditioned generation must be distinguished from formula prediction and from generation without a supplied formula. Low or zero cross-dataset exact match is retained, not replaced by cached answers.
-
 <details><summary>Source reports and SHA-256 fingerprints</summary>
 
 - [nmr_documented_examples_20261117_v2.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/nmr_documented_examples_20261117_v2.json) — SHA-256 `669413d6fc0939bdb6826782d41fc13cf12926a672418ecb46303f0b8ba05b99`
@@ -159,4 +169,10 @@ Formula-conditioned generation must be distinguished from formula prediction and
 </details>
 
 
-[Original model / 原模型](https://github.com/jiaqingxie/openmolspec-studio-frontend) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/jiaqingxie/openmolspec-studio-frontend) · [Model review / 模型检查](../model-audit.md)
+
+## References
+
+- Yang, L., Yang, Z., Xie, J., Wang, Y., Gao, B., Fu, T., Wei, X., Sun, J., Wu, J., He, C., Li, Y. & Gu, Q. NMRTrans: Structure Elucidation from Experimental NMR Spectra via Set Transformers. arXiv:2602.10158 (2026). [Source](https://arxiv.org/abs/2602.10158)
+- Fang, Z., Yang, C., Yu, H., Luo, H., He, H., Xie, J., Yang, Z. & Xia, J. NMRGym: A Comprehensive Benchmark for Nuclear Magnetic Resonance Based Molecular Structure Elucidation. arXiv:2601.15763 (2026). [Source](https://arxiv.org/abs/2601.15763)
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)

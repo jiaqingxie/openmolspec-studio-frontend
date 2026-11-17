@@ -1,0 +1,6 @@
+# Agent 工具
+
+| Module | Description |
+| --- | --- |
+| [openmolspec.harness](module-harness.md) | Spectra Harness: validated, observable model calls by spectroscopy family. |
+| [openmolspec.mcp](module-mcp.md) | MCP stdio tools backed by the same Spectra Harness used in Python. |

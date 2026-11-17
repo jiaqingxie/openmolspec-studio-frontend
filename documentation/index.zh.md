@@ -1,56 +1,70 @@
 # OpenMolSpec
 
-<div class="oms-eyebrow">Chemical spectroscopy · Open research platform</div>
+Chemical spectroscopy and deep learning
 
-<p class="oms-lead"><strong>数据集、模型与可复现的化学谱学</strong><br>通过统一 Python 接口加载分子谱学数据、预测谱图、检索或生成结构，并训练 NMR 模型。</p>
+OpenMolSpec 是面向分子谱学的 Python 工具包。你可以加载实验与计算数据集，预测谱图和分子性质，通过谱图解析结构，也可以用自己的数据训练模型。支持 NMR、质谱、红外与拉曼光谱。
 
-<div class="oms-stat-grid">
-<div class="oms-stat"><strong>8</strong><span>个数据注册入口</span></div>
-<div class="oms-stat"><strong>31</strong><span>个启用任务配置</span></div>
-<div class="oms-stat"><strong>82</strong><span>份已执行中英文 notebook</span></div>
-</div>
+## 开始使用
 
-<div class="oms-paths">
-<a class="oms-path" href="data/index.html"><strong>使用数据 →</strong><span>了解来源、分布、训练与测试划分，以及数据加载方法。</span></a>
-<a class="oms-path" href="tasks/index.html"><strong>选择任务 →</strong><span>从手头的结构、NMR 峰、MS/MS、IR 或 Raman 出发。</span></a>
-<a class="oms-path" href="api.html"><strong>预测与训练 →</strong><span>调用模型类、检查真实案例，并准备自己的训练数据。</span></a>
-</div>
-
-## 先看一份实际结果
-
-构象到谱图示例调用 Xinyu 的 openSpec 模型，输入坐标与 Gaussian 参考完全对应。两条曲线分别是实际预测与参考计算。图中展示两个案例中的一例，说明推理路径已跑通；完整精度仍需更大规模的独立评测。
-
-[![IR and Raman: recorded prediction and reference](assets/gallery/vibrational-forward.png)](tasks/vibrational-forward.md)
-
-[浏览全部结果图](gallery.md) · [任务输入与输出](tasks/vibrational-forward.md) · [查看教程](notebooks/vibrational-forward.ipynb)
-
-## 从 Python 包开始
-
-先按 [SDK 指南](api.md) 安装带版本号的 wheel，再查看数据注册表。完整数据和模型权重的准备方法也在该页列出。
+从[快速开始](quickstart.md)安装 OpenMolSpec，依次学习数据加载、模型预测和训练。[教程](notebooks/index.md)配有逐步说明、代码、输出和图。
 
 ```python
-from openmolspec.dataset import list_datasets
+from openmolspec.dataset import molspectra
+from openmolspec.model import NMRNet
 
-for card in list_datasets():
-    print(card["name"])
+data = molspectra("opendatalab_nmr", root="data/nmr")
+molecule = data["test"].head(1)[0]
+
+model = NMRNet.from_pretrained("models", nucleus="13C",
+    python="/path/to/nmr-env/bin/python")
+prediction = model.predict(molecule["smiles"])
+print(prediction["records"])
 ```
 
-[Quick Start](quickstart.md) · [Python SDK](api.md) · [Tutorials](notebooks/index.md)
+## Examples
 
-## 这里的数据分别是什么
+下面的例子展示如何预测谱图、解析分子结构，以及预测分子性质。
 
-| 数据类别 | 含义 | 查看详情 |
-| --- | --- | --- |
-| 团队整理的实验 NMR | 从专利整理的实验测量；当前准备库含 2,680,271 个存储的标准 InChI 身份。整理数据不代表实验由我们测量。 | [来源与计数](datasets.md) |
-| 计算谱与性质 | 计算得到的 IR/Raman 及分子性质，分子记录和构象帧分别计数。 | [数据分布](datasets.md) |
-| 外部基准 | NMRSpec、NMRexp、NMRGym、MS 等资源保留各自来源和贡献者。 | [数据比较](corpus-comparison.md) |
+### [从 NMR 解析结构](notebooks/nmr-generation-hc.ipynb)
 
-不同资源的计数单位不同，也可能包含相同分子。注册入口提供统一访问，不代表八个新测量的数据集。
+输入氢谱、碳谱和分子式，生成候选结构。
 
-## 使用前判断模型是否适合
+[![Structure elucidation from NMR](assets/gallery/nmr-generation-hc.png)](notebooks/nmr-generation-hc.ipynb)
 
-H/C NMR、MS/MS 与振动谱案例均展示真实输出。B/Si 和 F/P 当前只作诊断，跨溶剂迁移当前为实验参考检索基线。训练接口已完成编码器与生成器的微型训练、保存、重载检查；大规模学习效果需要另外的实验支撑。
+### [预测串联质谱](notebooks/ms-forward-glacier.ipynb)
 
-[Model suitability](model-audit.md) · [Evaluation protocols](protocols.md) · [Publication status](publication.md)
+输入分子结构、加合物和碰撞能，预测碎片峰及其强度。
 
-[Data](data/index.md) · [Theory](theory/index.md) · [Inversion](inversion/index.md) · [Spectra Harness](harness.md)
+[![Predicting tandem mass spectra](assets/gallery/ms-forward-glacier.png)](notebooks/ms-forward-glacier.ipynb)
+
+### [由分子构象预测红外与拉曼谱](notebooks/vibrational-forward.ipynb)
+
+使用 openSpec 模型，从原子坐标预测振动光谱。
+
+[![IR and Raman from a molecular geometry](assets/gallery/vibrational-forward.png)](notebooks/vibrational-forward.ipynb)
+
+### [预测 HOMO–LUMO 能隙](notebooks/vibrational-gap-ir_raman_hc.ipynb)
+
+结合 IR、Raman 和 NMR，预测分子的 HOMO–LUMO 能隙。
+
+[![HOMO–LUMO gap prediction](assets/gallery/vibrational-gap-ir_raman_hc.png)](notebooks/vibrational-gap-ir_raman_hc.ipynb)
+
+
+### 交互式分子示例
+
+在三维中查看分子结构，配合数据集中的参考轨道能量，以及由 IR、Raman 和 H/C NMR 光谱预测的能隙。
+
+<div class="oms-conformer-demo" data-oms-viewer data-oms-assets="assets/viewer/" data-oms-language="zh">
+<label>分子 <select class="oms-conformer-select" aria-label="选择分子"></select></label>
+<div class="oms-conformer-canvas" role="img" aria-label="交互式分子构象"></div>
+<p class="oms-conformer-result" aria-live="polite">正在加载坐标…</p>
+</div>
+
+## 使用手册
+
+- [数据](data/index.md): 数据集、实验信息、数据分布与划分。
+- [任务](tasks/index.md): 任务定义、输入输出与模型使用。
+- [教程](notebooks/index.md): 预测、训练与谱学理论的分步教程。
+- [API 参考](api-reference/index.md): 类、函数、参数、返回值和调用示例。
+- [基准评测](benchmarks.md): 基准数据、评测流程、指标与结果。
+- [Agent Harness](harness.md): 通过 Python、命令行或 Agent 调用谱学工具。

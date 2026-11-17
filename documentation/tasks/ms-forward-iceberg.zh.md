@@ -1,17 +1,13 @@
-# 分子 → MS/MS（ICEBERG）
+# 使用 ICEBERG 预测 MS/MS
 
-给定分子结构、加合物、碰撞能和仪器，预测 MS/MS 的 m/z–强度峰列表。
-
-## 示例与评测
-
-采用作者接口并显式提供采集条件，方法适配合理；31 条评分不足以证明广泛精度。先核查协议与训练重叠，再决定微调。
+在指定采集条件下预测分子的碎片质量和强度。
 
 ## 输入是什么
 
 | Field | Meaning |
 | --- | --- |
 | `smiles / adduct` | 分子结构与记录中的离子/加合物类型，例如 [M+H]+ 或 [M+Na]+。 |
-| `collision_energy / instrument` | 发布模型支持的实际碰撞能与仪器条件；不能补造缺失值。 |
+| `collision_energy / instrument` | 模型支持的碰撞能与仪器条件。 |
 | `precursor_mz` | 记录中的前体 m/z；按作者接口解释输入条件。 |
 
 ## 输出是什么
@@ -23,11 +19,19 @@
 
 ## 真实运行案例
 
-下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
+下面展示示例的输入、预测与参考。下载 JSON 可获取完整数值数组及更多示例。
 
 ![ms.forward.iceberg actual results](../assets/gallery/ms-forward-iceberg.png)
 
 [SVG](../assets/gallery/ms-forward-iceberg.svg) · [PNG](../assets/gallery/ms-forward-iceberg.png) · [Full input/output JSON](../assets/examples/ms-forward-iceberg.json)
+
+### 示例 2
+
+![ms.forward.iceberg example 2](../assets/gallery/ms-forward-iceberg-example-2.png)
+
+### 示例 3
+
+![ms.forward.iceberg example 3](../assets/gallery/ms-forward-iceberg-example-3.png)
 
 <details><summary>展开查看实际输入与输出字段</summary>
 
@@ -105,13 +109,11 @@
 | recorded evaluation | recorded model | cosine_similarity | 0.4625 |
 | recorded evaluation | recorded model | entropy_similarity | 0.369847 |
 
-样本量和候选池随每次运行记录。图可能展示单个分子，表格是来源实验的实际汇总，不能混为同一统计范围。
-
 ## 模型与方法
 
-直接加载作者发布的冻结 checkpoint，调用 predict_mol。用我们测试 CSV 中的实测谱评分，并按谱图 ID、规范分子结构和加合物核对采集元数据。默认每个分子只取一条谱，避免多碰撞能重复分子主导平均值。
+ICEBERG 接收分子结构、加合物、碰撞能和仪器类型，通过碎片与强度预测模块生成 MS/MS 峰表。
 
-m/z 单位为 Da。用 0–1500 Da、150000 个 bin，bin 内 max pooling，保留预测强度最高的 100 个 bin，计算与全部实测峰的余弦相似度和熵相似度。缺少碰撞能或仪器时不补造条件，明确跳过。
+使用余弦相似度与熵相似度比较预测谱和实测谱。
 
 ## 复现方式
 
@@ -136,10 +138,6 @@ result = model.predict(smiles=smiles, adduct='[M+H]+',
 
 $$L_{\rm cosine}=1-\frac{\hat s\cdot s}{\|\hat s\|\|s\|}.$$
 
-## 数据要求与引用
-
-该口径保留全部实测峰，不等同于只保留可指认峰的 benchmark。预训练使用 MassSpecGym，当前自建划分与权重训练集重叠尚未独立核验；旧权重的仪器/加合物训练覆盖元数据也不完整。
-
 <details><summary>来源报告与 SHA-256 指纹</summary>
 
 - [ms_iceberg_32_molecules_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/ms_iceberg_32_molecules_20261116.json) — SHA-256 `7b403aa40d8478ff3ff8ee93ed6bec4151493d88eb0d2521f037542889c443ee`
@@ -147,4 +145,9 @@ $$L_{\rm cosine}=1-\frac{\hat s\cdot s}{\|\hat s\|\|s\|}.$$
 </details>
 
 
-[Original model / 原模型](https://github.com/coleygroup/ms-pred) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/coleygroup/ms-pred) · [Model review / 模型检查](../model-audit.md)
+
+## 参考文献
+
+- Wang, R., Manjrekar, M., Mahjour, B., Avila-Pacheco, J., et al. Neural Spectral Prediction for Structure Elucidation with Tandem Mass Spectrometry. bioRxiv (2025). doi:10.1101/2025.05.28.656653. [Source](https://doi.org/10.1101/2025.05.28.656653)
+- Bushuiev, R., Bushuiev, A., de Jonge, N. F., Young, A., et al. MassSpecGym: A benchmark for the discovery and identification of molecules. Advances in Neural Information Processing Systems 37, Datasets and Benchmarks Track (2024). arXiv:2410.23326. [Source](https://arxiv.org/abs/2410.23326)

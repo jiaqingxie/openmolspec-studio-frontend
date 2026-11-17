@@ -1,10 +1,4 @@
-"""Authoritative machine-readable field definitions for OpenSpec v1.
-
-The schema describes the public record contract. It does not yet convert the
-legacy parser output; that is intentionally deferred to the parser-reliability
-phase. Every field carries a dtype, shape, unit, missing-value policy and
-description so release builders and validators can consume one definition.
-"""
+"""Field names, dtypes, shapes and units shared by release builders and validators."""
 
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, Mapping, Optional, Tuple
@@ -20,7 +14,23 @@ from .constants import (
 
 @dataclass(frozen=True)
 class FieldSpec:
-    """Specification for one OpenSpec record field."""
+    """Describe one field in the OpenSpec molecular record schema.
+
+    Parameters
+    ----------
+    dtype : str
+        Logical storage type, such as ``'float32'`` or ``'string'``.
+    shape : str
+        Scalar or array dimensions, including symbolic atom count ``N``.
+    unit : str or None
+        Physical unit; ``None`` denotes a unitless metadata field.
+    missing_value_policy : str
+        Representation of an unavailable value and its associated flags.
+    description : str
+        Meaning of the field for a molecular record.
+    required : bool, default False
+        Whether the field name must be present in a conforming record.
+    """
 
     dtype: str
     shape: str
@@ -30,6 +40,13 @@ class FieldSpec:
     required: bool = False
 
     def as_dict(self) -> Dict[str, Any]:
+        """Return the field specification as a plain dictionary.
+
+        Returns
+        -------
+        dict
+            Dtype, shape, unit, missing-value policy, description and required flag.
+        """
         return asdict(self)
 
 
@@ -130,7 +147,14 @@ SCHEMA_METADATA: Mapping[str, Any] = {
 
 
 def schema_as_dict() -> Dict[str, Any]:
-    """Return a JSON/YAML-serializable schema representation."""
+    """Return the complete schema as serializable dictionaries.
+
+    Returns
+    -------
+    dict
+        ``'schema'`` contains version and processing metadata; ``'fields'``
+        maps every molecular record field to its :class:`FieldSpec` values.
+    """
 
     return {
         "schema": dict(SCHEMA_METADATA),
@@ -139,6 +163,17 @@ def schema_as_dict() -> Dict[str, Any]:
 
 
 def validate_record_keys(record: Mapping[str, Any]) -> Tuple[str, ...]:
-    """Return missing required keys without validating numerical values yet."""
+    """Identify required field names absent from a molecular record.
+
+    Parameters
+    ----------
+    record : mapping
+        Molecular record whose keys are checked against ``REQUIRED_FIELDS``.
+
+    Returns
+    -------
+    tuple of str
+        Required field names missing from the record, in schema order.
+    """
 
     return tuple(name for name in REQUIRED_FIELDS if name not in record)

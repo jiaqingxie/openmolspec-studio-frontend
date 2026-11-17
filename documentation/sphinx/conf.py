@@ -11,6 +11,8 @@ author = "OpenMolSpec contributors"
 copyright = "2026, OpenMolSpec contributors"
 release = "1.0"
 extensions = ["myst_nb", "sphinx.ext.autodoc", "sphinx.ext.napoleon", "sphinx.ext.mathjax"]
+mathjax_path = 'mathjax/tex-mml-chtml.js'
+mathjax3_config = {'chtml': {'displayAlign': 'left'}}
 autodoc_typehints = 'description'
 source_suffix = {".md": "myst-nb", ".ipynb": "myst-nb"}
 root_doc = "index"
@@ -26,6 +28,7 @@ html_logo = str(Path(__file__).resolve().parents[1] / 'assets/brand/openmolspec-
 html_favicon = str(Path(__file__).resolve().parents[1] / 'assets/brand/mark.svg')
 html_static_path = ["_static"]
 html_css_files = ["openmolspec.css"]
+html_js_files = [("openmolspec-viewer.js", {"defer": "defer"})]
 templates_path = ["_templates"]
 html_theme_options = {
     "navigation_depth": 3,
@@ -43,6 +46,10 @@ html_context = {"locale": locale}
 
 
 def page_context(app, pagename, templatename, context, doctree):
+    if pagename == "index":
+        # Keep the document title plain for breadcrumbs, search and navigation.
+        context["body"] = context["body"].replace(
+            "<h1>OpenMolSpec", '<h1><img src="assets/brand/mark.svg" class="oms-home-logo" alt=""> OpenMolSpec', 1)
     current = PurePosixPath("zh" if locale == "zh" else ".") / (pagename + ".html")
     translated = PurePosixPath("." if locale == "zh" else "zh") / (pagename + ".html")
     context["translation_url"] = posixpath.relpath(str(translated), str(current.parent))

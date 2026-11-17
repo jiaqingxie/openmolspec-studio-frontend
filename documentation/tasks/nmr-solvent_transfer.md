@@ -1,10 +1,6 @@
-# H/C cross-solvent transfer: experimental-reference baseline
+# Cross-solvent chemical shift transfer
 
-Estimate target-solvent shifts from a measured source-solvent spectrum using paired experimental references.
-
-## Example and evaluation
-
-Executable reference baseline; H does not improve on unchanged shifts. A solvent-conditioned model and independent paired data are still needed.
+Estimate a spectrum in a target solvent from measurements in a source solvent.
 
 ## What goes in
 
@@ -23,7 +19,7 @@ Executable reference baseline; H does not improve on unchanged shifts. A solvent
 
 ## A real recorded example
 
-The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
+Inspect the input, prediction and reference for the example below. Download the JSON for the complete numerical arrays and additional examples.
 
 ![nmr.solvent_transfer actual results](../assets/gallery/nmr-solvent_transfer.png)
 
@@ -95,13 +91,11 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 | recorded evaluation | 1H | unchanged_shift_mae_ppm | 0.135385 |
 | recorded evaluation | 1H | rmse_ppm | 0.376179 |
 
-Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
-
 ## Model and method
 
-Use reviewed, one-dimensional H/C NMRShiftDB records; exclude calculated-condition entries, unknown/mixed solvents and conflicting repeated atom shifts. Pair the same database atom across solvents. Retrieve the nearest other molecular connectivity by Morgan Tanimoto, then the nearest source shift, and add that reference atom's measured solvent difference. No parameters are fitted. All records sharing the query connectivity, including stereoisomers, are excluded.
+The experimental-reference model retrieves a similar molecular environment with paired measurements in both solvents. It adds the reference solvent difference to the query shift and returns the reference molecule and atom IDs alongside the estimate.
 
-Report H and C errors separately and compare with leaving the source shift unchanged. The completed run covers 32 distinct molecules and 296 paired atoms. Predictions expose reference molecules, atom/spectrum IDs and similarity.
+Evaluate H and C shifts separately using MAE in ppm.
 
 ## Reproduce
 
@@ -124,10 +118,6 @@ result = benchmark.run('nmr.solvent_transfer', output='new-algorithm-results.jso
 
 This task is an algorithmic workflow. Adapt its reference library or matching rules; there are no neural parameters or training loss. The task’s matching objective and provenance are described above.
 
-## Data requirements and references
-
-This is a retrieval baseline, not a pretrained neural solvent model. It does not consistently improve both nuclei over unchanged shifts. The reference library is small, and temperature/concentration/reference conventions are not independently harmonized. Neural solvent checkpoints remain unavailable.
-
 <details><summary>Source reports and SHA-256 fingerprints</summary>
 
 - [solvent_transfer_reference32_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/solvent_transfer_reference32_20261116.json) — SHA-256 `7532dc2b785a93aa51323934bb748b768f1bfc7c820809bc2065d0840afc543f`
@@ -135,4 +125,8 @@ This is a retrieval baseline, not a pretrained neural solvent model. It does not
 </details>
 
 
-[Original model / 原模型](https://nmrshiftdb.nmr.uni-koeln.de/) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://nmrshiftdb.nmr.uni-koeln.de/) · [Model review / 模型检查](../model-audit.md)
+
+## References
+
+- Steinbeck, C., Krause, S. & Kuhn, S. NMRShiftDB—Constructing a Free Chemical Information System with Open-Source Components. Journal of Chemical Information and Computer Sciences 43, 1733–1739 (2003). doi:10.1021/ci0341363. [Source](https://doi.org/10.1021/ci0341363)

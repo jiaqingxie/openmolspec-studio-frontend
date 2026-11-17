@@ -1,61 +1,38 @@
-# Spectra Harness
+# Agent Harness
 
-Spectra Harness uses one task registry and request contract across Python, a command line and MCP. Its replaceable family plugins are inspired by [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). It runs existing spectroscopy backends and records their behavior.
+Spectra Harness gives an agent a common interface to NMR, MS and vibrational models. A request identifies the task, supplies molecular or spectral inputs, and selects a model environment. The response contains the prediction and a record of the calls. The same request can be used from Python, the command line or MCP.
 
-| Plugin | Direct calls |
-| --- | --- |
-| NMR Spectra Harness | H/C forward prediction, assignment, spectrum-to-structure retrieval and formula-conditioned generation |
-| MS Spectra Harness | GLACIER and ICEBERG under explicit acquisition conditions |
-| Vibrational Spectra Harness | Gap prediction, Vib2Mol retrieval, generation and candidate reranking |
+## Workflow
 
-The full task list also contains benchmark and algorithmic adapters. `catalog()` lists direct Harness capabilities explicitly; the [task pages](tasks/index.md) provide the other entry points.
-
-## Python
+1. Discover available tasks with `catalog()` or `spectra_tasks`.
+2. Prepare the fields for your task and configure model paths.
+3. Check the request with `validate()` or `spectra_validate`.
+4. Run the model with `run()` or `spectra_predict`.
+5. Read `result`; inspect `calls` when measuring latency or repeating a prediction.
 
 ```python
 from openmolspec.harness import SpectraHarness
 
 harness = SpectraHarness()
-print(harness.catalog())
-inputs = {'smiles': 'CCO'}
-settings = {'root': '/path/to/models', 'python': '/path/to/nmr-env/bin/python'}
-print(harness.validate('nmr.forward.13C', inputs, settings))
-report = harness.run('nmr.forward.13C', inputs, settings, repeats=2)
-print(report['completed'], report['repeat_predictions_equal'])
-prediction = report['result']
+for task in harness.catalog():
+    print(task['task'], task['harness'])
 ```
 
-Each call records elapsed time, success/failure and response/prediction hashes. Full responses can contain changing temporary-file provenance; prediction equality is therefore reported separately. Numerical agreement or successful execution does not measure accuracy without reference labels and a suitable evaluation protocol.
+## Guides
 
-## Command line
+- [Quick start](harness/quickstart.md): Make an NMR request and read its output.
+- [Python interface](harness/python.md): Configure a Harness and call it from a script.
+- [Command line](harness/cli.md): Run reusable JSON request files.
+- [MCP tools](harness/mcp.md): Connect an agent and use discovery, validation and prediction tools.
+- [NMR Spectra Harness](harness/nmr.md): Predict shifts, assign peaks and identify structures.
+- [MS Spectra Harness](harness/ms.md): Predict MS/MS spectra with acquisition conditions.
+- [Vibrational Spectra Harness](harness/vibrational.md): Predict gaps and identify structures from multiple spectral channels.
+- [Examples](harness/examples.md): Inspect inputs and outputs for three model families.
 
-Create a JSON object with `task`, `inputs`, `model_config` and optional `repeats`:
+## References
 
-```bash
-python -m openmolspec.harness catalog
-python -m openmolspec.harness validate --request request.json
-python -m openmolspec.harness run --request request.json --output new-result.json
-```
-
-## MCP
-
-Install the optional `mcp` extra and configure the client with your environment’s Python:
-
-```json
-{
-  "mcpServers": {
-    "openmolspec": {
-      "command": "/path/to/environment/bin/python",
-      "args": ["-m", "openmolspec.mcp"]
-    }
-  }
-}
-```
-
-The server uses stdio and exposes `spectra_tasks`, `spectra_datasets`, `spectra_validate` and `spectra_predict`. MCP parameters use `model_settings` for model/runtime paths. Validation returns an explanatory error for incompatible inputs before launching a model. Model dependencies and weights must exist in the selected backend environment.
-
-The repository includes a [Spectra Harness skill](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/skills/spectra-harness) for agent use. Training remains an explicit SDK operation with a separate training plan, train/validation inputs and a new output directory. See [Models and training](model-audit.md).
-
-## Recorded execution
-
-[Repeated NMR/MS/vibrational calls](assets/reports/spectra_harness_stability_20261117.json) · [MCP protocol](assets/reports/spectra_mcp_protocol_20261117.json) · [MCP real NMR inference](assets/reports/spectra_mcp_real_call_20261117.json)
+- DeepSeek-AI. DeepSeek Harness: modular agent tools and execution infrastructure. Software repository. Accessed 18 November 2026. [Source](https://github.com/deepseek-ai/deepseek-harness)
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)
+- Wang, R.-X., Wang, R. & Coley, C. W. GLACIER: Rethinking Mass Spectrum Prediction as an Object Detection Problem. NeurIPS 2026. arXiv:2606.29161 (2026). [Source](https://arxiv.org/abs/2606.29161)
+- Wang, R., Manjrekar, M., Mahjour, B., Avila-Pacheco, J., et al. Neural Spectral Prediction for Structure Elucidation with Tandem Mass Spectrometry. bioRxiv (2025). doi:10.1101/2025.05.28.656653. [Source](https://doi.org/10.1101/2025.05.28.656653)
+- OpenMolSpec contributors. openSpec models and benchmark training workflows. Source archive, v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks)

@@ -48,6 +48,7 @@ PUBLIC_YEAR = {
 
 
 def openmolspec_elements(root: Path) -> set[str]:
+    """Collect the element coverage of the OpenMolSpec records."""
     path = root / "reports/analysis/chemical_descriptors.parquet"
     table = pd.read_parquet(path, columns=["elements"])
     result: set[str] = set()
@@ -60,6 +61,7 @@ def openmolspec_elements(root: Path) -> set[str]:
 
 
 def coverage_frame(open_elements: set[str]) -> pd.DataFrame:
+    """Build a tabular element-coverage summary for the compared collections."""
     sets = dict(REFERENCE_ELEMENTS)
     sets["OpenMolSpec"] = open_elements
     rows = []
@@ -72,6 +74,7 @@ def coverage_frame(open_elements: set[str]) -> pd.DataFrame:
 
 
 def plot_coverage(frame: pd.DataFrame, output: Path) -> None:
+    """Draw the element-coverage comparison."""
     plt.rcParams.update({"font.size": 10, "figure.dpi": 140, "savefig.dpi": 300})
     fig = plt.figure(figsize=(16, 8.5), constrained_layout=True)
     grid = fig.add_gridspec(1, 2, width_ratios=[4.8, 1.7])
@@ -122,6 +125,7 @@ def plot_coverage(frame: pd.DataFrame, output: Path) -> None:
 
 
 def main() -> None:
+    """Run the plot element coverage command-line workflow."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--output", type=Path, default=Path("docs/figures/openmolspec_element_coverage.png"))

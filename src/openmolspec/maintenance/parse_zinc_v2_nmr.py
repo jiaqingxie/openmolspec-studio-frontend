@@ -102,6 +102,7 @@ def parse_zinc_v2_nmr(
     broadening_sigma: float,
     require_normal_termination: bool,
 ) -> Dict[str, Any]:
+    """Parse the ZINC v2 NMR records into the maintained output representation."""
     with open(smiles_dict, encoding="utf-8") as handle:
         smiles = json.load(handle)
 
@@ -138,6 +139,7 @@ def parse_zinc_v2_nmr(
 
 
 def main() -> None:
+    """Run the parse zinc v2 nmr command-line workflow."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--log-path",

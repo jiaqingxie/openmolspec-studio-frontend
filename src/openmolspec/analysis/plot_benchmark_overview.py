@@ -38,6 +38,7 @@ def repository_root() -> Path:
 
 
 def resolve(root: Path, path: Path) -> Path:
+    """Resolve a configured input or output path."""
     return path if path.is_absolute() else root / path
 
 
@@ -300,6 +301,7 @@ def plot_benchmark_overview(
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse command-line arguments into an argparse namespace."""
     root = repository_root()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -321,6 +323,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
+    """Run the plot benchmark overview command-line workflow."""
     args = parse_args()
     root = repository_root()
     summary_path = resolve(root, args.summary)

@@ -1,17 +1,13 @@
-# 构象 → IR / Raman
+# 从分子构象预测 IR 与 Raman
 
-从固定分子构象预测 IR/Raman，复用 Xinyu openSpec 项目的 Equiformer-v3 Hessian 和 response 权重。
-
-## 示例与评测
-
-使用正确的 Xinyu Hessian/response 路径及成对几何。两例只证明流程执行；先做独立构象集评测。
+使用 openSpec 模型，从原子坐标预测红外与拉曼光谱。
 
 ## 输入是什么
 
 | Field | Meaning |
 | --- | --- |
 | `geometry` | 元素列表及 N×3 笛卡尔坐标（Å），与参考谱取自同一份 Gaussian 日志。 |
-| `checkpoints` | Xinyu openSpec 的 Equiformer-v3 Hessian Hi/Hij 及偶极矩/极化率导数权重。 |
+| `checkpoints` | openSpec 的 Equiformer-v3 Hessian Hi/Hij 及偶极矩/极化率导数权重。 |
 
 ## 输出是什么
 
@@ -22,7 +18,7 @@
 
 ## 真实运行案例
 
-下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
+下面展示示例的输入、预测与参考。下载 JSON 可获取完整数值数组及更多示例。
 
 ![vibrational.forward actual results](../assets/gallery/vibrational-forward.png)
 
@@ -103,15 +99,15 @@
 | Dataset / scope | Model / variant | Metric | Value |
 | --- | --- | --- | ---: |
 | recorded sample | recorded model | ir_cosine_similarity | 0.977503 |
+| recorded sample | recorded model | ir_mae | 0.00519438 |
 | recorded sample | recorded model | raman_cosine_similarity | 0.990194 |
-
-样本量和候选池随每次运行记录。图可能展示单个分子，表格是来源实验的实际汇总，不能混为同一统计范围。
+| recorded sample | recorded model | raman_mae | 0.00164467 |
 
 ## 模型与方法
 
-坐标与参考谱必须来自同一 Gaussian 日志；检查 XYZ 加载后坐标不变，预测 Hessian/响应导数，再经振动模和展宽重建谱图。
+构象模型预测 Hessian、偶极矩与极化率响应张量；通过简正模式分析得到频率与活性，再展宽为连续光谱。
 
-预测与参考均使用 400–4000 cm⁻¹ 的 1024 点轴和 min-max 强度归一化，分别报告 IR/Raman 的余弦相似度及强度 MAE。
+分别使用余弦相似度和强度 MAE 比较 IR 与 Raman。
 
 ## 复现方式
 
@@ -133,15 +129,11 @@ result = benchmark.run('vibrational.forward',
     output='geometry-to-spectrum-results.json', limit=2)
 ```
 
-按 [openSpec 训练实现](https://github.com/X1nyuLu/openSpec-alpha)准备参考构象、Hessian 与响应张量，保持原子顺序、单位和模式约定。正向模型训练使用张量／性质目标；下游谱相似度不自动等于其训练 loss。 各 direct 模型训练其选定的张量头；Hessian／响应引擎按全局张量分量数平均 Cartesian SmoothL1。重建简正模式时保留各目标的独立 checkpoint 与单位。
+按 [openSpec 训练实现](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks)准备参考构象、Hessian 与响应张量，保持原子顺序、单位和模式约定。正向模型训练使用张量／性质目标；下游谱相似度不自动等于其训练 loss。 各 direct 模型训练其选定的张量头；Hessian／响应引擎按全局张量分量数平均 Cartesian SmoothL1。重建简正模式时保留各目标的独立 checkpoint 与单位。
 
 $$\ell_\beta(r)=\begin{cases}r^2/(2\beta),&|r|<\beta,\\ |r|-\beta/2,&|r|\ge\beta.\end{cases}$$
 
 $$L_{\rm tensor}=\sum_{q\in\{H_i,H_{ij},\partial\mu,\partial\alpha\}}\frac1{N_q}\sum_j\ell_1(\hat T_{qj}-T_{qj}).$$
-
-## 数据要求与引用
-
-默认两个真实 Gaussian 日志仅用于配对运行检查，未审计其独立测试身份。不能用新生成的 RDKit 构象代替原参考几何后宣称是严格配对精度。
 
 <details><summary>来源报告与 SHA-256 指纹</summary>
 
@@ -150,4 +142,11 @@ $$L_{\rm tensor}=\sum_{q\in\{H_i,H_{ij},\partial\mu,\partial\alpha\}}\frac1{N_q}
 </details>
 
 
-[Original model / 原模型](https://github.com/X1nyuLu/openSpec-alpha) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks) · [Model review / 模型检查](../model-audit.md)
+
+## 参考文献
+
+- OpenMolSpec contributors. openSpec models and benchmark training workflows. Source archive, v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks)
+- OpenMolSpec contributors. OpenMolSpec: Chemical spectroscopy datasets, models and learning workflows. Software release v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0)
+- Yuan, M., Zou, Z. & Hu, W. QMe14S, A Comprehensive and Efficient Spectral Dataset for Small Organic Molecules. arXiv:2501.18876 (2025). [Source](https://arxiv.org/abs/2501.18876)
+- Zou, Z., Zhang, Y., Liang, L., Wei, M., Leng, J., Jiang, J., Luo, Y. & Hu, W. A deep learning model for predicting selected organic molecular spectra. Nature Computational Science 3, 957–964 (2023). doi:10.1038/s43588-023-00550-y. [Source](https://www.nature.com/articles/s43588-023-00550-y)

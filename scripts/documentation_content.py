@@ -24,39 +24,39 @@ def io_contract(task,en):
                 ('nucleus',f'{nucleus}; the checkpoint must cover this nucleus.',f'{nucleus}，权重必须覆盖该核种。'),
                 ('reference peaks','Optional measured ppm values for evaluation; not an inference input.','评测时提供实测 ppm 标签；标签不作为模型推理输入。')]
         outputs=[('prediction_ppm','Per-atom chemical shifts in ppm, with atom indices or a peak list.','逐原子化学位移（ppm）及原子编号，或整理后的峰列表。'),
-                 ('error / coverage','Reference-matched errors and coverage; matching does not establish atom assignments.','与参考谱匹配后的误差及覆盖率；峰匹配不等于实验原子指认。')]
+                 ('error / coverage','Reference-matched errors and peak coverage.','与参考谱匹配后的误差及峰覆盖率。')]
     elif id_=='nmr.assignment':
-        fields=[('smiles','Known molecular structure; the task does not identify an unknown molecule.','已知分子结构；本任务不负责猜测未知分子。'),('nucleus / peaks_ppm','1H or 13C and the measured 1D peak positions in ppm.','1H 或 13C，以及实测一维峰位置（ppm）。'),('tolerance_ppm','Maximum allowed peak/site residual: default H 0.5, C 5 ppm.','峰与预测位点的最大允许残差，默认 H 0.5、C 5 ppm。')]
-        outputs=[('assignments','Peak index → candidate atom indices, predicted ppm, residual and alternatives.','峰编号 → 候选原子编号、预测位移、残差与备选位点。'),('unmatched','Unassigned peaks and sites remain explicit. Experimental assignment accuracy is unavailable.','保留未匹配峰和位点。当前没有实验指认准确率。')]
+        fields=[('smiles','Known molecular structure.','已知分子结构。'),('nucleus / peaks_ppm','1H or 13C and the measured 1D peak positions in ppm.','1H 或 13C，以及实测一维峰位置（ppm）。'),('tolerance_ppm','Maximum allowed peak/site residual: default H 0.5, C 5 ppm.','峰与预测位点的最大允许残差，默认 H 0.5、C 5 ppm。')]
+        outputs=[('assignments','Peak index → candidate atom indices, predicted ppm, residual and alternatives.','峰编号 → 候选原子编号、预测位移、残差与备选位点。'),('unmatched','Indices of unmatched peaks and predicted sites.','未匹配峰与预测位点的编号。')]
     elif id_=='nmr.solvent_transfer':
         fields=[('structure / nucleus','Molecular connectivity and 1H or 13C.','分子连接结构及 1H 或 13C 核种。'),('solvents','Explicit source and target solvents that have paired references.','显式指定源溶剂与目标溶剂，且参考库包含对应配对。'),('source_ppm','Measured source-solvent shifts in ppm.','源溶剂下的实测位移（ppm）。')]
         outputs=[('target_ppm / delta_ppm','Estimated target shift and solvent difference from an independent reference.','从独立参考记录估计目标位移及跨溶剂差值。'),('reference','Reference identity, spectra/atom IDs, Tanimoto similarity and exclusions.','参考分子、谱图/原子 ID、Tanimoto 相似度及排除规则。')]
     elif id_.startswith('nmr.retrieval.'):
         view,direction=id_.split('.')[2:]
         fields=[('query',f'{view.upper()} peak records for s2m; molecular structure for m2s. Direction here: {direction}.',f's2m 使用 {view.upper()} 峰记录查询结构；m2s 使用结构查询谱。当前方向：{direction}。'),('candidate_pool','Explicit candidate structures or spectra; ranking is restricted to this pool.','明确提供候选结构或谱库；结果仅在这个候选池内排序。'),('formula','Not supplied to the spectral encoder.','谱编码器不接收分子式。')]
-        outputs=[('ranked_candidates','Candidate identity, rank and embedding similarity score.','候选 ID、排名与嵌入相似度分数。'),('recall / MRR','Report candidate-pool size with every metric; 32-way retrieval is not full-library retrieval.','每个指标都应同时给出候选池大小；32 候选检索不代表全库检索。')]
+        outputs=[('ranked_candidates','Candidate identity, rank and embedding similarity score.','候选 ID、排名与嵌入相似度分数。'),('recall / MRR','Recall@1/5/10 and MRR, with the candidate-pool size.','Recall@1/5/10、MRR 及对应候选池大小。')]
     elif id_.startswith('nmr.generation.'):
         view=id_.split('.')[-1].upper()
         fields=[('h_nmr / c_nmr',f'{view} records: shift positions (ppm), multiplicity/integration/J where recorded; obey the modality mask.',f'{view} 谱记录：位移（ppm）及原记录中的多重性、积分、J 值；按模态掩码选择输入。'),('formula','A known molecular formula is required by this checkpoint.','此 checkpoint 必须显式提供已知分子式。'),('beam_size','Number of decoded candidates; 5 in the documented experiment.','解码候选数；本页实验使用 5。')]
-        outputs=[('candidates','Generated SMILES, canonical structures, validity, formula match and model score.','生成 SMILES、规范结构、有效性、分子式一致性及模型分数。'),('exact_match','Compare the selected candidate with a held reference structure; valid SMILES alone is not success.','将选中候选与参考结构比较；SMILES 有效并不代表结构正确。')]
+        outputs=[('candidates','Generated SMILES, canonical structures, validity, formula match and model score.','生成 SMILES、规范结构、有效性、分子式一致性及模型分数。'),('exact_match','Canonical structural agreement with the reference molecule.','与参考分子规范结构的一致性。')]
     elif id_.startswith('ms.forward.'):
-        fields=[('smiles / adduct','Molecular structure and ion/adduct, e.g. the actual [M+H]+ or [M+Na]+ in the record.','分子结构与记录中的离子/加合物类型，例如 [M+H]+ 或 [M+Na]+。'),('collision_energy / instrument','Recorded acquisition settings supported by the released model; do not invent missing values.','发布模型支持的实际碰撞能与仪器条件；不能补造缺失值。'),('precursor_mz','Recorded precursor m/z; input conventions follow the author interface.','记录中的前体 m/z；按作者接口解释输入条件。')]
+        fields=[('smiles / adduct','Molecular structure and ion/adduct, e.g. the actual [M+H]+ or [M+Na]+ in the record.','分子结构与记录中的离子/加合物类型，例如 [M+H]+ 或 [M+Na]+。'),('collision_energy / instrument','Collision energy and instrument settings supported by the model.','模型支持的碰撞能与仪器条件。'),('precursor_mz','Recorded precursor m/z; input conventions follow the author interface.','记录中的前体 m/z；按作者接口解释输入条件。')]
         outputs=[('predicted_peaks','Pairs of m/z and relative intensity; figures retain the top 100 predicted peaks.','m/z 与相对强度对；图中显示预测强度最高的 100 个峰。'),('similarity','Cosine/entropy similarity to all observed reference peaks, with skipped records counted.','与全部实测参考峰比较的余弦/熵相似度，同时统计跳过记录。')]
     elif id_=='ms.annotation.magma':
         fields=[('smiles / peaks','Known structure, measured MS/MS peaks [m/z, relative intensity], and adduct.','已知结构、实测 MS/MS 峰 [m/z, 相对强度] 及加合物。'),('ppm_tolerance','Mass tolerance, default 10 ppm; not an NMR chemical-shift tolerance.','质量误差容限，默认 10 ppm；不是 NMR 化学位移容限。')]
-        outputs=[('peak_annotations','Candidate fragments, formulas, mass errors and atom/bond indices on engine_smiles.','候选碎片、分子式、质量误差及 engine_smiles 上的原子/键编号。'),('interpretation','Algorithmic candidate explanations; neither learned predictions nor unique confirmed mechanisms.','算法给出的候选解释，不是已实验确认的唯一裂解机制。')]
+        outputs=[('peak_annotations','Candidate fragments, formulas, mass errors and atom/bond indices on engine_smiles.','候选碎片、分子式、质量误差及 engine_smiles 上的原子/键编号。'),('interpretation','Candidate fragment structures and matching mass errors.','候选碎片结构及匹配质量误差。')]
     elif id_=='vibrational.forward':
-        fields=[('geometry','Element symbols and N×3 Cartesian coordinates in Å, taken from the same Gaussian log as the reference.','元素列表及 N×3 笛卡尔坐标（Å），与参考谱取自同一份 Gaussian 日志。'),('checkpoints','Xinyu openSpec Equiformer-v3 Hessian Hi/Hij and dipole/polarizability derivative weights.','Xinyu openSpec 的 Equiformer-v3 Hessian Hi/Hij 及偶极矩/极化率导数权重。')]
+        fields=[('geometry','Element symbols and N×3 Cartesian coordinates in Å, taken from the same Gaussian log as the reference.','元素列表及 N×3 笛卡尔坐标（Å），与参考谱取自同一份 Gaussian 日志。'),('checkpoints','openSpec Equiformer-v3 Hessian Hi/Hij and dipole/polarizability derivative weights.','openSpec 的 Equiformer-v3 Hessian Hi/Hij 及偶极矩/极化率导数权重。')]
         outputs=[('IR / Raman','Two normalized intensity arrays on 1024 points spanning 400–4000 cm⁻¹.','400–4000 cm⁻¹、1024 点共同网格上的两条归一化强度数组。'),('spectral error','Channel-wise cosine similarity and intensity MAE against paired computed reference spectra.','与成对计算参考谱比较的分通道余弦相似度及强度 MAE。')]
     else:
         complete=id_.endswith(('.hc','_hc'))
         fields=[('IR / Raman','1024 intensity samples per visible channel, ordered 400→4000 cm⁻¹, using the checkpoint normalization.','每个可见通道 1024 个强度点，按 400→4000 cm⁻¹ 排列，并采用 checkpoint 的归一化。')]
         if complete:fields.append(('1H / 13C','Per-atom shift arrays in ppm with the checkpoint-compatible reference ID and normalization.','逐原子位移数组（ppm），参考 ID 和归一化必须与 checkpoint 一致。'))
-        else:fields.append(('missing channels','This uses a four-modal checkpoint with channels omitted; it is an ablation, not a separately trained model.','此路径省略四模态权重的部分通道，属于消融，不是独立训练的专用模型。'))
+        else:fields.append(('missing channels','The input mask selects visible channels from the shared four-modal checkpoint.','输入掩码选择共享四模态权重的可见通道。'))
         if '.gap.' in id_:outputs=[('gap_ev','One predicted HOMO–LUMO gap in eV; source Hartree labels are converted once.','一个 HOMO–LUMO gap 预测值（eV）；原始 Hartree 标签仅转换一次。'),('MAE / baseline','Error against reference and the frozen training-mean constant on the same records.','与参考值的误差，以及相同样本上固定训练均值基线的误差。')]
         elif '.generation' in id_:outputs=[('SMILES candidates','Decoded valid, canonical unique candidates; full-input route uses beam 10 and ITM reranking.','解码后有效、规范化且去重的结构；完整输入路径使用 beam 10 和 ITM 重排。'),('top-k','Generation and reranking scores are separate. No molecular formula is supplied.','分别报告生成与重排后的 top-k；不提供分子式。')]
         else:
-            fields.append(('candidate structures','An explicit candidate library; scores cannot identify molecules outside it.','明确提供候选结构库；模型只能在此库中排序。'))
+            fields.append(('candidate structures','The molecular candidate library to rank.','用于排序的分子候选库。'))
             outputs=[('ranking','Candidate identities with similarity or ITM positive-class scores.','候选结构 ID，以及相似度或 ITM 正类分数。'),('recall / MRR','Ranking metrics plus candidate-pool size and source composition.','排序指标、候选池大小及样本来源构成。')]
     def table(rows):return '| Field | Meaning |\n| --- | --- |\n'+'\n'.join(f'| `{k}` | {a if en else z} |' for k,a,z in rows)+'\n'
     return table(fields),table(outputs)
@@ -75,11 +75,11 @@ def metric_rows(bundle):
             else:groups2=[(model,metrics)]
             for label,m in groups2:
                 for key,value in m.items():
-                    if key in allowed and not isinstance(value,(dict,list)):
+                    if not isinstance(value,(dict,list)):
                         rows.append((str(run.get('dataset') or 'recorded sample'),label,key,'not measured' if value is None else f'{value:.6g}' if isinstance(value,float) else str(value)))
         for label,key in [('ITM reranked','reranked_metrics'),('Training-mean baseline','training_mean_baseline')]:
             for metric,value in run.get(key,{}).items():
-                if metric in allowed:rows.append((str(run.get('dataset') or 'recorded sample'),label,metric,f'{value:.6g}' if isinstance(value,float) else str(value)))
+                if not isinstance(value,(dict,list)):rows.append((str(run.get('dataset') or 'recorded sample'),label,metric,f'{value:.6g}' if isinstance(value,float) else str(value)))
     return rows
 
 

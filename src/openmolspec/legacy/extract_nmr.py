@@ -47,6 +47,7 @@ def Lorenz_broadening(x0, y0, c, sigma=12):
     return y.flatten()
 
 def get_nmr_spectrum(shifts, sigma=0.05):
+    """Construct an NMR spectrum from the supplied peak positions and weights."""
     return Lorenz_broadening(shifts, np.ones_like(shifts), np.linspace(0, 12, 1024), sigma=sigma)
 
 class LogParser:
@@ -71,6 +72,7 @@ class LogParser:
             self.properties['smiles'] = label_dict[file_path.split('.log')[0].split('/')[-1]]
     
     def log2nmr(self):
+        """Extract NMR quantities from the loaded Gaussian log."""
         element_list = []
         isotropic_list = []
         anisotropy_list = []
@@ -108,6 +110,7 @@ class LogParser:
 
 
 def get_args_parser():
+    """Construct the argument parser for the extraction command."""
     parser = argparse.ArgumentParser(description='Extract legacy NMR records')
 
     # basic params
@@ -125,6 +128,7 @@ def get_args_parser():
 # Define a top-level function to process a single log file
 # This function is pickleable.
 def process_log_file_wrapper(args_tuple):
+    """Unpack one extraction job and process its source log."""
     file_id, log_path = args_tuple
     log_file_path = os.path.join(log_path, f'{file_id}.log')
     try:
@@ -136,6 +140,7 @@ def process_log_file_wrapper(args_tuple):
 
 
 def process_log_file_with_report(args_tuple):
+    """Process a molecular log and return its processing-report entry."""
     file_id, log_path = args_tuple
     log_file_path = os.path.join(log_path, f'{file_id}.log')
     try:

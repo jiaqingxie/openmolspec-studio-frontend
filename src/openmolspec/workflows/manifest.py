@@ -32,6 +32,7 @@ def build_manifest(
     audit_all_records: bool = False,
     write_compatibility_json: bool = True,
 ) -> Dict[str, Any]:
+    """Build the input-file manifest for molecular data processing."""
     configure_rdkit_logging(show_rdkit_warnings)
     datasets = list(datasets)
     nmr_datasets = list(nmr_datasets)

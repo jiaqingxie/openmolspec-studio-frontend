@@ -1,10 +1,6 @@
-# 结构 → 31P 峰列表
+# 31P 化学位移预测
 
-检查已有 31P 预测与实验参考的配对、位移参考和适用域，不拟合新的校正参数。
-
-## 示例与评测
-
-当前固相权重没有验证为溶液位移模型。优先解决数据域与参考兼容，不能直接归因于需要微调。
+根据分子结构预测 31P 化学位移。利用返回的原子编号，可以把预测值标到分子结构上，也可以与实测峰比较。
 
 ## 输入是什么
 
@@ -19,11 +15,11 @@
 | Field | Meaning |
 | --- | --- |
 | `prediction_ppm` | 逐原子化学位移（ppm）及原子编号，或整理后的峰列表。 |
-| `error / coverage` | 与参考谱匹配后的误差及覆盖率；峰匹配不等于实验原子指认。 |
+| `error / coverage` | 与参考谱匹配后的误差及峰覆盖率。 |
 
 ## 真实运行案例
 
-下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
+下面展示示例的输入、预测与参考。下载 JSON 可获取完整数值数组及更多示例。
 
 ![nmr.forward.31P actual results](../assets/gallery/nmr-forward-31P.png)
 
@@ -59,13 +55,11 @@
 | recorded evaluation | recorded model | rmse_ppm | 237.252 |
 | recorded evaluation | recorded model | examples | 32 |
 
-样本量和候选池随每次运行记录。图可能展示单个分子，表格是来源实验的实际汇总，不能混为同一统计范围。
-
 ## 模型与方法
 
-旧预测对应的 LMDB 后来发生变化，保存的 target 与当前标签不一致，旧 MAE 已撤回。冻结权重对带哈希的同一份输入重新推理，可以修复样本配对。
+使用固态 NMRNet 权重，为准备好的分子构象生成逐原子 F/P 预测。基准将保存的预测与严格配对的 LMDB 标签计分；调用时指定冻结推理目录，并选择跨数据域比较选项。
 
-配对修复后的固相 checkpoint 在实验溶液数据上误差仍很大，且位移参考兼容性未确认，仅保留为诊断，不作为正式溶液模型成绩。
+MAE 和 RMSE 的单位均为 ppm。
 
 ## 复现方式
 
@@ -73,7 +67,7 @@
 
 ```bash
 python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
-  --tasks nmr.forward.31P --limit 8 --output results/nmr-forward-31P-new.json
+  --tasks nmr.forward.31P --fp-inference-root /path/to/frozen-fp --allow-cross-domain-diagnostic --limit 8 --output results/nmr-forward-31P-new.json
 ```
 
 ## 调用模型与微调
@@ -83,17 +77,21 @@ from openmolspec.benchmark import Benchmark
 benchmark = Benchmark(workspace='/path/to/workspace',
     python='/path/to/sdk-env/bin/python',
     models_root='/path/to/models',
-    nmr_python='/path/to/nmr-env/bin/python')
-result = benchmark.run('nmr.forward.31P', output='31P-results.json', limit=32)
+    nmr_python='/path/to/nmr-env/bin/python',
+    fp_inference_root='/path/to/frozen-fp')
+result = benchmark.run('nmr.forward.31P', output='31P-results.json', limit=32, allow_cross_domain_diagnostic=True)
 ```
 
 微调使用 [NMRNet 作者训练实现](https://github.com/Colin-Jay/NMRNet)：准备对应核种的逐原子标签、结构／坐标、目标掩码及 train/val LMDB。实现提供 `atom_regloss_mae` 与 `atom_regloss_mse`，在有标签的原子上计算目标。保留 scaler 和参考标准，在验证集选择 checkpoint。该训练流程通过作者实现运行。
 
 $$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
 
-## 数据要求与引用
 
-需要兼容的现成溶液 checkpoint，或作者明确提供的参考转换。不得对测试标签拟合一个偏移来降低误差，也不启动重新训练。
+| 模型设置 | 值 |
+| --- | --- |
+| Checkpoint | NMRNet 31P checkpoint |
+| Training domain | solid-state |
+| Shift unit | ppm |
 
 <details><summary>来源报告与 SHA-256 指纹</summary>
 
@@ -102,4 +100,9 @@ $$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delt
 </details>
 
 
-[Original model / 原模型](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+
+## 参考文献
+
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)

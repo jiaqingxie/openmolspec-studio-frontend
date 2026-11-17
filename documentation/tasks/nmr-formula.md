@@ -1,5 +1,5 @@
-# Molecular formula prediction
+# 谱图 → 分子式
 
-Deferred at the user's request.
+Additional spectroscopy task.
 
 Deferred at the user’s request. No new model result is claimed.

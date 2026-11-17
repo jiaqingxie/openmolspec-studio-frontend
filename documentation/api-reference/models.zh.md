@@ -1,6 +1,7 @@
-# Models
+---
+orphan: true
+---
 
-```{automodule} openmolspec.model
-:members:
-:show-inheritance:
-```
+# API reference
+
+[OpenMolSpec API reference](module-models.md)

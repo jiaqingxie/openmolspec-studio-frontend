@@ -1,13 +1,13 @@
 # IR / Raman
 
-Task pages contain actual examples and measured results. A diagnostic status is not a validated production accuracy claim.
+Choose a task to see its purpose, inputs, outputs, model call and examples.
 
 | Task / input → output | Task ID |
 | --- | --- |
-| [HOMO–LUMO gap prediction: IR](vibrational-gap-ir.md) | `vibrational.gap.ir` |
-| [HOMO–LUMO gap prediction: RAMAN](vibrational-gap-raman.md) | `vibrational.gap.raman` |
-| [HOMO–LUMO gap prediction: IR_RAMAN](vibrational-gap-ir_raman.md) | `vibrational.gap.ir_raman` |
-| [Conformer to IR and Raman](vibrational-forward.md) | `vibrational.forward` |
-| [Vib2Mol bidirectional retrieval with IR/Raman only](vibrational-retrieval.md) | `vibrational.retrieval` |
-| [Vib2Mol generation with IR/Raman only](vibrational-generation.md) | `vibrational.generation` |
-| [Vib2Mol candidate reranking with IR/Raman only](spectroscopy-reranking.md) | `spectroscopy.reranking` |
+| [HOMO–LUMO gap from IR](vibrational-gap-ir.md) | `vibrational.gap.ir` |
+| [HOMO–LUMO gap from Raman](vibrational-gap-raman.md) | `vibrational.gap.raman` |
+| [HOMO–LUMO gap from IR + Raman](vibrational-gap-ir_raman.md) | `vibrational.gap.ir_raman` |
+| [IR and Raman from a molecular geometry](vibrational-forward.md) | `vibrational.forward` |
+| [Structure retrieval: IR + Raman](vibrational-retrieval.md) | `vibrational.retrieval` |
+| [Structure generation: IR + Raman](vibrational-generation.md) | `vibrational.generation` |
+| [Candidate reranking: IR + Raman](spectroscopy-reranking.md) | `spectroscopy.reranking` |

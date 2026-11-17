@@ -58,6 +58,7 @@ def extract_frequency(
     ir_broadening_sigma: float,
     raman_broadening_sigma: float,
 ) -> Dict[str, Any]:
+    """Extract the frequency, property and vibrational-spectrum dataset."""
     tasks, smiles = load_tasks(
         manifest_path=manifest_path,
         file_dict=file_dict,

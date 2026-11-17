@@ -1,0 +1,7 @@
+# 数据访问
+
+| Module | Description |
+| --- | --- |
+| [openmolspec.dataset](module-datasets.md) | Versioned dataset descriptions and lazy local spectroscopy readers. |
+| [openmolspec.datasets.splits](module-datasets-splits.md) | Generate deterministic dataset splits and molecule/scaffold leakage reports. |
+| [openmolspec.split](module-splits.md) | Deterministic grouped splits for user-owned spectroscopy records. |

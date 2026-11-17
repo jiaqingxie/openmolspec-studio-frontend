@@ -1,10 +1,6 @@
-# 谱图 → SMILES · HC
+# 从 ¹H + ¹³C NMR 解析结构
 
-用已有生成模型从实验 H/C NMR 预测 SMILES 候选。
-
-## 示例与评测
-
-存在明显数据域差异：专利和 NMRGym 的 32 样本检查均为零精确匹配。先检查独立测试、解析及词表覆盖，再考虑领域微调。
+根据 NMR 峰表和分子式生成候选结构。
 
 ## 输入是什么
 
@@ -19,15 +15,23 @@
 | Field | Meaning |
 | --- | --- |
 | `candidates` | 生成 SMILES、规范结构、有效性、分子式一致性及模型分数。 |
-| `exact_match` | 将选中候选与参考结构比较；SMILES 有效并不代表结构正确。 |
+| `exact_match` | 与参考分子规范结构的一致性。 |
 
 ## 真实运行案例
 
-下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
+下面展示示例的输入、预测与参考。下载 JSON 可获取完整数值数组及更多示例。
 
 ![nmr.generation.hc actual results](../assets/gallery/nmr-generation-hc.png)
 
 [SVG](../assets/gallery/nmr-generation-hc.svg) · [PNG](../assets/gallery/nmr-generation-hc.png) · [Full input/output JSON](../assets/examples/nmr-generation-hc.json)
+
+### 示例 2
+
+![nmr.generation.hc example 2](../assets/gallery/nmr-generation-hc-example-2.png)
+
+### 示例 3
+
+![nmr.generation.hc example 3](../assets/gallery/nmr-generation-hc-example-3.png)
 
 <details><summary>展开查看实际输入与输出字段</summary>
 
@@ -96,30 +100,48 @@
 
 | Dataset / scope | Model / variant | Metric | Value |
 | --- | --- | --- | ---: |
+| nmrspec_test | recorded model | modality | available |
 | nmrspec_test | recorded model | examples | 32 |
+| nmrspec_test | recorded model | skipped_missing_modality | 0 |
+| nmrspec_test | recorded model | valid | 32 |
+| nmrspec_test | recorded model | formula_match | 29 |
+| nmrspec_test | recorded model | exact | 4 |
 | nmrspec_test | recorded model | valid_rate | 1 |
 | nmrspec_test | recorded model | formula_match_rate | 0.90625 |
 | nmrspec_test | recorded model | exact_rate | 0.125 |
+| patent_test_10k | recorded model | modality | available |
 | patent_test_10k | recorded model | examples | 32 |
+| patent_test_10k | recorded model | skipped_missing_modality | 0 |
+| patent_test_10k | recorded model | valid | 24 |
+| patent_test_10k | recorded model | formula_match | 1 |
+| patent_test_10k | recorded model | exact | 0 |
 | patent_test_10k | recorded model | valid_rate | 0.75 |
 | patent_test_10k | recorded model | formula_match_rate | 0.03125 |
 | patent_test_10k | recorded model | exact_rate | 0 |
+| nmrexp_exp_10k | recorded model | modality | available |
 | nmrexp_exp_10k | recorded model | examples | 32 |
+| nmrexp_exp_10k | recorded model | skipped_missing_modality | 0 |
+| nmrexp_exp_10k | recorded model | valid | 32 |
+| nmrexp_exp_10k | recorded model | formula_match | 29 |
+| nmrexp_exp_10k | recorded model | exact | 22 |
 | nmrexp_exp_10k | recorded model | valid_rate | 1 |
 | nmrexp_exp_10k | recorded model | formula_match_rate | 0.90625 |
 | nmrexp_exp_10k | recorded model | exact_rate | 0.6875 |
+| nmrgym_test | recorded model | modality | available |
 | nmrgym_test | recorded model | examples | 32 |
+| nmrgym_test | recorded model | skipped_missing_modality | 0 |
+| nmrgym_test | recorded model | valid | 25 |
+| nmrgym_test | recorded model | formula_match | 15 |
+| nmrgym_test | recorded model | exact | 0 |
 | nmrgym_test | recorded model | valid_rate | 0.78125 |
 | nmrgym_test | recorded model | formula_match_rate | 0.46875 |
 | nmrgym_test | recorded model | exact_rate | 0 |
 
-样本量和候选池随每次运行记录。图可能展示单个分子，表格是来源实验的实际汇总，不能混为同一统计范围。
-
 ## 模型与方法
 
-该模型需要显式给定分子式。按原推理代码的有效性、分子式一致性和模型分数排序 beam，取 top-1 评分。不会从目标 SMILES 偷偷推导缺失的输入分子式。
+NMRTransformer 的谱编码器将峰表转为表征，分子解码器通过 beam search 生成 SMILES。每个候选附有分子式一致性和解码分数。
 
-报告有效 SMILES 比率、规范异构 SMILES exact match、分子式一致率，同时保存 beam size、模态 mask 和样本。JSONL 的 smiles 仅是评测答案，不是生成输入。
+用规范化结构的 top-k 准确率与有效 SMILES 比例汇总生成结果。
 
 ## 复现方式
 
@@ -153,10 +175,6 @@ $$L_{\rm LM}=-\frac{1}{N_{\rm token}}\sum_t\log p_\theta(y_t\mid y_{<t},x,F).$$
 
 生成使用 token 交叉熵，可按配置加入联合对齐项。对齐使用归一化谱学／分子表征的双向对比交叉熵；ITM 配置增加正负配对分类项。具体目标与权重以训练配置为准。
 
-## 数据要求与引用
-
-给定分子式的结构生成与分子式预测、无分子式生成是不同任务。跨数据集 exact match 低或为零时保留真实结果，不替换成缓存答案。
-
 <details><summary>来源报告与 SHA-256 指纹</summary>
 
 - [nmr_documented_examples_20261117_v2.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/nmr_documented_examples_20261117_v2.json) — SHA-256 `669413d6fc0939bdb6826782d41fc13cf12926a672418ecb46303f0b8ba05b99`
@@ -164,4 +182,10 @@ $$L_{\rm LM}=-\frac{1}{N_{\rm token}}\sum_t\log p_\theta(y_t\mid y_{<t},x,F).$$
 </details>
 
 
-[Original model / 原模型](https://github.com/jiaqingxie/openmolspec-studio-frontend) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/jiaqingxie/openmolspec-studio-frontend) · [Model review / 模型检查](../model-audit.md)
+
+## 参考文献
+
+- Yang, L., Yang, Z., Xie, J., Wang, Y., Gao, B., Fu, T., Wei, X., Sun, J., Wu, J., He, C., Li, Y. & Gu, Q. NMRTrans: Structure Elucidation from Experimental NMR Spectra via Set Transformers. arXiv:2602.10158 (2026). [Source](https://arxiv.org/abs/2602.10158)
+- Fang, Z., Yang, C., Yu, H., Luo, H., He, H., Xie, J., Yang, Z. & Xia, J. NMRGym: A Comprehensive Benchmark for Nuclear Magnetic Resonance Based Molecular Structure Elucidation. arXiv:2601.15763 (2026). [Source](https://arxiv.org/abs/2601.15763)
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)

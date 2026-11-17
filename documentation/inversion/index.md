@@ -46,3 +46,8 @@ reconstruction = result.fitted_signal
 Inspect reconstruction, residual structure, distribution stability and sensitivity to alpha/grid. GCV, L-curves and discrepancy criteria are alternative selection strategies. The current Python API accepts alpha explicitly. Sparse L1 regularization and multi-exponential nonlinear fitting make different assumptions; consult the upstream package for its available solvers and automatic selection procedures.
 
 Run the [simulated inversion tutorial](../notebooks/theory-nmr-inversion.ipynb) to see known components, noisy observations and reconstructed distributions. For [the upstream Python/Julia integration](https://aris-mav.github.io/NMRInversions.jl/stable/python/), follow its installation instructions and API rather than treating OpenMolSpec as an identical implementation.
+
+## References
+
+- NMRInversions.jl contributors. NMRInversions.jl: inversion of NMR relaxation and diffusion measurements. Software and theory documentation. Accessed 18 November 2026. [Source](https://github.com/aris-mav/NMRInversions.jl)
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)

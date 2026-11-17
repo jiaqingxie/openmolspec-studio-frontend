@@ -1,56 +1,70 @@
 # OpenMolSpec
 
-<div class="oms-eyebrow">Chemical spectroscopy · Open research platform</div>
+Chemical spectroscopy and deep learning
 
-<p class="oms-lead"><strong>Datasets, models and reproducible spectroscopy</strong><br>Load molecular spectra, predict observables, retrieve or generate structures, and train NMR models through a common Python interface.</p>
+OpenMolSpec is a Python library for working with molecular spectra. Load experimental and computed datasets, predict spectra and molecular properties, identify structures, and train models with your own data. It supports NMR, mass spectrometry, infrared and Raman spectroscopy.
 
-<div class="oms-stat-grid">
-<div class="oms-stat"><strong>8</strong><span>dataset registry entries</span></div>
-<div class="oms-stat"><strong>31</strong><span>active task configurations</span></div>
-<div class="oms-stat"><strong>82</strong><span>executed bilingual notebooks</span></div>
-</div>
+## Getting started
 
-<div class="oms-paths">
-<a class="oms-path" href="data/index.html"><strong>Use the data →</strong><span>Understand sources, distributions, split roles and loading APIs.</span></a>
-<a class="oms-path" href="tasks/index.html"><strong>Choose a task →</strong><span>Start from your input: a structure, NMR peaks, MS/MS, IR or Raman.</span></a>
-<a class="oms-path" href="api.html"><strong>Predict and train →</strong><span>Use model classes, inspect real examples and prepare training data.</span></a>
-</div>
-
-## See an actual result
-
-The geometry-to-spectrum example uses Xinyu’s openSpec models and the exact coordinates of its Gaussian reference. The two curves show the recorded prediction and calculation. This figure shows one of two examples; it establishes a working inference path, not a large independent benchmark.
-
-[![IR and Raman: recorded prediction and reference](assets/gallery/vibrational-forward.png)](tasks/vibrational-forward.md)
-
-[Explore all result figures](gallery.md) · [Open this task](tasks/vibrational-forward.md) · [Read the executed notebook](notebooks/vibrational-forward.ipynb)
-
-## Start with the Python package
-
-Install the versioned wheel using the [SDK guide](api.md), then inspect the dataset registry. Loading full data and running model weights require the assets described there.
+Follow the [Quick start](quickstart.md) to install OpenMolSpec and work through data loading, prediction and training. The [tutorials](notebooks/index.md) explain each step with code, outputs and figures.
 
 ```python
-from openmolspec.dataset import list_datasets
+from openmolspec.dataset import molspectra
+from openmolspec.model import NMRNet
 
-for card in list_datasets():
-    print(card["name"])
+data = molspectra("opendatalab_nmr", root="data/nmr")
+molecule = data["test"].head(1)[0]
+
+model = NMRNet.from_pretrained("models", nucleus="13C",
+    python="/path/to/nmr-env/bin/python")
+prediction = model.predict(molecule["smiles"])
+print(prediction["records"])
 ```
 
-[Quick Start](quickstart.md) · [Python SDK](api.md) · [Tutorials](notebooks/index.md)
+## Examples
 
-## What the data represent
+Explore spectrum prediction, structure elucidation and property prediction in the following examples.
 
-| Collection | Meaning | Where to inspect |
-| --- | --- | --- |
-| Team-curated experimental NMR | Patent-derived measurements; 2,680,271 stored standard-InChI identities in the current prepared corpus. Curation does not mean we measured these spectra. | [Sources and counts](datasets.md) |
-| Computed observables | Calculated IR/Raman and associated molecular properties. Molecular records and geometry frames are counted separately. | [Distributions](datasets.md) |
-| External benchmarks | NMRSpec, NMRexp, NMRGym and MS resources retain their own provenance and attribution. | [Data comparison](corpus-comparison.md) |
+### [Structure elucidation from NMR](notebooks/nmr-generation-hc.ipynb)
 
-Dataset counts use different units and can overlap. The registry is an access layer, not eight newly measured datasets.
+Generate molecular structures from proton and carbon NMR peaks.
 
-## Assess a model before using it
+[![Structure elucidation from NMR](assets/gallery/nmr-generation-hc.png)](notebooks/nmr-generation-hc.ipynb)
 
-H/C NMR, MS/MS and vibrational examples contain actual outputs. B/Si and F/P are diagnostic; cross-solvent transfer is currently an experimental-reference baseline. The training API has completed an encoder/generator train–save–reload integration check on tiny examples; large-scale learning claims require separate experiments.
+### [Predicting tandem mass spectra](notebooks/ms-forward-glacier.ipynb)
 
-[Model suitability](model-audit.md) · [Evaluation protocols](protocols.md) · [Publication status](publication.md)
+Predict fragment peaks and intensities from a molecule and its acquisition conditions.
 
-[Data](data/index.md) · [Theory](theory/index.md) · [Inversion](inversion/index.md) · [Spectra Harness](harness.md)
+[![Predicting tandem mass spectra](assets/gallery/ms-forward-glacier.png)](notebooks/ms-forward-glacier.ipynb)
+
+### [IR and Raman from a molecular geometry](notebooks/vibrational-forward.ipynb)
+
+Use the openSpec model to predict vibrational spectra from atomic coordinates.
+
+[![IR and Raman from a molecular geometry](assets/gallery/vibrational-forward.png)](notebooks/vibrational-forward.ipynb)
+
+### [HOMO–LUMO gap prediction](notebooks/vibrational-gap-ir_raman_hc.ipynb)
+
+Combine IR, Raman and NMR spectra to predict the molecular energy gap.
+
+[![HOMO–LUMO gap prediction](assets/gallery/vibrational-gap-ir_raman_hc.png)](notebooks/vibrational-gap-ir_raman_hc.ipynb)
+
+
+### Interactive molecular example
+
+Explore the molecular structure in 3D alongside the dataset orbital energies and the gap predicted from IR, Raman and H/C NMR spectra.
+
+<div class="oms-conformer-demo" data-oms-viewer data-oms-assets="assets/viewer/" data-oms-language="en">
+<label>Molecule <select class="oms-conformer-select" aria-label="Select molecule"></select></label>
+<div class="oms-conformer-canvas" role="img" aria-label="Interactive molecular conformer"></div>
+<p class="oms-conformer-result" aria-live="polite">Loading coordinates…</p>
+</div>
+
+## Documentation
+
+- [Data](data/index.md): Datasets, experimental details, distributions and splits.
+- [Tasks](tasks/index.md): Task definitions, inputs, outputs and model usage.
+- [Tutorials](notebooks/index.md): Step-by-step examples for prediction, training and spectroscopy.
+- [API reference](api-reference/index.md): Classes, functions, arguments, return values and examples.
+- [Benchmarks](benchmarks.md): Benchmark datasets, protocols, metrics and results.
+- [Agent Harness](harness.md): Use spectroscopy tools from Python, the command line or an agent.

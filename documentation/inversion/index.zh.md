@@ -15,7 +15,7 @@ NMR 反演从时域测量恢复弛豫时间或扩散系数分布。本栏把 [NM
 
 ## 为什么需要正则化
 
-相近指数成分产生的时域信号很相似，核矩阵因此病态：微小噪声可能显著改变恢复分布。重建残差很小，不代表分布唯一，也不代表分辨出了相近的物理组分。
+相近指数成分产生的时域信号很相似，核矩阵因此病态：微小噪声可能显著改变恢复分布。使用正则化与相关实验信息约束可行分布，并根据噪声水平和核矩阵的分辨能力解释组分。
 
 当前求解目标为：
 
@@ -46,3 +46,8 @@ reconstruction = result.fitted_signal
 应同时检查重建、残差结构、分布稳定性，以及 alpha／格点的敏感性。GCV、L 曲线和偏差准则可用于参数选择；当前 Python 接口显式接收 alpha。L1 稀疏正则化和多指数非线性拟合使用不同假设，可参考上游包的求解器与自动参数选择。
 
 [反演模拟教程](../notebooks/theory-nmr-inversion.ipynb)展示已知组分、带噪观测与恢复分布。需要上游完整功能时，可按其 [Python／Julia 集成说明](https://aris-mav.github.io/NMRInversions.jl/stable/python/)安装和调用。
+
+## 参考文献
+
+- NMRInversions.jl contributors. NMRInversions.jl: inversion of NMR relaxation and diffusion measurements. Software and theory documentation. Accessed 18 November 2026. [Source](https://github.com/aris-mav/NMRInversions.jl)
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)

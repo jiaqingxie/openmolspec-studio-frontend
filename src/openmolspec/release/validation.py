@@ -13,6 +13,7 @@ VALIDATION_VERSION = "1.1.0"
 
 
 def validate_release(config: Mapping[str, Any]) -> Dict[str, Any]:
+    """Validate the configured release files and record contracts."""
     root = output_dir(config)
     records = pd.read_parquet(root / "catalog" / "records.parquet")
     full = pd.read_parquet(root / "catalog" / "full.parquet")

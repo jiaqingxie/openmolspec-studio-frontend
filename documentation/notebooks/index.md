@@ -1,6 +1,6 @@
 # Tutorials
 
-Each active task notebook shows actual input/output data, a run table, executable analysis and a result figure. These notebooks analyze saved inference; they are not placeholders for hypothetical results.
+Follow the tutorials to learn how to load spectra, call models, interpret their outputs and evaluate predictions. Each task includes explanatory text, code, saved results and figures.
 
 [SDK: actual NMR inference](sdk-inference.ipynb) · [SDK: training preflight](sdk-training-preflight.ipynb)
 
@@ -15,49 +15,49 @@ Each active task notebook shows actual input/output data, a run table, executabl
 
 ## NMR
 
-- [Structure to 1H NMR](nmr-forward-1H.ipynb)
-- [Structure to 13C NMR](nmr-forward-13C.ipynb)
-- [Structure to 19F NMR: alignment audit](nmr-forward-19F.ipynb)
-- [Structure to 31P NMR: alignment audit](nmr-forward-31P.ipynb)
-- [Structure to 11B NMR: frozen diagnostic](nmr-forward-11B.ipynb)
-- [Structure to 29Si NMR: frozen diagnostic](nmr-forward-29Si.ipynb)
-- [NMR retrieval: H, s2m](nmr-retrieval-h-s2m.ipynb)
-- [NMR retrieval: H, m2s](nmr-retrieval-h-m2s.ipynb)
-- [NMR-to-SMILES generation: H](nmr-generation-h.ipynb)
-- [NMR retrieval: C, s2m](nmr-retrieval-c-s2m.ipynb)
-- [NMR retrieval: C, m2s](nmr-retrieval-c-m2s.ipynb)
-- [NMR-to-SMILES generation: C](nmr-generation-c.ipynb)
-- [NMR retrieval: HC, s2m](nmr-retrieval-hc-s2m.ipynb)
-- [NMR retrieval: HC, m2s](nmr-retrieval-hc-m2s.ipynb)
-- [NMR-to-SMILES generation: HC](nmr-generation-hc.ipynb)
-- [H/C peak-to-atom assignment](nmr-assignment.ipynb)
-- [H/C cross-solvent transfer: experimental-reference baseline](nmr-solvent_transfer.ipynb)
+- [1H chemical shift prediction](nmr-forward-1H.ipynb)
+- [13C chemical shift prediction](nmr-forward-13C.ipynb)
+- [19F chemical shift prediction](nmr-forward-19F.ipynb)
+- [31P chemical shift prediction](nmr-forward-31P.ipynb)
+- [11B chemical shift prediction](nmr-forward-11B.ipynb)
+- [29Si chemical shift prediction](nmr-forward-29Si.ipynb)
+- [Spectrum-to-structure retrieval: ¹H](nmr-retrieval-h-s2m.ipynb)
+- [Structure-to-spectrum retrieval: ¹H](nmr-retrieval-h-m2s.ipynb)
+- [Structure elucidation from ¹H NMR](nmr-generation-h.ipynb)
+- [Spectrum-to-structure retrieval: ¹³C](nmr-retrieval-c-s2m.ipynb)
+- [Structure-to-spectrum retrieval: ¹³C](nmr-retrieval-c-m2s.ipynb)
+- [Structure elucidation from ¹³C NMR](nmr-generation-c.ipynb)
+- [Spectrum-to-structure retrieval: ¹H + ¹³C](nmr-retrieval-hc-s2m.ipynb)
+- [Structure-to-spectrum retrieval: ¹H + ¹³C](nmr-retrieval-hc-m2s.ipynb)
+- [Structure elucidation from ¹H + ¹³C NMR](nmr-generation-hc.ipynb)
+- [Peak-to-atom assignment](nmr-assignment.ipynb)
+- [Cross-solvent chemical shift transfer](nmr-solvent_transfer.ipynb)
 
 ## Mass spectrometry
 
-- [Molecule to MS/MS with GLACIER](ms-forward-glacier.ipynb)
-- [Molecule to MS/MS with ICEBERG](ms-forward-iceberg.ipynb)
-- [MS/MS peak annotation with MAGMa](ms-annotation-magma.ipynb)
+- [MS/MS prediction with GLACIER](ms-forward-glacier.ipynb)
+- [MS/MS prediction with ICEBERG](ms-forward-iceberg.ipynb)
+- [MS/MS fragment annotation](ms-annotation-magma.ipynb)
 
 ## IR / Raman
 
-- [HOMO–LUMO gap prediction: IR](vibrational-gap-ir.ipynb)
-- [HOMO–LUMO gap prediction: RAMAN](vibrational-gap-raman.ipynb)
-- [HOMO–LUMO gap prediction: IR_RAMAN](vibrational-gap-ir_raman.ipynb)
-- [Conformer to IR and Raman](vibrational-forward.ipynb)
-- [Vib2Mol bidirectional retrieval with IR/Raman only](vibrational-retrieval.ipynb)
-- [Vib2Mol generation with IR/Raman only](vibrational-generation.ipynb)
-- [Vib2Mol candidate reranking with IR/Raman only](spectroscopy-reranking.ipynb)
+- [HOMO–LUMO gap from IR](vibrational-gap-ir.ipynb)
+- [HOMO–LUMO gap from Raman](vibrational-gap-raman.ipynb)
+- [HOMO–LUMO gap from IR + Raman](vibrational-gap-ir_raman.ipynb)
+- [IR and Raman from a molecular geometry](vibrational-forward.ipynb)
+- [Structure retrieval: IR + Raman](vibrational-retrieval.ipynb)
+- [Structure generation: IR + Raman](vibrational-generation.ipynb)
+- [Candidate reranking: IR + Raman](spectroscopy-reranking.ipynb)
 
 ## Multimodal spectroscopy
 
-- [HOMO–LUMO gap prediction: IR + Raman + H/C](vibrational-gap-ir_raman_hc.ipynb)
-- [Vib2Mol bidirectional retrieval with H/C](vibrational-retrieval-hc.ipynb)
-- [Vib2Mol generation with H/C](vibrational-generation-hc.ipynb)
-- [Vib2Mol candidate reranking with H/C](spectroscopy-reranking-hc.ipynb)
+- [HOMO–LUMO gap from IR + Raman + NMR](vibrational-gap-ir_raman_hc.ipynb)
+- [Structure retrieval: IR + Raman + NMR](vibrational-retrieval-hc.ipynb)
+- [Structure generation: IR + Raman + NMR](vibrational-generation-hc.ipynb)
+- [Candidate reranking: IR + Raman + NMR](spectroscopy-reranking-hc.ipynb)
 
 ## Deferred tasks
 
-- [Molecular formula prediction](nmr-formula.ipynb)
-- [Spectroscopy QA](spectroscopy-qa.ipynb)
-- [SpectraLLM structure generation](multispectral-spectrallm-generation.ipynb)
+- [谱图 → 分子式](nmr-formula.ipynb)
+- [谱学问答 / 推理](spectroscopy-qa.ipynb)
+- [多谱 → 结构（SpectraLLM）](multispectral-spectrallm-generation.ipynb)

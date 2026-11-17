@@ -52,6 +52,7 @@ def _process(task: Tuple[str, str]):
 
 
 def run_dataset(log_path: str, save_path: str, report_path: str, workers: int, prefix: str = "") -> Dict[str, Any]:
+    """Run trajectory extraction for one configured source dataset."""
     tasks = []
     for path in sorted(Path(log_path).glob("*.log")):
         stem = path.stem
@@ -98,6 +99,7 @@ def run_dataset(log_path: str, save_path: str, report_path: str, workers: int, p
 
 
 def main() -> None:
+    """Run the trajectories command-line workflow."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--log-path", help="Parse one directory containing Gaussian .log files")
     parser.add_argument(

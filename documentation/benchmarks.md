@@ -1,35 +1,65 @@
 # Benchmarks
 
-Software execution, frozen-model evaluation and gains from new training are separate questions. This page records their current evidence.
+OpenMolSpec defines benchmark tasks for NMR, MS, vibrational and multimodal spectroscopy. This catalogue includes every active task, its saved evaluation results and the configured training experiments.
 
-## Actual training integration check
+## Task benchmarks
 
-Both NMRTransformer stages completed one optimizer update on two real training records, with two validation records and no test examples. Checkpoint saving, configuration reload and repeated inference agreed. This is a successful software integration check, not a learning curve or a meaningful model accuracy result. [Report](assets/reports/sdk_training_roundtrip_20261117.json) · [Training API](api.md).
+| Family | Tasks | Contents |
+| --- | --- | --- |
+| [NMR](benchmarks/nmr.md) | 17 | Definitions, inputs, metrics and recorded results. |
+| [Mass spectrometry](benchmarks/ms.md) | 3 | Definitions, inputs, metrics and recorded results. |
+| [IR / Raman](benchmarks/vibrational.md) | 7 | Definitions, inputs, metrics and recorded results. |
+| [Multimodal spectroscopy](benchmarks/multimodal.md) | 4 | Definitions, inputs, metrics and recorded results. |
 
-## Retrieval with train/validation identity exclusion
+## Training benchmark configurations
 
-The frozen alignment checkpoint is evaluated on 512 H/C-complete molecules per source. Both fingerprint-matched alignment train and validation files are excluded at InChIKey connectivity level, grouping stereoisomers. Seed 42 selects the pool; the same molecules and candidate identities are used for H, C and H+C ablations. No molecular formula is supplied. The checkpoint uses byte encoding with a 512-token source budget; longer NMR text is truncated by its original encoder.
+The [production benchmark results](benchmarks/production.md) report the saved 200k/1M experiments for Hessians, H/C shifts, response tensors, molecular properties and structure generation.
 
-![Filtered retrieval modality comparison](assets/gallery/filtered-retrieval.png)
+The configuration catalogue contains 53 YAML experiments. They specify the input channels, targets, architecture, dataset version, random seed and optimizer budget. [All configurations](benchmarks/training.md).
 
-[SVG](assets/gallery/filtered-retrieval.svg) · [Full report](assets/reports/nmr_filtered_retrieval_20261117.json)
+| Benchmark family | Input → output | Model |
+| --- | --- | --- |
+| structure2property | 3D structure → energy, HOMO, LUMO, gap, dipole and ZPVE | Equiformer-v3 |
+| structure2spectrum | 3D structure → IR/Raman arrays | Equiformer-v3 |
+| structure2observables | 3D structure → scalar and tensor observables | Equiformer-v3 |
+| structure2nmr | 3D structure → atomwise H/C shifts | Equiformer-v3 |
+| structure2hessian | 3D structure → Hessian tensor blocks | Equiformer-v3 |
+| structure2response | 3D structure → dipole/polarizability derivatives | Equiformer-v3 |
+| spectrum2structure | Spectra → molecular structure | Vib2Mol |
+| spectrum2property | Spectra → quantum-chemical property | Vib2Conf / shared spectroscopy Transformer |
+| spectrum2conformer | Spectra → three-dimensional conformer; protocol definition | Vib2Conf |
 
-| Source | H R@1 | C R@1 | H+C R@1 | H+C R@5 | H+C R@10 |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| `nmrspec_test` | 97.5% | 62.1% | 98.8% | 99.6% | 99.8% |
-| `patent_test_10k` | 77.9% | 36.9% | 80.5% | 92.0% | 94.5% |
-| `nmrexp_exp_10k` | 92.0% | 62.1% | 93.2% | 99.8% | 99.8% |
-| `nmrgym_test` | 26.4% | 36.1% | 48.8% | 77.5% | 87.9% |
+## Metrics
 
-Table: spectrum-to-molecule retrieval. The report also includes the reverse direction, per-query ranks, shuffled-pair controls and 2,000-bootstrap intervals conditional on the fixed candidate pool. These controls do not establish unknown pretraining-history, scaffold or source-document independence. Related molecules remain possible. Missing-channel results are ablations of the same checkpoint, not separate trained models.
+Regression tasks report MAE and RMSE in the target unit. Retrieval reports Recall@k and mean reciprocal rank for the selected candidate pool. Structure generation reports canonical top-k accuracy and valid-SMILES rate. Spectral prediction compares numerical intensities using cosine and entropy similarity.
 
-The [token-budget audit](assets/reports/nmr_filtered_token_budget_20261117.json) found no truncated candidate SMILES. Some spectral texts exceed the checkpoint source budget; those original preprocessing limits remain in the scores.
+$$\mathrm{MAE}=\frac1N\sum_{i=1}^{N}|\hat y_i-y_i|,\qquad \mathrm{RMSE}=\sqrt{\frac1N\sum_{i=1}^{N}(\hat y_i-y_i)^2}.$$
+
+$$\mathrm{Recall@}k=\frac1N\sum_i\mathbf{1}[r_i\leq k],\qquad \mathrm{MRR}=\frac1N\sum_i\frac1{r_i}.$$
+
+## Run a benchmark
 
 ```bash
-python scripts/evaluate_filtered_nmr.py \
-  --workspace /path/to/OpenMolSpec \
-  --work runs/filtered-retrieval \
-  --output results/filtered-retrieval.json --limit 512
+python -m openmolspec_bench list
+python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
+  --tasks nmr.retrieval.hc.s2m nmr.generation.hc \
+  --alignment-checkpoint /path/to/alignment.pt \
+  --generation-checkpoint /path/to/generation.pt \
+  --limit 64 --sampling reservoir --seed 42 --output results/nmr.json
 ```
 
-[Data comparison](corpus-comparison.md) · [Data splits](data/splits.md) · [Model review](model-audit.md)
+Choose the required model assets using the task guide. The result JSON records predictions, target values, dataset settings, metrics and model fingerprints.
+
+## Additional task definitions
+
+Molecular formula prediction, spectroscopy QA and SpectraLLM generation are listed in the task registry as deferred.
+
+## References
+
+- OpenMolSpec contributors. OpenMolSpec: Chemical spectroscopy datasets, models and learning workflows. Software release v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0)
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)
+- Yang, L., Yang, Z., Xie, J., Wang, Y., Gao, B., Fu, T., Wei, X., Sun, J., Wu, J., He, C., Li, Y. & Gu, Q. NMRTrans: Structure Elucidation from Experimental NMR Spectra via Set Transformers. arXiv:2602.10158 (2026). [Source](https://arxiv.org/abs/2602.10158)
+- Fang, Z., Yang, C., Yu, H., Luo, H., He, H., Xie, J., Yang, Z. & Xia, J. NMRGym: A Comprehensive Benchmark for Nuclear Magnetic Resonance Based Molecular Structure Elucidation. arXiv:2601.15763 (2026). [Source](https://arxiv.org/abs/2601.15763)
+- Bushuiev, R., Bushuiev, A., de Jonge, N. F., Young, A., et al. MassSpecGym: A benchmark for the discovery and identification of molecules. Advances in Neural Information Processing Systems 37, Datasets and Benchmarks Track (2024). arXiv:2410.23326. [Source](https://arxiv.org/abs/2410.23326)
+- Yuan, M., Zou, Z. & Hu, W. QMe14S, A Comprehensive and Efficient Spectral Dataset for Small Organic Molecules. arXiv:2501.18876 (2025). [Source](https://arxiv.org/abs/2501.18876)
+- Zou, Z., Zhang, Y., Liang, L., Wei, M., Leng, J., Jiang, J., Luo, Y. & Hu, W. A deep learning model for predicting selected organic molecular spectra. Nature Computational Science 3, 957–964 (2023). doi:10.1038/s43588-023-00550-y. [Source](https://www.nature.com/articles/s43588-023-00550-y)

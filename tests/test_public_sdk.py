@@ -101,6 +101,23 @@ class PublicSDKTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'does not match'):
             ds.verify()
 
+    def test_cleaned_peak_lists_keep_nucleus_and_acquisition_modality(self):
+        path=self.root/'peak-lists.jsonl'
+        records=[
+            {'smiles':'B(O)O','modality':'NMR','nucleus':'11B','peaks_ppm':[30.5]},
+            {'smiles':'CCO','modality':'MS','peaks':[[31.0,1.0],[47.0,.4]]},
+            {'smiles':'CCO','modality':'IR','wavenumber_cm1':[1700,3000]},
+            {'smiles':'CCO','peaks':[[31.0,1.0],[47.0,.4]]},
+        ]
+        path.write_text(''.join(json.dumps(row)+'\n' for row in records))
+        view=SpectraSplit(path,'test','peak-lists','experimental',format='jsonl')
+        for modality,index in [('11B',0),('MS',1),('IR',2),('MS/MS',3)]:
+            chosen=view.select(modalities=modality).head(2)
+            self.assertEqual(len(chosen),1)
+            self.assertEqual(chosen[0]['_openmolspec']['modalities'],[modality])
+            self.assertEqual(chosen[0]['smiles'],records[index]['smiles'])
+        self.assertEqual(view.select(modalities=['11B','IR']).head(1),[])
+
 
 if __name__ == '__main__':
     unittest.main()

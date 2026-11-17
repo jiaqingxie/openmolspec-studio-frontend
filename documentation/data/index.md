@@ -1,24 +1,66 @@
 # Data
 
-Explore data by spectroscopy family and by experimental or computed origin. OpenDataLab is the source label for the team-curated patent collection; external resources retain their citations. Record counts, structure identities and geometry frames are different units.
+Use the dataset interface to load experimental measurements and calculated spectra. This guide describes the cleaned data, their fields, experimental conditions and train/validation/test files.
 
-| Collection | What is available |
-| --- | --- |
-| [NMR](nmr.md) | OpenDataLab experimental NMR and external H/C or heteronuclear resources |
-| [MS](ms.md) | OpenDataLab mass records, MassSpecGym v1.5 and other experimental spectra |
-| [IR / Raman](vibrational.md) | Experimental peak lists and calculated OpenMolSpec, QM9S, QMe14S spectra |
-| [Multimodal](multimodal.md) | Co-occurring measurements and explicitly aligned multimodal views |
+## OpenMolSpec experimental collection
 
-[Dataset loading](../api.md) · [Benchmark and custom splits](splits.md) · [Distributions](../datasets.md) · [Corpus comparison](../corpus-comparison.md)
+| Dataset | Category | Description | Cleaned usable data |
+| --- | --- | --- | --- |
+| [H/C NMR](nmr.md) | Experimental NMR | Proton/carbon shifts, structures, formulas, spectral text and acquisition metadata. | 2,678,511 molecules |
+| [11B](nmr.md) | Experimental | Boron chemical shifts and boron-containing structures. | 1,140 spectra; 1,017 molecules |
+| [19F](nmr.md) | Experimental | Fluorine chemical shifts and fluorinated structures. | 56,679 spectra; 50,402 molecules |
+| [29Si](nmr.md) | Experimental | Silicon chemical shifts and silicon-containing structures. | 726 spectra; 636 molecules |
+| [31P](nmr.md) | Experimental | Phosphorus chemical shifts and phosphorus-containing structures. | 21,662 spectra; 18,238 molecules |
+| [MS](ms.md) | Experimental | Numerical m/z–intensity peak lists and molecular structures. | 5,233 spectra; 4,980 molecules |
+| [IR](vibrational.md) | Experimental | Experimental infrared peak positions and molecular structures. | 177,759 spectra; 168,197 molecules |
+| [Raman](vibrational.md) | Experimental | Experimental Raman peak positions and molecular structures. | 42 spectra; 39 molecules |
 
-The raw collection contains **34,292,837 characterization entries**, of which **32,901,847** are classified as NMR, MS, IR or Raman. The remainder retains other source labels, including chromatography and other characterization. Task-ready counts depend on the fields and quality tiers on each data card.
+The collection is curated from OpenDataLab / WanJuan MolSpectra v1.0.3. H/C records are grouped by standard molecular identity. The other views retain unique numerical spectra and their source conditions.
 
-## Standard molecular identities
+![Cleaned experimental spectroscopy coverage](../assets/gallery/data-cleaned-experimental.png)
 
-The complete structure/scaffold qualification retains **3,245,902 full standard-InChIKey identities**; **3,235,816** have at least one NMR, MS, IR or Raman entry and receive a fixed v1 benchmark role. These are identity counts, distinct from measurements and the curated H/C view.
+![Cleaned molecular distributions](../assets/gallery/data-cleaned-nmr.png)
 
-![OpenDataLab molecular distributions](../assets/gallery/data-opendatalab-chemistry.png)
+Molecular size and weight for all 2,678,511 cleaned H/C records. The last bin includes larger molecules. [SVG](../assets/gallery/data-cleaned-nmr.svg) · [PDF](../assets/gallery/data-cleaned-nmr.pdf)
 
-[SVG](../assets/gallery/data-opendatalab-chemistry.svg) · [PDF](../assets/gallery/data-opendatalab-chemistry.pdf)
+## External experimental resources
 
-[Qualification and exclusions / 检查与排除范围](../assets/reports/opendatalab_structure_qualification_20261117.json)
+| Dataset / view | Category | Description | Usable records |
+| --- | --- | --- | --- |
+| NMRexp v2 | NMR | Per-nucleus experimental NMR Parquet views; see the nucleus table. | [NMR](nmr.md) |
+| NMRSpec / NMRTrans | NMR | H/C spectra and target structures for retrieval and structure generation. | 10,000 |
+| NMRGym | NMR | Experimental NMR molecular structure elucidation test view. | 10,000 |
+| MassSpecGym v1.5 | MS/MS | Numerical tandem spectra with molecular and acquisition fields for forward prediction. | 119,029 |
+| MassBank | MS/MS | Numerical MS2 spectra with valid molecular structures. | 120,512 |
+
+## Computed spectra
+
+| Dataset / view | Category | Description | Usable records |
+| --- | --- | --- | --- |
+| OpenMolSpec / openSpec test | IR / Raman / NMR | Paired spectra, structures and quantum-chemical properties for multimodal learning. | 20,390 |
+| QMe14S | IR / Raman | Finite, nonconstant paired IR and Raman arrays across 14 elements. | 184,252 |
+
+## Load a dataset
+
+```python
+from openmolspec.dataset import molspectra
+
+data = molspectra("opendatalab_nmr", root="data/nmr")
+record = data["test"].head(1)[0]
+print(record["smiles"])
+print(record["h_peaks_ppm"])
+paired = data["train"].select(modalities=["1H", "13C"])
+```
+
+Place the cleaned `train.jsonl`, `val.jsonl` and `test.jsonl` files in `data/nmr`. The [NMR guide](nmr.md) explains every field and the [split guide](splits.md) explains how to construct your own dataset. [Download counts and distributions](../assets/cleaned-data-summary.json).
+
+## References
+
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)
+- Wang, J.-J., Jin, Y., Zhi, C.-Y., et al. NMRexp: A database of 3.3 million experimental NMR spectra. Scientific Data 12, 1954 (2025). doi:10.1038/s41597-025-06245-5. [Source](https://www.nature.com/articles/s41597-025-06245-5)
+- Yang, L., Yang, Z., Xie, J., Wang, Y., Gao, B., Fu, T., Wei, X., Sun, J., Wu, J., He, C., Li, Y. & Gu, Q. NMRTrans: Structure Elucidation from Experimental NMR Spectra via Set Transformers. arXiv:2602.10158 (2026). [Source](https://arxiv.org/abs/2602.10158)
+- Fang, Z., Yang, C., Yu, H., Luo, H., He, H., Xie, J., Yang, Z. & Xia, J. NMRGym: A Comprehensive Benchmark for Nuclear Magnetic Resonance Based Molecular Structure Elucidation. arXiv:2601.15763 (2026). [Source](https://arxiv.org/abs/2601.15763)
+- Bushuiev, R., Bushuiev, A., de Jonge, N. F., Young, A., et al. MassSpecGym: A benchmark for the discovery and identification of molecules. Advances in Neural Information Processing Systems 37, Datasets and Benchmarks Track (2024). arXiv:2410.23326. [Source](https://arxiv.org/abs/2410.23326)
+- Horai, H., Arita, M., Kanaya, S., et al. MassBank: a public repository for sharing mass spectral data for life sciences. Journal of Mass Spectrometry 45, 703–714 (2010). doi:10.1002/jms.1777. [Source](https://doi.org/10.1002/jms.1777)
+- Yuan, M., Zou, Z. & Hu, W. QMe14S, A Comprehensive and Efficient Spectral Dataset for Small Organic Molecules. arXiv:2501.18876 (2025). [Source](https://arxiv.org/abs/2501.18876)
+- OpenMolSpec contributors. OpenMolSpec: Chemical spectroscopy datasets, models and learning workflows. Software release v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0)

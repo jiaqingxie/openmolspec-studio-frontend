@@ -2,14 +2,15 @@
 
 Public URL: https://jiaqingxie.github.io/openmolspec.github.io/
 
-The project portal uses static HTML, CSS and JavaScript. It links to the full
-bilingual Read the Docs manual and displays figures generated from recorded
+The project portal uses static HTML, CSS and JavaScript. It includes the full
+bilingual Sphinx manual at `docs/` and displays figures generated from recorded
 model runs and complete-file data audits.
 
 Build from the release repository after regenerating documentation figures:
 
 ```bash
-python scripts/build_project_site.py --output .runtime/github-pages-v1
+python scripts/build_readthedocs.py --output .runtime/manual-site-v1 --strict
+python scripts/build_project_site.py --output .runtime/github-pages-v1 --manual .runtime/manual-site-v1
 python -m http.server 8769 --directory .runtime
 ```
 

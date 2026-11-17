@@ -2,6 +2,26 @@
 
 
 def create_server():
+    """Create the OpenMolSpec MCP server and register its spectroscopy tools.
+
+    Returns
+    -------
+    mcp.server.MCPServer
+        Server exposing ``spectra_tasks``, ``spectra_datasets``,
+        ``spectra_validate`` and ``spectra_predict``. Prediction and validation
+        tools take ``task``, ``inputs`` and ``model_settings``; prediction also
+        accepts ``repeats``.
+
+    Raises
+    ------
+    RuntimeError
+        If the optional MCP dependency is absent.
+
+    Examples
+    --------
+    >>> server = create_server()
+    >>> server.run(transport='stdio')
+    """
     try:
         from mcp.server import MCPServer
     except ImportError as error:
@@ -36,6 +56,7 @@ def create_server():
 
 
 def main():
+    """Start the ``openmolspec-mcp`` stdio service."""
     create_server().run(transport='stdio')
 
 

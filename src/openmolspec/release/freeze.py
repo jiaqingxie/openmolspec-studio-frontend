@@ -77,6 +77,7 @@ def _inventory(paths: Iterable[Path], workers: int) -> pd.DataFrame:
 
 
 def freeze_release(config: Mapping[str, Any], hash_workers: int = 2) -> Dict[str, Any]:
+    """Freeze the release inventory and its file-identity metadata."""
     root = output_dir(config)
     root.mkdir(parents=True, exist_ok=True)
     repository = Path(str(config["_config_path"])).parent.parent

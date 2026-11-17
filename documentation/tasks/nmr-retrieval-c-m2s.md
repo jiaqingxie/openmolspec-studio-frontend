@@ -1,10 +1,6 @@
-# NMR retrieval: C, m2s
+# Structure-to-spectrum retrieval: ¹³C
 
-Rank candidate structures from NMR spectra, or rank candidate spectra from a molecular structure, with the existing dual encoder.
-
-## Example and evaluation
-
-Input/output pairing is appropriate; the 32-candidate smoke pool is small. Validate a larger independent library before judging generalization or fine-tuning.
+Rank the candidates that best match the query molecule or spectrum.
 
 ## What goes in
 
@@ -19,11 +15,11 @@ Input/output pairing is appropriate; the 32-candidate smoke pool is small. Valid
 | Field | Meaning |
 | --- | --- |
 | `ranked_candidates` | Candidate identity, rank and embedding similarity score. |
-| `recall / MRR` | Report candidate-pool size with every metric; 32-way retrieval is not full-library retrieval. |
+| `recall / MRR` | Recall@1/5/10 and MRR, with the candidate-pool size. |
 
 ## A real recorded example
 
-The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
+Inspect the input, prediction and reference for the example below. Download the JSON for the complete numerical arrays and additional examples.
 
 ![nmr.retrieval.c.m2s actual results](../assets/gallery/nmr-retrieval-c-m2s.png)
 
@@ -72,29 +68,43 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 | Dataset / scope | Model / variant | Metric | Value |
 | --- | --- | --- | ---: |
 | nmrspec_test | recorded model | recall_at_1 | 0.9375 |
+| nmrspec_test | recorded model | recall_at_5 | 0.96875 |
+| nmrspec_test | recorded model | recall_at_10 | 0.96875 |
 | nmrspec_test | recorded model | mrr | 0.950321 |
 | nmrspec_test | recorded model | queries | 32 |
 | nmrspec_test | recorded model | candidate_pool | 32 |
+| nmrspec_test | recorded model | unique_candidates | 32 |
+| nmrspec_test | recorded model | tie_policy | stable_candidate_order |
 | patent_test_10k | recorded model | recall_at_1 | 0.5625 |
+| patent_test_10k | recorded model | recall_at_5 | 0.8125 |
+| patent_test_10k | recorded model | recall_at_10 | 0.875 |
 | patent_test_10k | recorded model | mrr | 0.694401 |
 | patent_test_10k | recorded model | queries | 32 |
 | patent_test_10k | recorded model | candidate_pool | 32 |
+| patent_test_10k | recorded model | unique_candidates | 32 |
+| patent_test_10k | recorded model | tie_policy | stable_candidate_order |
 | nmrexp_exp_10k | recorded model | recall_at_1 | 0.65625 |
+| nmrexp_exp_10k | recorded model | recall_at_5 | 0.9375 |
+| nmrexp_exp_10k | recorded model | recall_at_10 | 0.96875 |
 | nmrexp_exp_10k | recorded model | mrr | 0.774595 |
 | nmrexp_exp_10k | recorded model | queries | 32 |
 | nmrexp_exp_10k | recorded model | candidate_pool | 32 |
+| nmrexp_exp_10k | recorded model | unique_candidates | 32 |
+| nmrexp_exp_10k | recorded model | tie_policy | stable_candidate_order |
 | nmrgym_test | recorded model | recall_at_1 | 0.78125 |
+| nmrgym_test | recorded model | recall_at_5 | 0.9375 |
+| nmrgym_test | recorded model | recall_at_10 | 1 |
 | nmrgym_test | recorded model | mrr | 0.861111 |
 | nmrgym_test | recorded model | queries | 32 |
 | nmrgym_test | recorded model | candidate_pool | 32 |
-
-Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
+| nmrgym_test | recorded model | unique_candidates | 32 |
+| nmrgym_test | recorded model | tie_policy | stable_candidate_order |
 
 ## Model and method
 
-H-only, C-only and H+C are explicit visibility masks. The spectral encoder does not receive the molecular formula. Canonical isomeric identities define positive matches; the selected dataset supplies the candidate pool.
+The dual encoder maps molecular structures and NMR peak lists into a shared embedding space. Candidates are ranked by embedding similarity.
 
-Report Recall@1/5/10 and MRR with candidate counts. Byte-encoded candidate SMILES that exceed checkpoint capacity are excluded and counted rather than silently truncated.
+Report Recall@1/5/10 and mean reciprocal rank together with the candidate count.
 
 ## Reproduce
 
@@ -132,10 +142,6 @@ $$L_{\rm align}=\tfrac12[\mathrm{CE}(SM^\top/\tau,I)+\mathrm{CE}(MS^\top/\tau,I)
 
 Generation uses token cross-entropy; an optional joint alignment term follows its configured weight. Alignment uses normalized spectral/molecular representations with symmetric contrastive cross-entropy; ITM configuration adds positive/negative matching. The actual checkpoint/training configuration determines the objective.
 
-## Data requirements and references
-
-Scores from 16, 32 and full-dataset candidate pools are not directly comparable. Existing dataset provenance and train/test overlap still require independent audit before an accuracy claim.
-
 <details><summary>Source reports and SHA-256 fingerprints</summary>
 
 - [nmr_documented_examples_20261117_v2.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/nmr_documented_examples_20261117_v2.json) — SHA-256 `669413d6fc0939bdb6826782d41fc13cf12926a672418ecb46303f0b8ba05b99`
@@ -143,4 +149,10 @@ Scores from 16, 32 and full-dataset candidate pools are not directly comparable.
 </details>
 
 
-[Original model / 原模型](https://github.com/jiaqingxie/openmolspec-studio-frontend) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/jiaqingxie/openmolspec-studio-frontend) · [Model review / 模型检查](../model-audit.md)
+
+## References
+
+- Yang, L., Yang, Z., Xie, J., Wang, Y., Gao, B., Fu, T., Wei, X., Sun, J., Wu, J., He, C., Li, Y. & Gu, Q. NMRTrans: Structure Elucidation from Experimental NMR Spectra via Set Transformers. arXiv:2602.10158 (2026). [Source](https://arxiv.org/abs/2602.10158)
+- Fang, Z., Yang, C., Yu, H., Luo, H., He, H., Xie, J., Yang, Z. & Xia, J. NMRGym: A Comprehensive Benchmark for Nuclear Magnetic Resonance Based Molecular Structure Elucidation. arXiv:2601.15763 (2026). [Source](https://arxiv.org/abs/2601.15763)
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)

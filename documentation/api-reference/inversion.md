@@ -1,6 +1,7 @@
-# Inversion
+---
+orphan: true
+---
 
-```{automodule} openmolspec.inversion
-:members:
-:show-inheritance:
-```
+# API reference
+
+[OpenMolSpec API reference](module-inversion.md)

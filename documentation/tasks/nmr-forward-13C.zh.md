@@ -1,10 +1,6 @@
-# 结构 → 13C 峰列表
+# 13C 化学位移预测
 
-由分子结构预测 13C 化学位移，已有兼容权重时进行冻结推理或已有预测评分。
-
-## 示例与评测
-
-可作为 H/C 冻结模型基线；误差来自峰匹配，不代表实验原子指认。仍要检查训练重叠和溶剂覆盖。
+根据分子结构预测 13C 化学位移。利用返回的原子编号，可以把预测值标到分子结构上，也可以与实测峰比较。
 
 ## 输入是什么
 
@@ -19,11 +15,11 @@
 | Field | Meaning |
 | --- | --- |
 | `prediction_ppm` | 逐原子化学位移（ppm）及原子编号，或整理后的峰列表。 |
-| `error / coverage` | 与参考谱匹配后的误差及覆盖率；峰匹配不等于实验原子指认。 |
+| `error / coverage` | 与参考谱匹配后的误差及峰覆盖率。 |
 
 ## 真实运行案例
 
-下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
+下面展示示例的输入、预测与参考。下载 JSON 可获取完整数值数组及更多示例。
 
 ![nmr.forward.13C actual results](../assets/gallery/nmr-forward-13C.png)
 
@@ -69,45 +65,75 @@
 | Dataset / scope | Model / variant | Metric | Value |
 | --- | --- | --- | ---: |
 | nmrspec_test | nmrnet | matched_peak_mae_ppm | 1.16684 |
+| nmrspec_test | nmrnet | matched_peak_rmse_ppm | 2.38985 |
+| nmrspec_test | nmrnet | peak_count_mae | 2.65625 |
 | nmrspec_test | nmrnet | matched_fraction | 0.868315 |
 | nmrspec_test | nmrnet | examples | 32 |
 | nmrspec_test | nmrnet | scored_examples | 32 |
+| nmrspec_test | nmrnet | aggregation | equal_weight_per_molecule |
+| nmrspec_test | nmrnet | assignment | minimum_absolute_error_without_atom_labels |
 | nmrspec_test | nmrnetpp | matched_peak_mae_ppm | 0.816381 |
+| nmrspec_test | nmrnetpp | matched_peak_rmse_ppm | 2.01372 |
+| nmrspec_test | nmrnetpp | peak_count_mae | 2.65625 |
 | nmrspec_test | nmrnetpp | matched_fraction | 0.868315 |
 | nmrspec_test | nmrnetpp | examples | 32 |
 | nmrspec_test | nmrnetpp | scored_examples | 32 |
+| nmrspec_test | nmrnetpp | aggregation | equal_weight_per_molecule |
+| nmrspec_test | nmrnetpp | assignment | minimum_absolute_error_without_atom_labels |
 | patent_test_10k | nmrnet | matched_peak_mae_ppm | 8.04192 |
+| patent_test_10k | nmrnet | matched_peak_rmse_ppm | 24.2975 |
+| patent_test_10k | nmrnet | peak_count_mae | 18.1935 |
 | patent_test_10k | nmrnet | matched_fraction | 0.433151 |
 | patent_test_10k | nmrnet | examples | 31 |
 | patent_test_10k | nmrnet | scored_examples | 31 |
+| patent_test_10k | nmrnet | aggregation | equal_weight_per_molecule |
+| patent_test_10k | nmrnet | assignment | minimum_absolute_error_without_atom_labels |
 | patent_test_10k | nmrnetpp | matched_peak_mae_ppm | 7.56152 |
+| patent_test_10k | nmrnetpp | matched_peak_rmse_ppm | 22.9178 |
+| patent_test_10k | nmrnetpp | peak_count_mae | 18.1935 |
 | patent_test_10k | nmrnetpp | matched_fraction | 0.433151 |
 | patent_test_10k | nmrnetpp | examples | 31 |
 | patent_test_10k | nmrnetpp | scored_examples | 31 |
+| patent_test_10k | nmrnetpp | aggregation | equal_weight_per_molecule |
+| patent_test_10k | nmrnetpp | assignment | minimum_absolute_error_without_atom_labels |
 | nmrexp_exp_10k | nmrnet | matched_peak_mae_ppm | 1.30638 |
+| nmrexp_exp_10k | nmrnet | matched_peak_rmse_ppm | 7.49856 |
+| nmrexp_exp_10k | nmrnet | peak_count_mae | 3.90625 |
 | nmrexp_exp_10k | nmrnet | matched_fraction | 0.753554 |
 | nmrexp_exp_10k | nmrnet | examples | 32 |
 | nmrexp_exp_10k | nmrnet | scored_examples | 32 |
+| nmrexp_exp_10k | nmrnet | aggregation | equal_weight_per_molecule |
+| nmrexp_exp_10k | nmrnet | assignment | minimum_absolute_error_without_atom_labels |
 | nmrexp_exp_10k | nmrnetpp | matched_peak_mae_ppm | 1.29252 |
+| nmrexp_exp_10k | nmrnetpp | matched_peak_rmse_ppm | 8.09745 |
+| nmrexp_exp_10k | nmrnetpp | peak_count_mae | 3.90625 |
 | nmrexp_exp_10k | nmrnetpp | matched_fraction | 0.753554 |
 | nmrexp_exp_10k | nmrnetpp | examples | 32 |
 | nmrexp_exp_10k | nmrnetpp | scored_examples | 32 |
+| nmrexp_exp_10k | nmrnetpp | aggregation | equal_weight_per_molecule |
+| nmrexp_exp_10k | nmrnetpp | assignment | minimum_absolute_error_without_atom_labels |
 | nmrgym_test | nmrnet | matched_peak_mae_ppm | 2.27653 |
+| nmrgym_test | nmrnet | matched_peak_rmse_ppm | 3.99254 |
+| nmrgym_test | nmrnet | peak_count_mae | 2.625 |
 | nmrgym_test | nmrnet | matched_fraction | 0.908013 |
 | nmrgym_test | nmrnet | examples | 32 |
 | nmrgym_test | nmrnet | scored_examples | 32 |
+| nmrgym_test | nmrnet | aggregation | equal_weight_per_molecule |
+| nmrgym_test | nmrnet | assignment | minimum_absolute_error_without_atom_labels |
 | nmrgym_test | nmrnetpp | matched_peak_mae_ppm | 2.45342 |
+| nmrgym_test | nmrnetpp | matched_peak_rmse_ppm | 4.1577 |
+| nmrgym_test | nmrnetpp | peak_count_mae | 2.625 |
 | nmrgym_test | nmrnetpp | matched_fraction | 0.908013 |
 | nmrgym_test | nmrnetpp | examples | 32 |
 | nmrgym_test | nmrnetpp | scored_examples | 32 |
-
-样本量和候选池随每次运行记录。图可能展示单个分子，表格是来源实验的实际汇总，不能混为同一统计范围。
+| nmrgym_test | nmrnetpp | aggregation | equal_weight_per_molecule |
+| nmrgym_test | nmrnetpp | assignment | minimum_absolute_error_without_atom_labels |
 
 ## 模型与方法
 
-H/C 读取 NMRNet、NMRNet++ 的预测及对应元数据；未指认实验峰用最小绝对误差匹配，并保留峰数和覆盖率诊断。
+NMRNet 编码分子构象，并预测所选原子的化学位移。接口负责准备构象、加载相应核种的权重，并应用模型的位移缩放参数。
 
-位移和误差单位均为 ppm。按分子等权计算匹配峰 MAE/RMSE，必须同时报告匹配比例与峰数误差，因为匹配误差本身不惩罚全部缺失峰或额外峰。
+MAE 和 RMSE 的单位均为 ppm。
 
 ## 复现方式
 
@@ -131,9 +157,12 @@ result = model.predict(smiles)
 
 $$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
 
-## 数据要求与引用
 
-峰匹配误差不是逐原子指认准确率。这里对 H/C 保存的预测评分，不据此外推其他核种的适用性。
+| 模型设置 | 值 |
+| --- | --- |
+| Checkpoint | NMRNet 13C fold 0 |
+| Training domain | liquid |
+| Shift unit | ppm |
 
 <details><summary>来源报告与 SHA-256 指纹</summary>
 
@@ -142,4 +171,9 @@ $$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delt
 </details>
 
 
-[Original model / 原模型](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+
+## 参考文献
+
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)

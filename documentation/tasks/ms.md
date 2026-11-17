@@ -1,9 +1,9 @@
 # Mass spectrometry
 
-Task pages contain actual examples and measured results. A diagnostic status is not a validated production accuracy claim.
+Choose a task to see its purpose, inputs, outputs, model call and examples.
 
 | Task / input → output | Task ID |
 | --- | --- |
-| [Molecule to MS/MS with GLACIER](ms-forward-glacier.md) | `ms.forward.glacier` |
-| [Molecule to MS/MS with ICEBERG](ms-forward-iceberg.md) | `ms.forward.iceberg` |
-| [MS/MS peak annotation with MAGMa](ms-annotation-magma.md) | `ms.annotation.magma` |
+| [MS/MS prediction with GLACIER](ms-forward-glacier.md) | `ms.forward.glacier` |
+| [MS/MS prediction with ICEBERG](ms-forward-iceberg.md) | `ms.forward.iceberg` |
+| [MS/MS fragment annotation](ms-annotation-magma.md) | `ms.annotation.magma` |

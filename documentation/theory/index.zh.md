@@ -10,3 +10,9 @@
 | [NMR 反演](../inversion/index.md) | 弛豫／扩散核、病态问题与非负正则化 | [弛豫分布恢复](../notebooks/theory-nmr-inversion.ipynb) |
 
 四项教程均实际执行带明确参数的数值模拟。实验与计算数据案例见 [Data](../data/index.md)。
+
+## 参考文献
+
+- Zou, Z., Zhang, Y., Liang, L., Wei, M., Leng, J., Jiang, J., Luo, Y. & Hu, W. A deep learning model for predicting selected organic molecular spectra. Nature Computational Science 3, 957–964 (2023). doi:10.1038/s43588-023-00550-y. [Source](https://www.nature.com/articles/s43588-023-00550-y)
+- Yuan, M., Zou, Z. & Hu, W. QMe14S, A Comprehensive and Efficient Spectral Dataset for Small Organic Molecules. arXiv:2501.18876 (2025). [Source](https://arxiv.org/abs/2501.18876)
+- OpenMolSpec contributors. openSpec models and benchmark training workflows. Source archive, v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks)

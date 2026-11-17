@@ -1,75 +1,71 @@
 # NMR data
 
-![NMR data availability](../assets/gallery/data-nmr-availability.png)
+NMR records connect molecular structures to chemical shifts. The cleaned collection covers proton, carbon, boron, fluorine, silicon and phosphorus. Chemical shifts use ppm; acquisition frequencies use MHz.
 
-[SVG](../assets/gallery/data-nmr-availability.svg) · [PDF](../assets/gallery/data-nmr-availability.pdf)
+## Cleaned H/C collection
 
-![NMR chemical distributions](../assets/gallery/data-nmr-nuclei.png)
+| Quantity | Count |
+| --- | --- |
+| Molecular identities | 2,678,511 |
+| ¹H spectra | 2,720,828 |
+| ¹³C spectra | 252,015 |
+| ¹H peaks | 29,270,201 |
+| ¹³C peaks | 4,380,626 |
+| Molecules with both H and C | 238,226 |
 
-[SVG](../assets/gallery/data-nmr-nuclei.svg) · [PDF](../assets/gallery/data-nmr-nuclei.pdf)
+Cleaning validates the molecular structure, checks that the measured nucleus occurs in the molecule, parses numerical shifts and normalizes the molecular formula. Each retained molecule has at least one usable H or C spectrum. Molecular identity and the prepared split role are retained.
 
-## OpenDataLab
-
-- **NMR: 18,588,070** spectral entries; **13,732,773** with structure text.
-
-| Availability check / 字段可用性 | Entries or values / 条目或数值 |
-| --- | ---: |
-| `NMR:nonempty_shift_text` | 18,511,179 |
-| `NMR:shift_text_contains_number` | 18,499,239 |
-| `NMR:solvent_present` | 18,167,918 |
-| `NMR:positive_frequency` | 17,349,294 |
-
-[Full census](../assets/reports/opendatalab_all_modalities_20261117.json) retains raw spectrum labels and exact classification rules.
-
-### Qualified molecular identities / 结构资格检查
-
-| Modality | Qualified full InChIKeys | Source entries attached to these identities |
-| --- | ---: | ---: |
-| NMR | 2,707,528 | 13,716,645 |
-
-Qualification requires a standard molecular identity and a supported scaffold group; it does not establish spectral extraction accuracy or task eligibility. A molecule can occur in several modalities. [Full qualification and exclusion scope](../assets/reports/opendatalab_structure_qualification_20261117.json).
-
-### OpenDataLab nucleus labels / 核种标签
-
-| Nucleus label | Source entries |
-| --- | ---: |
-| 1H | 16,572,405 |
-| 13C | 1,456,877 |
-| 19F | 360,167 |
-| 31P | 161,534 |
-| 11B | 9,154 |
-| 29Si | 6,571 |
-| Other / multiple nuclei | 9,253 |
-| Unspecified | 12,109 |
-
-The curated H/C view contains 2,680,271 standard-InChI identities and 238,412 H/C-paired records. It preserves the original prepared train/validation/test roles. Pairing by molecular identity does not ensure matched acquisition conditions.
-
-## External experimental data / 外部实验数据
-
-**NMRexp v2 complete local release:** 3,372,987 spectral records / 1,499,173 valid standard-InChIKey identities.
-
-![NMRexp nucleus availability](../assets/gallery/dataset-nmrexp-nuclei.png)
-
-| Resource | Modalities | Citation |
+| Field | Type / unit | Meaning |
 | --- | --- | --- |
-| NMRexp v2 | ¹H, ¹³C, ¹⁹F, ³¹P, ¹¹B, ²⁹Si | [Dataset](https://zenodo.org/records/17296666) |
-| NMRSpec / NMRTrans | Paired ¹H / ¹³C | [Paper](https://arxiv.org/abs/2602.10158) |
-| NMRGym | Paired ¹H / ¹³C | [Paper](https://arxiv.org/abs/2601.15763) |
-| NMRShiftDB | Assigned shifts and experimental conditions | [Project](https://nmrshiftdb.nmr.uni-koeln.de/) |
+| `smiles`, `inchi`, `standard_inchikey` | string | Molecular structure and standard identity. |
+| `formula` | string | Molecular formula normalized from the structure. |
+| `h_peaks_ppm`, `c_peaks_ppm` | list[float] / ppm | Parsed proton and carbon peak positions. |
+| `h_nmr`, `c_nmr` | list[dict] | Spectrum text, nucleus, frequency and source-line metadata. |
+| `modality_mask` | [has_H, has_C] | Which NMR channels are available. |
+| `h_provenance`, `c_provenance` | dict | Acquisition/source information for each nucleus. |
+| `patent_id`, `year`, `source` | string | Original document, publication year and source collection. |
 
-### NMRexp local nucleus views / 本地核种视图
+Use the numerical arrays for learning and plotting. Keep the spectral text when studying multiplicity, integration or coupling constants. Select solvent and frequency conditions from the nucleus-specific source record when building a condition-dependent model.
 
-| View | Spectral records |
-| --- | ---: |
-| `nmrexp_11B_usable` | 16,871 |
-| `nmrexp_13C_usable` | 1,439,344 |
-| `nmrexp_19F_usable` | 195,077 |
-| `nmrexp_1H_usable` | 1,651,821 |
-| `nmrexp_29Si_usable` | 2,385 |
-| `nmrexp_31P_usable` | 32,890 |
+![Proton and carbon chemical-shift distributions](../assets/gallery/data-cleaned-nmr-shifts.png)
 
-These filtered views overlap the complete NMRexp release and are not additional spectra.
+## Heteronuclear views
 
-[Data index](index.md) · [Loading API](../api.md) · [Splits](splits.md) · [Theory](../theory/index.md)
+| Nucleus | Spectra | Molecules |
+| --- | --- | --- |
+| 11B | 1,140 | 1,017 |
+| 19F | 56,679 | 50,402 |
+| 29Si | 726 | 636 |
+| 31P | 21,662 | 18,238 |
 
-[External complete-file census / 外部数据扫描](../assets/reports/external_data_census_20261117.json)
+Each record contains `smiles`, `standard_inchikey`, `nucleus`, `peaks_ppm`, `chemical_shift`, `solvent`, `frequency` and the source document. Peak intervals are represented by their center.
+
+```python
+from openmolspec.dataset import molspectra
+
+boron = molspectra("opendatalab_11b", root="data/experimental")
+record = boron["test"].select(modalities="11B").head(1)[0]
+print(record["smiles"], record["peaks_ppm"])
+```
+
+## NMRexp
+
+NMRexp provides experimental shifts extracted from the chemical literature in per-nucleus Parquet files. The filtered local views contain the following spectral records.
+
+| Nucleus | Spectral records |
+| --- | --- |
+| 1H | 1,651,821 |
+| 13C | 1,439,344 |
+| 19F | 195,077 |
+| 31P | 32,890 |
+| 11B | 16,871 |
+| 29Si | 2,385 |
+
+NMRSpec and NMRGym provide complementary test sets for spectral retrieval and structure elucidation. Load their prepared H/C JSONL views with `molspectra("nmrspec_test", root=...)` and `molspectra("nmrgym_test", root=...)`.
+
+## References
+
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)
+- Wang, J.-J., Jin, Y., Zhi, C.-Y., et al. NMRexp: A database of 3.3 million experimental NMR spectra. Scientific Data 12, 1954 (2025). doi:10.1038/s41597-025-06245-5. [Source](https://www.nature.com/articles/s41597-025-06245-5)
+- Yang, L., Yang, Z., Xie, J., Wang, Y., Gao, B., Fu, T., Wei, X., Sun, J., Wu, J., He, C., Li, Y. & Gu, Q. NMRTrans: Structure Elucidation from Experimental NMR Spectra via Set Transformers. arXiv:2602.10158 (2026). [Source](https://arxiv.org/abs/2602.10158)
+- Fang, Z., Yang, C., Yu, H., Luo, H., He, H., Xie, J., Yang, Z. & Xia, J. NMRGym: A Comprehensive Benchmark for Nuclear Magnetic Resonance Based Molecular Structure Elucidation. arXiv:2601.15763 (2026). [Source](https://arxiv.org/abs/2601.15763)

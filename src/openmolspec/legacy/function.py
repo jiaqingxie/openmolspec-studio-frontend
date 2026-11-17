@@ -24,6 +24,7 @@ from tqdm import tqdm
 # import openbabel
 
 def car2xyz(car_filepath:str,xyz_filepath:str):
+    """Convert a CAR molecular geometry representation to XYZ."""
     with open(car_filepath,'r') as f:
         car_lines = f.readlines()
         f.close()
@@ -37,6 +38,7 @@ def car2xyz(car_filepath:str,xyz_filepath:str):
         f.close()
 
 def log2arc(log_filepath,arc_filepath):
+    """Extract molecular archive data from a Gaussian log."""
     with open(log_filepath,'r') as f:
         log_lines =  f.readlines()
         f.close()
@@ -73,6 +75,7 @@ def log2arc(log_filepath,arc_filepath):
         f.close()
         
 def arc2xyz(arc_path:str,xyz_path:str):
+    """Convert molecular archive coordinates to XYZ."""
     with open(arc_path,'r') as f:
         line = f.readline()
         f.close()
@@ -86,6 +89,7 @@ def arc2xyz(arc_path:str,xyz_path:str):
         f.writelines(lines)    
         
 def np2xyz(atoms_x:np.array,atoms_pos:np.array,file_path:str):
+    """Format atomic identities and NumPy coordinates as XYZ."""
     lines = str(atoms_pos.shape[0]) + "\n" + "\t" + "\n"
     for i in range(atoms_pos.shape[0]):
         lines += Chem.GetPeriodicTable().GetElementSymbol(int(atoms_x[i])) + "\t" + str(float(atoms_pos[i][0])) + "\t" +str(float(atoms_pos[i][1])) +"\t" +str(float(atoms_pos[i][2])) +"\n" 
@@ -93,6 +97,7 @@ def np2xyz(atoms_x:np.array,atoms_pos:np.array,file_path:str):
         f.writelines(lines)  
 
 def obmol2rdmol(obmol:openbabel.openbabel.OBMol,rdmol:Chem.rdchem.Mol):
+    """Convert an Open Babel molecule to an RDKit molecular graph."""
     bond_type = [   Chem.rdchem.BondType.SINGLE,
                     Chem.rdchem.BondType.DOUBLE,
                     Chem.rdchem.BondType.TRIPLE,
@@ -116,6 +121,7 @@ def obmol2rdmol(obmol:openbabel.openbabel.OBMol,rdmol:Chem.rdchem.Mol):
 
 # 根据mol_path生成rdmol和邻接矩阵  
 def xyz2rdmol_AC(mol_path:str):
+    """Construct an RDKit molecular graph from XYZ geometry and connectivity."""
     rdmol = Chem.MolFromXYZFile(mol_path)
     obconversion = ob.OBConversion()
     obconversion.SetInFormat("xyz")
@@ -129,6 +135,7 @@ def xyz2rdmol_AC(mol_path:str):
     return rdmol,AC
 
 def pdb2rdmol_AC(pdb_file:str):
+    """Construct an RDKit molecular graph from PDB geometry and connectivity."""
     obconversion = ob.OBConversion()
     obconversion.SetInFormat("pdb")
     obmol = ob.OBMol()
@@ -150,6 +157,7 @@ def pdb2rdmol_AC(pdb_file:str):
 
 # 根据rdmol生成mol的atoms_x和atoms_pos
 def rdmol2x_pos(rdmol):
+    """Extract atomic features and Cartesian positions from an RDKit molecule."""
     atoms_x = np.zeros(shape = [rdmol.GetNumAtoms()],dtype=np.int64)
     atoms_pos = np.zeros(shape = [rdmol.GetNumAtoms(),3],dtype=np.float32)
     confer = rdmol.GetConformer()
@@ -165,6 +173,7 @@ def generate_atoms_edge_index(atoms_adjacent_matrix: np.array = None,
     # 按照化学键遍历
     # if np.where(atoms_adjacent_matrix==0)[0].shape[0] != atoms_adjacent_matrix.shape[0]:
     #     return KeyError
+    """Construct atom-level graph edge indices."""
     edge_index = np.zeros(shape=[1,4],dtype=np.int32)
     for i in range(mol.GetNumBonds()):
         # BeginAtomIdx
@@ -187,6 +196,7 @@ def generate_atoms_edge_index(atoms_adjacent_matrix: np.array = None,
 
 def atoms2bonds_edge_index(atoms_edge_index: np.array = None,
                             mol: Chem.rdchem.Mol = None):
+    """Convert atom connections to bond-level graph edge indices."""
     bond_type = [
         'SINGLE',
         'DOUBLE',
@@ -210,6 +220,7 @@ def atoms2bonds_edge_index(atoms_edge_index: np.array = None,
 
 def generate_angel_edge_bondes(atoms_pos: np.array = None,
                              atoms_edge_index: np.array = None):
+    """Construct angular relationships between molecular graph bonds."""
     angle_edge_bonds = np.zeros(shape=[atoms_edge_index.shape[0],4],dtype=np.float32)
     for i in range(atoms_edge_index.shape[0]):
         bond_1 = atoms_pos[atoms_edge_index[i,1]] - atoms_pos[atoms_edge_index[i,0]]
@@ -230,6 +241,7 @@ def generate_angel_edge_bondes(atoms_pos: np.array = None,
     return angle_edge_bonds   
 
 def Is_bonds_edge_index(bonds_edge_index,bonds_x):
+    """Check membership in the molecular bond-edge indices."""
     if int(bonds_x.shape[0]) - 1 == int(np.max(bonds_edge_index[:,2])):
         return True
     else :
@@ -237,6 +249,7 @@ def Is_bonds_edge_index(bonds_edge_index,bonds_x):
 
 # 生成特征矩阵
 def generate_data(atomicNumList, xyz_coordinates,rdmol,matrix_mol):
+    """Assemble molecular graph features for the model input format."""
     atoms_edge_index = generate_atoms_edge_index(matrix_mol,rdmol)
     bonds_edge_index,bonds_x = atoms2bonds_edge_index(atoms_edge_index,rdmol)
     if Is_bonds_edge_index(bonds_edge_index,bonds_x) == False:
@@ -260,6 +273,7 @@ def generate_data(atomicNumList, xyz_coordinates,rdmol,matrix_mol):
 
 # 根据Hessian 生成Hi，Hij
 def HessiantoHiHij(Hessian: torch.tensor=None,atoms_edge_index:torch.tensor=None):
+    """Partition a Cartesian Hessian into atomic diagonal and pair blocks."""
     atoms_count = Hessian.shape[0] // 3
     Hi = torch.zeros(size=[atoms_count,3,3],dtype = torch.float32)
     Hij = torch.zeros(size = [atoms_edge_index.shape[1],3,3])
@@ -271,9 +285,11 @@ def HessiantoHiHij(Hessian: torch.tensor=None,atoms_edge_index:torch.tensor=None
 
 # 根据arc生成dipole,dedipole,polar,depolar,hessian
 def str2dedipole(s:str,atoms_count:int):
+    """Parse dipole-derivative values from molecular archive text."""
     dedipole = torch.tensor(np.array(s.split(','),dtype=np.float32),dtype=torch.float32).reshape(atoms_count,3,3)
     return dedipole
 def str2polar(s:str,atoms_count:int):
+    """Parse polarizability values from molecular archive text."""
     polar = torch.zeros(size=[1,3,3],dtype=torch.float32)
     polar_list = np.array(s.split(','))
     for i in range(3):
@@ -282,9 +298,11 @@ def str2polar(s:str,atoms_count:int):
             polar[0,j,i] = float(polar_list[(i*i+i)//2 + j])
     return polar
 def str2depolar(s:str,atoms_count:int):
+    """Parse polarizability-derivative values from molecular archive text."""
     depolar = torch.tensor(np.array(s.split(','),dtype=np.float32),dtype=torch.float32).reshape(atoms_count,3,6)
     return depolar
 def str2hessian(s:str,atoms_count:int):
+    """Parse Cartesian Hessian values from molecular archive text."""
     hessian = torch.zeros(size=[int(3*atoms_count),int(3*atoms_count)])
     s = s.replace('\\\\',',')
     hessian_list = np.array(s.split(','),dtype=np.float32)
@@ -294,6 +312,7 @@ def str2hessian(s:str,atoms_count:int):
             hessian[j,i] = float(hessian_list[(i*i+i)//2 + j])
     return hessian 
 def arc2tensor(arc_filepath:str):
+    """Convert molecular archive quantities to tensor-based model inputs."""
     with open(arc_filepath,'r') as f:
         line = f.readline()
         f.close()
@@ -317,6 +336,7 @@ def arc2tensor(arc_filepath:str):
     return  energy,dipole,dedipole,polar,depolar,hessian
 # 根据.b 和 .out文件生成振动模式频率和活性
 def shiftactfromfile(b_filepath:str,out_filepath:str,max_step:int):
+    """Read atomwise NMR quantities from a source file."""
     with open(out_filepath ,'r') as f:
         lines_out = f.readlines()
         f.close()
@@ -333,6 +353,7 @@ def shiftactfromfile(b_filepath:str,out_filepath:str,max_step:int):
 
 # 根据目标分子xyz生成对应的pt
 def file2pt(xyz_pdb_path:str,arc_path:str=None):
+    """Convert a molecular source file to tensor-based model data."""
     if os.path.basename(xyz_pdb_path).split('.')[1] == 'xyz':
         rdmol, AC = xyz2rdmol_AC(xyz_pdb_path)
     if os.path.basename(xyz_pdb_path).split('.')[1] == 'pdb':
@@ -370,6 +391,7 @@ def file2pt(xyz_pdb_path:str,arc_path:str=None):
 
 def rdmol2pt(rdmol:Chem.rdchem.Mol,name:str):
     
+    """Convert an RDKit molecular graph to tensor-based model data."""
     atoms_x,atoms_pos = rdmol2x_pos(rdmol)
     AC = Chem.GetAdjacencyMatrix(rdmol)
     atoms_x,atoms_pos,bonds_x,bonds_edge_index,bonds_edge_attr  = generate_data(atoms_x,atoms_pos,rdmol,AC)

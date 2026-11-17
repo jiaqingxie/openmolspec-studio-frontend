@@ -18,6 +18,18 @@ import tempfile
 
 
 def sha256(path):
+    """Compute the SHA-256 checksum of a file.
+
+    Parameters
+    ----------
+    path : str or pathlib.Path
+        File to read in binary mode.
+
+    Returns
+    -------
+    str
+        The 64-character hexadecimal digest.
+    """
     digest = hashlib.sha256()
     with Path(path).open('rb') as stream:
         for chunk in iter(lambda: stream.read(1024 * 1024), b''):
@@ -26,11 +38,46 @@ def sha256(path):
 
 
 def list_datasets():
-    """Return dataset cards; counts describe audited versions, not arbitrary files."""
+    """List the datasets available through :func:`molspectra`.
+
+    Returns
+    -------
+    list of dict
+        Dataset cards containing ``name``, ``version``, ``domain``, ``format``,
+        split filenames, source references and dataset statistics.
+
+    Examples
+    --------
+    >>> names = [card['name'] for card in list_datasets()]
+    >>> 'opendatalab_nmr' in names
+    True
+    """
     return json.loads(files('openmolspec').joinpath('assets/datasets.json').read_text())
 
 
 def dataset_info(name):
+    """Look up a dataset's format, files and source information.
+
+    Parameters
+    ----------
+    name : str
+        Registered dataset name, such as ``'opendatalab_nmr'``.
+
+    Returns
+    -------
+    dict
+        Dataset card for ``name``.
+
+    Raises
+    ------
+    ValueError
+        If the name is absent from :func:`list_datasets`.
+
+    Examples
+    --------
+    >>> dataset_info('opendatalab_nmr')['domain']
+    'experimental'
+    """
     for card in list_datasets():
         if card['name'] == name:
             return card
@@ -65,7 +112,42 @@ def _nmr(row):
 
 @dataclass(frozen=True)
 class SpectraSplit:
-    """A reusable lazy view. The role remains attached when filtering or taking rows."""
+    """A streaming view of one spectroscopy dataset split.
+
+    Parameters
+    ----------
+    path : str or pathlib.Path
+        JSONL, MassSpecGym CSV/TSV, or openSpec LMDB file.
+    role : {'train', 'val', 'test'}
+        Split to read. ``'valid'`` and ``'validation'`` are aliases for ``'val'``.
+    dataset : str
+        Dataset name attached to each returned record.
+    domain : {'experimental', 'computed'}
+        Origin of the spectral measurements.
+    format : str, default 'nmr_jsonl'
+        Reader format: ``'nmr_jsonl'``, ``'jsonl'``, ``'massspecgym_csv'``,
+        ``'massspecgym_tsv'`` or ``'openspec_lmdb'``.
+    trusted : bool, default False
+        Set to ``True`` when opening a trusted pickle-based LMDB.
+    modalities : tuple of str, default ()
+        Channels required in each selected record: ``'1H'``, ``'13C'``,
+        ``'11B'``, ``'19F'``, ``'29Si'``, ``'31P'``, ``'IR'``, ``'Raman'``,
+        ``'MS'`` or ``'MS/MS'``.
+    limit : int or None, default None
+        Maximum number of selected records.
+
+    Yields
+    ------
+    dict
+        Molecular and spectral fields plus ``_openmolspec`` metadata containing
+        the split, dataset, domain, record locator and available channels.
+
+    Examples
+    --------
+    >>> split = SpectraSplit('test.jsonl', 'test', 'my_nmr', 'experimental')
+    >>> first_three = split.head(3)
+    >>> hc = split.select(modalities=['1H', '13C'], limit=32)
+    """
     path: Path
     role: str
     dataset: str
@@ -86,7 +168,7 @@ class SpectraSplit:
             raise ValueError('Legacy LMDB stores Python pickles; use trusted=True only for trusted files')
         if self.limit is not None and (isinstance(self.limit, bool) or not isinstance(self.limit, int) or self.limit < 1):
             raise ValueError('limit must be positive')
-        if set(self.modalities) - {'1H', '13C', 'IR', 'Raman', 'MS/MS'}:
+        if set(self.modalities) - {'1H', '13C', '11B', '19F', '29Si', '31P', 'IR', 'Raman', 'MS', 'MS/MS'}:
             raise ValueError('Unknown modality')
 
     def _raw(self):
@@ -124,6 +206,14 @@ class SpectraSplit:
                 environment.close()
 
     def __iter__(self):
+        """Stream the selected molecular spectra in file order.
+
+        Yields
+        ------
+        dict
+            Original spectral fields plus normalized ``smiles`` and
+            ``_openmolspec`` dataset, role, locator and channel metadata.
+        """
         accepted = 0
         for number, raw in self._raw():
             if not isinstance(raw, dict):
@@ -136,9 +226,15 @@ class SpectraSplit:
             if self.format == 'nmr_jsonl':
                 present.update(n for n, m in zip(('1H', '13C'), row['modality_mask']) if m)
             for key, name in [('ir', 'IR'), ('raman', 'Raman'), ('nmr_h_shifts_ppm', '1H'),
-                              ('nmr_c_shifts_ppm', '13C'), ('peaks', 'MS/MS')]:
+                              ('nmr_c_shifts_ppm', '13C')]:
                 if row.get(key) is not None and len(row[key]):
                     present.add(name)
+            if row.get('peaks'):
+                present.add('MS' if row.get('modality')=='MS' else 'MS/MS')
+            if row.get('peaks_ppm') and row.get('nucleus') in {'1H','13C','11B','19F','29Si','31P'}:
+                present.add(row['nucleus'])
+            if row.get('wavenumber_cm1') and row.get('modality') in {'IR','Raman'}:
+                present.add(row['modality'])
             if not set(self.modalities) <= present:
                 continue
             row['_openmolspec'] = {'dataset': self.dataset, 'domain': self.domain, 'split': self.role,
@@ -150,12 +246,42 @@ class SpectraSplit:
                 break
 
     def head(self, n=3):
+        """Read the first ``n`` selected records.
+
+        Parameters
+        ----------
+        n : int, default 3
+            Number of records to return; zero returns an empty list.
+
+        Returns
+        -------
+        list of dict
+            Up to ``n`` records in source-file order.
+        """
         if isinstance(n, bool) or not isinstance(n, int) or n < 0:
             raise ValueError('n must be a nonnegative integer')
         return list(islice(iter(self), n))
 
     def select(self, *, modalities=(), limit=None):
-        """Filter by available modalities; preserve measurements, provenance and role."""
+        """Create a view restricted to the requested spectral channels.
+
+        Parameters
+        ----------
+        modalities : str or sequence of str, default ()
+            Channels that must be present together in a record.
+        limit : int or None, default None
+            Maximum number of matching records to read.
+
+        Returns
+        -------
+        SpectraSplit
+            A new view with the combined channel filters and the original split.
+
+        Examples
+        --------
+        >>> paired = split.select(modalities=['1H', '13C'])
+        >>> examples = paired.head(5)
+        """
         if isinstance(modalities, str):
             modalities = (modalities,)
         combined = tuple(sorted(set(self.modalities) | set(modalities)))
@@ -163,30 +289,94 @@ class SpectraSplit:
         return replace(self, modalities=combined, limit=bounded)
 
     def fingerprint(self):
+        """Return file identity and view selection settings.
+
+        Returns
+        -------
+        dict
+            Path, SHA-256, role, dataset, domain, channel filters and row limit.
+        """
         return {'path': str(self.path), 'sha256': sha256(self.path), 'role': self.role,
                 'dataset': self.dataset, 'domain': self.domain,
                 'selection': {'modalities': list(self.modalities), 'limit': self.limit}}
 
 
 class MolecularSpectra:
+    """A dataset card together with its train, validation and test views.
+
+    Parameters
+    ----------
+    card : dict
+        Dataset metadata, including the name, version and source information.
+    splits : mapping of str to SpectraSplit
+        Named split views, indexed by ``'train'``, ``'val'`` and ``'test'``.
+
+    Examples
+    --------
+    >>> data = molspectra('opendatalab_nmr', root='data/nmr')
+    >>> test = data['test']
+    >>> record = test.head(1)[0]
+    >>> print(record['smiles'])
+    """
     def __init__(self, card, splits):
         self.card = dict(card)
         self._splits = dict(splits)
 
     def get_split(self):
-        """Return existing split views; never randomly repartition a published test set."""
+        """Return the dataset's named split views.
+
+        Returns
+        -------
+        dict of str to SpectraSplit
+            Mapping from split names to streaming readers.
+        """
         return dict(self._splits)
 
     def __getitem__(self, split):
+        """Select a named dataset split with ``data[split]``.
+
+        Parameters
+        ----------
+        split : {'train', 'val', 'validation', 'valid', 'test'}
+            Requested split role; validation aliases normalize to ``'val'``.
+
+        Returns
+        -------
+        SpectraSplit
+            Streaming reader for the selected local file.
+
+        Raises
+        ------
+        KeyError
+            If the dataset has no file for the requested role.
+        """
         return self._splits[_role(split)]
 
     def summary(self):
+        """Describe the dataset card and locally available files.
+
+        Returns
+        -------
+        dict
+            Dataset card and each split's local path and file size.
+        """
         return {'card': self.card, 'local_splits': {k: {'path': str(v.path), 'bytes': v.path.stat().st_size}
                                                   for k, v in self._splits.items()},
                 'counts_note': 'Card counts refer to the audited source version; local files are not recounted here.'}
 
     def verify(self):
-        """Hash local files against the packaged audited version; reject changed views."""
+        """Verify local split files against the dataset card's SHA-256 values.
+
+        Returns
+        -------
+        dict
+            ``verified=True`` and the checksum of each split.
+
+        Raises
+        ------
+        ValueError
+            If a reference checksum is missing or a local file differs.
+        """
         expected = self.card.get('reference_sha256', {})
         if any(k not in expected for k in self._splits):
             raise ValueError('No audited checksum for this dataset version; use explicit local provenance')
@@ -196,10 +386,36 @@ class MolecularSpectra:
             if actual != expected[key]:
                 raise ValueError(f'{key} does not match the audited {self.card["version"]} version')
             result[key] = actual
-        return {'verified': True, 'sha256': result, 'scope': 'file identity, not an accuracy or license certification'}
+        return {'verified': True, 'sha256': result, 'scope': 'SHA-256 identity of versioned local split files'}
 
     @classmethod
     def from_jsonl(cls, *, splits, name, domain, format='nmr_jsonl'):
+        """Create a dataset from your own JSONL files.
+
+        Parameters
+        ----------
+        splits : mapping of str to path-like
+            JSONL files keyed by split, for example
+            ``{'train': 'train.jsonl', 'val': 'val.jsonl'}``.
+        name : str
+            Name to attach to returned records.
+        domain : {'experimental', 'computed'}
+            Spectral data origin.
+        format : {'nmr_jsonl', 'jsonl'}, default 'nmr_jsonl'
+            Use ``'nmr_jsonl'`` for H/C peak-text records and ``'jsonl'`` for
+            general molecular/spectral dictionaries.
+
+        Returns
+        -------
+        MolecularSpectra
+            Dataset with the supplied split files.
+
+        Examples
+        --------
+        >>> custom = MolecularSpectra.from_jsonl(
+        ...     splits={'train': 'train.jsonl', 'val': 'val.jsonl'},
+        ...     name='my_measurements', domain='experimental')
+        """
         if domain not in ('experimental', 'computed'):
             raise ValueError('Declare experimental or computed domain explicitly')
         normalized = {}
@@ -215,7 +431,35 @@ class MolecularSpectra:
 
 
 def molspectra(name, *, root, trusted=False):
-    """Open a registered local dataset (directory of splits, or one test file)."""
+    """Load a registered molecular spectroscopy dataset.
+
+    Parameters
+    ----------
+    name : str
+        Name returned by :func:`list_datasets`.
+    root : str or pathlib.Path
+        Directory containing the dataset card's split files. Single-file
+        datasets also accept the file path directly.
+    trusted : bool, default False
+        Enable the reader for a trusted pickle-based LMDB.
+
+    Returns
+    -------
+    MolecularSpectra
+        Dataset with lazy split readers.
+
+    Raises
+    ------
+    FileNotFoundError
+        If no expected split file exists under ``root``.
+    ValueError
+        If ``name`` is unknown.
+
+    Examples
+    --------
+    >>> data = molspectra('opendatalab_nmr', root='data/nmr')
+    >>> records = data['test'].select(modalities=['1H', '13C']).head(3)
+    """
     card = dataset_info(name)
     root = Path(root).expanduser().resolve()
     splits = {}
@@ -231,8 +475,26 @@ def molspectra(name, *, root, trusted=False):
 def audit_splits(splits, *, identity='connectivity', check_nmr=False):
     """Scan supplied views for molecular overlap using a disk-backed identity index.
 
-    RDKit standard InChIKeys are recomputed from SMILES. Connectivity grouping also
-    keeps stereoisomers together. This does not audit unknown model training data.
+    Parameters
+    ----------
+    splits : mapping of str to iterable of dict
+        Named molecular record streams, usually ``data.get_split()``.
+    identity : {'connectivity', 'inchi'}, default 'connectivity'
+        Compare the connectivity block or the full standard InChIKey.
+        Connectivity grouping keeps stereoisomers together.
+    check_nmr : bool, default False
+        Validate each record's H/C peak representation while scanning.
+
+    Returns
+    -------
+    dict
+        Record and unique-identity counts, repeated identities, cross-split
+        overlaps and molecular-identity policy. Standard InChIKeys are
+        recomputed from SMILES.
+
+    Examples
+    --------
+    >>> report = audit_splits(data.get_split(), identity='connectivity')
     """
     from rdkit import Chem
     if identity not in ('connectivity', 'inchi'):

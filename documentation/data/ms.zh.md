@@ -1,68 +1,34 @@
-# MS data
+# 质谱数据
 
-![MS data availability](../assets/gallery/data-ms-availability.png)
-
-[SVG](../assets/gallery/data-ms-availability.svg) · [PDF](../assets/gallery/data-ms-availability.pdf)
-
-![MS chemical distributions](../assets/gallery/data-ms-distributions.png)
-
-[SVG](../assets/gallery/data-ms-distributions.svg) · [PDF](../assets/gallery/data-ms-distributions.pdf)
+质谱数据保存 m/z 位置与强度。MS/MS 预测还使用离子／加合物、碰撞能、仪器及前体质量来定义采集条件。
 
 ## OpenDataLab
 
-- **MS: 13,257,689** 条谱条目; **10,356,478** 条附有结构文本。
+数值化 m/z–强度峰表及对应分子结构。 5,233 条谱，覆盖 4,980 个分子。
 
-| Availability check / 字段可用性 | Entries or values / 条目或数值 |
-| --- | ---: |
-| `MS:unstructured_or_missing` | 13,226,620 |
-| `MS:positive_measured_mz` | 13,233,024 |
-| `MS:at_least_two_numeric_peaks` | 29,480 |
-| `MS:at_least_six_numeric_peaks` | 14,354 |
-| `MS:fragment_text_present` | 1,367 |
-| `MS:explicit_collision_energy` | 2 |
-| `MS:numeric_positions_only` | 12,263 |
-| `MS:numeric_position_intensity_pairs` | 17,742 |
-| `MS:mixed_or_text_peaks` | 1,064 |
+清洗保留至少两个有限正 m/z、强度有限非负且强度总和为正的谱；相同分子身份、谱值及实验条件的重复谱会被去除。
 
-[完整扫描结果](../assets/reports/opendatalab_all_modalities_20261117.json)保留原谱型标签与准确分类规则。
-
-### Qualified molecular identities / 结构资格检查
-
-| Modality | Qualified full InChIKeys | Source entries attached to these identities |
-| --- | ---: | ---: |
-| MS | 2,167,510 | 10,347,217 |
-
-资格检查要求可生成标准分子身份及受支持的骨架分组，不等同于谱提取正确或已满足任务训练要求。同一分子可以出现于多个模态。[完整检查与排除范围](../assets/reports/opendatalab_structure_qualification_20261117.json)。
-
-单点分子离子 m/z、碎片峰位列表、带数值强度的谱图支持不同任务。完整强度谱评测需要数值强度参考。
-
-## External experimental data / 外部实验数据
-
-- [MassSpecGym v1.5](https://huggingface.co/datasets/roman-bushuiev/MassSpecGym): updated RDKit-standardized molecular structures and benchmark files.
-- [MassBank](https://github.com/MassBank/MassBank-data): experimental spectra with per-record acquisition metadata and provenance.
-
-**MassSpecGym v1.5:** 231,104 spectra / 28,923 molecular connectivities. 231,104 valid numerical peak arrays; 121,746 records with finite scalar collision energy.
+![Cleaned MS molecular size and peak positions](../assets/gallery/data-cleaned-ms.png)
 
 ```python
 from openmolspec.dataset import molspectra
-data = molspectra("massspecgym_1_5", root="/path/to/versioned-tsv")
-print(data["test"].head(1))
+
+data = molspectra("opendatalab_ms", root="data/experimental")
+record = data["test"].head(1)[0]
+print(record["smiles"])
+print(record["peaks"][:5])  # [[m/z, intensity], ...]
 ```
 
-**MassBank local snapshot:** 142,978 records / 142,978 accessions. MS type and acquisition metadata remain attached to each record.
+## MassSpecGym
 
-| MS type | Local records |
-| --- | ---: |
-| MS2 | 120,949 |
-| MS | 21,011 |
-| MSn | 19 |
-| MS3 | 929 |
-| MS4 | 70 |
+v1.5 前向预测视图包含 119,029 条具有模拟任务所需采集字段的谱。读取器保留 `spec_id`、`smiles`、`peaks`、`adduct`、`collision_energy`、`instrument` 和 `precursor_mz`。TSV 源文件用 `molspectra("massspecgym_1_5", root=...)` 加载；整理好的 CSV 使用 `SpectraSplit(format="massspecgym_csv", ...)` 导入。
 
-全峰表检查得到 **142,978 条数值有效谱**，其中 **120,512 条同时具有有效结构和 MS2 标记**；该快照包含 20,375 个有效完整标准 InChIKey。所有记录的声明峰数均与实际峰表一致。
+## MassBank
 
-[Numerical qualification and snapshot fingerprint / 数值检查与快照指纹](../assets/reports/massbank_spectrum_qualification_20261117.json)
+数值 MS2 视图包含 120,512 条具有有效结构的谱。使用峰数组时同时保留谱编号、离子模式、仪器、碰撞条件与来源许可信息。
 
-[Data index](index.md) · [Loading API](../api.md) · [Splits](splits.md) · [Theory](../theory/index.md)
+## 参考文献
 
-[External complete-file census / 外部数据扫描](../assets/reports/external_data_census_20261117.json)
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)
+- Bushuiev, R., Bushuiev, A., de Jonge, N. F., Young, A., et al. MassSpecGym: A benchmark for the discovery and identification of molecules. Advances in Neural Information Processing Systems 37, Datasets and Benchmarks Track (2024). arXiv:2410.23326. [Source](https://arxiv.org/abs/2410.23326)
+- Horai, H., Arita, M., Kanaya, S., et al. MassBank: a public repository for sharing mass spectral data for life sciences. Journal of Mass Spectrometry 45, 703–714 (2010). doi:10.1002/jms.1777. [Source](https://doi.org/10.1002/jms.1777)

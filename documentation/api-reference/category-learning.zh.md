@@ -1,0 +1,7 @@
+# 训练与评测
+
+| Module | Description |
+| --- | --- |
+| [openmolspec.benchmark](module-benchmarks.md) | Run existing benchmark adapters through the same public Python package. |
+| [openmolspec.task](module-tasks.md) | The shared task catalog, grouped for the public SDK. |
+| [openmolspec.training](module-training.md) | Prepare train/validation data and explicitly launch the packaged NMR trainer. |

@@ -1,61 +1,38 @@
-# Spectra Harness
+# Agent Harness
 
-Spectra Harness 把 Python、命令行和 MCP 的任务注册、输入检查、模型调用及运行记录统一起来。可替换的谱型插件参考 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的组织方式。
+Spectra Harness 为 Agent 提供统一的 NMR、MS 和振动谱模型接口。一个请求包含任务名称、分子或谱学输入，以及模型运行环境；响应返回预测结果和调用记录。同一份请求可以通过 Python、命令行或 MCP 使用。
 
-| 插件 | 直接调用 |
-| --- | --- |
-| NMR Spectra Harness | H/C 正向预测、峰指认、谱到结构检索、已知分子式条件下的生成 |
-| MS Spectra Harness | 明确采集条件的 GLACIER、ICEBERG 预测 |
-| Vibrational Spectra Harness | Gap 预测，以及 Vib2Mol 检索、生成、候选重排 |
+## 使用流程
 
-完整任务目录还包含基准和算法适配器。`catalog()` 列出直接 Harness 能力，其他入口见[任务页](tasks/index.md)。
-
-## Python 调用
+1. 使用 `catalog()` 或 `spectra_tasks` 选择任务。
+2. 按任务准备输入，配置模型路径。
+3. 使用 `validate()` 或 `spectra_validate` 检查字段与数组形状。
+4. 使用 `run()` 或 `spectra_predict` 执行模型。
+5. 从 `result` 读取结果，从 `calls` 查看每次调用的耗时和状态。
 
 ```python
 from openmolspec.harness import SpectraHarness
 
 harness = SpectraHarness()
-print(harness.catalog())
-inputs = {'smiles': 'CCO'}
-settings = {'root': '/path/to/models', 'python': '/path/to/nmr-env/bin/python'}
-print(harness.validate('nmr.forward.13C', inputs, settings))
-report = harness.run('nmr.forward.13C', inputs, settings, repeats=2)
-print(report['completed'], report['repeat_predictions_equal'])
-prediction = report['result']
+for task in harness.catalog():
+    print(task['task'], task['harness'])
 ```
 
-每次调用保存耗时、成功／失败和响应／预测哈希。完整响应可能包含变化的临时文件溯源信息，因此另行报告预测一致性。准确率需要参考标签与相应评测协议。
+## 使用指南
 
-## 命令行
+- [快速开始](harness/quickstart.md): 完成一次 NMR 请求并读取输出。
+- [Python 接口](harness/python.md): 在 Python 脚本中配置并调用 Harness。
+- [命令行](harness/cli.md): 通过 JSON 请求文件运行模型。
+- [MCP 工具](harness/mcp.md): 连接 Agent，使用发现、验证和预测工具。
+- [NMR Spectra Harness](harness/nmr.md): 预测位移、指认峰并解析结构。
+- [MS Spectra Harness](harness/ms.md): 在指定采集条件下预测 MS/MS。
+- [Vibrational Spectra Harness](harness/vibrational.md): 用多谱输入预测能隙、检索或生成结构。
+- [Examples](harness/examples.md): 查看三类模型的输入与输出。
 
-请求 JSON 包含 `task`、`inputs`、`model_config` 和可选 `repeats`：
+## 参考文献
 
-```bash
-python -m openmolspec.harness catalog
-python -m openmolspec.harness validate --request request.json
-python -m openmolspec.harness run --request request.json --output new-result.json
-```
-
-## MCP 接入
-
-安装可选 `mcp` 依赖，在客户端中配置本地环境的 Python：
-
-```json
-{
-  "mcpServers": {
-    "openmolspec": {
-      "command": "/path/to/environment/bin/python",
-      "args": ["-m", "openmolspec.mcp"]
-    }
-  }
-}
-```
-
-服务使用 stdio，提供 `spectra_tasks`、`spectra_datasets`、`spectra_validate`、`spectra_predict`。MCP 用 `model_settings` 传入模型与运行环境配置。输入不满足条件时，检查入口返回原因，随后才启动模型。后端环境需要具备相应依赖和权重。
-
-仓库提供 [Spectra Harness skill](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/skills/spectra-harness)。训练通过显式 SDK 计划执行，接收独立 train/val 并创建新的输出目录，详见[模型与训练](model-audit.md)。
-
-## 实际执行记录
-
-[Repeated NMR/MS/vibrational calls](assets/reports/spectra_harness_stability_20261117.json) · [MCP protocol](assets/reports/spectra_mcp_protocol_20261117.json) · [MCP real NMR inference](assets/reports/spectra_mcp_real_call_20261117.json)
+- DeepSeek-AI. DeepSeek Harness: modular agent tools and execution infrastructure. Software repository. Accessed 18 November 2026. [Source](https://github.com/deepseek-ai/deepseek-harness)
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)
+- Wang, R.-X., Wang, R. & Coley, C. W. GLACIER: Rethinking Mass Spectrum Prediction as an Object Detection Problem. NeurIPS 2026. arXiv:2606.29161 (2026). [Source](https://arxiv.org/abs/2606.29161)
+- Wang, R., Manjrekar, M., Mahjour, B., Avila-Pacheco, J., et al. Neural Spectral Prediction for Structure Elucidation with Tandem Mass Spectrometry. bioRxiv (2025). doi:10.1101/2025.05.28.656653. [Source](https://doi.org/10.1101/2025.05.28.656653)
+- OpenMolSpec contributors. openSpec models and benchmark training workflows. Source archive, v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks)

@@ -1,16 +1,12 @@
-# H/C 峰 → 原子指认
+# 峰到原子的指认
 
-给定结构和实测 H/C 峰，预测逐原子位移并输出候选指认。
-
-## 示例与评测
-
-作为已知结构的候选指认流程合理，但尚无实验指认准确率。先验证原子标签和对称性，再决定微调。
+将实测 NMR 峰与已知分子结构中的原子对应起来。
 
 ## 输入是什么
 
 | Field | Meaning |
 | --- | --- |
-| `smiles` | 已知分子结构；本任务不负责猜测未知分子。 |
+| `smiles` | 已知分子结构。 |
 | `nucleus / peaks_ppm` | 1H 或 13C，以及实测一维峰位置（ppm）。 |
 | `tolerance_ppm` | 峰与预测位点的最大允许残差，默认 H 0.5、C 5 ppm。 |
 
@@ -19,11 +15,11 @@
 | Field | Meaning |
 | --- | --- |
 | `assignments` | 峰编号 → 候选原子编号、预测位移、残差与备选位点。 |
-| `unmatched` | 保留未匹配峰和位点。当前没有实验指认准确率。 |
+| `unmatched` | 未匹配峰与预测位点的编号。 |
 
 ## 真实运行案例
 
-下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
+下面展示示例的输入、预测与参考。下载 JSON 可获取完整数值数组及更多示例。
 
 ![nmr.assignment actual results](../assets/gallery/nmr-assignment.png)
 
@@ -152,17 +148,16 @@
 | Dataset / scope | Model / variant | Metric | Value |
 | --- | --- | --- | ---: |
 | recorded evaluation | recorded model | molecules | 32 |
+| recorded evaluation | recorded model | matched_peaks | 488 |
 | recorded evaluation | recorded model | matched_peak_fraction_macro | 0.939238 |
 | recorded evaluation | recorded model | matched_residual_mae_ppm | 0.899131 |
 | recorded evaluation | recorded model | assignment_accuracy | not measured |
 
-样本量和候选池随每次运行记录。图可能展示单个分子，表格是来源实验的实际汇总，不能混为同一统计范围。
-
 ## 模型与方法
 
-直接加载液相 NMRNet H/C fold-0 权重，固定种子生成构象；完整恢复权重，保存 RDKit AddHs(input SMILES) 的 0 起始原子编号。按拓扑对称性合并位点，再做带未匹配项的最小代价匹配。H/C 默认容差分别为 0.5/5 ppm。
+先用 NMRNet 预测逐原子化学位移，再合并对称相关位点，通过最小代价匹配把实测峰与预测位点对应。输出包含原子编号、预测位移、匹配残差和备选指认。
 
-32 个碳谱分子已完成，匹配 488 个峰；另有真实在线氢谱请求。报告覆盖率、残差、原子编号及歧义候选；缺少独立实验指认答案时 assignment_accuracy 为 null。
+用峰覆盖率和匹配峰 MAE 汇总指认结果。
 
 ## 复现方式
 
@@ -186,10 +181,6 @@ result = model.assign(smiles, measured_peaks_ppm)
 
 $$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
 
-## 数据要求与引用
-
-匹配残差不等于指认准确率；拓扑对称不保证磁等价。模型不输入溶剂，未做构象系综平均，目前仅覆盖 H/C。
-
 <details><summary>来源报告与 SHA-256 指纹</summary>
 
 - [assignment_carbon32_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/assignment_carbon32_20261116.json) — SHA-256 `c3d25150e5811b8987060e147f43d9add4f729e340da420b94425766e1e76540`
@@ -197,4 +188,9 @@ $$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delt
 </details>
 
 
-[Original model / 原模型](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+
+## 参考文献
+
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)

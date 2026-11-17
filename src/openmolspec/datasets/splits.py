@@ -77,6 +77,7 @@ def _source_groups(frame: pd.DataFrame) -> Dict[str, List[int]]:
 
 
 def leakage_report(identity: pd.DataFrame, splits: Dict[str, List[int]]) -> Dict[str, pd.DataFrame]:
+    """Summarize molecular-group overlap between dataset splits."""
     rows = []
     for field, label in (("canonical_smiles", "molecule"), ("inchikey", "inchikey"), ("scaffold", "scaffold")):
         values = {name: set(identity.loc[identity["row_index"].isin(indices), field].dropna()) for name, indices in splits.items()}
@@ -92,6 +93,7 @@ def leakage_report(identity: pd.DataFrame, splits: Dict[str, List[int]]) -> Dict
 
 
 def generate(frame: pd.DataFrame, seed: int = 2025, ratios: Optional[Dict[str, float]] = None, workers: int = 1):
+    """Assign molecular records to grouped training, validation and test splits."""
     ratios = ratios or {"train": 0.8, "validation": 0.1, "test": 0.1}
     if abs(sum(ratios.values()) - 1.0) > 1e-8:
         raise ValueError("Split ratios must sum to 1.0")
@@ -107,6 +109,7 @@ def generate(frame: pd.DataFrame, seed: int = 2025, ratios: Optional[Dict[str, f
 
 
 def run(dataset: str, output: str, seed: int = 2025, train: float = 0.8, validation: float = 0.1, test: float = 0.1, workers: int = 1):
+    """Run the datasets splits workflow with the supplied settings."""
     path = Path(dataset)
     frame = pd.read_pickle(path) if path.suffix in (".pkl", ".pickle") else pd.read_parquet(path)
     identity, splits, leakage, ratios = generate(
@@ -133,6 +136,7 @@ def run(dataset: str, output: str, seed: int = 2025, train: float = 0.8, validat
 
 
 def main():
+    """Run the splits command-line workflow."""
     parser = argparse.ArgumentParser(description="Generate deterministic OpenSpec splits")
     parser.add_argument("--dataset", required=True)
     parser.add_argument("--output", required=True)

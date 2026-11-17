@@ -1,60 +1,45 @@
-# IR / Raman data
+# IR 与 Raman 数据
 
-![IR / Raman data availability](../assets/gallery/data-vibrational-availability.png)
+实验视图保存测得的峰位置；计算视图提供密集光谱及相关量子化学性质，用于谱预测、检索与分子结构生成。
 
-[SVG](../assets/gallery/data-vibrational-availability.svg) · [PDF](../assets/gallery/data-vibrational-availability.pdf)
+## 实验光谱
 
-![IR / Raman chemical distributions](../assets/gallery/data-vibrational-distributions.png)
-
-[SVG](../assets/gallery/data-vibrational-distributions.svg) · [PDF](../assets/gallery/data-vibrational-distributions.pdf)
-
-## OpenDataLab
-
-- **IR: 1,055,125** 条谱条目; **556,448** 条附有结构文本。
-- **Raman: 963** 条谱条目; **156** 条附有结构文本。
-
-| Availability check / 字段可用性 | Entries or values / 条目或数值 |
-| --- | ---: |
-| `IR:numeric_positions_only` | 1,044,173 |
-| `IR:numeric_peak_positions` | 7,991,587 |
-| `IR:unstructured_or_missing` | 10,366 |
-| `Raman:numeric_positions_only` | 772 |
-| `Raman:numeric_peak_positions` | 6,890 |
-| `IR:mixed_or_text_peaks` | 586 |
-| `Raman:unstructured_or_missing` | 179 |
-| `Raman:mixed_or_text_peaks` | 12 |
-
-[完整扫描结果](../assets/reports/opendatalab_all_modalities_20261117.json)保留原谱型标签与准确分类规则。
-
-### Qualified molecular identities / 结构资格检查
-
-| Modality | Qualified full InChIKeys | Source entries attached to these identities |
-| --- | ---: | ---: |
-| IR | 182,139 | 555,122 |
-| RAMAN | 68 | 156 |
-
-资格检查要求可生成标准分子身份及受支持的骨架分组，不等同于谱提取正确或已满足任务训练要求。同一分子可以出现于多个模态。[完整检查与排除范围](../assets/reports/opendatalab_structure_qualification_20261117.json)。
-
-实验峰位与完整数值曲线是不同表示，不能把展宽后的峰列表当作原始实验强度曲线。
-
-## Computed data / 计算数据
-
-| Dataset | Local form | Citation |
+| 模态 | 谱数 | 分子数 |
 | --- | --- | --- |
-| OpenMolSpec computed observables | IR/Raman, H/C and molecular properties; geometry/reference metadata retained | [Project](https://github.com/X1nyuLu/openSpec-alpha) |
-| QM9S | Calculated IR/Raman and molecular properties | [Paper](https://www.nature.com/articles/s43588-023-00550-y) |
-| QMe14S | Calculated spectra across 14 elements; local processed arrays have 186,102 rows per channel | [Paper](https://arxiv.org/abs/2501.18876) |
+| IR | 177,759 | 168,197 |
+| Raman | 42 | 39 |
 
-**QM9S local view:** 129,817 mapped records, 129,734 canonical isomeric structures, 129,817 corresponding CSV files. These are local-view counts, distinct from the original publication total.
+记录包含 `wavenumber_cm1`、分子结构、原谱型标签和采集信息；有实测强度时同时保存 `intensities`。每条谱至少有两个有限正峰位置。构建密集输入时，应选择波数网格和展宽宽度，并将参数与数组一起保存。
 
-QM9S 两个完整 CSV 数值扫描均得到 **129,817 条有限、非常数曲线**，每条 3,501 点，覆盖 500–4000 cm⁻¹。批量 CSV 行号**尚未与分子映射 ID 核实**；这里确认曲线质量，不能据此宣称分子—谱配对已验证。[数值检查报告](../assets/reports/qm9s_array_qualification_20261118.json)。
+![Experimental IR and Raman peak positions](../assets/gallery/data-cleaned-vibrational.png)
 
-**QMe14S processed arrays:** 186,102 rows × 3,600 samples per channel, 500–4000 cm⁻¹. Each channel contains 1,850 constant rows; 184,252 are nonconstant.
+```python
+from openmolspec.dataset import molspectra
 
-全部原文件检查得到 **181,920 个标准 InChIKey 身份**，对应 186,102 行；IR/Raman 结构文本不一致数为 0。两通道数组均通过“文件名编号对应数组行”的数值一致性检查，使用报告声明的插值网格及 0.2% 相对最大误差容差。该检查验证数值对应关系，不代表已核查原始处理代码。
+data = molspectra("opendatalab_ir", root="data/experimental")
+spectrum = data["train"].head(1)[0]
+print(spectrum["wavenumber_cm1"])
+```
 
-[Complete structure/array alignment report / 完整结构与数组核对](../assets/reports/qme14s_alignment_20261117.json)
+## OpenMolSpec 计算测试视图
 
-[Data index](index.md) · [Loading API](../api.md) · [Splits](splits.md) · [Theory](../theory/index.md)
+openSpec 测试视图包含 20,390 条记录。每条提供 400–4,000 cm⁻¹ 网格上的 1,024 点 IR 与 Raman 强度、分子结构和性质目标。H/C 位移保留权重对应的参考标识。LMDB 中能隙单位为 Hartree，乘一次 27.211386245988 得到 eV；`GapModel.predict` 返回 eV。
 
-[External complete-file census / 外部数据扫描](../assets/reports/external_data_census_20261117.json)
+```python
+from openmolspec.dataset import molspectra
+
+data = molspectra("openspec_test", root="data/openspec_test.lmdb", trusted=True)
+record = data["test"].head(1)[0]
+print(len(record["ir"]), len(record["raman"]))  # 1024 1024
+```
+
+## QMe14S
+
+对齐视图包含 184,252 对 IR/Raman，两通道均为有限且非常数值。原资源覆盖 14 种元素，并提供研究结构与光谱关系所需的响应信息。数值数组已与分子文件名对应。
+
+## 参考文献
+
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)
+- Yuan, M., Zou, Z. & Hu, W. QMe14S, A Comprehensive and Efficient Spectral Dataset for Small Organic Molecules. arXiv:2501.18876 (2025). [Source](https://arxiv.org/abs/2501.18876)
+- Zou, Z., Zhang, Y., Liang, L., Wei, M., Leng, J., Jiang, J., Luo, Y. & Hu, W. A deep learning model for predicting selected organic molecular spectra. Nature Computational Science 3, 957–964 (2023). doi:10.1038/s43588-023-00550-y. [Source](https://www.nature.com/articles/s43588-023-00550-y)
+- OpenMolSpec contributors. OpenMolSpec: Chemical spectroscopy datasets, models and learning workflows. Software release v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0)

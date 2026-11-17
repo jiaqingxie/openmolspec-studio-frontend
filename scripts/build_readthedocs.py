@@ -80,13 +80,21 @@ def stage_sources(target, sources, locale):
         # Both locale trees use the same page names; only the output root differs.
         content = re.sub(r"(?<=\.)zh\.(?=(?:md|ipynb)(?:[)#?]))", "", content)
         if relative.as_posix() == "index.md":
-            content = add_toctree(content, ["quickstart", "data/index", "tasks/index", "model-audit", "api", "notebooks/index", "theory/index", "inversion/index", "gallery", "harness", "api-reference/index", "benchmarks", "datasets", "corpus-comparison", "faq", "contributing", "citations", "protocols", "publication"])
+            content = add_toctree(content, ["quickstart", "data/index", "tasks/index", "model-audit", "api", "notebooks/index", "theory/index", "inversion/index", "gallery", "harness", "api-reference/index", "benchmarks", "faq", "contributing", "citations"])
         elif relative.as_posix() == 'api-reference/index.md':
-            content = add_toctree(content, ['datasets', 'models', 'training', 'inversion', 'harness'])
+            from build_api_reference import GROUPS as API_GROUPS
+            content = add_toctree(content, ['category-'+key for key,_,_ in API_GROUPS])
+        elif relative.parent.as_posix()=='api-reference' and relative.stem.startswith('category-'):
+            from build_api_reference import category,inventory,slug
+            content = add_toctree(content,[slug(row['module']) for row in inventory() if category(row['module'])==relative.stem[len('category-'):]])
         elif relative.as_posix() == 'data/index.md':
-            content = add_toctree(content, ['nmr', 'ms', 'vibrational', 'multimodal', 'splits'])
+            content = add_toctree(content, ['nmr', 'ms', 'vibrational', 'multimodal', 'splits', 'comparison'])
         elif relative.as_posix() == 'theory/index.md':
             content = add_toctree(content, ['nmr', 'ms', 'vibrational'])
+        elif relative.as_posix() == 'harness.md':
+            content = add_toctree(content, ['harness/'+name for name in ['quickstart','python','cli','mcp','nmr','ms','vibrational','examples']])
+        elif relative.as_posix() == 'benchmarks.md':
+            content = add_toctree(content, ['benchmarks/'+name for name in ['nmr','ms','vibrational','multimodal','production','training']])
         elif relative.as_posix() == 'tasks/index.md':
             content = add_toctree(content, [key for key,_,_ in GROUPS])
         elif relative.parent.as_posix()=='tasks' and relative.stem in [g[0] for g in GROUPS]:

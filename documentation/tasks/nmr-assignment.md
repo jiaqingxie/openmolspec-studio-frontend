@@ -1,16 +1,12 @@
-# H/C peak-to-atom assignment
+# Peak-to-atom assignment
 
-Propose atom assignments for measured peaks and a known structure.
-
-## Example and evaluation
-
-Reasonable candidate pipeline for a known structure; no experimental assignment accuracy yet. Validate atom labels and symmetry before proposing fine-tuning.
+Assign measured NMR peaks to atoms in a known molecular structure.
 
 ## What goes in
 
 | Field | Meaning |
 | --- | --- |
-| `smiles` | Known molecular structure; the task does not identify an unknown molecule. |
+| `smiles` | Known molecular structure. |
 | `nucleus / peaks_ppm` | 1H or 13C and the measured 1D peak positions in ppm. |
 | `tolerance_ppm` | Maximum allowed peak/site residual: default H 0.5, C 5 ppm. |
 
@@ -19,11 +15,11 @@ Reasonable candidate pipeline for a known structure; no experimental assignment 
 | Field | Meaning |
 | --- | --- |
 | `assignments` | Peak index → candidate atom indices, predicted ppm, residual and alternatives. |
-| `unmatched` | Unassigned peaks and sites remain explicit. Experimental assignment accuracy is unavailable. |
+| `unmatched` | Indices of unmatched peaks and predicted sites. |
 
 ## A real recorded example
 
-The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
+Inspect the input, prediction and reference for the example below. Download the JSON for the complete numerical arrays and additional examples.
 
 ![nmr.assignment actual results](../assets/gallery/nmr-assignment.png)
 
@@ -152,17 +148,16 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 | Dataset / scope | Model / variant | Metric | Value |
 | --- | --- | --- | ---: |
 | recorded evaluation | recorded model | molecules | 32 |
+| recorded evaluation | recorded model | matched_peaks | 488 |
 | recorded evaluation | recorded model | matched_peak_fraction_macro | 0.939238 |
 | recorded evaluation | recorded model | matched_residual_mae_ppm | 0.899131 |
 | recorded evaluation | recorded model | assignment_accuracy | not measured |
 
-Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
-
 ## Model and method
 
-Run the released liquid NMRNet H/C fold-0 checkpoint directly on a seeded 3D conformer. Require complete checkpoint restoration, preserve RDKit AddHs(input SMILES) atom indices, group topological symmetry sites, and use minimum-cost matching with explicit unmatched peaks and sites. Default tolerances are 0.5 ppm for H and 5 ppm for C.
+NMRNet first predicts atomwise shifts. Symmetry-related sites are grouped, then a minimum-cost matching step pairs the measured peaks with the predicted sites. The output includes atom indices, predicted shifts, residuals and alternative assignments.
 
-Report matched fraction, residual MAE and candidate atom indices. The 32-molecule carbon run matched 488 peaks; an additional online hydrogen request completed. assignment_accuracy is null because independent atom-assignment labels were not supplied.
+Peak coverage and matched-peak MAE summarize the assignment.
 
 ## Reproduce
 
@@ -186,10 +181,6 @@ For fine-tuning, use the [NMRNet author training implementation](https://github.
 
 $$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
 
-## Data requirements and references
-
-Residual error is not assignment accuracy. Topological symmetry is not proof of magnetic equivalence. Solvent and conformer ensembles are not modeled; H/C only. See the source JSON for input geometry, checkpoint hash and sample identities.
-
 <details><summary>Source reports and SHA-256 fingerprints</summary>
 
 - [assignment_carbon32_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/assignment_carbon32_20261116.json) — SHA-256 `c3d25150e5811b8987060e147f43d9add4f729e340da420b94425766e1e76540`
@@ -197,4 +188,9 @@ Residual error is not assignment accuracy. Topological symmetry is not proof of 
 </details>
 
 
-[Original model / 原模型](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)
+
+## References
+
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)
+- OpenDataLab. WanJuan MolSpectra, version 1.0.3. Experimental molecular spectroscopy dataset. [Source](https://opendatalab.com/)

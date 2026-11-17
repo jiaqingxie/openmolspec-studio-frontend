@@ -25,6 +25,7 @@ ATOM_COLORS = {
 
 
 def align_coordinates(reference, coordinates):
+    """Align two molecular coordinate arrays for geometric comparison."""
     reference_centered = reference - reference.mean(axis=0)
     coordinates_centered = coordinates - coordinates.mean(axis=0)
     covariance = coordinates_centered.T @ reference_centered
@@ -37,6 +38,7 @@ def align_coordinates(reference, coordinates):
 
 
 def infer_bonds(atomic_numbers, coordinates, scale=1.25):
+    """Infer molecular bonds from elements and Cartesian coordinates."""
     periodic_table = Chem.GetPeriodicTable()
     bonds = []
     for left in range(len(atomic_numbers)):
@@ -54,6 +56,7 @@ def infer_bonds(atomic_numbers, coordinates, scale=1.25):
 
 
 def main():
+    """Run the visualize opt trajectory command-line workflow."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", required=True, help="Trajectory pickle")
     parser.add_argument("--sample-id", help="Molecule identifier; defaults to the longest trajectory")

@@ -68,6 +68,7 @@ def _identity_row(item):
 
 
 def build_identity_table(frame: pd.DataFrame, workers: int = 1) -> pd.DataFrame:
+    """Build the standardized molecular identity table used for deduplication."""
     tasks = frame.iterrows()
     if workers > 1 and len(frame) > 1:
         with ThreadPoolExecutor(max_workers=workers) as executor:
@@ -92,6 +93,7 @@ def build_identity_table(frame: pd.DataFrame, workers: int = 1) -> pd.DataFrame:
 
 
 def analyze(frame: pd.DataFrame, workers: int = 1) -> Dict[str, Any]:
+    """Analyze duplicate molecular identity groups."""
     identity = build_identity_table(frame, workers=workers)
     non_null = lambda field: int(identity[field].notna().sum())
     summary = {
@@ -119,6 +121,7 @@ def analyze(frame: pd.DataFrame, workers: int = 1) -> Dict[str, Any]:
 
 
 def run(dataset: str, output: str, workers: int = 1) -> Dict[str, Any]:
+    """Run the quality dedup workflow with the supplied settings."""
     path = Path(dataset)
     frame = pd.read_pickle(path) if path.suffix in (".pkl", ".pickle") else pd.read_parquet(path)
     result = analyze(frame, workers=workers)
@@ -131,6 +134,7 @@ def run(dataset: str, output: str, workers: int = 1) -> Dict[str, Any]:
 
 
 def main():
+    """Run the dedup command-line workflow."""
     parser = argparse.ArgumentParser(description="Analyze OpenSpec molecular identity and duplicates")
     parser.add_argument("--dataset", required=True)
     parser.add_argument("--output", required=True)

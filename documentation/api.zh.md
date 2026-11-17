@@ -1,141 +1,172 @@
-# Python SDK — OpenMolSpec v1.0
+# Python SDK
 
-数据加载、模型类、训练准备和统一评测入口现已实现。基础安装不依赖第三方库。当前是 v1.0 SDK：冻结推理已有实际运行证据；训练启动器已用微型 train/val 示例完成编码器和生成器各一步训练，并验证 checkpoint 保存、配置重载与推理结果一致；这是软件链路验证，不是学习性能结论。
+OpenMolSpec 提供流式数据集、谱学模型类、训练计划和评测入口。本节介绍这些接口如何配合使用。安装与首次预测步骤见[快速开始](quickstart.md)。
 
-## 安装
-
-[带版本号的发布页](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0)提供约 250 KB 的 wheel 及校验和。使用数据加载与模型接口时，可以直接安装到自己的环境：
-
-```bash
-python -m pip install "https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/download/v1.0/openmolspec-1.0.0-py3-none-any.whl"
-```
-
-需要 notebook、源码及可选依赖时，克隆仓库：
-
-```bash
-git clone --branch release/openmolspec-v1 https://github.com/jiaqingxie/openmolspec-studio-frontend.git
-cd openmolspec-studio-frontend
-python3 -m venv .venv
-.venv/bin/python -m pip install .
-# 按需安装数据读取与分析依赖：
-.venv/bin/python -m pip install '.[data,analysis]'
-# 需要使用打包的 NMR Transformer 训练器时：
-# .venv/bin/python -m pip install '.[train]'
-```
-
-此 alpha 版本尚未发布到 PyPI。NMRNet、Vib2Mol 和 MS 模型通过 `python=` 使用作者环境；客户端仅向其提供 OpenMolSpec 模块，保留作者环境的 torch/numpy 版本。原始数据生产命令使用 `pip install ".[production]"` 安装依赖。
-
-## 数据加载、来源和固定划分
+## 数据集对象
 
 ```python
 from openmolspec.dataset import molspectra, list_datasets
 
-print([card['name'] for card in list_datasets()])
-data = molspectra('opendatalab_nmr', root='/path/to/hc_nmr_inchi_v1')
-splits = data.get_split()       # 保留已有 train / val / test
-rows = splits['test'].head(3)   # 流式读取，不把全库载入内存
-hc = splits['test'].select(modalities=['1H', '13C'], limit=32)
+print([card["name"] for card in list_datasets()])
+data = molspectra("opendatalab_nmr", root="data/nmr")
+splits = data.get_split()
+rows = splits["test"].head(3)
+paired = splits["train"].select(modalities=["1H", "13C"], limit=100)
 print(data.summary())
-# data.verify()                # 对完整文件计算哈希，与审计版本比较
+print(data.verify())
 ```
 
-| 注册名称 | 文件格式 | 数据域与归属 |
+`MolecularSpectra` 按名称组织划分；`SpectraSplit` 在迭代时逐条读取，避免把全库载入内存。`select` 组合通道筛选与行数上限，`head` 返回少量记录；`verify` 核对完整本地文件与数据版本。
+
+| 注册名称 | Format | 说明 |
 | --- | --- | --- |
-| `opendatalab_nmr` | `train.jsonl`、`val.jsonl`、`test.jsonl` | 团队整理的外部实验 NMR |
-| `nmrspec_test`、`patent_test_10k`、`nmrexp_exp_10k`、`nmrgym_test` | `test.jsonl` | 整理后的实验评测视图 |
-| `openspec_test` | `openspec_test.lmdb` | OpenMolSpec 计算谱 |
-| `massspecgym_test` | `MassSpecGym_test_full.csv` | 外部实验 MS/MS |
-| `massspecgym_1_5` | 版本化 `MassSpecGym.tsv`，按原始 fold 过滤 | 外部实验 MS/MS；v1.5 |
+| `opendatalab_nmr` | `nmr_jsonl` | 清洗后的实验 H/C NMR。 |
+| `nmrspec_test` | `nmr_jsonl` | NMRSpec / NMRTrans |
+| `patent_test_10k` | `nmr_jsonl` | OpenDataLab H/C 评测子集。 |
+| `nmrexp_exp_10k` | `nmr_jsonl` | 整理后的 NMRexp 评测视图。 |
+| `nmrgym_test` | `nmr_jsonl` | NMRGym |
+| `openspec_test` | `openspec_lmdb` | 计算多谱及分子性质。 |
+| `massspecgym_test` | `massspecgym_csv` | 整理后的 MS/MS 评测 CSV。 |
+| `massspecgym_1_5` | `massspecgym_tsv` | 保留原划分的 MassSpecGym v1.5 TSV。 |
+| `opendatalab_nmr_prepared` | `nmr_jsonl` | 原始准备版 H/C 文件。 |
+| `opendatalab_ir` | `jsonl` | 清洗后的实验 IR |
+| `opendatalab_19f` | `jsonl` | 清洗后的实验 19F |
+| `opendatalab_31p` | `jsonl` | 清洗后的实验 31P |
+| `opendatalab_ms` | `jsonl` | 清洗后的实验 MS |
+| `opendatalab_11b` | `jsonl` | 清洗后的实验 11B |
+| `opendatalab_raman` | `jsonl` | 清洗后的实验 RAMAN |
+| `opendatalab_29si` | `jsonl` | 清洗后的实验 29SI |
 
-`root` 接受目录；只有一个测试文件的视图也可直接传文件。旧 LMDB 内含 Python pickle，读取可信文件时需显式 `trusted=True`。原字段保留，`_openmolspec` 补充数据集、实验/计算域、划分、源文件位置和已有模态；不补造缺失采集条件。card 数量只对应审计版本，不自动等于本地文件数量，`verify()` 会拒绝版本不符的文件。
+每条记录保留来源字段，`_openmolspec` 补充数据集、数据域、划分、文件位置与通道。数值字段、单位、采集条件及清洗后数量见[数据指南](data/index.md)。
 
-不会静默下载全量数据。公开发布地址、版本与再分发范围仍待确认；原来源及数量见[数据集说明](datasets.md)。`audit_splits(data.get_split())` 使用 RDKit 重算结构身份，通过磁盘索引检查交叉重叠，默认把同连接关系的立体异构体归组。结果仅适用于传入视图，小子集检查不能证明全库或预训练模型独立性。
+## 导入自己的测量
 
-## NMRNet：真实冻结推理
+```python
+from openmolspec.dataset import MolecularSpectra
+
+custom = MolecularSpectra.from_jsonl(
+    splits={"train": "my-train.jsonl", "val": "my-val.jsonl"},
+    name="my_measurements", domain="experimental")
+print(custom["train"].head(1))
+```
+
+H/C JSONL 使用 `format="nmr_jsonl"`；杂核位移、光学峰表或一般谱字典使用 `format="jsonl"`。读取器识别 `nucleus` 与 `peaks_ppm`、`modality` 与 `wavenumber_cm1`，以及数值质谱 `peaks`。
+
+## 模型接口
+
+| Class | 输入 → 输出 | 训练方式 |
+| --- | --- | --- |
+| `NMRNet` | SMILES → ¹H/¹³C shifts; structure + peaks → assignments | [NMRNet](tasks/nmr-forward-13C.md) |
+| `NMRTransformer(stage="align")` | NMR + 候选结构 → 排名 | `training_plan`, `fit` |
+| `NMRTransformer(stage="generate")` | NMR + 分子式 → 分子结构 | `training_plan`, `fit` |
+| `GapModel` | IR + Raman + H/C → gap (eV) | [openSpec](tasks/vibrational-gap-ir_raman_hc.md) |
+| `Vib2Mol` | 光谱 → 分子结构或候选排序 | [openSpec](tasks/vibrational-generation-hc.md) |
+| `MSPredictor` | 分子 + 采集条件 → MS/MS | [ms-pred](tasks/ms-forward-glacier.md) |
+
+通过 `python=` 指定各模型的依赖环境，使 OpenMolSpec 客户端可以调用安装了作者实现及权重的解释器。
+
+### NMRNet
 
 ```python
 from openmolspec.model import NMRNet
 
 model = NMRNet.from_pretrained(
-    '/path/to/models', nucleus='13C', python='/path/to/nmr-env/bin/python'
-)
-result = model.predict([row['smiles'] for row in rows])
-print(result['records'])       # atom_indices 与 prediction_ppm
-print(result['provenance']['checkpoint_sha256'])
-model.save_config('nmrnet-config.json')
-restored = NMRNet.from_config('nmrnet-config.json')
+    "models", nucleus="13C", python="/path/to/nmr-env/bin/python")
+prediction = model.predict("CCO")
+print(prediction["records"][0]["atom_indices"])
+print(prediction["records"][0]["prediction_ppm"])
+assignments = model.assign("CCO", [18.2, 58.3], tolerance_ppm=5.0)
 ```
 
-模型目录应含原始 `nmrnet/nmrnet-orig` 源码和 `nmrnet/weights/finetune/liquid`。此接口使用 CPU、液相 H/C fold 0 和原 scaler。原子索引以 RDKit AddHs(input SMILES) 的零基编号为准，生成构象也保存在来源信息中。训练重叠和溶剂影响仍未核实；B/Si/F/P 不作为已验证变体开放。[作者发布资产](https://zenodo.org/records/19142375)。
+模型目录包含 `nmrnet/nmrnet-orig` 与 `nmrnet/weights`。液相 fold-0 接口在 CPU 上预测 H/C 位移。原子编号采用 RDKit 加氢后的 0 起始顺序。指认结果把实测峰编号关联到预测原子位点，并提供残差与备选匹配。
 
-运行[真实 SDK 推理 notebook](notebooks/sdk-inference.ipynb)前，安装本包和 `requirements-docs-examples.txt`，并设置：
-
-```bash
-export OPENMOLSPEC_MODELS_ROOT=/path/to/models
-export OPENMOLSPEC_NMR_PYTHON=/path/to/nmr-env/bin/python
-```
-
-notebook 会实际调用 `model.predict`，输出权重哈希，与实测峰比较并绘图。峰匹配误差不等于实验原子指认准确率。
-
-## 模型接口
-
-| 类 | 输入 → 输出 | SDK 训练支持 |
-| --- | --- | --- |
-| `NMRNet` | SMILES → H/C 原子位移；`assign` 再接收实测峰 | 暂无 |
-| `NMRTransformer(stage='align')` | NMR 查询与显式候选 → 排序 | 接已有对齐训练器 |
-| `NMRTransformer(stage='generate')` | NMR 与已知分子式 → SMILES | 接已有生成训练器，需对齐权重 |
-| `GapModel` | IR/Raman/H/C → gap（eV） | 暂无 |
-| `Vib2Mol` | IR/Raman/H/C → SMILES；`retrieve(..., rerank=True)` 对显式候选做 ITM 重排 | 暂无 |
-| `MSPredictor(model='glacier' or 'iceberg')` | 结构、加合物、碰撞能和仪器 → MS/MS | 暂无 |
-
-振动输入为 `ir`、`raman`（各 1024 点）及 `nmr_h`、`nmr_c`（ppm 数组），需采用相容参考与归一化。缺通道默认拒绝，显式 `allow_missing_modalities=True` 时才运行并标为消融。NMR 检索不输入分子式，生成必须提供。各模型支持配置保存/加载；保存路径与参数，不复制权重。
-
-## 用自己的 NMR 数据训练
+### NMRTransformer
 
 ```python
-from openmolspec.dataset import MolecularSpectra
-from openmolspec.training import prepare_nmr_training
 from openmolspec.model import NMRTransformer
 
-custom = MolecularSpectra.from_jsonl(
-    splits={'train': 'train.jsonl', 'val': 'val.jsonl'},
-    name='my_experiment', domain='experimental',
-)
-prepared = prepare_nmr_training(custom['train'], custom['val'], 'prepared-nmr')
-model = NMRTransformer(stage='align', device='cpu')
-plan = model.training_plan(prepared, run_dir='runs/my-alignment', epochs=10, batch_size=32)
-print(plan.describe())
-print(plan.validate())
-# model.fit(plan)              # 用户显式调用时才启动训练
+query = data["test"].head(1)[0]
+aligner = NMRTransformer.from_pretrained(
+    "alignment.pt", stage="align", python="/path/to/nmr-env/bin/python")
+ranking = aligner.retrieve(query, ["CCO", "CCCO", "COC"], top_k=3)
+generator = NMRTransformer.from_pretrained(
+    "generation.pt", stage="generate",
+    python="/path/to/nmr-env/bin/python")
+candidates = generator.predict(query, beam_size=5)
 ```
 
-记录包含 `smiles`、`formula`、`h_nmr`、`c_nmr`，以及可选 `[has_H, has_C]` 掩码。准备阶段检查分子式、核种及训练/验证集连接结构重叠。`select` 保留数据角色，既有 test 视图不能直接用于训练。启动前重新核验文件哈希和结构重叠，运行时建立新目录、日志、plan 和最佳权重哈希。生成训练还需要 `alignment_checkpoint=`；旧权重只用于初始化，不恢复优化器/调度器状态。
+检索利用谱与分子嵌入为给定候选排序；生成使用查询中的 NMR 通道和已知 `formula`。返回候选包括 SMILES、有效性、分子式一致性与模型分数。
 
-[已执行的训练准备 notebook](notebooks/sdk-training-preflight.ipynb) 分别使用 OpenDataLab 原 train/val 的两个真实记录，只做准备与检查，**没有训练**。另一项实际训练检查已完成两个阶段：[训练链路报告](assets/reports/sdk_training_roundtrip_20261117.json) 记录两个训练样本、两个验证样本、每阶段一次优化器更新、checkpoint 哈希和保存重载后的推理一致性。记录保留原始划分，没有使用测试集。这不构成学习性能结论。选择示例时发现一条无氢 `BrOBr` 结构附有 ¹H 记录；训练准备会拒绝这种核种缺失情况，原始加载器仍保留记录供回查。
+### 振动谱与性质模型
 
-## 任务目录与统一评测
+```python
+import json
+from pathlib import Path
+from openmolspec.model import GapModel, Vib2Mol
+
+inputs = json.loads(Path(
+    "documentation/assets/harness/vibrational-request.json").read_text())["inputs"]
+gap_model = GapModel(root="openspec-models", python="/path/to/openspec-env/bin/python")
+gap = gap_model.predict(inputs)
+structure_model = Vib2Mol(root="openspec-models", python="/path/to/openspec-env/bin/python")
+structures = structure_model.predict(inputs)
+```
+
+IR 和 Raman 各包含 400–4,000 cm⁻¹ 网格上的 1,024 点归一化强度。`nmr_h` 与 `nmr_c` 保存采用权重参考标准的 ppm 位移。`GapModel` 返回 eV 能隙；`Vib2Mol` 生成分子候选，`retrieve` 则为给定候选库排序。
+
+### 质谱预测
+
+```python
+from openmolspec.model import MSPredictor
+
+ms = MSPredictor(model="glacier", source="ms-pred",
+    weights="glacier-weights", python="/path/to/ms-env/bin/python")
+prediction = ms.predict(smiles="CCO", adduct="[M+H]+",
+    collision_energy=20.0, instrument="Orbitrap")
+print(prediction)
+```
+
+提供目标谱对应的分子结构、加合物、碰撞能与仪器。ICEBERG 接口使用 `model="iceberg"`。模型文件与谱比较设置见任务指南。
+
+## 训练与权重复用
+
+```python
+from openmolspec.training import prepare_nmr_training
+
+prepared = prepare_nmr_training(custom["train"], custom["val"], "prepared-nmr")
+model = NMRTransformer(stage="align", device="cpu")
+plan = model.training_plan(
+    prepared, run_dir="runs/my-encoder", epochs=10, batch_size=32)
+print(plan.describe())
+print(plan.validate())
+trained = model.fit(plan)
+model.save_config("trained-model.json")
+restored = NMRTransformer.from_config("trained-model.json")
+```
+
+准备阶段检查分子式、核种与训练／验证身份分离。`fit` 启动指定阶段训练，并选择最佳验证 checkpoint。生成器使用 `stage="generate"` 并指定对齐权重。[训练教程](notebooks/sdk-training-preflight.ipynb)解释准备步骤，并检查保存的训练与权重结果。
+
+## 评测与数值反演
 
 ```python
 from openmolspec.task import list_tasks
 from openmolspec.benchmark import Benchmark
 
-print(list_tasks(group='nmr'))
-bench = Benchmark(workspace='/path/to/OpenMolSpec', python='/path/to/runtime/bin/python')
-report = bench.run('nmr.retrieval.hc.s2m', datasets=['nmrspec_test'],
-                   limit=32, output='results/my-benchmark.json')
+print(list_tasks(group="nmr"))
+benchmark = Benchmark(workspace="/path/to/OpenMolSpec",
+    python="/path/to/nmr-env/bin/python", alignment_checkpoint="alignment.pt", nmr_python="/path/to/nmr-env/bin/python")
+report = benchmark.run("nmr.retrieval.hc.s2m", datasets=["nmrspec_test"],
+    limit=64, output="results/my-retrieval.json")
 ```
 
-保留 31 项活跃评测入口，暂缓任务不运行。接口完成不等于模型准确或已独立验证；请结合[模型审计](model-audit.md)和[评测协议](protocols.md)解释结果。
+任务指标与实验配置见[基准评测](benchmarks.md)。反演模块提供弛豫、扩散分布的非负正则化恢复，见 [NMR 反演](inversion/index.md)。完整 [API 参考](api-reference/index.md)列出签名、参数与返回值。
 
+## 参考文献
 
-完整检查四个本地评测 JSONL，共 39,183 条记录：专利 10,000 条视图中有 5 条核种与结构不一致（5 条 H 标记，其中 2 条同时有 C 标记）；另三份视图在这些检查下未发现标记。这不代表所有原谱或 268 万身份全库均已完成质量核验。[下载审计](assets/reports/sdk_nmr_input_audit_20261117.json)。
-
-
-从仓库复现软件训练链路检查：
-
-```bash
-python scripts/verify_sdk_training.py \
-  --python /path/to/nmr-env/bin/python \
-  --work runs/sdk-training-check \
-  --output results/sdk-training-check.json
-```
+- OpenMolSpec contributors. OpenMolSpec: Chemical spectroscopy datasets, models and learning workflows. Software release v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0)
+- Xu, F., Guo, W., Wang, F., Yao, L., Wang, H., Tang, F., Gao, Z., Zhang, L., E, W., Tian, Z.-Q., et al. Toward a unified benchmark and framework for deep learning-based prediction of nuclear magnetic resonance chemical shifts. Nature Computational Science 5, 292–300 (2025). doi:10.1038/s43588-025-00783-z. [Source](https://doi.org/10.1038/s43588-025-00783-z)
+- Yang, L., Yang, Z., Xie, J., Wang, Y., Gao, B., Fu, T., Wei, X., Sun, J., Wu, J., He, C., Li, Y. & Gu, Q. NMRTrans: Structure Elucidation from Experimental NMR Spectra via Set Transformers. arXiv:2602.10158 (2026). [Source](https://arxiv.org/abs/2602.10158)
+- OpenMolSpec contributors. openSpec models and benchmark training workflows. Source archive, v1.0 (2026). [Source](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks)
+- Wang, R.-X., Wang, R. & Coley, C. W. GLACIER: Rethinking Mass Spectrum Prediction as an Object Detection Problem. NeurIPS 2026. arXiv:2606.29161 (2026). [Source](https://arxiv.org/abs/2606.29161)
+- Wang, R., Manjrekar, M., Mahjour, B., Avila-Pacheco, J., et al. Neural Spectral Prediction for Structure Elucidation with Tandem Mass Spectrometry. bioRxiv (2025). doi:10.1101/2025.05.28.656653. [Source](https://doi.org/10.1101/2025.05.28.656653)
+- NMRInversions.jl contributors. NMRInversions.jl: inversion of NMR relaxation and diffusion measurements. Software and theory documentation. Accessed 18 November 2026. [Source](https://github.com/aris-mav/NMRInversions.jl)

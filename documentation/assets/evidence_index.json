@@ -4,7 +4,7 @@
     "sources": [
       "nmr_documented_examples_20261117_v2.json"
     ],
-    "example_count": 1,
+    "example_count": 3,
     "figure": "gallery/nmr-forward-1H.png"
   },
   "nmr.forward.13C": {
@@ -12,7 +12,7 @@
     "sources": [
       "nmr_documented_examples_20261117_v2.json"
     ],
-    "example_count": 1,
+    "example_count": 3,
     "figure": "gallery/nmr-forward-13C.png"
   },
   "nmr.forward.19F": {
@@ -238,7 +238,7 @@
     "sources": [
       "ms_glacier_32_molecules_20261116.json"
     ],
-    "example_count": 1,
+    "example_count": 3,
     "figure": "gallery/ms-forward-glacier.png"
   },
   "ms.forward.iceberg": {
@@ -246,7 +246,7 @@
     "sources": [
       "ms_iceberg_32_molecules_20261116.json"
     ],
-    "example_count": 1,
+    "example_count": 3,
     "figure": "gallery/ms-forward-iceberg.png"
   },
   "ms.annotation.magma": {

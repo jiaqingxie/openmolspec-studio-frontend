@@ -268,6 +268,7 @@ def run(dataset: str, output: str, workers: int = 1) -> Dict[str, Any]:
 
 
 def main():
+    """Run the validation command-line workflow."""
     parser = argparse.ArgumentParser(description="Run non-destructive OpenSpec internal QC")
     parser.add_argument("--dataset", required=True)
     parser.add_argument("--output", required=True)

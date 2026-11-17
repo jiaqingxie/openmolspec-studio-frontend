@@ -19,6 +19,21 @@ def _finite_vector(value, name, length=None):
 
 @dataclass
 class HarnessPlugin:
+    """Backend functions for a family of spectroscopy tasks.
+
+    Parameters
+    ----------
+    name : str
+        Display name of the model family.
+    task_ids : tuple of str
+        Task identifiers served by this plugin.
+    validate : callable
+        ``validate(task, inputs, model_config)`` checks the request and raises
+        ``ValueError`` for invalid fields.
+    execute : callable
+        ``execute(task, inputs, model_config)`` runs the model and returns a
+        JSON-serializable prediction dictionary.
+    """
     name: str
     task_ids: tuple
     validate: object
@@ -26,7 +41,23 @@ class HarnessPlugin:
 
 
 class SpectraHarness:
-    """A tool registry shared by Python, CLI, MCP and the web application."""
+    """Discover, validate and run spectroscopy model tasks.
+
+    Parameters
+    ----------
+    plugins : iterable of HarnessPlugin or None, default None
+        Model plugins to register. ``None`` installs the NMR, MS and vibrational
+        plugins returned by :func:`default_plugins`.
+
+    Examples
+    --------
+    >>> harness = SpectraHarness()
+    >>> tasks = harness.catalog()
+    >>> inputs = {'smiles': 'CCO'}
+    >>> settings = {'root': 'models', 'python': '/path/to/nmr-env/bin/python'}
+    >>> harness.validate('nmr.forward.13C', inputs, settings)['valid']
+    True
+    """
     def __init__(self,plugins=None):
         self.plugins={}
         for plugin in plugins or default_plugins():
@@ -35,18 +66,68 @@ class SpectraHarness:
                 self.plugins[task_id]=plugin
 
     def catalog(self):
+        """List the registered model tasks.
+
+        Returns
+        -------
+        list of dict
+            Task ID, title, modalities, data domain and Harness family name.
+        """
         from openmolspec_bench.catalog import records
         return [{'task':r['id'],'title':r['title'],'modalities':r['modalities'],'domain':r['domain'],
                  'harness':self.plugins[r['id']].name} for r in records() if r['id'] in self.plugins]
 
     def validate(self,task,inputs,model_config):
+        """Check task fields and spectral array shapes.
+
+        Parameters
+        ----------
+        task : str
+            Registered task identifier.
+        inputs : dict
+            Molecular or spectral fields expected by the selected task.
+        model_config : dict
+            Model paths and runtime settings. NMR uses ``root`` or
+            ``checkpoint``; MS uses ``source`` and ``weights``; vibrational
+            models use ``root``. ``python`` selects the model environment.
+
+        Returns
+        -------
+        dict
+            ``valid=True``, task identifier and plugin family.
+
+        Raises
+        ------
+        ValueError
+            If a task or required request field is invalid.
+        """
         if task not in self.plugins:raise ValueError('No direct-call harness registered for '+task)
         if not isinstance(inputs,dict) or not isinstance(model_config,dict):raise ValueError('inputs and model_config must be objects')
         self.plugins[task].validate(task,inputs,model_config)
         return {'valid':True,'task':task,'harness':self.plugins[task].name}
 
     def run(self,task,inputs,model_config,*,repeats=1):
-        """Run identical requests and retain per-call elapsed time and output hashes."""
+        """Run a model request and return its prediction and call history.
+
+        Parameters
+        ----------
+        task : str
+            Model task from :meth:`catalog`.
+        inputs : dict
+            Task inputs, using the same fields as :meth:`validate`.
+        model_config : dict
+            Model and interpreter paths for the selected plugin.
+        repeats : int, default 1
+            Number of identical calls, from 1 to 5.
+
+        Returns
+        -------
+        dict
+            ``completed``, ``result``, ``calls``, prediction/output hashes and
+            repeat equality fields. For repeated requests, ``repeat_results``
+            contains the individual outputs. Each call records elapsed seconds,
+            status and, on failure, its error type and message.
+        """
         self.validate(task,inputs,model_config)
         if isinstance(repeats,bool) or not isinstance(repeats,int) or not 1<=repeats<=5:raise ValueError('repeats must be 1–5')
         request_hash=hashlib.sha256(json.dumps({'task':task,'inputs':inputs,'model_config':model_config},sort_keys=True,allow_nan=False).encode()).hexdigest()
@@ -145,6 +226,13 @@ def _vibrational_execute(task,x,config):
 
 
 def default_plugins():
+    """Create the NMR, MS and vibrational model plugins.
+
+    Returns
+    -------
+    list of HarnessPlugin
+        The three plugin families and their task bindings.
+    """
     from openmolspec_bench.catalog import TASKS
     nmr=tuple(t.id for t in TASKS if t.enabled and (t.id in ('nmr.forward.1H','nmr.forward.13C','nmr.assignment') or t.id.startswith('nmr.generation.') or t.id.startswith('nmr.retrieval.') and t.id.endswith('.s2m')))
     ms=tuple(t.id for t in TASKS if t.id.startswith('ms.forward.'))
@@ -155,6 +243,12 @@ def default_plugins():
 
 
 def main():
+    """Run the ``spectra-harness`` command-line interface.
+
+    Commands are ``catalog``, ``validate --request request.json`` and
+    ``run --request request.json --output result.json``. Request files contain
+    ``task``, ``inputs``, ``model_config`` and optional ``repeats``.
+    """
     import argparse
     from pathlib import Path
     parser=argparse.ArgumentParser();parser.add_argument('command',choices=('catalog','validate','run'))

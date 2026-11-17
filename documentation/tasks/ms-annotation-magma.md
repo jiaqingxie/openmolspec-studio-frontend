@@ -1,10 +1,6 @@
-# MS/MS peak annotation with MAGMa
+# MS/MS fragment annotation
 
-Enumerate candidate molecular fragments and match their masses to observed MS/MS peaks. This is an algorithmic task and uses no trained parameters.
-
-## Example and evaluation
-
-Algorithmic annotation, not a trainable neural model. Improve matching and validation rather than propose fine-tuning.
+Find molecular fragments that explain the measured MS/MS peaks.
 
 ## What goes in
 
@@ -18,11 +14,11 @@ Algorithmic annotation, not a trainable neural model. Improve matching and valid
 | Field | Meaning |
 | --- | --- |
 | `peak_annotations` | Candidate fragments, formulas, mass errors and atom/bond indices on engine_smiles. |
-| `interpretation` | Algorithmic candidate explanations; neither learned predictions nor unique confirmed mechanisms. |
+| `interpretation` | Candidate fragment structures and matching mass errors. |
 
 ## A real recorded example
 
-The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
+Inspect the input, prediction and reference for the example below. Download the JSON for the complete numerical arrays and additional examples.
 
 ![ms.annotation.magma actual results](../assets/gallery/ms-annotation-magma.png)
 
@@ -292,15 +288,14 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 | Dataset / scope | Model / variant | Metric | Value |
 | --- | --- | --- | ---: |
 | recorded evaluation | recorded model | matched_peak_fraction | 0.568182 |
+| recorded evaluation | recorded model | annotated_spectra | 2 |
 | recorded evaluation | recorded model | checked_fragments | 1534 |
-
-Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.
 
 ## Model and method
 
-The adapter retains MAGMa v8's original canonicalization and 10 ppm default tolerance. Every exported fragment is checked against engine_smiles, the actual graph used by the engine, rather than assuming the input SMILES has the same atom order.
+MAGMa enumerates fragments of the molecular graph and matches their masses to the measured peaks. Each annotation contains its fragment formula, mass error and atom/bond indices.
 
-Report matched-peak fraction, annotated-spectrum count and checked-fragment count. A matched fragment is an algorithmic explanation, not an experimentally confirmed unique fragmentation mechanism.
+Report matched-peak coverage and mass errors in ppm.
 
 ## Reproduce
 
@@ -325,10 +320,6 @@ result = benchmark.run('ms.annotation.magma', output='new-algorithm-results.json
 
 This task is an algorithmic workflow. Adapt its reference library or matching rules; there are no neural parameters or training loss. The task’s matching objective and provenance are described above.
 
-## Data requirements and references
-
-Hydrogen shifts, graph depth and canonicalization have specific engine semantics. Do not reinterpret graph depth as an experimentally measured reaction sequence.
-
 <details><summary>Source reports and SHA-256 fingerprints</summary>
 
 - [magma_real_test_verified_20261115.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/magma_real_test_verified_20261115.json) — SHA-256 `e65563b00863389105f5eae392d493167d693ac4ca38b9f1abfbd40942d1946b`
@@ -336,4 +327,9 @@ Hydrogen shifts, graph depth and canonicalization have specific engine semantics
 </details>
 
 
-[Original model / 原模型](https://github.com/Dsadd4/MassSpecGym-MAGMA-annotation) · [Model review / 模型检查](../model-audit.md)
+[Model implementation / 模型实现](https://github.com/Dsadd4/MassSpecGym-MAGMA-annotation) · [Model review / 模型检查](../model-audit.md)
+
+## References
+
+- Ridder, L., van der Hooft, J. J. J. & Verhoeven, S. Automatic Compound Annotation from Mass Spectrometry Data Using MAGMa. Mass Spectrometry 3, S0033 (2014). doi:10.5702/massspectrometry.S0033. [Source](https://doi.org/10.5702/massspectrometry.S0033)
+- Bushuiev, R., Bushuiev, A., de Jonge, N. F., Young, A., et al. MassSpecGym: A benchmark for the discovery and identification of molecules. Advances in Neural Information Processing Systems 37, Datasets and Benchmarks Track (2024). arXiv:2410.23326. [Source](https://arxiv.org/abs/2410.23326)
