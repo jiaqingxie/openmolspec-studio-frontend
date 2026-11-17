@@ -4,16 +4,16 @@ Use the dataset interface to load experimental measurements and calculated spect
 
 ## OpenMolSpec experimental collection
 
-| Dataset | Category | Description | Cleaned usable data |
-| --- | --- | --- | --- |
-| [H/C NMR](nmr.md) | Experimental NMR | Proton/carbon shifts, structures, formulas, spectral text and acquisition metadata. | 2,678,511 molecules |
-| [11B](nmr.md) | Experimental | Boron chemical shifts and boron-containing structures. | 1,140 spectra; 1,017 molecules |
-| [19F](nmr.md) | Experimental | Fluorine chemical shifts and fluorinated structures. | 56,679 spectra; 50,402 molecules |
-| [29Si](nmr.md) | Experimental | Silicon chemical shifts and silicon-containing structures. | 726 spectra; 636 molecules |
-| [31P](nmr.md) | Experimental | Phosphorus chemical shifts and phosphorus-containing structures. | 21,662 spectra; 18,238 molecules |
-| [MS](ms.md) | Experimental | Numerical m/z–intensity peak lists and molecular structures. | 5,233 spectra; 4,980 molecules |
-| [IR](vibrational.md) | Experimental | Experimental infrared peak positions and molecular structures. | 177,759 spectra; 168,197 molecules |
-| [Raman](vibrational.md) | Experimental | Experimental Raman peak positions and molecular structures. | 42 spectra; 39 molecules |
+| Dataset | Category | Description | Spectra | Molecules |
+| --- | --- | --- | --- | --- |
+| [H/C NMR](nmr.md) | Experimental NMR | Proton/carbon shifts, structures, formulas, spectral text and acquisition metadata. | 2,972,843 | 2,678,511 |
+| [11B](nmr.md) | Experimental | Boron chemical shifts and boron-containing structures. | 1,140 | 1,017 |
+| [19F](nmr.md) | Experimental | Fluorine chemical shifts and fluorinated structures. | 56,679 | 50,402 |
+| [29Si](nmr.md) | Experimental | Silicon chemical shifts and silicon-containing structures. | 726 | 636 |
+| [31P](nmr.md) | Experimental | Phosphorus chemical shifts and phosphorus-containing structures. | 21,662 | 18,238 |
+| [MS](ms.md) | Experimental | Numerical m/z–intensity peak lists and molecular structures. | 5,233 | 4,980 |
+| [IR](vibrational.md) | Experimental | Experimental infrared peak positions and molecular structures. | 177,759 | 168,197 |
+| [Raman](vibrational.md) | Experimental | Experimental Raman peak positions and molecular structures. | 42 | 39 |
 
 The collection is curated from OpenDataLab / WanJuan MolSpectra v1.0.3. H/C records are grouped by standard molecular identity. The other views retain unique numerical spectra and their source conditions.
 
@@ -25,20 +25,22 @@ Molecular size and weight for all 2,678,511 cleaned H/C records. The last bin in
 
 ## External experimental resources
 
-| Dataset / view | Category | Description | Usable records |
-| --- | --- | --- | --- |
-| NMRexp v2 | NMR | Per-nucleus experimental NMR Parquet views; see the nucleus table. | [NMR](nmr.md) |
-| NMRSpec / NMRTrans | NMR | H/C spectra and target structures for retrieval and structure generation. | 10,000 |
-| NMRGym | NMR | Experimental NMR molecular structure elucidation test view. | 10,000 |
-| MassSpecGym v1.5 | MS/MS | Numerical tandem spectra with molecular and acquisition fields for forward prediction. | 119,029 |
-| MassBank | MS/MS | Numerical MS2 spectra with valid molecular structures. | 120,512 |
+| Dataset | Category | Description | Spectra | Molecules |
+| --- | --- | --- | --- | --- |
+| [NMRexp v2 · H/C](nmr.md) | NMR | Experimental proton/carbon spectra paired with valid molecular structures. | 3,091,126 | 1,492,268 |
+| NMRSpec / NMRTrans | NMR | H/C spectra and target structures for retrieval and structure generation. | 20,000 | 10,000 |
+| NMRGym | NMR | Experimental NMR molecular structure elucidation test view. | 20,000 | 10,000 |
+| MassSpecGym v1.5 | MS/MS | Numerical tandem spectra with molecular and acquisition fields for forward prediction. | 119,029 | 16,974 |
+| MassBank | MS/MS | Numerical MS2 spectra with valid molecular structures. | 120,512 | 11,699 |
 
 ## Computed spectra
 
-| Dataset / view | Category | Description | Usable records |
-| --- | --- | --- | --- |
-| OpenMolSpec / openSpec test | IR / Raman / NMR | Paired spectra, structures and quantum-chemical properties for multimodal learning. | 20,390 |
-| QMe14S | IR / Raman | Finite, nonconstant paired IR and Raman arrays across 14 elements. | 184,252 |
+| Dataset | Category | Description | Spectra | Molecules |
+| --- | --- | --- | --- | --- |
+| OpenMolSpec / openSpec test | IR / Raman / NMR | IR/Raman spectra for 20,390 calculation records, with H/C shifts and molecular properties. | 40,780 | 16,728 |
+| QMe14S | IR / Raman | 184,252 finite, nonconstant IR/Raman pairs across 14 elements. | 368,504 | 180,073 |
+
+Each IR/Raman channel counts as one spectrum. Molecules are deduplicated within the same selected records. [Download the counts](../assets/dataset-counts.json).
 
 ## Load a dataset
 

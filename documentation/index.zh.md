@@ -27,13 +27,13 @@ print(prediction["records"])
 
 ### [从 NMR 解析结构](notebooks/nmr-generation-hc.ipynb)
 
-输入氢谱、碳谱和分子式，生成候选结构。
+输入氢谱、碳谱和分子式，首选候选结构与参考分子一致。
 
 [![Structure elucidation from NMR](assets/gallery/nmr-generation-hc.png)](notebooks/nmr-generation-hc.ipynb)
 
 ### [预测串联质谱](notebooks/ms-forward-glacier.ipynb)
 
-输入分子结构、加合物和碰撞能，预测碎片峰及其强度。
+GLACIER 预测与 14 个实测峰对比：余弦相似度 0.869，熵相似度 0.796。
 
 [![Predicting tandem mass spectra](assets/gallery/ms-forward-glacier.png)](notebooks/ms-forward-glacier.ipynb)
 

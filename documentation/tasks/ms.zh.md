@@ -4,6 +4,6 @@
 
 | Task / input → output | Task ID |
 | --- | --- |
-| [分子 → MS/MS（GLACIER）](ms-forward-glacier.md) | `ms.forward.glacier` |
-| [分子 → MS/MS（ICEBERG）](ms-forward-iceberg.md) | `ms.forward.iceberg` |
-| [MS/MS 峰 → MAGMa 候选碎片标注](ms-annotation-magma.md) | `ms.annotation.magma` |
+| [使用 GLACIER 预测 MS/MS](ms-forward-glacier.md) | `ms.forward.glacier` |
+| [使用 ICEBERG 预测 MS/MS](ms-forward-iceberg.md) | `ms.forward.iceberg` |
+| [MS/MS 碎片指认](ms-annotation-magma.md) | `ms.annotation.magma` |

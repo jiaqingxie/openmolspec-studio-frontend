@@ -31,8 +31,8 @@ def homepage(en):
     text+='## Examples\n\n'
     text+=('Explore spectrum prediction, structure elucidation and property prediction in the following examples.\n\n' if en else '下面的例子展示如何预测谱图、解析分子结构，以及预测分子性质。\n\n')
     for title,zh,slug,desc,desc_zh in [
-        ('Structure elucidation from NMR','从 NMR 解析结构','nmr-generation-hc','Generate molecular structures from proton and carbon NMR peaks.','输入氢谱、碳谱和分子式，生成候选结构。'),
-        ('Predicting tandem mass spectra','预测串联质谱','ms-forward-glacier','Predict fragment peaks and intensities from a molecule and its acquisition conditions.','输入分子结构、加合物和碰撞能，预测碎片峰及其强度。'),
+        ('Structure elucidation from NMR','从 NMR 解析结构','nmr-generation-hc','The top-ranked structure matches the reference molecule in this H/C NMR example.','输入氢谱、碳谱和分子式，首选候选结构与参考分子一致。'),
+        ('Predicting tandem mass spectra','预测串联质谱','ms-forward-glacier','Compare GLACIER predictions with 14 measured peaks: cosine similarity 0.869 and entropy similarity 0.796.','GLACIER 预测与 14 个实测峰对比：余弦相似度 0.869，熵相似度 0.796。'),
         ('IR and Raman from a molecular geometry','由分子构象预测红外与拉曼谱','vibrational-forward','Use the openSpec model to predict vibrational spectra from atomic coordinates.','使用 openSpec 模型，从原子坐标预测振动光谱。'),
         ('HOMO–LUMO gap prediction','预测 HOMO–LUMO 能隙','vibrational-gap-ir_raman_hc','Combine IR, Raman and NMR spectra to predict the molecular energy gap.','结合 IR、Raman 和 NMR，预测分子的 HOMO–LUMO 能隙。')]:
         text+=f'### [{title if en else zh}](notebooks/{slug}.ipynb)\n\n{desc if en else desc_zh}\n\n'

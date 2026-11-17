@@ -45,6 +45,19 @@ class ReadTheDocsPublicationTests(unittest.TestCase):
         self.assertEqual(endpoint, "/api/v3/projects/openmolspec/")
         self.assertEqual([c.args[0] for c in client.request.call_args_list], ["PATCH", "GET"])
 
+    def test_canonical_name_is_selected_over_legacy_project_for_same_repository(self):
+        client = Mock()
+        project = {"name": "OpenMolSpec", "slug": "openmolspec",
+                   "repository": {"url": publish.REPOSITORY},
+                   "default_branch": publish.BRANCH, "default_version": "latest",
+                   "readthedocs_yaml_path": ".readthedocs.yaml"}
+        client.projects.return_value = [dict(project, name="OpenMolSpec 1.0", slug="openmolspec-10"), project]
+        client.request.return_value = project
+        with contextlib.redirect_stdout(io.StringIO()):
+            endpoint, _ = publish.configure(client, "OpenMolSpec")
+        self.assertEqual(endpoint, "/api/v3/projects/openmolspec/")
+        client.request.assert_called_once_with("GET", endpoint)
+
     def test_new_project_uses_returned_slug_and_release_configuration(self):
         client = Mock()
         client.projects.return_value = []

@@ -73,14 +73,14 @@ def main():
     if not cleaned['completed']:
         raise ValueError('The project site requires the completed cleaned NMR collection')
     text=text.replace('__INTRO_COUNTS__',f'The cleaned H/C NMR collection contains {cleaned["molecular_identities"]:,} molecular identities. Explore {len(tasks)} tasks and {proof["executed_notebooks"]} tutorials covering prediction, structure elucidation, training and spectroscopy.')
-    qme=json.loads((ROOT/'results/qme14s_alignment_20261117.json').read_text())
-    massbank=json.loads((ROOT/'results/massbank_spectrum_qualification_20261117.json').read_text())
-    rows=[('OpenDataLab · cleaned H/C NMR','Experimental · OpenMolSpec collection','Proton and carbon chemical shifts, molecular structures, formulas and experimental conditions; predefined train/validation/test files.',f'{cleaned["molecular_identities"]:,} molecules; {cleaned["counts"]["h_spectra"]:,} H spectra; {cleaned["counts"]["c_spectra"]:,} C spectra',DOCS+'data/nmr.html'),
-          ('NMRexp v2 · H/C view','Experimental · external','Literature-derived proton and carbon NMR spectra, accessed through the filtered per-nucleus Parquet views.','1,651,821 H spectra; 1,439,344 C spectra','https://zenodo.org/records/17296666'),
-          ('OpenMolSpec · computed test view','Computed · OpenMolSpec benchmark','Paired IR/Raman arrays, H/C shifts, structures and electronic properties for molecular retrieval, generation and gap prediction.','20,390 records; 16,728 canonical molecular structures',DOCS+'data/vibrational.html'),
-          ('MassSpecGym v1.5 · prediction view','Experimental · external','Tandem mass spectra paired with molecular structures and the acquisition conditions used for forward spectrum prediction.','119,029 prediction-ready spectra','https://huggingface.co/datasets/roman-bushuiev/MassSpecGym'),
-          ('MassBank · MS2 view','Experimental · external','Numerical tandem mass spectra with parseable molecular structures and repository acquisition metadata.',f'{massbank["counts"]["valid_numeric_ms2_with_valid_structure"]:,} spectra','https://github.com/MassBank/MassBank-data'),
-          ('QMe14S · paired IR/Raman view','Computed · external','Small molecules with 14-element coverage and finite, nonconstant paired infrared and Raman arrays.',f'{qme["paired_array_quality"]["both_finite_nonconstant_rows"]:,} IR/Raman pairs','https://arxiv.org/abs/2501.18876')]
+    counts=json.loads((assets/'dataset-counts.json').read_text())['datasets']
+    def totals(name):return counts[name]['spectra'],counts[name]['molecules']
+    rows=[('OpenDataLab · cleaned H/C NMR','Experimental · OpenMolSpec collection','Proton and carbon chemical shifts, molecular structures, formulas and experimental conditions; predefined train/validation/test files.',cleaned['counts']['h_spectra']+cleaned['counts']['c_spectra'],cleaned['molecular_identities'],DOCS+'data/nmr.html'),
+          ('NMRexp v2 · H/C view','Experimental · external','Literature-derived proton and carbon spectra paired with valid molecular structures.',*totals('nmrexp_hc'),'https://zenodo.org/records/17296666'),
+          ('OpenMolSpec · computed test view','Computed · OpenMolSpec benchmark','IR/Raman spectra for 20,390 calculation records, with H/C shifts, structures and electronic properties.',*totals('openspec_test'),DOCS+'data/vibrational.html'),
+          ('MassSpecGym v1.5 · prediction view','Experimental · external','Tandem mass spectra paired with molecular structures and acquisition conditions for forward prediction.',*totals('massspecgym_1_5'),'https://huggingface.co/datasets/roman-bushuiev/MassSpecGym'),
+          ('MassBank · MS2 view','Experimental · external','Numerical tandem mass spectra with parseable molecular structures and repository acquisition metadata.',*totals('massbank_ms2'),'https://github.com/MassBank/MassBank-data'),
+          ('QMe14S · paired IR/Raman view','Computed · external','184,252 finite, nonconstant infrared/Raman pairs across 14 elements; each channel counts as one spectrum.',*totals('qme14s_paired'),'https://arxiv.org/abs/2501.18876')]
     if 'experimental' in summary:
         report=summary['experimental']
         if report.get('completed'):
@@ -93,13 +93,13 @@ def main():
                 '31P':'Phosphorus chemical shifts in ppm with phosphorus-containing molecular structures.'}
             for modality,counts in report.get('views',{}).items():
                 count=counts['spectra']
-                if count: rows.insert(1,(f'OpenDataLab · {modality}','Experimental · OpenMolSpec collection',descriptions[modality],f'{count:,} spectra; {counts["molecules"]:,} molecules',DOCS+'data/index.html'))
-    text=text.replace('__DATA_ROWS__',''.join(f'<tr><td><a href="{url}">{escape(name)}</a></td><td>{escape(domain)}</td><td>{escape(description)}</td><td>{escape(count)}</td></tr>' for name,domain,description,count,url in rows))
+                if count: rows.insert(1,(f'OpenDataLab · {modality}','Experimental · OpenMolSpec collection',descriptions[modality],count,counts['molecules'],DOCS+'data/index.html'))
+    text=text.replace('__DATA_ROWS__',''.join(f'<tr><td><a href="{url}">{escape(name)}</a></td><td>{escape(domain)}</td><td>{escape(description)}</td><td>{spectra:,}</td><td>{molecules:,}</td></tr>' for name,domain,description,spectra,molecules,url in rows))
     text=text.replace('__REFERENCES__',''.join(f'<li>{escape(reference)} <a href="{url}">Source ↗</a></li>' for reference,url in REFERENCES.values()))
     example_rows=[]
     for slug,title,description in [
-        ('nmr-generation-hc','Structure elucidation from NMR','Input H/C NMR peaks and a molecular formula; compare the generated candidate structures.'),
-        ('ms-forward-glacier','Predicting tandem mass spectra','Input a molecular structure and acquisition conditions; compare predicted and observed fragment peaks.'),
+        ('nmr-generation-hc','Structure elucidation from NMR','The top-ranked structure matches the reference molecule in this H/C NMR example.'),
+        ('ms-forward-glacier','Predicting tandem mass spectra','GLACIER predictions compared with 14 measured peaks: cosine similarity 0.869; entropy similarity 0.796.'),
         ('vibrational-forward','IR and Raman from a molecular geometry','Use the openSpec model to predict IR and Raman spectra from atomic coordinates.'),
         ('vibrational-gap-ir_raman_hc','Predicting the HOMO–LUMO gap','Combine IR, Raman and NMR spectra to predict the energy gap in eV.')]:
         guide=DOCS+'tasks/'+slug+'.html'

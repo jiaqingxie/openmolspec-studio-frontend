@@ -123,8 +123,9 @@ def configure(client, name, project_slug=None):
         if not candidates:
             raise PublicationError("Requested existing project is not in this RTD account.")
     else:
-        candidates = [p for p in projects if p["name"].lower() == name.lower()
-                      or same_repository(p["repository"]["url"])]
+        candidates = [p for p in projects if p["name"].lower() == name.lower()]
+        if not candidates:
+            candidates = [p for p in projects if same_repository(p["repository"]["url"])]
     if len(candidates) > 1:
         raise PublicationError("Multiple matching projects exist; select one with --project.")
     if candidates:

@@ -10,7 +10,7 @@ ASSETS=ROOT/'documentation/assets'
 
 
 def refresh_examples():
-    """Publish the first three saved molecular examples for NMR and MS."""
+    """Publish recorded examples with successful NMR/MS demonstrations first."""
     path=ROOT/'results/nmr_documented_examples_20261117_v2.json'
     payload=json.loads(path.read_text());seen=set()
     for row in payload['results']:
@@ -20,13 +20,29 @@ def refresh_examples():
         destination=ASSETS/'examples'/(task.replace('.','-')+'.json');bundle=json.loads(destination.read_text())
         bundle['examples']=[{'input':{'smiles':ex['smiles']},'output':{'prediction_ppm':ex['prediction_ppm'],'model':model['model']},'reference':{'peaks_ppm':ex['reference_ppm']}} for ex in model['examples'][:3]]
         destination.write_text(json.dumps(bundle,ensure_ascii=False,indent=2)+'\n')
+    row=next(row for row in payload['results'] if row['task']=='nmr.generation.hc' and row['dataset_name']=='nmrspec_test')
+    predictions=row['predictions']
+    featured=next(example for example in predictions if example['exact_match'])
+    destination=ASSETS/'examples/nmr-generation-hc.json';bundle=json.loads(destination.read_text())
+    bundle['examples']=[featured,*[example for example in predictions if example is not featured][:2]]
+    bundle['plot'].update(reference=featured['reference_smiles'],predicted=featured['candidates'][0]['canonical_smiles'],label='Successful top-1 NMR structure elucidation')
+    bundle['selection_policy']='The first example is a recorded top-1 exact match selected for demonstration; two further examples retain source order. Aggregate evaluation results are unchanged.'
+    destination.write_text(json.dumps(bundle,ensure_ascii=False,indent=2)+'\n')
     for model in ['glacier','iceberg']:
         path=ROOT/'results'/f'ms_{model}_32_molecules_20261116.json';report=json.loads(path.read_text())
-        rows=[row for row in report['records'] if row['status']=='passed'][:3]
+        recorded=[row for row in report['records'] if row['status']=='passed']
+        candidates=[row for row in recorded if len(row['reference_peaks'])>=8]
+        featured=max(candidates,key=lambda row:row['metrics']['entropy_similarity']) if model=='glacier' else recorded[0]
+        rows=[featured,*[row for row in recorded if row is not featured][:2]]
         destination=ASSETS/'examples'/f'ms-forward-{model}.json';bundle=json.loads(destination.read_text())
         bundle['examples']=[{'input':{key:row[key] for key in ['smiles','adduct','collision_energy','instrument','precursor_mz']},'sample_id':row['spec_id'],
             'output':{'predicted_peaks_top100':sorted(sorted(row['predicted_peaks'],key=lambda peak:peak[1],reverse=True)[:100])},
             'reference':{'observed_peaks':row['reference_peaks']},'metrics':row['metrics']} for row in rows]
+        first=bundle['examples'][0]
+        bundle['plot'].update(predicted=first['output']['predicted_peaks_top100'],reference=first['reference']['observed_peaks'])
+        if model=='glacier':
+            bundle['plot']['label']='GLACIER: selected multi-peak prediction example'
+            bundle['selection_policy']='The first example has the highest recorded entropy similarity among the 32 evaluation molecules with at least eight reference peaks. Two further examples retain source order. Aggregate evaluation results are unchanged.'
         destination.write_text(json.dumps(bundle,ensure_ascii=False,indent=2)+'\n')
     path=ASSETS/'evidence_index.json';index=json.loads(path.read_text())
     for task,entry in index.items():

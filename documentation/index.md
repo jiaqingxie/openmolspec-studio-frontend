@@ -27,13 +27,13 @@ Explore spectrum prediction, structure elucidation and property prediction in th
 
 ### [Structure elucidation from NMR](notebooks/nmr-generation-hc.ipynb)
 
-Generate molecular structures from proton and carbon NMR peaks.
+The top-ranked structure matches the reference molecule in this H/C NMR example.
 
 [![Structure elucidation from NMR](assets/gallery/nmr-generation-hc.png)](notebooks/nmr-generation-hc.ipynb)
 
 ### [Predicting tandem mass spectra](notebooks/ms-forward-glacier.ipynb)
 
-Predict fragment peaks and intensities from a molecule and its acquisition conditions.
+Compare GLACIER predictions with 14 measured peaks: cosine similarity 0.869 and entropy similarity 0.796.
 
 [![Predicting tandem mass spectra](assets/gallery/ms-forward-glacier.png)](notebooks/ms-forward-glacier.ipynb)
 

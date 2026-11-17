@@ -6,7 +6,7 @@
 
 OpenDataLab / WanJuan 清洗所得数据是团队整理的外部实验谱，与 OpenMolSpec 计算谱及接入的外部基准分别报告。当前工作台支持实验 H/C NMR 候选检索与 SMILES 生成，并保留计算 IR/Raman、谱图到性质和 Vib2Mol 工作流。
 
-中英文完整手册已上线：[English](https://openmolspec-10.readthedocs.io/en/latest/) · [简体中文](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)。采用 Sphinx 和经典 `sphinx_rtd_theme`，提供左侧层级目录、全文搜索、上下篇导航和语言切换。共 228 个内容页面（含 82 个经 Jupyter 内核执行的教程预览及下载），另有 46 张真实结果与数据分布图，另有搜索与索引页。源文件位于 [documentation/](documentation/index.md)；旧 [handbook/](handbook/index.md) 保留历史记录。
+中英文完整手册已上线：[English](https://openmolspec.readthedocs.io/en/latest/) · [简体中文](https://openmolspec.readthedocs.io/en/latest/zh/index.html)。采用 Sphinx 和经典 `sphinx_rtd_theme`，提供左侧层级目录、全文搜索、上下篇导航和语言切换。共 228 个内容页面（含 82 个经 Jupyter 内核执行的教程预览及下载），另有 46 张真实结果与数据分布图，另有搜索与索引页。源文件位于 [documentation/](documentation/index.md)；旧 [handbook/](handbook/index.md) 保留历史记录。
 
 ## 安装与启动
 

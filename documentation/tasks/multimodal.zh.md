@@ -4,7 +4,7 @@
 
 | Task / input → output | Task ID |
 | --- | --- |
-| [IR + Raman + H/C NMR → HOMO–LUMO gap](vibrational-gap-ir_raman_hc.md) | `vibrational.gap.ir_raman_hc` |
-| [IR + Raman + H/C → 结构检索](vibrational-retrieval-hc.md) | `vibrational.retrieval.hc` |
-| [IR + Raman + H/C → SMILES（Xinyu 协议）](vibrational-generation-hc.md) | `vibrational.generation.hc` |
-| [IR + Raman + H/C + 候选 → ITM 重排](spectroscopy-reranking-hc.md) | `spectroscopy.reranking.hc` |
+| [由 IR + Raman + NMR 预测 HOMO–LUMO 能隙](vibrational-gap-ir_raman_hc.md) | `vibrational.gap.ir_raman_hc` |
+| [结构检索：IR + Raman + NMR](vibrational-retrieval-hc.md) | `vibrational.retrieval.hc` |
+| [结构生成：IR + Raman + NMR](vibrational-generation-hc.md) | `vibrational.generation.hc` |
+| [候选重排：IR + Raman + NMR](spectroscopy-reranking-hc.md) | `spectroscopy.reranking.hc` |

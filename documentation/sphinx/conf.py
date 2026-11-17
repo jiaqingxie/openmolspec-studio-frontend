@@ -39,7 +39,7 @@ html_theme_options = {
     "language_selector": False,
 }
 locale = os.environ.get("OPENMOLSPEC_DOCS_LOCALE", "en")
-html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "https://openmolspec-10.readthedocs.io/en/latest/")
+html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "https://openmolspec.readthedocs.io/en/latest/")
 if locale == "zh":
     html_baseurl = html_baseurl.rstrip("/") + "/zh/"
 html_context = {"locale": locale}

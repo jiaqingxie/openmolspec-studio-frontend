@@ -33,6 +33,10 @@ def table(headers,rows):
 def pages(en):
     suffix='' if en else '.zh';out={};t=lambda a,b:a if en else b
     summary=json.loads((ROOT/'documentation/assets/cleaned-data-summary.json').read_text())
+    count_report=json.loads((ROOT/'documentation/assets/dataset-counts.json').read_text())
+    counts=count_report['datasets']
+    def totals(name):
+        return f'{counts[name]["spectra"]:,}',f'{counts[name]["molecules"]:,}'
     nmr=summary['nmr'];experimental=summary['experimental'];views=experimental['views']
     descriptions={
         'IR':t('Experimental infrared peak positions and molecular structures.','实验红外峰位置及对应分子结构。'),
@@ -45,26 +49,28 @@ def pages(en):
     text='# '+t('Data','数据')+'\n\n'
     text+=t('Use the dataset interface to load experimental measurements and calculated spectra. This guide describes the cleaned data, their fields, experimental conditions and train/validation/test files.\n\n','通过统一的数据接口加载实验测量与计算光谱。本节介绍清洗后可用的数据、字段、实验条件，以及训练、验证和测试文件。\n\n')
     text+='## '+t('OpenMolSpec experimental collection','OpenMolSpec 实验数据集')+'\n\n'
-    rows=[('[H/C NMR](nmr.md)',t('Experimental NMR','实验 NMR'),t('Proton/carbon shifts, structures, formulas, spectral text and acquisition metadata.','氢碳化学位移、结构、分子式、谱文本与采集信息。'),f'{nmr["molecular_identities"]:,} '+t('molecules','个分子'))]
+    rows=[('[H/C NMR](nmr.md)',t('Experimental NMR','实验 NMR'),t('Proton/carbon shifts, structures, formulas, spectral text and acquisition metadata.','氢碳化学位移、结构、分子式、谱文本与采集信息。'),f'{nmr["counts"]["h_spectra"]+nmr["counts"]["c_spectra"]:,}',f'{nmr["molecular_identities"]:,}')]
     for modality in ['11B','19F','29Si','31P','MS','IR','Raman']:
         v=views[modality];guide='nmr' if modality in ['11B','19F','29Si','31P'] else 'ms' if modality=='MS' else 'vibrational'
-        rows.append((f'[{modality}]({guide}.md)',t('Experimental','实验'),descriptions[modality],f'{v["spectra"]:,} '+t('spectra','条谱')+f'; {v["molecules"]:,} '+t('molecules','个分子')))
-    text+=table([t('Dataset','数据集'),t('Category','分类'),t('Description','内容描述'),t('Cleaned usable data','清洗后可用数量')],rows)
+        rows.append((f'[{modality}]({guide}.md)',t('Experimental','实验'),descriptions[modality],f'{v["spectra"]:,}',f'{v["molecules"]:,}'))
+    headers=[t('Dataset','数据集'),t('Category','分类'),t('Description','内容描述'),t('Spectra','谱数量'),t('Molecules','分子数量')]
+    text+=table(headers,rows)
     text+=t('The collection is curated from OpenDataLab / WanJuan MolSpectra v1.0.3. H/C records are grouped by standard molecular identity. The other views retain unique numerical spectra and their source conditions.\n\n','本数据集由 OpenDataLab / WanJuan MolSpectra v1.0.3 清洗整理。H/C 按标准分子身份组织，其他视图保留去重后的数值谱及实验条件。\n\n')
     text+='![Cleaned experimental spectroscopy coverage](../assets/gallery/data-cleaned-experimental.png)\n\n'
     text+='![Cleaned molecular distributions](../assets/gallery/data-cleaned-nmr.png)\n\n'
     text+=t('Molecular size and weight for all 2,678,511 cleaned H/C records. The last bin includes larger molecules. [SVG](../assets/gallery/data-cleaned-nmr.svg) · [PDF](../assets/gallery/data-cleaned-nmr.pdf)\n\n','全部 2,678,511 条清洗后 H/C 记录的分子大小与分子量分布；最右侧一格包含更大的分子。[SVG](../assets/gallery/data-cleaned-nmr.svg) · [PDF](../assets/gallery/data-cleaned-nmr.pdf)\n\n')
     text+='## '+t('External experimental resources','外部实验资源')+'\n\n'
-    text+=table([t('Dataset / view','数据集／视图'),t('Category','分类'),t('Description','内容描述'),t('Usable records','可用条目')],[
-        ('NMRexp v2','NMR',t('Per-nucleus experimental NMR Parquet views; see the nucleus table.','按核种整理的实验 NMR Parquet 视图，数量见核种表。'),'[NMR](nmr.md)'),
-        ('NMRSpec / NMRTrans','NMR',t('H/C spectra and target structures for retrieval and structure generation.','用于谱结构检索、结构生成的 H/C 谱与目标结构。'),'10,000'),
-        ('NMRGym','NMR',t('Experimental NMR molecular structure elucidation test view.','实验 NMR 分子结构解析测试视图。'),'10,000'),
-        ('MassSpecGym v1.5','MS/MS',t('Numerical tandem spectra with molecular and acquisition fields for forward prediction.','具有结构和采集字段、可用于前向预测的数值串联质谱。'),'119,029'),
-        ('MassBank','MS/MS',t('Numerical MS2 spectra with valid molecular structures.','含有效分子结构的数值 MS2 谱。'),'120,512')])
+    text+=table(headers,[
+        ('[NMRexp v2 · H/C](nmr.md)','NMR',t('Experimental proton/carbon spectra paired with valid molecular structures.','具有有效分子结构的实验氢谱与碳谱。'),*totals('nmrexp_hc')),
+        ('NMRSpec / NMRTrans','NMR',t('H/C spectra and target structures for retrieval and structure generation.','用于谱结构检索、结构生成的 H/C 谱与目标结构。'),*totals('nmrspec_test')),
+        ('NMRGym','NMR',t('Experimental NMR molecular structure elucidation test view.','实验 NMR 分子结构解析测试视图。'),*totals('nmrgym_test')),
+        ('MassSpecGym v1.5','MS/MS',t('Numerical tandem spectra with molecular and acquisition fields for forward prediction.','具有结构和采集字段、可用于前向预测的数值串联质谱。'),*totals('massspecgym_1_5')),
+        ('MassBank','MS/MS',t('Numerical MS2 spectra with valid molecular structures.','含有效分子结构的数值 MS2 谱。'),*totals('massbank_ms2'))])
     text+='## '+t('Computed spectra','计算光谱')+'\n\n'
-    text+=table([t('Dataset / view','数据集／视图'),t('Category','分类'),t('Description','内容描述'),t('Usable records','可用条目')],[
-        ('OpenMolSpec / openSpec test','IR / Raman / NMR',t('Paired spectra, structures and quantum-chemical properties for multimodal learning.','配对光谱、分子结构和量子化学性质，用于多模态学习。'),'20,390'),
-        ('QMe14S','IR / Raman',t('Finite, nonconstant paired IR and Raman arrays across 14 elements.','覆盖 14 种元素、两通道均为有限且非常数值的 IR/Raman 配对数组。'),'184,252')])
+    text+=table(headers,[
+        ('OpenMolSpec / openSpec test','IR / Raman / NMR',t('IR/Raman spectra for 20,390 calculation records, with H/C shifts and molecular properties.','20,390 条计算记录对应的 IR/Raman 谱，附 H/C 位移及分子性质。'),*totals('openspec_test')),
+        ('QMe14S','IR / Raman',t('184,252 finite, nonconstant IR/Raman pairs across 14 elements.','覆盖 14 种元素的 184,252 对有限、非常数 IR/Raman 谱。'),*totals('qme14s_paired'))])
+    text+=t('Each IR/Raman channel counts as one spectrum. Molecules are deduplicated within the same selected records. [Download the counts](../assets/dataset-counts.json).\n\n','IR 与 Raman 每个通道分别计为一条谱，分子数量按同一视图的结构身份去重统计。[下载分列计数](../assets/dataset-counts.json)。\n\n')
     text+='## '+t('Load a dataset','加载数据')+'\n\n'
     text+='```python\nfrom openmolspec.dataset import molspectra\n\ndata = molspectra("opendatalab_nmr", root="data/nmr")\nrecord = data["test"].head(1)[0]\nprint(record["smiles"])\nprint(record["h_peaks_ppm"])\npaired = data["train"].select(modalities=["1H", "13C"])\n```\n\n'
     text+=t('Place the cleaned `train.jsonl`, `val.jsonl` and `test.jsonl` files in `data/nmr`. The [NMR guide](nmr.md) explains every field and the [split guide](splits.md) explains how to construct your own dataset. [Download counts and distributions](../assets/cleaned-data-summary.json).\n','将清洗后的 `train.jsonl`、`val.jsonl`、`test.jsonl` 放在 `data/nmr` 目录。[NMR 数据指南](nmr.md)解释字段，[划分指南](splits.md)说明如何构建自己的数据集。[下载计数与分布](../assets/cleaned-data-summary.json)。\n')
@@ -91,7 +97,7 @@ def pages(en):
     text+='```python\nfrom openmolspec.dataset import molspectra\n\nboron = molspectra("opendatalab_11b", root="data/experimental")\nrecord = boron["test"].select(modalities="11B").head(1)[0]\nprint(record["smiles"], record["peaks_ppm"])\n```\n\n'
     text+='## NMRexp\n\n'
     text+=t('NMRexp provides experimental shifts extracted from the chemical literature in per-nucleus Parquet files. The filtered local views contain the following spectral records.\n\n','NMRexp 提供从化学文献提取的实验化学位移，按核种保存在 Parquet 文件中。筛选后的本地视图包含以下谱记录。\n\n')
-    text+=table([t('Nucleus','核种'),t('Spectral records','谱记录')],[(m,f'{n:,}') for m,n in [('1H',1651821),('13C',1439344),('19F',195077),('31P',32890),('11B',16871),('29Si',2385)]])
+    text+=table([t('Nucleus','核种'),t('Spectra','谱数量'),t('Molecules','分子数量')],[(m,f'{count_report["nmrexp_nuclei"][m]["spectra"]:,}',f'{count_report["nmrexp_nuclei"][m]["molecules"]:,}') for m in ['1H','13C','19F','31P','11B','29Si']])
     text+=t('NMRSpec and NMRGym provide complementary test sets for spectral retrieval and structure elucidation. Load their prepared H/C JSONL views with `molspectra("nmrspec_test", root=...)` and `molspectra("nmrgym_test", root=...)`.\n','NMRSpec 和 NMRGym 提供谱结构检索及结构解析测试集。整理后的 H/C JSONL 视图分别用 `molspectra("nmrspec_test", root=...)` 与 `molspectra("nmrgym_test", root=...)` 加载。\n')
     out[f'data/nmr{suffix}.md']=text+references(['opendatalab','nmrexp','nmrtrans','nmrgym'],en)
 

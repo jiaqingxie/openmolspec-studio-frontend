@@ -58,7 +58,12 @@ def source_relative(path):
 
 
 def add_toctree(content, entries):
-    return content + "\n\n```{toctree}\n:hidden:\n:maxdepth: 2\n\n" + "\n".join(entries) + "\n```\n"
+    """Attach child pages to the page title rather than its final subsection."""
+    title = re.search(r"^# [^\n]+(?:\n|$)", content, re.MULTILINE)
+    if title is None:
+        raise ValueError("A navigation parent must have a top-level page title")
+    tree = "\n```{toctree}\n:hidden:\n:maxdepth: 2\n\n" + "\n".join(entries) + "\n```\n\n"
+    return content[:title.end()] + tree + content[title.end():].lstrip("\n")
 
 
 def stage_sources(target, sources, locale):

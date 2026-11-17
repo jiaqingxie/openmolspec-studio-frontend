@@ -4,10 +4,10 @@
 
 | Task / input → output | Task ID |
 | --- | --- |
-| [IR → HOMO–LUMO gap](vibrational-gap-ir.md) | `vibrational.gap.ir` |
-| [RAMAN → HOMO–LUMO gap](vibrational-gap-raman.md) | `vibrational.gap.raman` |
-| [IR_RAMAN → HOMO–LUMO gap](vibrational-gap-ir_raman.md) | `vibrational.gap.ir_raman` |
-| [构象 → IR / Raman](vibrational-forward.md) | `vibrational.forward` |
-| [IR / Raman → 结构检索](vibrational-retrieval.md) | `vibrational.retrieval` |
-| [IR / Raman → SMILES](vibrational-generation.md) | `vibrational.generation` |
-| [谱图 + 候选结构 → 重排](spectroscopy-reranking.md) | `spectroscopy.reranking` |
+| [由 IR 预测 HOMO–LUMO 能隙](vibrational-gap-ir.md) | `vibrational.gap.ir` |
+| [由 Raman 预测 HOMO–LUMO 能隙](vibrational-gap-raman.md) | `vibrational.gap.raman` |
+| [由 IR + Raman 预测 HOMO–LUMO 能隙](vibrational-gap-ir_raman.md) | `vibrational.gap.ir_raman` |
+| [从分子构象预测 IR 与 Raman](vibrational-forward.md) | `vibrational.forward` |
+| [结构检索：IR + Raman](vibrational-retrieval.md) | `vibrational.retrieval` |
+| [结构生成：IR + Raman](vibrational-generation.md) | `vibrational.generation` |
+| [候选重排：IR + Raman](spectroscopy-reranking.md) | `spectroscopy.reranking` |
