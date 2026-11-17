@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenMolSpec · Molecular data, spectra and tools</title>
+  <meta name="description" content="Explore molecular spectroscopy data, run spectroscopy tools, and follow an agent from a scientific request to model results. NMR, mass spectrometry, IR and Raman.">
+  <link rel="canonical" href="https://jiaqingxie.github.io/openmolspec.github.io/">
+  <link rel="icon" href="assets/brand/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="portal.css">
+  <script src="site.js" defer></script>
+  <script src="portal.js" defer></script>
+</head>
+<body class="oms-portal">
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="portal-header">
+    <div class="portal-wrap header-row">
+      <a class="brand" href="#introduction" aria-label="OpenMolSpec home">
+        <img src="assets/brand/mark.svg" alt="" width="34" height="34">
+        <span>OpenMolSpec <small>v1.0</small></span>
+      </a>
+      <button class="menu-toggle" type="button" aria-controls="nav" aria-expanded="false" aria-label="Open navigation">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="nav" aria-label="Main navigation">
+        <a href="#introduction">Introduction</a>
+        <a href="#tool">Tool</a>
+        <a href="#dataset">Dataset</a>
+        <a href="https://openmolspec.readthedocs.io/" target="_blank" rel="noopener">Documentation <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section id="introduction" class="portal-hero" aria-labelledby="portal-title">
+      <div class="portal-wrap hero-layout">
+        <div class="hero-copy">
+          <p class="eyebrow hero-eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> Molecular spectroscopy, connected</p>
+          <h1 id="portal-title"><img src="assets/brand/mark.svg" alt="" width="62" height="62">OpenMolSpec</h1>
+          <p class="hero-headline">Explore the data.<br><span>Work with the spectra.</span></p>
+          <p class="hero-description">Molecular spectroscopy datasets and tools for NMR, mass spectrometry, infrared and Raman. Browse real records, call a model, and take the result into your own workflow.</p>
+          <div class="hero-actions">
+            <a class="portal-button portal-button-mint" href="#tool">Open the tool <span aria-hidden="true">↗</span></a>
+            <a class="hero-text-link" href="#dataset">Explore datasets <span aria-hidden="true">→</span></a>
+          </div>
+          <div class="hero-channels" aria-label="Supported spectroscopy families">
+            <span>NMR</span><span>MS</span><span>IR</span><span>Raman</span>
+          </div>
+        </div>
+
+        <figure class="hero-molecule">
+          <div class="molecule-heading">
+            <div><span class="micro-label">A molecular example</span><h2>Structure meets spectra.</h2></div>
+            <span class="viewer-badge"><span aria-hidden="true"></span>3D</span>
+          </div>
+          <label class="molecule-select-label" for="conformer-select">Explore a molecule</label>
+          <select id="conformer-select" aria-label="Select a molecular example"></select>
+          <div id="conformer-viewer" role="img" aria-label="Interactive molecular conformer. Drag to rotate and scroll to zoom."></div>
+          <figcaption>
+            <p class="viewer-hint"><span aria-hidden="true">↔</span> Drag to rotate <span class="hint-divider" aria-hidden="true">·</span> Scroll to zoom</p>
+            <p id="conformer-result" aria-live="polite">Loading the molecular example…</p>
+            <a href="https://openmolspec.readthedocs.io/en/latest/tasks/vibrational-gap-ir_raman_hc.html" target="_blank" rel="noopener">View the gap prediction example <span aria-hidden="true">↗</span></a>
+          </figcaption>
+        </figure>
+      </div>
+      <div class="portal-wrap hero-bottom">
+        <p>__PLATFORM_STATS__</p>
+        <a href="#tool">Explore the platform <span aria-hidden="true">↓</span></a>
+      </div>
+    </section>
+
+    <section id="tool" class="portal-section tool-section" aria-labelledby="tool-title">
+      <div class="portal-wrap">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">01 <span aria-hidden="true">/</span> Tool</p>
+            <h2 id="tool-title">Your spectroscopy workspace.</h2>
+          </div>
+          <p>Start with an example or provide your own input. Choose a workflow, inspect its output, and keep the numerical result.</p>
+        </div>
+        <div class="tool-shell">
+          <div class="tool-shell-heading">
+            <span class="workspace-label"><span class="workspace-mark" aria-hidden="true">⌁</span> OpenMolSpec tools</span>
+            <span id="service-status" class="service-status" role="status"><span class="status-dot" aria-hidden="true"></span>Checking service…</span>
+          </div>
+          <div class="tool-tabs" role="tablist" aria-label="Choose a spectroscopy workflow">
+            <button id="tool-tab-structure" type="button" role="tab" aria-selected="true" aria-controls="tool-workspace" data-tool-tab="structure">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 3 8 0 4 7-4 7H8l-4-7Zm8 14v4M4 10H1m19 0h3"/></svg>
+              Structure → spectra
+            </button>
+            <button id="tool-tab-gap" type="button" role="tab" aria-selected="false" aria-controls="tool-workspace" data-tool-tab="gap">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18M3 6h18M12 9v6m-3-3 3 3 3-3"/></svg>
+              Spectra → gap
+            </button>
+            <button id="tool-tab-generate" type="button" role="tab" aria-selected="false" aria-controls="tool-workspace" data-tool-tab="generate">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 18h3l2-12 3 12 3-7 2 7h2m2-13v5m-2-2 2 2 2-2"/></svg>
+              Structure generation
+            </button>
+            <button id="tool-tab-agent" type="button" role="tab" aria-selected="false" aria-controls="tool-workspace" data-tool-tab="agent">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14v12H5zm7-5v5M9 12v3m6-3v3m-6 3h6M2 12h3m14 0h3"/></svg>
+              Agent Harness
+            </button>
+          </div>
+          <div id="tool-workspace" class="tool-workspace" role="tabpanel" aria-label="Scientific tool workspace">
+            <div class="workspace-grid workspace-placeholder">
+              <div class="workspace-input">
+                <p class="micro-label">Molecular input</p>
+                <h3>Begin with a structure.</h3>
+                <p>Enter a molecular SMILES and choose the spectroscopy task.</p>
+                <div class="example-smiles"><span>Example SMILES</span><code>CCO</code></div>
+              </div>
+              <div class="workspace-result">
+                <div class="result-placeholder-mark" aria-hidden="true">⌁</div>
+                <h3>A place for your result.</h3>
+                <p>Model output, spectra and numerical values will appear here when the workflow is ready.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="section-footnote">Learn the input fields and model settings in the <a href="https://openmolspec.readthedocs.io/en/latest/tasks/index.html" target="_blank" rel="noopener">task guides <span aria-hidden="true">↗</span></a>.</p>
+      </div>
+    </section>
+
+    <section class="portal-section agent-demo-section" aria-labelledby="agent-demo-title">
+      <div class="portal-wrap">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Inside the Agent Harness</p>
+            <h2 id="agent-demo-title">Follow the tools, step by step.</h2>
+          </div>
+          <p>A captured API → MCP run shows the request, tool calls and returned result. Inspect the intermediate steps alongside the live Agent Harness workflow above.</p>
+        </div>
+        <div id="agent-demo-player" class="agent-demo-player" aria-label="Replay a real API and MCP demonstration"><p class="preview-loading">Loading the recorded tool sequence…</p></div>
+        <details class="agent-captures">
+          <summary><span>View the captured interface</span><span class="summary-note">The request, intermediate tool calls and final result</span><span class="disclosure-arrow" aria-hidden="true">+</span></summary>
+          <div class="agent-demo-captures" aria-label="Screenshots from the real API and MCP demonstration">
+          <figure class="demo-frame">
+            <div class="demo-frame-heading"><span>01</span><h3>The request</h3></div>
+            <a href="assets/agent-demo/01-plan.png" target="_blank" rel="noopener"><img src="assets/agent-demo/01-plan.png" alt="The user request and initial task plan in the recorded Agent Harness run" loading="lazy" width="1280" height="800"></a>
+            <figcaption>The molecular question and the actions selected for it.</figcaption>
+          </figure>
+          <figure class="demo-frame">
+            <div class="demo-frame-heading"><span>02</span><h3>The tool calls</h3></div>
+            <a href="assets/agent-demo/02-tools.png" target="_blank" rel="noopener"><img src="assets/agent-demo/02-tools.png" alt="MCP tool calls, input parameters and execution status in the recorded run" loading="lazy" width="1280" height="800"></a>
+            <figcaption>The selected tools, their inputs and execution status.</figcaption>
+          </figure>
+          <figure class="demo-frame">
+            <div class="demo-frame-heading"><span>03</span><h3>The result</h3></div>
+            <a href="assets/agent-demo/03-result.png" target="_blank" rel="noopener"><img src="assets/agent-demo/03-result.png" alt="The returned spectroscopy result and final response from the recorded run" loading="lazy" width="1280" height="800"></a>
+            <figcaption>The returned spectroscopy data and the final response.</figcaption>
+          </figure>
+          </div>
+        </details>
+        <p class="section-footnote">Connect the same tools to your own agent with the <a href="https://openmolspec.readthedocs.io/en/latest/harness.html" target="_blank" rel="noopener">Agent Harness guide <span aria-hidden="true">↗</span></a>.</p>
+      </div>
+    </section>
+
+    <section id="dataset" class="portal-section dataset-section" aria-labelledby="dataset-title">
+      <div class="portal-wrap">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">02 <span aria-hidden="true">/</span> Dataset</p>
+            <h2 id="dataset-title">Get to know a spectrum.</h2>
+          </div>
+          <p>Preview molecular structures, peak lists and acquisition fields. Explore a record before choosing a dataset for your analysis.</p>
+        </div>
+        <div class="dataset-controls">
+          <label class="dataset-filter-label" for="dataset-filter"><span>Dataset</span>
+            <select id="dataset-filter"><option value="all">All spectra</option><option value="nmr">NMR</option><option value="ms">Mass spectrometry</option><option value="ir">Infrared</option><option value="raman">Raman</option></select>
+          </label>
+          <label class="dataset-search-label" for="dataset-search"><span>Find a record</span>
+            <div class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input id="dataset-search" type="search" placeholder="SMILES, formula or nucleus…" autocomplete="off"></div>
+          </label>
+          <p id="preview-count" class="preview-count" role="status">Loading preview…</p>
+        </div>
+        <div class="dataset-browser">
+          <div class="dataset-list-panel">
+            <div class="dataset-list-heading"><span>Records</span><span aria-hidden="true">↓</span></div>
+            <div id="dataset-records" class="dataset-records" aria-label="Dataset preview records"><p class="preview-loading">Loading molecular records…</p></div>
+          </div>
+          <aside id="dataset-detail" class="dataset-detail" aria-label="Selected molecular record">
+            <div class="empty-preview"><img src="assets/brand/mark.svg" alt="" width="72" height="72"><h3>A molecule and its spectrum.</h3><p>Select a record to view its structure, spectrum and experimental metadata.</p></div>
+          </aside>
+        </div>
+        <details class="dataset-summary">
+          <summary><span>Dataset sizes and sources</span><span class="summary-note">Spectra and molecules, counted separately</span><span class="disclosure-arrow" aria-hidden="true">+</span></summary>
+          <div class="table-scroll"><table class="data-table"><thead><tr><th>Dataset / view</th><th>Category</th><th>Description</th><th>Spectra</th><th>Molecules</th></tr></thead><tbody>__DATA_ROWS__</tbody></table></div>
+          <p class="table-note">Counts describe each selected dataset view. See the data guide for source information, fields and train/test splits.</p>
+        </details>
+        <p class="section-footnote"><a href="https://openmolspec.readthedocs.io/en/latest/data/index.html" target="_blank" rel="noopener">Explore dataset fields and access <span aria-hidden="true">↗</span></a></p>
+      </div>
+    </section>
+
+    <section id="documentation" class="portal-section documentation-section" aria-labelledby="documentation-title">
+      <div class="portal-wrap">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">03 <span aria-hidden="true">/</span> Documentation</p>
+            <h2 id="documentation-title">Take the next step.</h2>
+          </div>
+          <p>Follow an executed tutorial, explore a dataset schema, or bring OpenMolSpec into your Python and agent workflows.</p>
+        </div>
+        <div class="documentation-links">
+          <a href="https://openmolspec.readthedocs.io/en/latest/quickstart.html" target="_blank" rel="noopener"><span class="documentation-number">01</span><h3>Quick start <span aria-hidden="true">↗</span></h3><p>Installation, your first spectrum and model calls.</p></a>
+          <a href="https://openmolspec.readthedocs.io/en/latest/data/index.html" target="_blank" rel="noopener"><span class="documentation-number">02</span><h3>Data guide <span aria-hidden="true">↗</span></h3><p>Fields, sources, distributions and dataset splits.</p></a>
+          <a href="https://openmolspec.readthedocs.io/en/latest/api-reference/index.html" target="_blank" rel="noopener"><span class="documentation-number">03</span><h3>Python API <span aria-hidden="true">↗</span></h3><p>Dataset readers, model interfaces and training.</p></a>
+          <a href="https://openmolspec.readthedocs.io/en/latest/harness.html" target="_blank" rel="noopener"><span class="documentation-number">04</span><h3>Agent Harness <span aria-hidden="true">↗</span></h3><p>Python, CLI and MCP tools for scientific agents.</p></a>
+        </div>
+        <a class="portal-button portal-button-dark" href="https://openmolspec.readthedocs.io/" target="_blank" rel="noopener">Read the full documentation <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
+    <section class="portal-wrap results-section" aria-label="Scientific examples and figure gallery">
+      <details class="results-disclosure">
+        <summary><span>Scientific examples and figures</span><span class="summary-note">__FIGURE_COUNT__ figures from recorded model runs and data summaries</span><span class="disclosure-arrow" aria-hidden="true">+</span></summary>
+        <div class="results-content">
+          <h2>Selected examples</h2>
+          <div class="example-grid">__EXAMPLES__</div>
+          <h2 class="gallery-title">Gallery</h2>
+          <div class="filters" data-filter-target="gallery" role="group" aria-label="Filter scientific figures"><button type="button" data-filter="all" aria-pressed="true">All</button><button type="button" data-filter="nmr" aria-pressed="false">NMR</button><button type="button" data-filter="ms" aria-pressed="false">MS</button><button type="button" data-filter="vibrational" aria-pressed="false">IR / Raman</button><button type="button" data-filter="multimodal" aria-pressed="false">Multimodal</button><button type="button" data-filter="data" aria-pressed="false">Data</button></div>
+          <div class="gallery-grid">__GALLERY__</div>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <footer class="portal-footer">
+    <div class="portal-wrap footer-layout">
+      <a class="brand footer-brand" href="#introduction"><img src="assets/brand/mark.svg" alt="" width="34" height="34"><span>OpenMolSpec <small>v1.0</small></span></a>
+      <p>Data and tools for molecular spectroscopy.</p>
+      <div class="footer-links"><a href="https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a><a href="https://openmolspec.readthedocs.io/" target="_blank" rel="noopener">Documentation <span aria-hidden="true">↗</span></a><a href="https://openmolspec.readthedocs.io/en/latest/zh/index.html" target="_blank" rel="noopener" lang="zh">中文手册 <span aria-hidden="true">↗</span></a></div>
+    </div>
+  </footer>
+
+  <dialog id="figure-dialog" aria-label="Scientific figure"><button class="close-dialog" type="button" aria-label="Close scientific figure">Close <span aria-hidden="true">×</span></button><img alt=""><a class="figure-guide" target="_blank" rel="noopener">Open tutorial <span aria-hidden="true">↗</span></a></dialog>
+</body>
+</html>

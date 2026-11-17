@@ -56,6 +56,17 @@ def main():
         raise ValueError('Build and verify the bilingual manual before packaging the project site')
     shutil.copytree(manual,output/'docs',dirs_exist_ok=True)
     assets=ROOT/'documentation/assets';gallery=assets/'gallery'
+    public_assets=ROOT/'website/assets'
+    preview=json.loads((public_assets/'dataset-preview.json').read_text())
+    recording=json.loads((public_assets/'agent-demo/run.json').read_text())
+    verification=json.loads((public_assets/'online-verification.json').read_text())
+    if recording.get('status')!='completed' or not any(e['type']=='tool_end' and e['data']['name']=='spectra_predict' for e in recording['events']):
+        raise ValueError('The agent demonstration must contain a completed real prediction')
+    if not verification.get('completed'):raise ValueError('Verify every exposed online model workflow')
+    for sample in preview['samples']:
+        if not (ROOT/'website'/sample['structure_svg']).is_file():raise ValueError('Missing molecular structure asset')
+    for name in ['01-plan.png','02-tools.png','03-result.png']:
+        if not (public_assets/'agent-demo'/name).is_file():raise ValueError('Missing recorded demonstration screenshot')
     extra={f'{slug}-example-{number}' for slug in ['nmr-generation-hc','ms-forward-glacier','ms-forward-iceberg'] for number in [2,3]}
     allowed={task.id.replace('.','-') for task in TASKS if task.enabled}|{slug for slug,_ in DATA_FIGURES}|extra
     shutil.copytree(assets/'brand',output/'assets/brand',dirs_exist_ok=True)
@@ -64,12 +75,15 @@ def main():
         if path.is_file() and path.stem not in allowed:path.unlink()
     for path in gallery.iterdir():
         if path.stem in allowed and path.suffix in ['.png','.svg','.pdf']:shutil.copyfile(path,output/'assets/gallery'/path.name)
-    for name in ['site.css','site.js']:shutil.copyfile(ROOT/'website'/name,output/name)
-    text=(ROOT/'website/index.html').read_text()
+    for name in ['site.css','site.js','portal.css','portal.js']:
+        shutil.copyfile(ROOT/'website'/name,output/name)
+    shutil.copytree(ROOT/'website/assets',output/'assets',dirs_exist_ok=True)
+    text=(ROOT/'website/portal.html').read_text()
     tasks=[task for task in TASKS if task.enabled]
     proof=json.loads((ROOT/'results/doc_notebook_execution.json').read_text())
     summary=json.loads((assets/'cleaned-data-summary.json').read_text())
     cleaned=summary['nmr']
+    text=text.replace('__PLATFORM_STATS__', f'{cleaned["counts"]["h_spectra"]+cleaned["counts"]["c_spectra"]:,} H/C spectra <span aria-hidden="true">/</span> {len(tasks)} tasks <span aria-hidden="true">/</span> {proof["executed_notebooks"]} executed tutorials')
     if not cleaned['completed']:
         raise ValueError('The project site requires the completed cleaned NMR collection')
     text=text.replace('__INTRO_COUNTS__',f'The cleaned H/C NMR collection contains {cleaned["molecular_identities"]:,} molecular identities. Explore {len(tasks)} tasks and {proof["executed_notebooks"]} tutorials covering prediction, structure elucidation, training and spectroscopy.')
@@ -130,11 +144,15 @@ def main():
     if '__' in text:raise ValueError('Unfilled site template marker')
     (output/'index.html').write_text(text)
     (output/'.nojekyll').write_text('')
-    (output/'README.md').write_text('# OpenMolSpec v1.0 project site\n\nhttps://jiaqingxie.github.io/openmolspec.github.io/\n\nStatic HTML/CSS/JS built from the versioned OpenMolSpec documentation evidence.\nSource generator: https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/website\n\nModel calls and training run through the Python package and documented author environments.\n')
+    (output/'README.md').write_text('# OpenMolSpec v1.0 project site\n\nhttps://jiaqingxie.github.io/openmolspec.github.io/\n\nIntroduction, online tools, experimental dataset previews and a Documentation entry. GitHub Pages serves the static frontend; model requests execute on the separate Python API.\nSource: https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/website\nDeployment: https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/online_api\n\nThe full bilingual manual is also bundled at docs/. The public API currently uses a temporary demonstration tunnel; permanent hosting requires a stable HTTPS origin and supervised model processes. No provider key is included in this repository.\n')
     report={'completed':True,'active_tasks':len(tasks),'scientific_figures':len(cards),'executed_tutorials':proof['executed_notebooks'],
         'cleaned_nmr_molecular_identities':cleaned['molecular_identities'],'interactive_3d_examples':3,
         'manual_html_pages':manifest['html_pages'],'manual_languages':manifest['languages'],
-        'external_runtime_dependencies':False,'target':'https://jiaqingxie.github.io/openmolspec.github.io/'}
+        'dataset_preview_records':len(preview['samples']),'dataset_preview_views':len(preview['datasets']),
+        'verified_online_workflows':len(verification['tasks']),'agent_demo':'recorded real API and MCP execution',
+        'navigation':['Introduction','Tool','Dataset','Documentation'],
+        'cdn_dependencies':False,'online_inference_requires_api':True,
+        'target':'https://jiaqingxie.github.io/openmolspec.github.io/'}
     (output/'build-report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
 
 

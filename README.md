@@ -1,12 +1,12 @@
 # OpenMolSpec
 
-项目网页：[OpenMolSpec v1.0](https://jiaqingxie.github.io/openmolspec.github.io/)。静态展示数据、任务、教程、理论与真实结果图；详细操作见下方中英文文档。
+项目网页：[OpenMolSpec v1.0](https://jiaqingxie.github.io/openmolspec.github.io/)。提供 Introduction、在线 Tool、实验 Dataset 预览和 Documentation 跳转。Agent Harness 接入模型 API，通过真实 MCP 工具完成能力发现、输入校验和模型调用，提供可展开的调用记录、实际运行回放与过程截图。网站构建见 [website/README.md](website/README.md)，推理服务部署见 [online_api/README.md](online_api/README.md)。
 
 面向化学谱学的数据集与深度学习平台。v1.0 通过 Python 包 `openmolspec` 提供数据加载、模型调用、训练准备、自主训练与评测。NMRTransformer 已完成编码器和生成器的微型真实训练、保存、重载与重复推理检查；模型效果按各任务的实际评测范围报告。用法见 [Python SDK](documentation/api.zh.md)，功能入口见 [文档目录](documentation/index.zh.md)。
 
 OpenDataLab / WanJuan 清洗所得数据是团队整理的外部实验谱，与 OpenMolSpec 计算谱及接入的外部基准分别报告。当前工作台支持实验 H/C NMR 候选检索与 SMILES 生成，并保留计算 IR/Raman、谱图到性质和 Vib2Mol 工作流。
 
-中英文完整手册已上线：[English](https://openmolspec.readthedocs.io/en/latest/) · [简体中文](https://openmolspec.readthedocs.io/en/latest/zh/index.html)。采用 Sphinx 和经典 `sphinx_rtd_theme`，提供左侧层级目录、全文搜索、上下篇导航和语言切换。共 228 个内容页面（含 82 个经 Jupyter 内核执行的教程预览及下载），另有 46 张真实结果与数据分布图，另有搜索与索引页。源文件位于 [documentation/](documentation/index.md)；旧 [handbook/](handbook/index.md) 保留历史记录。
+中英文完整手册已上线：[English](https://openmolspec.readthedocs.io/en/latest/) · [简体中文](https://openmolspec.readthedocs.io/en/latest/zh/index.html)。采用 Sphinx 和经典 `sphinx_rtd_theme`，提供左侧层级目录、全文搜索、上下篇导航和语言切换。包含 82 个经 Jupyter 内核执行的教程预览及下载；项目网页保留 42 张真实结果与数据分布图。源文件位于 [documentation/](documentation/index.md)；旧 [handbook/](handbook/index.md) 保留历史记录。
 
 ## 安装与启动
 
