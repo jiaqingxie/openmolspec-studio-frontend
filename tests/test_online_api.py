@@ -6,7 +6,7 @@ import threading
 from types import SimpleNamespace
 import unittest
 
-from online_api.serve import Service, clean, public_inputs
+from online_api.serve import Service, clean, public_inputs, model_tool_message
 
 
 class PublicAPIContracts(unittest.TestCase):
@@ -67,6 +67,16 @@ class PublicAPIContracts(unittest.TestCase):
         self.assertEqual(value['result']['prediction_ppm'], [17.774, 57.774])
         self.assertNotIn('/mnt', str(value))
         self.assertNotIn('python', value)
+
+    def test_dense_ms_output_remains_valid_json_with_actual_highest_peaks(self):
+        import json
+        peaks = [[float(i), i / 10000.] for i in range(4000)]
+        result = {'completed': True, 'task': 'ms.forward.glacier',
+                  'result': {'predicted_peaks': peaks, 'instrument': 'QTOF', 'adduct': '[M+H]+'}}
+        shown = json.loads(model_tool_message(result))['prediction_summary']
+        self.assertEqual(shown['predicted_peak_count'], 4000)
+        self.assertEqual(shown['top20_predicted_peaks_by_intensity'], list(reversed(peaks[-20:])))
+        self.assertEqual(len(result['result']['predicted_peaks']), 4000)
 
 
 if __name__ == '__main__': unittest.main()

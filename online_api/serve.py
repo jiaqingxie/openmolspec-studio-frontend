@@ -75,6 +75,24 @@ def public_inputs(inputs):
     return result
 
 
+def model_tool_message(result):
+    """Summarize large scientific arrays without truncating a JSON document."""
+    encoded = json.dumps(result, ensure_ascii=False)
+    if len(encoded) <= 20000: return encoded
+    value = result.get('result') or result
+    shown = {key: value[key] for key in ('model', 'smiles', 'unit', 'adduct', 'instrument',
+        'collision_energy', 'gap_ev', 'input_modalities', 'records', 'candidates') if key in value}
+    if 'predicted_peaks' in value:
+        peaks = value['predicted_peaks']
+        shown['predicted_peak_count'] = len(peaks)
+        shown['top20_predicted_peaks_by_intensity'] = sorted(peaks, key=lambda p: p[1], reverse=True)[:20]
+    for key in ('ir', 'raman', 'wavenumber'):
+        if key in value: shown[key + '_points'] = len(value[key])
+    summary = {'completed': result.get('completed'), 'task': result.get('task'),
+        'prediction_summary': shown, 'full_numerical_output': 'Available in the public tool trace and run download'}
+    return json.dumps(summary, ensure_ascii=False)
+
+
 class Service:
     def __init__(self, args, key):
         self.args, self.key = args, key
@@ -230,8 +248,7 @@ class Service:
                 except (ValueError, KeyError, TypeError) as error:
                     result = {'error': str(error), 'available_tasks': sorted(TASKS - {'vibrational.forward'})}
                     self.event(run_id, 'tool_error', {'name': name, 'error': str(error)})
-                encoded = json.dumps(result, ensure_ascii=False)
-                if len(encoded) > 20000: encoded = json.dumps({'summary': 'A full numerical result is available in the tool trace', 'result': {k: v for k, v in result.items() if k in {'completed', 'task', 'result', 'unit'}}}, ensure_ascii=False)[:20000]
+                encoded = model_tool_message(result)
                 messages.append({'role': 'tool', 'tool_call_id': part['id'], 'content': encoded})
         raise ValueError('The agent reached its step limit. Try a smaller question.')
 
