@@ -11,6 +11,8 @@ site/
 !tests/fixtures/*.log
 .env
 data/
+!documentation/data/
+!documentation/data/**
 runs/
 vendor/
 *.pt
