@@ -25,6 +25,12 @@ Executable reference baseline; H does not improve on unchanged shifts. A solvent
 
 The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
+![nmr.solvent_transfer actual results](../assets/gallery/nmr-solvent_transfer.png)
+
+[SVG](../assets/gallery/nmr-solvent_transfer.svg) · [PNG](../assets/gallery/nmr-solvent_transfer.png) · [Full input/output JSON](../assets/examples/nmr-solvent_transfer.json)
+
+<details><summary>Inspect the actual input and output fields</summary>
+
 ```json
 {
   "input": {
@@ -72,9 +78,7 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 }
 ```
 
-![nmr.solvent_transfer actual results](../assets/gallery/nmr-solvent_transfer.png)
-
-[SVG](../assets/gallery/nmr-solvent_transfer.svg) · [PNG](../assets/gallery/nmr-solvent_transfer.png) · [Full input/output JSON](../assets/examples/nmr-solvent_transfer.json)
+</details>
 
 ## Actual evaluation results
 
@@ -112,6 +116,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 This is a retrieval baseline, not a pretrained neural solvent model. It does not consistently improve both nuclei over unchanged shifts. The reference library is small, and temperature/concentration/reference conventions are not independently harmonized. Neural solvent checkpoints remain unavailable.
 
+<details><summary>Source reports and SHA-256 fingerprints</summary>
+
 - [solvent_transfer_reference32_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/solvent_transfer_reference32_20261116.json) — SHA-256 `7532dc2b785a93aa51323934bb748b768f1bfc7c820809bc2065d0840afc543f`
+
+</details>
+
 
 [Original model / 原模型](https://nmrshiftdb.nmr.uni-koeln.de/) · [Model review / 模型检查](../model-audit.md)

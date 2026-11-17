@@ -27,6 +27,12 @@
 
 下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
 
+![nmr.generation.h actual results](../assets/gallery/nmr-generation-h.png)
+
+[SVG](../assets/gallery/nmr-generation-h.svg) · [PNG](../assets/gallery/nmr-generation-h.png) · [Full input/output JSON](../assets/examples/nmr-generation-h.json)
+
+<details><summary>展开查看实际输入与输出字段</summary>
+
 ```json
 {
   "input": {
@@ -81,9 +87,7 @@
 }
 ```
 
-![nmr.generation.h actual results](../assets/gallery/nmr-generation-h.png)
-
-[SVG](../assets/gallery/nmr-generation-h.svg) · [PNG](../assets/gallery/nmr-generation-h.png) · [Full input/output JSON](../assets/examples/nmr-generation-h.json)
+</details>
 
 ## 实际评测结果
 
@@ -127,6 +131,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 给定分子式的结构生成与分子式预测、无分子式生成是不同任务。跨数据集 exact match 低或为零时保留真实结果，不替换成缓存答案。
 
+<details><summary>来源报告与 SHA-256 指纹</summary>
+
 - [nmr_documented_examples_20261117_v2.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/nmr_documented_examples_20261117_v2.json) — SHA-256 `669413d6fc0939bdb6826782d41fc13cf12926a672418ecb46303f0b8ba05b99`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/jiaqingxie/openmolspec-studio-frontend) · [Model review / 模型检查](../model-audit.md)

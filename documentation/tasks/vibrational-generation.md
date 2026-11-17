@@ -24,6 +24,12 @@ Missing-channel ablation of a four-modal checkpoint. Poor scores do not validate
 
 The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
+![vibrational.generation actual results](../assets/gallery/vibrational-generation.png)
+
+[SVG](../assets/gallery/vibrational-generation.svg) · [PNG](../assets/gallery/vibrational-generation.png) · [Full input/output JSON](../assets/examples/vibrational-generation.json)
+
+<details><summary>Inspect the actual input and output fields</summary>
+
 ```json
 {
   "reference": "CCCCc1cc2ccccc2c(OCCN(C)C)n1",
@@ -52,9 +58,7 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 }
 ```
 
-![vibrational.generation actual results](../assets/gallery/vibrational-generation.png)
-
-[SVG](../assets/gallery/vibrational-generation.svg) · [PNG](../assets/gallery/vibrational-generation.png) · [Full input/output JSON](../assets/examples/vibrational-generation.json)
+</details>
 
 ## Actual evaluation results
 
@@ -85,6 +89,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 Checkpoint pairs must share their H/C reference and normalization buffers. Small candidate pools can inflate retrieval numbers; publish the sample IDs, seed and source composition with every score.
 
+<details><summary>Source reports and SHA-256 fingerprints</summary>
+
 - [smoke_vib2mol_20261115.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/smoke_vib2mol_20261115.json) — SHA-256 `2d847121c398071c68040623482a51118d1e20932779247b2eb72e071b8a8ae4`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/X1nyuLu/openSpec-alpha) · [Model review / 模型检查](../model-audit.md)

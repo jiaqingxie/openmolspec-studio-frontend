@@ -25,6 +25,12 @@
 
 下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
 
+![nmr.assignment actual results](../assets/gallery/nmr-assignment.png)
+
+[SVG](../assets/gallery/nmr-assignment.svg) · [PNG](../assets/gallery/nmr-assignment.png) · [Full input/output JSON](../assets/examples/nmr-assignment.json)
+
+<details><summary>展开查看实际输入与输出字段</summary>
+
 ```json
 {
   "input": {
@@ -139,9 +145,7 @@
 }
 ```
 
-![nmr.assignment actual results](../assets/gallery/nmr-assignment.png)
-
-[SVG](../assets/gallery/nmr-assignment.svg) · [PNG](../assets/gallery/nmr-assignment.png) · [Full input/output JSON](../assets/examples/nmr-assignment.json)
+</details>
 
 ## 实际评测结果
 
@@ -173,6 +177,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 匹配残差不等于指认准确率；拓扑对称不保证磁等价。模型不输入溶剂，未做构象系综平均，目前仅覆盖 H/C。
 
+<details><summary>来源报告与 SHA-256 指纹</summary>
+
 - [assignment_carbon32_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/assignment_carbon32_20261116.json) — SHA-256 `c3d25150e5811b8987060e147f43d9add4f729e340da420b94425766e1e76540`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)

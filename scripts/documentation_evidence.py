@@ -191,66 +191,8 @@ def collect():
 
 def render(task_id, evidence=None):
     """Return a reproducible Matplotlib figure from numerical inference evidence."""
-    import numpy as np
-    import matplotlib
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
-    from rdkit import Chem
-    from rdkit.Chem import Draw
-    b=evidence or load_evidence(task_id);p=b['plot'];kind=p['kind']
-    plt.rcParams.update({'font.family':'DejaVu Sans','font.size':10,'axes.spines.top':False,'axes.spines.right':False,'svg.hashsalt':'openmolspec'})
-    fig,axes=plt.subplots(1,2 if kind in ('parity','vibrational','molecules','assignment','solvent') else 1,figsize=(10,4.2),squeeze=False)
-    ax=axes[0,0]
-    if kind=='parity':
-        x,y=np.asarray(p['x']),np.asarray(p['y']);lo,hi=min(x.min(),y.min()),max(x.max(),y.max())
-        ax.scatter(x,y,s=24,alpha=.8,color='#2879aa');ax.plot([lo,hi],[lo,hi],'--',color='#777777')
-        ax.set(xlabel=f'Reference ({p["unit"]})',ylabel=f'Prediction ({p["unit"]})',title=f'MAE = {np.mean(abs(y-x)):.4f} {p["unit"]}')
-        axes[0,1].hist(y-x,bins=min(16,len(x)),color='#2879aa',edgecolor='white')
-        axes[0,1].axvline(0,color='#555555',ls='--');axes[0,1].set(xlabel=f'Prediction - reference ({p["unit"]})',ylabel='Count',title=f'n = {len(x)} paired values')
-    elif kind=='vibrational':
-        for a,channel in zip(axes[0],('ir','raman')):
-            a.plot(p['wavenumber_cm1'],p['reference_'+channel],label='Gaussian reference',color='#333333',lw=1.4)
-            a.plot(p['wavenumber_cm1'],p['predicted_'+channel],label='Frozen prediction',color='#df713e',alpha=.8,lw=1.2)
-            a.set(xlabel='Wavenumber (cm$^{-1}$)',ylabel='Normalized intensity',title=channel.upper());a.legend(fontsize=8)
-    elif kind=='nmr_peaks':
-        ax.vlines(p['reference_ppm'],0,1,color='#333333',label='Experimental peaks')
-        ax.vlines(p['prediction_ppm'],0,-1,color='#2879aa',label='Predicted atom shifts')
-        ax.invert_xaxis();ax.set(xlabel='Chemical shift (ppm)',ylabel='Peak markers (not measured intensities)');ax.legend(fontsize=8)
-    elif kind=='ms':
-        for key,sign,col in [('reference',1,'#333333'),('predicted',-1,'#2879aa')]:
-            values=np.asarray(p[key]);values[:,1]/=max(values[:,1].max(),1e-12)
-            ax.vlines(values[:,0],0,sign*values[:,1],color=col,label='Observed' if sign==1 else 'Predicted')
-        ax.set(xlabel='m/z',ylabel='Relative intensity; prediction mirrored');ax.legend(fontsize=8)
-    elif kind=='ranking':
-        candidates=p['candidates'][:10];colors=['#e0813f' if c['reference_match'] else '#2879aa' for c in candidates]
-        ax.bar(range(1,len(candidates)+1),[c['score'] for c in candidates],color=colors)
-        ax.set(xlabel='Candidate rank (orange = reference structure)',ylabel='Model score (not calibrated probability)')
-    elif kind=='molecules':
-        for a,smi,title in zip(axes[0],[p['reference'],p['predicted']],['Reference structure','Actual top-1 prediction']):
-            molecule=Chem.MolFromSmiles(smi) if smi else None
-            if molecule:a.imshow(Draw.MolToImage(molecule,size=(450,300)))
-            else:a.text(.5,.5,'Invalid / missing SMILES',ha='center')
-            a.set_title(title);a.axis('off')
-    elif kind=='assignment':
-        r=p['record'];mol=Chem.MolFromSmiles(r['smiles'])
-        for atom in mol.GetAtoms():atom.SetAtomMapNum(atom.GetIdx()+1)
-        ax.imshow(Draw.MolToImage(mol,size=(500,330)));ax.axis('off');ax.set_title('Atom-map labels = index + 1')
-        entries=r['assignments'];a=axes[0,1]
-        a.scatter([x['observed_ppm'] for x in entries],[x['predicted_ppm'] for x in entries],color='#2879aa')
-        for x in entries:a.annotate(','.join(str(i+1) for i in x['atom_indices']),(x['observed_ppm'],x['predicted_ppm']),fontsize=6)
-        a.set(xlabel='Observed 13C peak (ppm)',ylabel='Predicted matched site (ppm)')
-    elif kind=='solvent':
-        for a,nuc in zip(axes[0],('1H','13C')):
-            m=p['metrics'][nuc];a.bar(['Reference transfer','Unchanged shift'],[m['mae_ppm'],m['unchanged_shift_mae_ppm']],color=['#2879aa','#888888'])
-            a.set(ylabel='MAE (ppm)',title=f'{nuc}: {m["atoms"]} paired atoms')
-    elif kind=='magma':
-        records=p['records'];x=np.arange(len(records))
-        ax.bar(x,[r['n_matched'] for r in records],label='Matched',color='#2879aa')
-        ax.bar(x,[r['n_peaks']-r['n_matched'] for r in records],bottom=[r['n_matched'] for r in records],label='Unmatched',color='#bbbbbb')
-        ax.set_xticks(x,[r['spec_id'] for r in records]);ax.set_ylabel('Observed peaks');ax.legend()
-    else:raise ValueError(kind)
-    fig.suptitle(task_id,fontsize=13,fontweight='bold');fig.text(.5,.015,p['label'],ha='center',fontsize=9)
-    fig.tight_layout(rect=(0,.06,1,.94));return fig
+    from documentation_figures import render_task
+    return render_task(task_id, evidence or load_evidence(task_id))
 
 
 def recompute(evidence):
@@ -275,8 +217,12 @@ def recompute(evidence):
 
 
 def main():
+    import argparse
     import matplotlib.pyplot as plt
-    bundles=collect();directory=ASSETS/'examples';directory.mkdir(exist_ok=True)
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--figures-only', action='store_true', help='Redraw the published evidence without running inference or collecting new records')
+    args=parser.parse_args()
+    bundles={t.id:load_evidence(t.id) for t in TASKS} if args.figures_only else collect();directory=ASSETS/'examples';directory.mkdir(exist_ok=True)
     images=ASSETS/'gallery';images.mkdir(exist_ok=True)
     index={}
     for task,b in bundles.items():
@@ -296,32 +242,14 @@ def main():
 
 
 def render_datasets(save=True):
-    import numpy as np
     import matplotlib.pyplot as plt
-    data=json.loads((ASSETS/'dataset_audit.json').read_text())
-    figures={}
-    fig,ax=plt.subplots(figsize=(10,4.5))
-    rows=data['datasets'][:4];positions=np.arange(len(rows));bottom=np.zeros(len(rows))
-    for modality,color in [('H only','#3b8bb5'),('C only','#e99852'),('H+C','#4a9b79')]:
-        counts=np.array([r['modality_records'].get(modality,0) for r in rows]);ax.bar(positions,counts,bottom=bottom,label=modality,color=color);bottom+=counts
-    ax.set_xticks(positions,[r['id'].replace('_test','').replace('_10k','') for r in rows]);ax.set(ylabel='Molecular records in local evaluation files',title='Our prepared evaluation views of external NMR datasets')
-    ax.legend();fig.tight_layout();figures['dataset-nmr-views']=fig
-    openspec=next(r for r in data['datasets'] if r['id']=='openspec_test')
-    fig,axes=plt.subplots(1,2,figsize=(11,4.8));pairs=sorted(openspec['source_records'].items(),key=lambda x:x[1])
-    axes[0].barh([k for k,v in pairs],[v for k,v in pairs],color='#3b8bb5');axes[0].set(xlabel='Test records',title='Molecular-library origins of computed spectra')
-    hist=openspec['heavy_atom_histogram'];axes[1].bar([int(k) for k in hist],list(hist.values()),color='#4a9b79');axes[1].set(xlabel='Heavy atoms',ylabel='Test records',title='20,390 records / 16,728 canonical structures')
-    fig.tight_layout();figures['dataset-openspec-test']=fig
-    fig,axes=plt.subplots(1,2,figsize=(10,4.5));counts=data['patent_corpus']['summary']['counts']
-    axes[0].bar(['Train','Validation','Test'],[counts[k] for k in ('train','val','test')],color='#3b8bb5');axes[0].set(ylabel='Unique standard InChIs',title='Team-curated WanJuan patent view')
-    axes[1].bar(['H only','C only','H+C'],[counts[k] for k in ('h_only','c_only','h_and_c')],color=['#3b8bb5','#e99852','#4a9b79']);axes[1].set(ylabel='Unique standard InChIs',title='Modality availability')
-    fig.text(.5,.01,'Counts from existing full-corpus verification report; this audit did not rescan 2.68M molecules.',ha='center',fontsize=8);fig.tight_layout(rect=(0,.04,1,1));figures['dataset-patent-corpus']=fig
-    fig,ax=plt.subplots(figsize=(9,4.2));rows=[r for r in data['external_local_views'] if r['id'].startswith('nmrexp')]
-    ax.bar([r['id'].split('_')[1] for r in rows],[r['records'] for r in rows],color='#3b8bb5');ax.set_yscale('log');ax.set(ylabel='Spectral records (log scale)',title='External NMRExp: locally filtered per-nucleus records')
-    for i,r in enumerate(rows):ax.text(i,r['records']*1.12,f'{r["records"]:,}',ha='center',fontsize=9)
-    fig.tight_layout();figures['dataset-nmrexp-nuclei']=fig
+    from documentation_figures import render_datasets as draw
+    figures = draw(json.loads((ASSETS/'dataset_audit.json').read_text()))
     if save:
-        for name,fig in figures.items():
-            for ext in ('svg','png'):fig.savefig(ASSETS/'gallery'/f'{name}.{ext}',dpi=170,metadata={'Date':None} if ext=='svg' else None)
+        for name, fig in figures.items():
+            for ext in ('svg', 'png'):
+                fig.savefig(ASSETS/'gallery'/f'{name}.{ext}', dpi=180,
+                            metadata={'Date': None} if ext=='svg' else None)
             plt.close(fig)
     return figures
 

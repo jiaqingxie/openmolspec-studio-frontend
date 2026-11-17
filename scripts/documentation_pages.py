@@ -6,6 +6,8 @@ from pathlib import Path
 from documentation_content import GROUPS, group, io_contract, results_table, quickstart, datasets_page, model_audit_page, assessment
 from documentation_evidence import compact, load_evidence
 from documentation_overlap import overlap_notice, overlap_page
+from documentation_design import homepage, caption
+from documentation_research import corpus_page, learning_page
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -35,7 +37,7 @@ def notebook(task,language):
     else:markdown('Task deferred by the user. No model inference or new scientific score is presented.' if en else '用户已暂停此任务，本轮不运行模型，也不展示新的科学评分。')
     for i,c in enumerate(cells):c['id']=hashlib.sha256(f'{id_}:{language}:{i}'.encode()).hexdigest()[:12]
     return {'cells':cells,'metadata':{'kernelspec':{'display_name':'Python 3','language':'python','name':'python3'},'language_info':{'name':'python'},
-                                    'openmolspec_evidence_files':[f'documentation/assets/examples/{slug}.json','scripts/documentation_evidence.py','scripts/documentation_content.py']},'nbformat':4,'nbformat_minor':5}
+                                    'openmolspec_evidence_files':[f'documentation/assets/examples/{slug}.json','scripts/documentation_evidence.py','scripts/documentation_figures.py','scripts/documentation_content.py']},'nbformat':4,'nbformat_minor':5}
 
 
 def dataset_notebook(en):
@@ -44,7 +46,7 @@ def dataset_notebook(en):
            {'cell_type':'code','metadata':{},'execution_count':None,'outputs':[],'source':["import matplotlib.pyplot as plt\nfor name, figure in render_datasets(save=False).items():\n    image = io.StringIO()\n    figure.savefig(image, format='svg', metadata={'Date': None})\n    display(SVG(image.getvalue()))\n    plt.close(figure)\n"]}]
     for i,c in enumerate(cells):c['id']=hashlib.sha256(f'datasets:{en}:{i}'.encode()).hexdigest()[:12]
     return {'cells':cells,'metadata':{'kernelspec':{'display_name':'Python 3','language':'python','name':'python3'},'language_info':{'name':'python'},
-                                    'openmolspec_evidence_files':['documentation/assets/dataset_audit.json','scripts/documentation_evidence.py']},'nbformat':4,'nbformat_minor':5}
+                                    'openmolspec_evidence_files':['documentation/assets/dataset_audit.json','scripts/documentation_evidence.py','scripts/documentation_figures.py']},'nbformat':4,'nbformat_minor':5}
 
 
 def build_pages(tasks,profile,profile_zh):
@@ -52,11 +54,7 @@ def build_pages(tasks,profile,profile_zh):
     files['assets/evaluation_index.json']=json.dumps({k:v['runs'] for k,v in bundles.items()},ensure_ascii=False,indent=2)+'\n'
     for en in (True,False):
         suffix='' if en else '.zh';language='en' if en else 'zh'
-        home='# OpenMolSpec\n\n'+('OpenMolSpec is developing a dataset and deep learning platform for chemical spectroscopy. Its data include curated OpenDataLab experimental spectra, calculated spectra and external benchmarks. This release documents the current tasks, real inputs and outputs, dataset provenance and model evidence. Start with a result you can inspect and reproduce.\n\n' if en else 'OpenMolSpec 正在建设化学谱学数据集与深度学习平台，覆盖 OpenDataLab 整理的实验谱、计算谱及外部基准。本版本展示当前任务、真实输入输出、数据来源与模型证据。先看一份可检查、可复现的实际结果，再选择适合的问题。\n\n')
-        links=[('api.md','Python SDK: datasets and models','Python SDK：数据与模型'),('quickstart.md','Quick start','快速开始'),('gallery.md','Photo Gallery: real results','Photo Gallery：真实结果图册'),('tasks/index.md','Tasks by spectroscopy family','按谱型浏览任务'),('datasets.md','Datasets and distributions','数据集与分布'),('notebooks/index.md','Executed notebooks','已执行 notebook'),('model-audit.md','Model suitability and fine-tuning candidates','模型适用性与潜在微调任务'),('protocols.md','Evaluation protocols','评测协议'),('publication.md','Publication status','发布状态')]
-        home+='\n'.join(f'- [{a if en else z}]({url})' for url,a,z in links)+'\n\n'
-        home+='[![Real IR and Raman prediction](assets/gallery/vibrational-forward.png)](tasks/vibrational-forward.md)\n\n'
-        home+=('31 active task definitions. Figures use recorded predictions and references; sample size, source and limitations remain visible. SpectraLLM, formula prediction and QA are deferred.\n' if en else '31 个启用任务定义。所有结果图来自已记录的预测和参考，明确保留样本量、来源与限制。SpectraLLM、分子式预测和 QA 暂不推进。\n')
+        home=homepage(en)
         files[f'index{suffix}.md']=home
         files[f'quickstart{suffix}.md']=quickstart(en).replace('\n\n', '\n\n'+('For the new dataset/model classes and training preflight, start with the [Python SDK guide](api.md).\n\n' if en else '新的数据加载、模型类和训练准备入口见 [Python SDK 指南](api.md)。\n\n'), 1)
         files[f'datasets{suffix}.md']=datasets_page(en)
@@ -64,6 +62,9 @@ def build_pages(tasks,profile,profile_zh):
         files[f'model-audit{suffix}.md']=model_audit_page(tasks,en)
         files[f'model-audit{suffix}.md']+='\n'+overlap_notice(en)
         files[f'training-overlap{suffix}.md']=overlap_page(en)
+        if (ROOT/'results/corpus_comparison_20261117.json').exists():
+            files[f'corpus-comparison{suffix}.md']=corpus_page(en)
+        files[f'learning-evidence{suffix}.md']=learning_page(en)
         files[f'notebooks/datasets-overview{suffix}.ipynb']=json.dumps(dataset_notebook(en),ensure_ascii=False,indent=2)+'\n'
         task_index='# '+('Tasks by spectroscopy family' if en else '按谱型浏览任务')+'\n\n'
         task_index+=('Choose the kind of evidence you have: NMR peaks, MS/MS peaks, a molecular geometry, or several spectral modalities together. Each task page explains the question, input fields, output fields and a real recorded example.\n\n' if en else '先按手头的信息选择：NMR 峰、MS/MS 峰、分子构象，或多种谱联合。每个任务页面说明解决什么问题、输入字段、输出字段，并展示真实运行案例。\n\n')
@@ -72,6 +73,7 @@ def build_pages(tasks,profile,profile_zh):
         notebook_index+=f'[Dataset distributions / 数据分布](datasets-overview.ipynb)\n\n'
         gallery='# Photo Gallery — '+('real results' if en else '真实结果')+'\n\n'
         gallery+=('Every image is generated from saved model outputs or audited dataset counts. Click a figure to open the task, its real example and interpretation. Blue/orange curves are identified in each panel; failed predictions and weak baselines are retained. Figures are generated with Matplotlib and RDKit.\n\n' if en else '每张图来自保存的模型输出或核验后的数据统计。点击图片进入对应任务、真实样本与解释。各图注明曲线含义，保留错误预测和较弱基线。图由 Matplotlib 与 RDKit 生成。\n\n')
+        gallery+='<nav class="oms-gallery-nav" aria-label="Gallery categories">'+''.join(f'<a href="#gallery-{k}">{a if en else z}</a>' for k,a,z in GROUPS if k!='deferred')+'</nav>\n\n'
         for key,label,label_zh in GROUPS:
             members=[t for t in tasks if group(t)==key];heading=label if en else label_zh
             task_index+=f'## [{heading}]({key}.md)\n\n'+f'{len(members)} '+('task definitions' if en else '个任务定义')+'\n\n'
@@ -79,16 +81,17 @@ def build_pages(tasks,profile,profile_zh):
             category+=('Task pages contain actual examples and measured results. A diagnostic status is not a validated production accuracy claim.\n\n' if en else '任务页面包含真实示例与实际评分。标为诊断的任务不代表已验证的正式精度。\n\n')
             category+='| Task / input → output | Task ID |\n| --- | --- |\n'
             notebook_index+=f'## {heading}\n\n'
-            if key!='deferred':gallery+=f'## {heading}\n\n<div class="oms-gallery-grid">\n'
+            if key!='deferred':gallery+=f'<div id="gallery-{key}"></div>\n\n## {heading}\n\n<div class="oms-gallery-grid">\n'
             for task in members:
                 slug=task.id.replace('.','-');title=profile(task)[0] if en else task.title
                 category+=f'| [{title}]({slug}.md) | `{task.id}` |\n'
                 notebook_index+=f'- [{title}]({slug}.ipynb)\n'
                 if task.enabled:
-                    gallery+=f'<figure><a href="tasks/{slug}.html"><img src="assets/gallery/{slug}.png" alt="{task.id}: actual model results" loading="lazy"></a><figcaption><a href="tasks/{slug}.html">{title}</a><br><a href="assets/gallery/{slug}.svg">SVG</a> · <a href="assets/examples/{slug}.json">Data / 数据</a></figcaption></figure>\n'
+                    gallery+=f'<figure><a href="tasks/{slug}.html"><img src="assets/gallery/{slug}.png" alt="{task.id}: actual model results" loading="lazy" width="2176" height="1088"></a><figcaption><strong><a href="tasks/{slug}.html">{title}</a></strong><span class="oms-caption-note">{caption(task,bundles[task.id],en)}</span><span class="oms-downloads"><a href="notebooks/{slug}.html">Notebook</a> · <a href="assets/gallery/{slug}.svg">SVG</a> · <a href="assets/gallery/{slug}.png">PNG</a> · <a href="assets/examples/{slug}.json">Data / 数据</a></span></figcaption></figure>\n'
             if key!='deferred':gallery+='</div>\n\n'
             notebook_index+='\n'
             files[f'tasks/{key}{suffix}.md']=category
+        gallery+='[Corpus comparison](corpus-comparison.md) · [Controlled learning evaluations](learning-evidence.md)\n\n'
         gallery+='## '+('Dataset distributions' if en else '数据分布')+'\n\n'
         for slug in ('dataset-openspec-test','dataset-patent-corpus','dataset-nmr-views','dataset-nmrexp-nuclei'):
             gallery+=f'[![{slug}](assets/gallery/{slug}.png)](datasets.md)\n\n[SVG](assets/gallery/{slug}.svg) · [Data](assets/dataset_audit.json)\n\n'
@@ -111,8 +114,9 @@ def build_pages(tasks,profile,profile_zh):
                 page+='## '+('What comes out' if en else '输出是什么')+'\n\n'+outputs+'\n'
                 page+='## '+('A real recorded example' if en else '真实运行案例')+'\n\n'
                 page+=('The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.\n\n' if en else '下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。\n\n')
-                page+='```json\n'+json.dumps(compact(b['examples'][0],4),ensure_ascii=False,indent=2)+'\n```\n\n'
                 page+=f'![{task.id} actual results](../assets/gallery/{slug}.png)\n\n[SVG](../assets/gallery/{slug}.svg) · [PNG](../assets/gallery/{slug}.png) · [Full input/output JSON](../assets/examples/{slug}.json)\n\n'
+                page+='<details><summary>'+('Inspect the actual input and output fields' if en else '展开查看实际输入与输出字段')+'</summary>\n\n'
+                page+='```json\n'+json.dumps(compact(b['examples'][0],4),ensure_ascii=False,indent=2)+'\n```\n\n</details>\n\n'
                 page+='## '+('Actual evaluation results' if en else '实际评测结果')+'\n\n'+results_table(b,en)+'\n'
                 page+=('Sample sizes and candidate pools belong to each run. The figure may show one molecule; the table reports the cited run, not a new benchmark on that molecule.\n\n' if en else '样本量和候选池随每次运行记录。图可能展示单个分子，表格是来源实验的实际汇总，不能混为同一统计范围。\n\n')
                 page+='## '+('Model and method' if en else '模型与方法')+f'\n\n{method}\n\n{metrics}\n\n'
@@ -120,12 +124,14 @@ def build_pages(tasks,profile,profile_zh):
                 page+=f'[Notebook with executed figures](../notebooks/{slug}.ipynb) · [Quick Start](../quickstart.md)\n\n'
                 page+=f'```bash\npython -m openmolspec_bench run --workspace /path/to/OpenMolSpec \\\n  --tasks {task.id} --limit 8 --output results/{slug}-new.json\n```\n\n'
                 page+='## '+('Limits and provenance' if en else '边界与来源')+f'\n\n{limits}\n\n'
+                page+='<details><summary>'+('Source reports and SHA-256 fingerprints' if en else '来源报告与 SHA-256 指纹')+'</summary>\n\n'
                 for name,digest in b['source_hashes'].items():page+=f'- [{name}](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/{name}) — SHA-256 `{digest}`\n'
+                page+='\n</details>\n\n'
                 page+=f'\n[Original model / 原模型]({source}) · [Model review / 模型检查](../model-audit.md)\n'
             files[f'tasks/{slug}{suffix}.md']=page
             files[f'notebooks/{slug}{suffix}.ipynb']=json.dumps(notebook(task,language),ensure_ascii=False,indent=2)+'\n'
         # Retain protocol/publication details; these pages are maintained below.
-        files[f'protocols{suffix}.md']=('# Evaluation protocols\n\n' if en else '# 评测协议\n\n')+('All published figures use actual recorded results. Each evidence JSON carries source report hashes. Execution success is separate from scientific validity. Small candidate-pool results, prepared-data split labels and matched-peak errors must not be described as independent generalization or atom-assignment accuracy.\n\nComplete IR/Raman/H/C input and missing-channel ablations are reported separately. Gap units are converted once from Hartree to eV. MS scores compare with all observed peaks under explicit acquisition conditions. No training or fitted calibration is performed.\n\n' if en else '所有公开结果图来自实际记录。证据 JSON 保留来源报告哈希。执行成功与科学有效性分开判断；小候选池、准备数据的 split 标签、峰匹配误差，不能宣传成独立泛化或实验原子指认准确率。\n\n完整 IR/Raman/H/C 输入与缺通道消融分别报告。Gap 从 Hartree 到 eV 仅转换一次。MS 在明确采集条件下与全部实测峰比较。本轮没有训练或拟合校准。\n\n')+'[Dataset definitions](datasets.md) · [Model-by-model audit](model-audit.md)\n'
+        files[f'protocols{suffix}.md']=('# Evaluation protocols\n\n' if en else '# 评测协议\n\n')+('All published figures use actual recorded results. Each evidence JSON carries source report hashes. Execution success is separate from scientific validity. Small candidate-pool results, prepared-data split labels and matched-peak errors must not be described as independent generalization or atom-assignment accuracy.\n\nComplete IR/Raman/H/C input and missing-channel ablations are reported separately. Gap units are converted once from Hartree to eV. MS scores compare with all observed peaks under explicit acquisition conditions. The frozen-model figures contain no fitted calibration. A separate two-record-per-split SDK training integration check completed one encoder and one generator step with save/reload verification; it is not a performance benchmark.\n\n' if en else '所有公开结果图来自实际记录。证据 JSON 保留来源报告哈希。执行成功与科学有效性分开判断；小候选池、准备数据的 split 标签、峰匹配误差，不能宣传成独立泛化或实验原子指认准确率。\n\n完整 IR/Raman/H/C 输入与缺通道消融分别报告。Gap 从 Hartree 到 eV 仅转换一次。MS 在明确采集条件下与全部实测峰比较。冻结模型图没有拟合校准。另有独立的 SDK 训练接口检查：每个原始划分取两个记录，编码器与生成器各训练一步并验证保存重载；这不是性能基准。\n\n')+'[Dataset definitions](datasets.md) · [Model-by-model audit](model-audit.md)\n'
         files[f'publication{suffix}.md']=('# Publication status\n\n' if en else '# 发布状态\n\n')+('[English](https://openmolspec-10.readthedocs.io/en/latest/) · [简体中文](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)\n\n')+('Read the Docs builds `release/openmolspec-v1` with the root `.readthedocs.yaml`, Sphinx and the classic RTD theme. The site includes categorized tasks, a real-results gallery, dataset distributions, model review and 74 executed notebooks, including real SDK inference and training preflight. Notebook publication never executes model code.\n\n' if en else 'Read the Docs 使用根目录 `.readthedocs.yaml` 构建 `release/openmolspec-v1` 分支，采用 Sphinx 与经典 RTD 主题。站点包括分类任务、真实结果图册、数据分布、模型检查及 74 份已执行 notebook（含暂停任务说明和数据分布 notebook）。发布构建不执行模型代码。\n\n')+'```bash\npython scripts/build_bilingual_docs.py --check\npython scripts/build_readthedocs.py --output site --strict\npython scripts/publish_readthedocs.py --apply --project openmolspec-10 --wait 600\n```\n\n'+('Publish only after pushing the corresponding Git commit. The publication script verifies the exact remote commit and finished RTD build; public pages are checked separately.\n' if en else '先推送对应 Git 提交，再发布。发布脚本检查远端精确提交与完成的 RTD 构建，公开页面另行验证。\n')
     for suffix,en in [('',True),('.zh',False)]:
         files[f'protocols{suffix}.md']+='\n'+overlap_notice(en)

@@ -25,6 +25,12 @@ Appropriate author model interface and explicit conditions; 31 scored spectra ar
 
 The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
+![ms.forward.glacier actual results](../assets/gallery/ms-forward-glacier.png)
+
+[SVG](../assets/gallery/ms-forward-glacier.svg) · [PNG](../assets/gallery/ms-forward-glacier.png) · [Full input/output JSON](../assets/examples/ms-forward-glacier.json)
+
+<details><summary>Inspect the actual input and output fields</summary>
+
 ```json
 {
   "input": {
@@ -90,9 +96,7 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 }
 ```
 
-![ms.forward.glacier actual results](../assets/gallery/ms-forward-glacier.png)
-
-[SVG](../assets/gallery/ms-forward-glacier.svg) · [PNG](../assets/gallery/ms-forward-glacier.png) · [Full input/output JSON](../assets/examples/ms-forward-glacier.json)
+</details>
 
 ## Actual evaluation results
 
@@ -122,6 +126,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 Pretrained MassSpecGym weights may overlap a differently constructed split. Training overlap and complete instrument/adduct support metadata have not been independently established.
 
+<details><summary>Source reports and SHA-256 fingerprints</summary>
+
 - [ms_glacier_32_molecules_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/ms_glacier_32_molecules_20261116.json) — SHA-256 `a4d084c72c7df758f49500942cdfcea91047cb3da3616b9adb93b5bc6e8470c6`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/coleygroup/ms-pred) · [Model review / 模型检查](../model-audit.md)

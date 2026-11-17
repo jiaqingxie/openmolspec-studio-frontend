@@ -24,6 +24,12 @@
 
 下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
 
+![vibrational.forward actual results](../assets/gallery/vibrational-forward.png)
+
+[SVG](../assets/gallery/vibrational-forward.svg) · [PNG](../assets/gallery/vibrational-forward.png) · [Full input/output JSON](../assets/examples/vibrational-forward.json)
+
+<details><summary>展开查看实际输入与输出字段</summary>
+
 ```json
 {
   "sample_id": "NISTIR-11730",
@@ -90,9 +96,7 @@
 }
 ```
 
-![vibrational.forward actual results](../assets/gallery/vibrational-forward.png)
-
-[SVG](../assets/gallery/vibrational-forward.svg) · [PNG](../assets/gallery/vibrational-forward.png) · [Full input/output JSON](../assets/examples/vibrational-forward.json)
+</details>
 
 ## 实际评测结果
 
@@ -122,6 +126,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 默认两个真实 Gaussian 日志仅用于配对运行检查，未审计其独立测试身份。不能用新生成的 RDKit 构象代替原参考几何后宣称是严格配对精度。
 
+<details><summary>来源报告与 SHA-256 指纹</summary>
+
 - [vibrational_forward_paired_logs_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/vibrational_forward_paired_logs_20261116.json) — SHA-256 `3e35b2c5b0c5b83715f49397e9d3ab5a744429ec90bff2551a96ea0d1641e087`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/X1nyuLu/openSpec-alpha) · [Model review / 模型检查](../model-audit.md)

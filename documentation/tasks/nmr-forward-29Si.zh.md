@@ -25,6 +25,12 @@
 
 下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
 
+![nmr.forward.29Si actual results](../assets/gallery/nmr-forward-29Si.png)
+
+[SVG](../assets/gallery/nmr-forward-29Si.svg) · [PNG](../assets/gallery/nmr-forward-29Si.png) · [Full input/output JSON](../assets/examples/nmr-forward-29Si.json)
+
+<details><summary>展开查看实际输入与输出字段</summary>
+
 ```json
 {
   "input": {
@@ -46,9 +52,7 @@
 }
 ```
 
-![nmr.forward.29Si actual results](../assets/gallery/nmr-forward-29Si.png)
-
-[SVG](../assets/gallery/nmr-forward-29Si.svg) · [PNG](../assets/gallery/nmr-forward-29Si.png) · [Full input/output JSON](../assets/examples/nmr-forward-29Si.json)
+</details>
 
 ## 实际评测结果
 
@@ -80,6 +84,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 各核训练覆盖、训练重叠及实验原子指认来源尚未核实，且该模型不输入溶剂。正式评分仍停用；继续核查 NMRNet++ 的 B/Si 专用权重，不拟合任何校正。
 
+<details><summary>来源报告与 SHA-256 指纹</summary>
+
 - [bsi_frozen_diagnostic_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/bsi_frozen_diagnostic_20261116.json) — SHA-256 `0f7c1f6c9eae12e644753581f785d76b1824f8311d5fccc7ae4afb98d19c65e6`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)

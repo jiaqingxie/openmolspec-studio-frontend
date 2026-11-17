@@ -24,6 +24,12 @@ Algorithmic annotation, not a trainable neural model. Improve matching and valid
 
 The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
+![ms.annotation.magma actual results](../assets/gallery/ms-annotation-magma.png)
+
+[SVG](../assets/gallery/ms-annotation-magma.svg) · [PNG](../assets/gallery/ms-annotation-magma.png) · [Full input/output JSON](../assets/examples/ms-annotation-magma.json)
+
+<details><summary>Inspect the actual input and output fields</summary>
+
 ```json
 {
   "input": {
@@ -279,9 +285,7 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 }
 ```
 
-![ms.annotation.magma actual results](../assets/gallery/ms-annotation-magma.png)
-
-[SVG](../assets/gallery/ms-annotation-magma.svg) · [PNG](../assets/gallery/ms-annotation-magma.png) · [Full input/output JSON](../assets/examples/ms-annotation-magma.json)
+</details>
 
 ## Actual evaluation results
 
@@ -311,6 +315,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 Hydrogen shifts, graph depth and canonicalization have specific engine semantics. Do not reinterpret graph depth as an experimentally measured reaction sequence.
 
+<details><summary>Source reports and SHA-256 fingerprints</summary>
+
 - [magma_real_test_verified_20261115.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/magma_real_test_verified_20261115.json) — SHA-256 `e65563b00863389105f5eae392d493167d693ac4ca38b9f1abfbd40942d1946b`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/Dsadd4/MassSpecGym-MAGMA-annotation) · [Model review / 模型检查](../model-audit.md)

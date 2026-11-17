@@ -1,6 +1,6 @@
-# Python SDK — openmolspec 1.1.0a1
+# Python SDK — openmolspec 1.1.0a2
 
-The package provides dataset loading, model facades, training preparation and benchmark entry points. The base installation has no third-party dependencies. This is an alpha SDK: frozen inference has real execution evidence; the new training launcher has preflight tests but has not completed a training/save/reload round trip.
+The package provides dataset loading, model facades, training preparation and benchmark entry points. The base installation has no third-party dependencies. This is an alpha SDK: frozen inference has real execution evidence; the training launcher has completed one encoder step and one generator step, including checkpoint save, configuration reload and identical repeated inference on tiny train/validation examples. This checks software integration, not learning performance.
 
 ## Install
 
@@ -97,12 +97,12 @@ model = NMRTransformer(stage='align', device='cpu')
 plan = model.training_plan(prepared, run_dir='runs/my-alignment', epochs=10, batch_size=32)
 print(plan.describe())
 print(plan.validate())
-# model.fit(plan)              # explicitly launches training when YOU call it
+# result = model.fit(plan)     # launches training; use a new run directory
 ```
 
 Records require `smiles`, `formula`, `h_nmr`, `c_nmr` and optional `[has_H, has_C]` masks. Preparation checks formulas, nuclei and train/validation connectivity overlap. `select` preserves split roles; an existing test view cannot be supplied as training data. Training rechecks file hashes and overlap before launching and creates a new log, plan and best-checkpoint hash. Generation training additionally requires `alignment_checkpoint=`. Pretrained initialization restores weights, not optimizer/scheduler state.
 
-The [executed preflight notebook](notebooks/sdk-training-preflight.ipynb) uses two real records from each original OpenDataLab train/validation split. It runs data preparation and validation, **not training**. No new accuracy or successful training round trip is claimed. One source inconsistency encountered during example selection was a hydrogen-free `BrOBr` structure with a ¹H record; training preparation now rejects absent-nucleus records, while raw loaders retain them for inspection.
+The [executed preflight notebook](notebooks/sdk-training-preflight.ipynb) uses two real records from each original OpenDataLab train/validation split. It runs data preparation and validation, **not training**. A separate actual training run has now verified both stages. The [training integration report](assets/reports/sdk_training_roundtrip_20261117.json) records two training and two validation records, one optimizer step per stage, checkpoint hashes and save/reload inference equality. These records retain their original split roles; no test examples are used. No learning-performance claim is made. One source inconsistency encountered during example selection was a hydrogen-free `BrOBr` structure with a ¹H record; training preparation now rejects absent-nucleus records, while raw loaders retain them for inspection.
 
 ## Task discovery and benchmark execution
 
@@ -122,3 +122,12 @@ The 31 active adapters remain accessible; deferred tasks are excluded. A complet
 A full chemistry check of the four local evaluation JSONLs inspected 39,183 records. Five records in the 10,000-record patent view had a recorded nucleus absent from the structure (five H flags; two of those also C flags). The other three views had no flags under these checks. This is not an audit of every raw spectrum or of the full 2.68-million-identity corpus. [Download audit](assets/reports/sdk_nmr_input_audit_20261117.json).
 
 The NMR Transformer checkpoints have confirmed evaluation/training identity overlap and a final-stage data-fingerprint discrepancy. See the [training-history audit](training-overlap.md) before interpreting retrieval or generation scores.
+
+To reproduce the software integration check from this repository:
+
+```bash
+python scripts/verify_sdk_training.py \
+  --python /path/to/nmr-env/bin/python \
+  --work runs/sdk-training-check \
+  --output results/sdk-training-check.json
+```

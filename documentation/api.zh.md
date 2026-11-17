@@ -1,6 +1,6 @@
-# Python SDK — openmolspec 1.1.0a1
+# Python SDK — openmolspec 1.1.0a2
 
-数据加载、模型类、训练准备和统一评测入口现已实现。基础安装不依赖第三方库。当前是 alpha SDK：冻结推理已有实际运行证据；训练启动器已检查启动前验证，但尚未完成训练、保存、重载闭环。
+数据加载、模型类、训练准备和统一评测入口现已实现。基础安装不依赖第三方库。当前是 alpha SDK：冻结推理已有实际运行证据；训练启动器已用微型 train/val 示例完成编码器和生成器各一步训练，并验证 checkpoint 保存、配置重载与推理结果一致；这是软件链路验证，不是学习性能结论。
 
 ## 安装
 
@@ -102,7 +102,7 @@ print(plan.validate())
 
 记录包含 `smiles`、`formula`、`h_nmr`、`c_nmr`，以及可选 `[has_H, has_C]` 掩码。准备阶段检查分子式、核种及训练/验证集连接结构重叠。`select` 保留数据角色，既有 test 视图不能直接用于训练。启动前重新核验文件哈希和结构重叠，运行时建立新目录、日志、plan 和最佳权重哈希。生成训练还需要 `alignment_checkpoint=`；旧权重只用于初始化，不恢复优化器/调度器状态。
 
-[已执行的训练准备 notebook](notebooks/sdk-training-preflight.ipynb) 分别使用 OpenDataLab 原 train/val 的两个真实记录，只做准备与检查，**没有训练**。不宣称新训练精度或完整训练闭环已验证。选择示例时发现一条无氢 `BrOBr` 结构附有 ¹H 记录；训练准备会拒绝这种核种缺失情况，原始加载器仍保留记录供回查。
+[已执行的训练准备 notebook](notebooks/sdk-training-preflight.ipynb) 分别使用 OpenDataLab 原 train/val 的两个真实记录，只做准备与检查，**没有训练**。另一项实际训练检查已完成两个阶段：[训练链路报告](assets/reports/sdk_training_roundtrip_20261117.json) 记录两个训练样本、两个验证样本、每阶段一次优化器更新、checkpoint 哈希和保存重载后的推理一致性。记录保留原始划分，没有使用测试集。这不构成学习性能结论。选择示例时发现一条无氢 `BrOBr` 结构附有 ¹H 记录；训练准备会拒绝这种核种缺失情况，原始加载器仍保留记录供回查。
 
 ## 任务目录与统一评测
 
@@ -122,3 +122,12 @@ report = bench.run('nmr.retrieval.hc.s2m', datasets=['nmrspec_test'],
 完整检查四个本地评测 JSONL，共 39,183 条记录：专利 10,000 条视图中有 5 条核种与结构不一致（5 条 H 标记，其中 2 条同时有 C 标记）；另三份视图在这些检查下未发现标记。这不代表所有原谱或 268 万身份全库均已完成质量核验。[下载审计](assets/reports/sdk_nmr_input_audit_20261117.json)。
 
 NMR Transformer 权重已确认存在评测与训练结构身份重叠，末阶段还发现数据指纹不一致。解释检索与生成分数前，请阅读[训练历史审计](training-overlap.md)。
+
+从仓库复现软件训练链路检查：
+
+```bash
+python scripts/verify_sdk_training.py \
+  --python /path/to/nmr-env/bin/python \
+  --work runs/sdk-training-check \
+  --output results/sdk-training-check.json
+```

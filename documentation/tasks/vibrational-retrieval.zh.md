@@ -25,6 +25,12 @@
 
 下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
 
+![vibrational.retrieval actual results](../assets/gallery/vibrational-retrieval.png)
+
+[SVG](../assets/gallery/vibrational-retrieval.svg) · [PNG](../assets/gallery/vibrational-retrieval.png) · [Full input/output JSON](../assets/examples/vibrational-retrieval.json)
+
+<details><summary>展开查看实际输入与输出字段</summary>
+
 ```json
 {
   "sample_id": "ZINCV2-ZINC000646741030",
@@ -79,9 +85,7 @@
 }
 ```
 
-![vibrational.retrieval actual results](../assets/gallery/vibrational-retrieval.png)
-
-[SVG](../assets/gallery/vibrational-retrieval.svg) · [PNG](../assets/gallery/vibrational-retrieval.png) · [Full input/output JSON](../assets/examples/vibrational-retrieval.json)
+</details>
 
 ## 实际评测结果
 
@@ -113,6 +117,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 生成与重排 checkpoint 的 H/C 参考和归一化缓冲必须一致。小候选池可能让检索分数偏高，必须公布样本 ID、种子和来源组成。
 
+<details><summary>来源报告与 SHA-256 指纹</summary>
+
 - [vibrational_ranked_examples_20261117.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/vibrational_ranked_examples_20261117.json) — SHA-256 `b7e464aa11e85fdcae7245d987d92f272d6c1a5e47d697734df17d26731744e3`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/X1nyuLu/openSpec-alpha) · [Model review / 模型检查](../model-audit.md)

@@ -24,6 +24,12 @@
 
 下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
 
+![vibrational.gap.ir_raman_hc actual results](../assets/gallery/vibrational-gap-ir_raman_hc.png)
+
+[SVG](../assets/gallery/vibrational-gap-ir_raman_hc.svg) · [PNG](../assets/gallery/vibrational-gap-ir_raman_hc.png) · [Full input/output JSON](../assets/examples/vibrational-gap-ir_raman_hc.json)
+
+<details><summary>展开查看实际输入与输出字段</summary>
+
 ```json
 {
   "sample_id": "ZINCV2-ZINC000666646493",
@@ -75,9 +81,7 @@
 }
 ```
 
-![vibrational.gap.ir_raman_hc actual results](../assets/gallery/vibrational-gap-ir_raman_hc.png)
-
-[SVG](../assets/gallery/vibrational-gap-ir_raman_hc.svg) · [PNG](../assets/gallery/vibrational-gap-ir_raman_hc.png) · [Full input/output JSON](../assets/examples/vibrational-gap-ir_raman_hc.json)
+</details>
 
 ## 实际评测结果
 
@@ -111,6 +115,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 按文件顺序的首批样本可能来源偏倚，较广的检查使用固定种子的 reservoir 抽样。缺通道与完整输入的成绩必须分开解释。
 
+<details><summary>来源报告与 SHA-256 指纹</summary>
+
 - [gap_protocol_random128_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/gap_protocol_random128_20261116.json) — SHA-256 `e3ab614192106dccc2bb4cf30d4a2ce0259ba6e21207bb52695a0a02ef08d488`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/X1nyuLu/openSpec-alpha) · [Model review / 模型检查](../model-audit.md)

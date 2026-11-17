@@ -27,6 +27,12 @@
 
 下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
 
+![nmr.retrieval.h.m2s actual results](../assets/gallery/nmr-retrieval-h-m2s.png)
+
+[SVG](../assets/gallery/nmr-retrieval-h-m2s.svg) · [PNG](../assets/gallery/nmr-retrieval-h-m2s.png) · [Full input/output JSON](../assets/examples/nmr-retrieval-h-m2s.json)
+
+<details><summary>展开查看实际输入与输出字段</summary>
+
 ```json
 {
   "input": {
@@ -61,9 +67,7 @@
 }
 ```
 
-![nmr.retrieval.h.m2s actual results](../assets/gallery/nmr-retrieval-h-m2s.png)
-
-[SVG](../assets/gallery/nmr-retrieval-h-m2s.svg) · [PNG](../assets/gallery/nmr-retrieval-h-m2s.png) · [Full input/output JSON](../assets/examples/nmr-retrieval-h-m2s.json)
+</details>
 
 ## 实际评测结果
 
@@ -107,6 +111,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 16、32 和全库候选的成绩不能直接比较。数据来源和训练/测试重叠仍需单独审计。JSONL 中的 smiles 是评测目标或候选身份，不作为谱编码器的输入。
 
+<details><summary>来源报告与 SHA-256 指纹</summary>
+
 - [nmr_documented_examples_20261117_v2.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/nmr_documented_examples_20261117_v2.json) — SHA-256 `669413d6fc0939bdb6826782d41fc13cf12926a672418ecb46303f0b8ba05b99`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/jiaqingxie/openmolspec-studio-frontend) · [Model review / 模型检查](../model-audit.md)

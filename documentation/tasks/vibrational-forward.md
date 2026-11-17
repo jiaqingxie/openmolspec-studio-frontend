@@ -24,6 +24,12 @@ Correct Xinyu Hessian/response route and paired geometry. Two examples demonstra
 
 The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
+![vibrational.forward actual results](../assets/gallery/vibrational-forward.png)
+
+[SVG](../assets/gallery/vibrational-forward.svg) · [PNG](../assets/gallery/vibrational-forward.png) · [Full input/output JSON](../assets/examples/vibrational-forward.json)
+
+<details><summary>Inspect the actual input and output fields</summary>
+
 ```json
 {
   "sample_id": "NISTIR-11730",
@@ -90,9 +96,7 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 }
 ```
 
-![vibrational.forward actual results](../assets/gallery/vibrational-forward.png)
-
-[SVG](../assets/gallery/vibrational-forward.svg) · [PNG](../assets/gallery/vibrational-forward.png) · [Full input/output JSON](../assets/examples/vibrational-forward.json)
+</details>
 
 ## Actual evaluation results
 
@@ -122,6 +126,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 The default two real Gaussian examples establish paired execution only. Their held-out status is not audited. An independently generated RDKit conformer must not be substituted and presented as the original reference geometry.
 
+<details><summary>Source reports and SHA-256 fingerprints</summary>
+
 - [vibrational_forward_paired_logs_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/vibrational_forward_paired_logs_20261116.json) — SHA-256 `3e35b2c5b0c5b83715f49397e9d3ab5a744429ec90bff2551a96ea0d1641e087`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/X1nyuLu/openSpec-alpha) · [Model review / 模型检查](../model-audit.md)

@@ -6,7 +6,7 @@ import posixpath
 project = "OpenMolSpec"
 author = "OpenMolSpec contributors"
 copyright = "2026, OpenMolSpec contributors"
-release = "1.1.0a1"
+release = "1.1.0a2"
 extensions = ["myst_nb"]
 source_suffix = {".md": "myst-nb", ".ipynb": "myst-nb"}
 root_doc = "index"

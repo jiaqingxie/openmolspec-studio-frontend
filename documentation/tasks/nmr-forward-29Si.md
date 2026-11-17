@@ -25,6 +25,12 @@ Unsuitable as an accurate solution predictor: 56.13 ppm MAE, all 32 predictions 
 
 The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
+![nmr.forward.29Si actual results](../assets/gallery/nmr-forward-29Si.png)
+
+[SVG](../assets/gallery/nmr-forward-29Si.svg) · [PNG](../assets/gallery/nmr-forward-29Si.png) · [Full input/output JSON](../assets/examples/nmr-forward-29Si.json)
+
+<details><summary>Inspect the actual input and output fields</summary>
+
 ```json
 {
   "input": {
@@ -46,9 +52,7 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 }
 ```
 
-![nmr.forward.29Si actual results](../assets/gallery/nmr-forward-29Si.png)
-
-[SVG](../assets/gallery/nmr-forward-29Si.svg) · [PNG](../assets/gallery/nmr-forward-29Si.png) · [Full input/output JSON](../assets/examples/nmr-forward-29Si.json)
+</details>
 
 ## Actual evaluation results
 
@@ -80,6 +84,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 Nucleus-specific training coverage, training overlap and experimental assignment provenance are unverified. The model has no solvent input. Primary scoring remains disabled; NMRNet++ B/Si-specific weights are still being sought. No fitting was performed.
 
+<details><summary>Source reports and SHA-256 fingerprints</summary>
+
 - [bsi_frozen_diagnostic_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/bsi_frozen_diagnostic_20261116.json) — SHA-256 `0f7c1f6c9eae12e644753581f785d76b1824f8311d5fccc7ae4afb98d19c65e6`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)

@@ -25,6 +25,12 @@
 
 下面展示记录中的第一例，不按结果好坏筛选。长数组预览会标明完整长度；完整数值可下载证据 JSON。参考标签与模型输入分开保留。
 
+![nmr.solvent_transfer actual results](../assets/gallery/nmr-solvent_transfer.png)
+
+[SVG](../assets/gallery/nmr-solvent_transfer.svg) · [PNG](../assets/gallery/nmr-solvent_transfer.png) · [Full input/output JSON](../assets/examples/nmr-solvent_transfer.json)
+
+<details><summary>展开查看实际输入与输出字段</summary>
+
 ```json
 {
   "input": {
@@ -72,9 +78,7 @@
 }
 ```
 
-![nmr.solvent_transfer actual results](../assets/gallery/nmr-solvent_transfer.png)
-
-[SVG](../assets/gallery/nmr-solvent_transfer.svg) · [PNG](../assets/gallery/nmr-solvent_transfer.png) · [Full input/output JSON](../assets/examples/nmr-solvent_transfer.json)
+</details>
 
 ## 实际评测结果
 
@@ -112,6 +116,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 这不是神经网络溶剂模型，对两种核尚无稳定收益。参考库较小，温度、浓度及位移参考尚未统一核验；专用神经网络权重仍待取得。
 
+<details><summary>来源报告与 SHA-256 指纹</summary>
+
 - [solvent_transfer_reference32_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/solvent_transfer_reference32_20261116.json) — SHA-256 `7532dc2b785a93aa51323934bb748b768f1bfc7c820809bc2065d0840afc543f`
+
+</details>
+
 
 [Original model / 原模型](https://nmrshiftdb.nmr.uni-koeln.de/) · [Model review / 模型检查](../model-audit.md)

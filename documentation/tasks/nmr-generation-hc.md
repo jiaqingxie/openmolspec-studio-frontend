@@ -27,6 +27,12 @@ Strong dataset dependence: zero exact matches on the 32-example patent and NMRGy
 
 The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
+![nmr.generation.hc actual results](../assets/gallery/nmr-generation-hc.png)
+
+[SVG](../assets/gallery/nmr-generation-hc.svg) · [PNG](../assets/gallery/nmr-generation-hc.png) · [Full input/output JSON](../assets/examples/nmr-generation-hc.json)
+
+<details><summary>Inspect the actual input and output fields</summary>
+
 ```json
 {
   "input": {
@@ -86,9 +92,7 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 }
 ```
 
-![nmr.generation.hc actual results](../assets/gallery/nmr-generation-hc.png)
-
-[SVG](../assets/gallery/nmr-generation-hc.svg) · [PNG](../assets/gallery/nmr-generation-hc.png) · [Full input/output JSON](../assets/examples/nmr-generation-hc.json)
+</details>
 
 ## Actual evaluation results
 
@@ -132,6 +136,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 Formula-conditioned generation must be distinguished from formula prediction and from generation without a supplied formula. Low or zero cross-dataset exact match is retained, not replaced by cached answers.
 
+<details><summary>Source reports and SHA-256 fingerprints</summary>
+
 - [nmr_documented_examples_20261117_v2.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/nmr_documented_examples_20261117_v2.json) — SHA-256 `669413d6fc0939bdb6826782d41fc13cf12926a672418ecb46303f0b8ba05b99`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/jiaqingxie/openmolspec-studio-frontend) · [Model review / 模型检查](../model-audit.md)

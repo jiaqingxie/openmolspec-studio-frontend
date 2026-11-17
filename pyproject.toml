@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "openmolspec"
-version = "1.1.0a1"
+version = "1.1.0a2"
 description = "Spectroscopy datasets, model interfaces and reproducible learning workflows"
 readme = "README.md"
 requires-python = ">=3.10"

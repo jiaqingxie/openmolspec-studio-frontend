@@ -24,6 +24,12 @@ Missing-channel ablation of a four-modal checkpoint. Poor scores do not validate
 
 The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
+![vibrational.gap.ir_raman actual results](../assets/gallery/vibrational-gap-ir_raman.png)
+
+[SVG](../assets/gallery/vibrational-gap-ir_raman.svg) · [PNG](../assets/gallery/vibrational-gap-ir_raman.png) · [Full input/output JSON](../assets/examples/vibrational-gap-ir_raman.json)
+
+<details><summary>Inspect the actual input and output fields</summary>
+
 ```json
 {
   "sample_id": "ZINCV2-ZINC000666646493",
@@ -56,9 +62,7 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 }
 ```
 
-![vibrational.gap.ir_raman actual results](../assets/gallery/vibrational-gap-ir_raman.png)
-
-[SVG](../assets/gallery/vibrational-gap-ir_raman.svg) · [PNG](../assets/gallery/vibrational-gap-ir_raman.png) · [Full input/output JSON](../assets/examples/vibrational-gap-ir_raman.json)
+</details>
 
 ## Actual evaluation results
 
@@ -92,6 +96,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 A small first-record sample may be biased by source order. Use seeded reservoir sampling for broader checks; missing-channel scores must remain separate from complete-input scores.
 
+<details><summary>Source reports and SHA-256 fingerprints</summary>
+
 - [gap_protocol_random128_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/gap_protocol_random128_20261116.json) — SHA-256 `e3ab614192106dccc2bb4cf30d4a2ce0259ba6e21207bb52695a0a02ef08d488`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/X1nyuLu/openSpec-alpha) · [Model review / 模型检查](../model-audit.md)

@@ -24,6 +24,12 @@ Author generation protocol is implemented. ITM reranking lowers top-1 from 0.75 
 
 The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
+![vibrational.generation.hc actual results](../assets/gallery/vibrational-generation-hc.png)
+
+[SVG](../assets/gallery/vibrational-generation-hc.svg) · [PNG](../assets/gallery/vibrational-generation-hc.png) · [Full input/output JSON](../assets/examples/vibrational-generation-hc.json)
+
+<details><summary>Inspect the actual input and output fields</summary>
+
 ```json
 {
   "target": "CC(C)OCC1=NC(C2CCC2)=CS1",
@@ -87,9 +93,7 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 }
 ```
 
-![vibrational.generation.hc actual results](../assets/gallery/vibrational-generation-hc.png)
-
-[SVG](../assets/gallery/vibrational-generation-hc.svg) · [PNG](../assets/gallery/vibrational-generation-hc.png) · [Full input/output JSON](../assets/examples/vibrational-generation-hc.json)
+</details>
 
 ## Actual evaluation results
 
@@ -123,6 +127,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 Checkpoint pairs must share their H/C reference and normalization buffers. Small candidate pools can inflate retrieval numbers; publish the sample IDs, seed and source composition with every score.
 
+<details><summary>Source reports and SHA-256 fingerprints</summary>
+
 - [vib2mol_xinyu_random64_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/vib2mol_xinyu_random64_20261116.json) — SHA-256 `9f452a28aef3ff5af315cdbe1340c1844f7e3af139896490fba2d268fc970cc8`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/X1nyuLu/openSpec-alpha) · [Model review / 模型检查](../model-audit.md)

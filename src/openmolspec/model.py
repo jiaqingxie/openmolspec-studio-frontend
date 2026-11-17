@@ -62,7 +62,7 @@ class NMRNet(_ConfiguredModel):
 class NMRTransformer(_ConfiguredModel):
     """Experimental NMR retrieval or formula-conditioned generation; two-stage training."""
     capabilities = {'predict': True, 'retrieve': True, 'fit': True,
-                    'training_validation': 'existing trainer; new wrapper has not run a training job'}
+                    'training_validation': 'encoder and generator each completed one-step train/save/reload inference verification; software integration only'}
 
     def __init__(self, *, checkpoint=None, stage='generate', python=None, device='cpu'):
         if stage not in ('align', 'generate'):

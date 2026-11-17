@@ -25,6 +25,12 @@ Current solid-state weights are not validated for solution shifts. Resolve domai
 
 The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
+![nmr.forward.19F actual results](../assets/gallery/nmr-forward-19F.png)
+
+[SVG](../assets/gallery/nmr-forward-19F.svg) · [PNG](../assets/gallery/nmr-forward-19F.png) · [Full input/output JSON](../assets/examples/nmr-forward-19F.json)
+
+<details><summary>Inspect the actual input and output fields</summary>
+
 ```json
 {
   "input": {
@@ -43,9 +49,7 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 }
 ```
 
-![nmr.forward.19F actual results](../assets/gallery/nmr-forward-19F.png)
-
-[SVG](../assets/gallery/nmr-forward-19F.svg) · [PNG](../assets/gallery/nmr-forward-19F.png) · [Full input/output JSON](../assets/examples/nmr-forward-19F.json)
+</details>
 
 ## Actual evaluation results
 
@@ -76,6 +80,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 A compatible released solution checkpoint or documented reference conversion is required for a valid primary score. No retraining or fitted recalibration is permitted.
 
+<details><summary>Source reports and SHA-256 fingerprints</summary>
+
 - [fp_frozen_fresh_diagnostic_20261115.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/fp_frozen_fresh_diagnostic_20261115.json) — SHA-256 `7a44203bd5826e778a9006edd92dee0ec71e47930c2a980f6082313974c68475`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)

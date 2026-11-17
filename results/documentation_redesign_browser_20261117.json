@@ -1,0 +1,26 @@
+{
+  "sidebar_header_color": "rgb(41, 128, 185)",
+  "sdk_guide_visible": true,
+  "reading_width": 1065,
+  "training_history_audit_visible": true,
+  "gallery_task_figures": 31,
+  "first_gallery_figure_width": 943,
+  "experimental_data_separated": true,
+  "translated_heading": "H/C 峰 → 原子指认",
+  "expandable_actual_input_output": true,
+  "search_en": {
+    "query": "assignment",
+    "results": 4,
+    "assignment_found": true
+  },
+  "search_zh/": {
+    "query": "原子",
+    "results": 4,
+    "assignment_found": true
+  },
+  "notebook_output_cells": 4,
+  "notebook_result_figure": true,
+  "notebook_download_matches": true,
+  "mobile_menu_works": true,
+  "javascript_errors": []
+}

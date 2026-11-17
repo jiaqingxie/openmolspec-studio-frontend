@@ -25,6 +25,12 @@ Reasonable candidate pipeline for a known structure; no experimental assignment 
 
 The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
+![nmr.assignment actual results](../assets/gallery/nmr-assignment.png)
+
+[SVG](../assets/gallery/nmr-assignment.svg) · [PNG](../assets/gallery/nmr-assignment.png) · [Full input/output JSON](../assets/examples/nmr-assignment.json)
+
+<details><summary>Inspect the actual input and output fields</summary>
+
 ```json
 {
   "input": {
@@ -139,9 +145,7 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 }
 ```
 
-![nmr.assignment actual results](../assets/gallery/nmr-assignment.png)
-
-[SVG](../assets/gallery/nmr-assignment.svg) · [PNG](../assets/gallery/nmr-assignment.png) · [Full input/output JSON](../assets/examples/nmr-assignment.json)
+</details>
 
 ## Actual evaluation results
 
@@ -173,6 +177,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 Residual error is not assignment accuracy. Topological symmetry is not proof of magnetic equivalence. Solvent and conformer ensembles are not modeled; H/C only. See the source JSON for input geometry, checkpoint hash and sample identities.
 
+<details><summary>Source reports and SHA-256 fingerprints</summary>
+
 - [assignment_carbon32_20261116.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/assignment_carbon32_20261116.json) — SHA-256 `c3d25150e5811b8987060e147f43d9add4f729e340da420b94425766e1e76540`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/Colin-Jay/NMRNet) · [Model review / 模型检查](../model-audit.md)

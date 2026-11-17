@@ -27,6 +27,12 @@ Input/output pairing is appropriate; the 32-candidate smoke pool is small. Valid
 
 The first recorded example is shown below, regardless of whether it succeeds. Array previews explicitly state their lengths; download the evidence JSON for complete values. Reference labels are kept separate from model inputs.
 
+![nmr.retrieval.c.s2m actual results](../assets/gallery/nmr-retrieval-c-s2m.png)
+
+[SVG](../assets/gallery/nmr-retrieval-c-s2m.svg) · [PNG](../assets/gallery/nmr-retrieval-c-s2m.png) · [Full input/output JSON](../assets/examples/nmr-retrieval-c-s2m.json)
+
+<details><summary>Inspect the actual input and output fields</summary>
+
 ```json
 {
   "input": {
@@ -76,9 +82,7 @@ The first recorded example is shown below, regardless of whether it succeeds. Ar
 }
 ```
 
-![nmr.retrieval.c.s2m actual results](../assets/gallery/nmr-retrieval-c-s2m.png)
-
-[SVG](../assets/gallery/nmr-retrieval-c-s2m.svg) · [PNG](../assets/gallery/nmr-retrieval-c-s2m.png) · [Full input/output JSON](../assets/examples/nmr-retrieval-c-s2m.json)
+</details>
 
 ## Actual evaluation results
 
@@ -122,6 +126,11 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
 
 Scores from 16, 32 and full-dataset candidate pools are not directly comparable. Existing dataset provenance and train/test overlap still require independent audit before an accuracy claim.
 
+<details><summary>Source reports and SHA-256 fingerprints</summary>
+
 - [nmr_documented_examples_20261117_v2.json](https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/nmr_documented_examples_20261117_v2.json) — SHA-256 `669413d6fc0939bdb6826782d41fc13cf12926a672418ecb46303f0b8ba05b99`
+
+</details>
+
 
 [Original model / 原模型](https://github.com/jiaqingxie/openmolspec-studio-frontend) · [Model review / 模型检查](../model-audit.md)
