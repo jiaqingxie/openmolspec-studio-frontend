@@ -4,6 +4,14 @@
 
 ## 安装
 
+[带版本号的发布页](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.1.0a2)提供约 250 KB 的 wheel 及校验和。使用数据加载与模型接口时，可以直接安装到自己的环境：
+
+```bash
+python -m pip install "https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/download/v1.1.0a2/openmolspec-1.1.0a2-py3-none-any.whl"
+```
+
+需要 notebook、源码及可选依赖时，克隆仓库：
+
 ```bash
 git clone --branch release/openmolspec-v1 https://github.com/jiaqingxie/openmolspec-studio-frontend.git
 cd openmolspec-studio-frontend

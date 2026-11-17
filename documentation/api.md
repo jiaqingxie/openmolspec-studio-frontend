@@ -4,6 +4,14 @@ The package provides dataset loading, model facades, training preparation and be
 
 ## Install
 
+The [versioned release](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.1.0a2) provides a 250 KB wheel and checksum. For data loading and model interfaces, install it directly into your environment:
+
+```bash
+python -m pip install "https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/download/v1.1.0a2/openmolspec-1.1.0a2-py3-none-any.whl"
+```
+
+For the notebooks, source code and optional dependencies, clone the repository:
+
 ```bash
 git clone --branch release/openmolspec-v1 https://github.com/jiaqingxie/openmolspec-studio-frontend.git
 cd openmolspec-studio-frontend
