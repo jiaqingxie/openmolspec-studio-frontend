@@ -80,8 +80,13 @@ def stage_sources(target, sources, locale):
         # Both locale trees use the same page names; only the output root differs.
         content = re.sub(r"(?<=\.)zh\.(?=(?:md|ipynb)(?:[)#?]))", "", content)
         if relative.as_posix() == "index.md":
-            content = add_toctree(content, ["quickstart", "api", "gallery", "tasks/index", "datasets", "notebooks/index",
-                                             "corpus-comparison", "learning-evidence", "model-audit", "training-overlap", "protocols", "publication"])
+            content = add_toctree(content, ["quickstart", "data/index", "tasks/index", "model-audit", "api", "notebooks/index", "theory/index", "inversion/index", "gallery", "harness", "api-reference/index", "benchmarks", "datasets", "corpus-comparison", "faq", "contributing", "citations", "protocols", "publication"])
+        elif relative.as_posix() == 'api-reference/index.md':
+            content = add_toctree(content, ['datasets', 'models', 'training', 'inversion', 'harness'])
+        elif relative.as_posix() == 'data/index.md':
+            content = add_toctree(content, ['nmr', 'ms', 'vibrational', 'multimodal', 'splits'])
+        elif relative.as_posix() == 'theory/index.md':
+            content = add_toctree(content, ['nmr', 'ms', 'vibrational'])
         elif relative.as_posix() == 'tasks/index.md':
             content = add_toctree(content, [key for key,_,_ in GROUPS])
         elif relative.parent.as_posix()=='tasks' and relative.stem in [g[0] for g in GROUPS]:

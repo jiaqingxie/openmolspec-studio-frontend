@@ -2,7 +2,7 @@
 
 用已训练的液相 All-nucleus NMRNet 对 29Si 验证数据做冻结推理。
 
-## 当前结论
+## 示例与评测
 
 当前不适合精确溶液位移预测：MAE 56.13 ppm，32 个预测全部偏高。先清理数据并确认相容权重，再考虑微调。
 
@@ -80,7 +80,22 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.forward.29Si --limit 8 --output results/nmr-forward-29Si-new.json
 ```
 
-## 边界与来源
+## 调用模型与微调
+
+```python
+from openmolspec.benchmark import Benchmark
+benchmark = Benchmark(workspace='/path/to/workspace',
+    python='/path/to/sdk-env/bin/python',
+    models_root='/path/to/models',
+    nmr_python='/path/to/nmr-env/bin/python')
+result = benchmark.run('nmr.forward.29Si', output='29Si-results.json', limit=32)
+```
+
+微调使用 [NMRNet 作者训练实现](https://github.com/Colin-Jay/NMRNet)：准备对应核种的逐原子标签、结构／坐标、目标掩码及 train/val LMDB。实现提供 `atom_regloss_mae` 与 `atom_regloss_mse`，在有标签的原子上计算目标。保留 scaler 和参考标准，在验证集选择 checkpoint。该训练流程通过作者实现运行。
+
+$$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
+
+## 数据要求与引用
 
 各核训练覆盖、训练重叠及实验原子指认来源尚未核实，且该模型不输入溶剂。正式评分仍停用；继续核查 NMRNet++ 的 B/Si 专用权重，不拟合任何校正。
 

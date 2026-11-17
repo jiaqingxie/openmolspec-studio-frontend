@@ -2,7 +2,7 @@
 
 Estimate target-solvent shifts from a measured source-solvent spectrum using paired experimental references.
 
-## Current evidence
+## Example and evaluation
 
 Executable reference baseline; H does not improve on unchanged shifts. A solvent-conditioned model and independent paired data are still needed.
 
@@ -112,7 +112,19 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.solvent_transfer --limit 8 --output results/nmr-solvent_transfer-new.json
 ```
 
-## Limits and provenance
+## Call and adapt this model
+
+```python
+from openmolspec.benchmark import Benchmark
+benchmark = Benchmark(workspace='/path/to/workspace',
+    python='/path/to/task-env/bin/python',
+    solvent_library='/path/to/solvent-library.json')
+result = benchmark.run('nmr.solvent_transfer', output='new-algorithm-results.json', limit=32)
+```
+
+This task is an algorithmic workflow. Adapt its reference library or matching rules; there are no neural parameters or training loss. The task’s matching objective and provenance are described above.
+
+## Data requirements and references
 
 This is a retrieval baseline, not a pretrained neural solvent model. It does not consistently improve both nuclei over unchanged shifts. The reference library is small, and temperature/concentration/reference conventions are not independently harmonized. Neural solvent checkpoints remain unavailable.
 

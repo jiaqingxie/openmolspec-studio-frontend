@@ -2,7 +2,7 @@
 
 Propose atom assignments for measured peaks and a known structure.
 
-## Current evidence
+## Example and evaluation
 
 Reasonable candidate pipeline for a known structure; no experimental assignment accuracy yet. Validate atom labels and symmetry before proposing fine-tuning.
 
@@ -173,7 +173,20 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.assignment --limit 8 --output results/nmr-assignment-new.json
 ```
 
-## Limits and provenance
+## Call and adapt this model
+
+```python
+from openmolspec.model import NMRNet
+model = NMRNet.from_pretrained('/path/to/models', nucleus='13C',
+    python='/path/to/nmr-env/bin/python')
+result = model.assign(smiles, measured_peaks_ppm)
+```
+
+For fine-tuning, use the [NMRNet author training implementation](https://github.com/Colin-Jay/NMRNet), preparing atom-labelled structures/coordinates, target masks and train/validation LMDBs for the selected nucleus. Its `atom_regloss_mae` and `atom_regloss_mse` criteria operate on supervised target atoms. Retain the scaler/reference convention and select the checkpoint on validation data. This author training route is separate from the SDK inference facade. Peak matching then minimizes a separate assignment cost under the stated tolerances; it does not create atom-labelled training truth.
+
+$$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
+
+## Data requirements and references
 
 Residual error is not assignment accuracy. Topological symmetry is not proof of magnetic equivalence. Solvent and conformer ensembles are not modeled; H/C only. See the source JSON for input geometry, checkpoint hash and sample identities.
 

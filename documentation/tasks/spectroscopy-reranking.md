@@ -2,7 +2,7 @@
 
 Use Xinyu's saved Vib2Mol models for spectral structure elucidation. The complete input is IR + Raman + H/C; the IR/Raman-only route is a missing-NMR ablation.
 
-## Current evidence
+## Example and evaluation
 
 Missing-channel ablation of a four-modal checkpoint. Poor scores do not validate a stand-alone IR/Raman model; use compatible unimodal weights or plan separate adaptation.
 
@@ -113,7 +113,21 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks spectroscopy.reranking --limit 8 --output results/spectroscopy-reranking-new.json
 ```
 
-## Limits and provenance
+## Call and adapt this model
+
+```python
+from openmolspec.model import Vib2Mol
+model = Vib2Mol(root='/path/to/portable-models',
+    python='/path/to/vibrational-env/bin/python')
+result = model.retrieve(inputs, candidate_smiles,
+    rerank=True, allow_missing_modalities=True)
+```
+
+Use the [openSpec/Vib2Mol author training workflow](https://github.com/X1nyuLu/openSpec-alpha) for adaptation. Export aligned spectral/structure LMDBs, retain H/C references and normalization, and keep train/validation groups disjoint. Retrieval combines symmetric contrastive cross-entropy with matching cross-entropy; generation adds autoregressive molecular-token cross-entropy. Property regression uses the target transform and regression criterion from its training configuration. SDK classes expose inference; these training workflows run in the author implementation.
+
+$$L_{\rm retrieval}=L_{\rm contrastive}+L_{\rm matching},\qquad L_{\rm generation}=-\sum_t\log p(y_t\mid y_{<t},s).$$
+
+## Data requirements and references
 
 Checkpoint pairs must share their H/C reference and normalization buffers. Small candidate pools can inflate retrieval numbers; publish the sample IDs, seed and source composition with every score.
 

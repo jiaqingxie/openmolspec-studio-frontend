@@ -62,8 +62,8 @@ class ModelAssets:
                 "1M theoretical · Hessian / response / H-C NMR",
             ),
             "谱图 → 结构检索": (
-                self.spectrum_lmdb is not None and (not online or self.retrieval_checkpoint is not None and self.nmr_normalizer is not None),
-                "OpenMolSpec theoretical test set",
+                self.spectrum_lmdb is not None and self.retrieval_checkpoint is not None and self.nmr_normalizer is not None,
+                "Vib2Mol · direct embedding retrieval",
             ),
             "谱图 → HOMO–LUMO gap": (
                 self.gap_checkpoint is not None,
@@ -71,9 +71,8 @@ class ModelAssets:
             ),
             "谱图 → 结构生成": (
                 self.generation_checkpoint is not None
-                and (self.nmr_normalizer is not None and self.retrieval_checkpoint is not None
-                     if online else self.generation_predictions is not None),
-                "Vib2Mol · direct inference" if online else "Vib2Mol · legacy test set cache",
+                and self.nmr_normalizer is not None and self.retrieval_checkpoint is not None,
+                "Vib2Mol · direct beam=10 and ITM reranking",
             ),
         }
 

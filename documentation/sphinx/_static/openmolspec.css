@@ -3,7 +3,7 @@
 .wy-nav-content { max-width: 1240px; padding: 2.6rem 3.25rem; }
 .wy-nav-content-wrap { background: #f7f9fb; }
 .rst-content { color: var(--oms-ink); line-height: 1.7; }
-.rst-content h1, .rst-content h2, .rst-content h3 { font-family: inherit; color: var(--oms-ink); }
+.rst-content h1, .rst-content h2, .rst-content h3 { font-family: Arial, sans-serif; color: var(--oms-ink); }
 .rst-content h1 { font-size: 2.25rem; letter-spacing: -.025em; line-height: 1.2; margin-bottom: 1.3rem; }
 .rst-content h2 { margin-top: 2.4rem; padding-top: .7rem; border-top: 1px solid var(--oms-rule); }
 .rst-content p { line-height: 1.75; }
@@ -49,3 +49,6 @@
  .oms-stat span { font-size: .74rem; } .oms-gallery-grid figcaption { padding: .85rem; }
  .oms-gallery-grid { gap: 1.3rem; }
 }
+
+body, .rst-content { font-family: Arial, sans-serif; }
+.wy-side-nav-search .wy-dropdown>a img.logo,.wy-side-nav-search>a img.logo { max-width: 240px; padding: 0; }

@@ -61,11 +61,15 @@ async def execute_notebook(notebook, runtime):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--limit", type=int)
+    parser.add_argument("--pattern", default='*.ipynb', help='Select tutorial filenames for a focused execution')
+    parser.add_argument("--proof-output", type=Path, help='Separate execution proof for a selected subset')
     parser.add_argument("--jobs", type=int, default=1, help="Parallel isolated Jupyter kernels")
     parser.add_argument("--engine", choices=["jupyter", "python"], default="jupyter",
                         help="python executes plain-Python cells in process; no Jupyter kernel validation")
     parser.add_argument("--output-dir", type=Path, help="Write executed notebooks separately from source previews")
     args = parser.parse_args()
+    if args.pattern != '*.ipynb' and not args.proof_output:
+        parser.error('A selected subset requires --proof-output to preserve the complete execution proof')
     if args.jobs < 1 or (args.engine == 'python' and args.jobs != 1):
         parser.error('jobs must be positive; the in-process Python engine requires jobs=1')
     runtime = ROOT / ".runtime/doc-notebook-kernels"
@@ -77,9 +81,13 @@ def main():
     os.environ["IPYTHONDIR"] = str(runtime / "ipython")
     os.environ["JUPYTER_RUNTIME_DIR"] = str(runtime / "runtime")
     os.environ["MPLCONFIGDIR"] = str(runtime / "matplotlib")
+    local_font = ROOT / '.runtime/fonts/Arial.TTF'
+    if local_font.is_file():
+        os.environ.setdefault('OPENMOLSPEC_ARIAL_FONT', str(local_font))
     os.environ["OPENMOLSPEC_RUN_NOTEBOOK_INFERENCE"] = "0"
     index_sha = hashlib.sha256((ROOT / "documentation/assets/evaluation_index.json").read_bytes()).hexdigest()
-    files = sorted((ROOT / "documentation/notebooks").glob("*.ipynb"))
+    files = sorted((ROOT / "documentation/notebooks").glob(args.pattern))
+    if not files:parser.error('No notebooks matched the requested pattern')
     if args.limit:
         files = files[:args.limit]
     def run_one(path):
@@ -125,7 +133,7 @@ def main():
             if not done:
                 print(f'Waiting for {len(pending)} notebook executions', flush=True)
         proof.sort(key=lambda item: item['notebook'])
-    destination = ROOT / "results/doc_notebook_execution.json"
+    destination = args.proof_output or ROOT / "results/doc_notebook_execution.json"
     destination.write_text(json.dumps({"executed_notebooks": len(proof), "evaluation_index_sha256": index_sha, "engine": args.engine,
                                        "scope": "saved_result_analysis_and_explicit_sdk_frozen_inference_no_training", "notebooks": proof}, indent=2) + "\n")
     print(f"Notebook demonstrations verified: {len(proof)}", flush=True)

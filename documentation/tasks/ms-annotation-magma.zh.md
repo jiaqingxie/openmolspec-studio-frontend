@@ -2,7 +2,7 @@
 
 从已知分子枚举候选碎片，用质量误差匹配实测 MS/MS 谱峰，无需模型训练。
 
-## 当前结论
+## 示例与评测
 
 这是算法标注，不是可微调神经模型；应改进匹配和验证。
 
@@ -311,7 +311,21 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks ms.annotation.magma --limit 8 --output results/ms-annotation-magma-new.json
 ```
 
-## 边界与来源
+## 调用模型与微调
+
+```python
+from openmolspec.benchmark import Benchmark
+benchmark = Benchmark(workspace='/path/to/workspace',
+    python='/path/to/task-env/bin/python',
+    magma_source='/path/to/MAGMA-source',
+    ms_input_csv='/path/to/measured-ms.csv',
+    ms_metadata_tsv='/path/to/acquisition-metadata.tsv')
+result = benchmark.run('ms.annotation.magma', output='new-algorithm-results.json', limit=32)
+```
+
+此任务是算法流程，可调整参考库或匹配规则；没有神经网络参数和训练 loss。具体匹配目标与数据来源见上文。
+
+## 数据要求与引用
 
 氢迁移、图深度、断键数等字段沿用原算法语义。默认规范化会改变原子顺序，必须保留 engine_smiles；不擅自改动枚举和匹配算法。
 

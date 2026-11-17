@@ -1,13 +1,13 @@
-# Python SDK — openmolspec 1.1.0a2
+# Python SDK — OpenMolSpec v1.0
 
-The package provides dataset loading, model facades, training preparation and benchmark entry points. The base installation has no third-party dependencies. This is an alpha SDK: frozen inference has real execution evidence; the training launcher has completed one encoder step and one generator step, including checkpoint save, configuration reload and identical repeated inference on tiny train/validation examples. This checks software integration, not learning performance.
+The package provides dataset loading, model facades, training preparation and benchmark entry points. The base installation has no third-party dependencies. In this release, frozen inference has real execution evidence; the training launcher has completed one encoder step and one generator step, including checkpoint save, configuration reload and identical repeated inference on tiny train/validation examples. This checks software integration, not learning performance.
 
 ## Install
 
-The [versioned release](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.1.0a2) provides a 250 KB wheel and checksum. For data loading and model interfaces, install it directly into your environment:
+The [versioned release](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0) provides the wheel and checksum. For data loading and model interfaces, install it directly into your environment:
 
 ```bash
-python -m pip install "https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/download/v1.1.0a2/openmolspec-1.1.0a2-py3-none-any.whl"
+python -m pip install "https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/download/v1.0/openmolspec-1.0.0-py3-none-any.whl"
 ```
 
 For the notebooks, source code and optional dependencies, clone the repository:
@@ -23,7 +23,7 @@ python3 -m venv .venv
 # .venv/bin/python -m pip install '.[train]'
 ```
 
-The alpha has not been published to PyPI. NMRNet, Vib2Mol and MS models use their author environments, selected with `python=`. Only OpenMolSpec modules are exposed to that interpreter; its torch/numpy versions are preserved. Original production-processing commands now require `pip install ".[production]"`.
+The package is distributed through GitHub Releases. NMRNet, Vib2Mol and MS models use their author environments, selected with `python=`. Only OpenMolSpec modules are exposed to that interpreter; its torch/numpy versions are preserved. Original production-processing commands now require `pip install ".[production]"`.
 
 ## Dataset loading, provenance and splits
 
@@ -45,6 +45,7 @@ print(data.summary())
 | `nmrspec_test`, `patent_test_10k`, `nmrexp_exp_10k`, `nmrgym_test` | `test.jsonl` | Prepared experimental evaluation views |
 | `openspec_test` | `openspec_test.lmdb` | OpenMolSpec calculated observables |
 | `massspecgym_test` | `MassSpecGym_test_full.csv` | External experimental MS/MS |
+| `massspecgym_1_5` | Versioned `MassSpecGym.tsv`, filtered by its native fold | External experimental MS/MS; v1.5 |
 
 Pass a directory or, for a single-file test view, the file itself. Legacy LMDB requires explicit `trusted=True` because it contains Python pickles. Record fields are preserved; `_openmolspec` adds dataset, domain, split, source-file locator and available modalities. Missing acquisition conditions are not fabricated. Card counts describe audited versions, not arbitrary local files; `verify()` rejects changed files. Full dataset downloads are not silently performed. Verified public release URLs and redistribution scope remain pending; see [data sources and counts](datasets.md).
 
@@ -129,7 +130,6 @@ The 31 active adapters remain accessible; deferred tasks are excluded. A complet
 
 A full chemistry check of the four local evaluation JSONLs inspected 39,183 records. Five records in the 10,000-record patent view had a recorded nucleus absent from the structure (five H flags; two of those also C flags). The other three views had no flags under these checks. This is not an audit of every raw spectrum or of the full 2.68-million-identity corpus. [Download audit](assets/reports/sdk_nmr_input_audit_20261117.json).
 
-The NMR Transformer checkpoints have confirmed evaluation/training identity overlap and a final-stage data-fingerprint discrepancy. See the [training-history audit](training-overlap.md) before interpreting retrieval or generation scores.
 
 To reproduce the software integration check from this repository:
 

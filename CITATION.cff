@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "Please cite the software and the original datasets/models used in your work."
+type: software
+title: "OpenMolSpec: Datasets and a Platform for Chemical Spectroscopic Deep Learning"
+version: "1.0"
+authors:
+  - name: "OpenMolSpec contributors"
+repository-code: "https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1"
+url: "https://jiaqingxie.github.io/openmolspec.github.io/"
+date-released: 2026-11-18

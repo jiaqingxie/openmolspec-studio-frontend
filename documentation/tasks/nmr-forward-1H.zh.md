@@ -2,7 +2,7 @@
 
 由分子结构预测 1H 化学位移，已有兼容权重时进行冻结推理或已有预测评分。
 
-## 当前结论
+## 示例与评测
 
 可作为 H/C 冻结模型基线；误差来自峰匹配，不代表实验原子指认。仍要检查训练重叠和溶剂覆盖。
 
@@ -118,7 +118,20 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.forward.1H --limit 8 --output results/nmr-forward-1H-new.json
 ```
 
-## 边界与来源
+## 调用模型与微调
+
+```python
+from openmolspec.model import NMRNet
+model = NMRNet.from_pretrained('/path/to/models', nucleus='1H',
+    python='/path/to/nmr-env/bin/python')
+result = model.predict(smiles)
+```
+
+微调使用 [NMRNet 作者训练实现](https://github.com/Colin-Jay/NMRNet)：准备对应核种的逐原子标签、结构／坐标、目标掩码及 train/val LMDB。实现提供 `atom_regloss_mae` 与 `atom_regloss_mse`，在有标签的原子上计算目标。保留 scaler 和参考标准，在验证集选择 checkpoint。该训练流程通过作者实现运行。
+
+$$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
+
+## 数据要求与引用
 
 峰匹配误差不是逐原子指认准确率。这里对 H/C 保存的预测评分，不据此外推其他核种的适用性。
 

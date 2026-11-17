@@ -9,10 +9,10 @@ def homepage(en):
     text=f'# OpenMolSpec\n\n<div class="oms-eyebrow">Chemical spectroscopy · Open research platform</div>\n\n'
     text+=f'<p class="oms-lead"><strong>{title}</strong><br>{intro}</p>\n\n'
     text+='<div class="oms-stat-grid">\n'
-    for value,english,chinese in [('7','dataset registry entries','个数据注册入口'),('31','active task configurations','个启用任务配置'),('74','executed bilingual notebooks','份已执行中英文 notebook')]:
+    for value,english,chinese in [('8','dataset registry entries','个数据注册入口'),('31','active task configurations','个启用任务配置'),('82','executed bilingual notebooks','份已执行中英文 notebook')]:
         text+=f'<div class="oms-stat"><strong>{value}</strong><span>{english if en else chinese}</span></div>\n'
     text+='</div>\n\n'
-    paths=[('datasets.html','Use the data','使用数据','Understand sources, distributions, split roles and loading APIs.','了解来源、分布、训练与测试划分，以及数据加载方法。'),
+    paths=[('data/index.html','Use the data','使用数据','Understand sources, distributions, split roles and loading APIs.','了解来源、分布、训练与测试划分，以及数据加载方法。'),
            ('tasks/index.html','Choose a task','选择任务','Start from your input: a structure, NMR peaks, MS/MS, IR or Raman.','从手头的结构、NMR 峰、MS/MS、IR 或 Raman 出发。'),
            ('api.html','Predict and train','预测与训练','Use model classes, inspect real examples and prepare training data.','调用模型类、检查真实案例，并准备自己的训练数据。')]
     text+='<div class="oms-paths">\n'+''.join(f'<a class="oms-path" href="{url}"><strong>{a if en else z} →</strong><span>{ae if en else ze}</span></a>\n' for url,a,z,ae,ze in paths)+'</div>\n\n'
@@ -21,12 +21,12 @@ def homepage(en):
            '构象到谱图示例调用 Xinyu 的 openSpec 模型，输入坐标与 Gaussian 参考完全对应。两条曲线分别是实际预测与参考计算。图中展示两个案例中的一例，说明推理路径已跑通；完整精度仍需更大规模的独立评测。\n\n')
     text+='[![IR and Raman: recorded prediction and reference](assets/gallery/vibrational-forward.png)](tasks/vibrational-forward.md)\n\n'
     text+=('[Explore all result figures](gallery.md) · [Open this task](tasks/vibrational-forward.md) · [Read the executed notebook](notebooks/vibrational-forward.ipynb)\n\n' if en else
-           '[浏览全部结果图](gallery.md) · [任务输入与输出](tasks/vibrational-forward.md) · [查看已执行 notebook](notebooks/vibrational-forward.ipynb)\n\n')
+           '[浏览全部结果图](gallery.md) · [任务输入与输出](tasks/vibrational-forward.md) · [查看教程](notebooks/vibrational-forward.ipynb)\n\n')
     text+='## '+('Start with the Python package' if en else '从 Python 包开始')+'\n\n'
     text+=('Install the versioned wheel using the [SDK guide](api.md), then inspect the dataset registry. Loading full data and running model weights require the assets described there.\n\n' if en else
            '先按 [SDK 指南](api.md) 安装带版本号的 wheel，再查看数据注册表。完整数据和模型权重的准备方法也在该页列出。\n\n')
     text+='```python\nfrom openmolspec.dataset import list_datasets\n\nfor card in list_datasets():\n    print(card["name"])\n```\n\n'
-    text+='[Quick Start](quickstart.md) · [Python SDK](api.md) · [Executed notebooks](notebooks/index.md)\n\n'
+    text+='[Quick Start](quickstart.md) · [Python SDK](api.md) · [Tutorials](notebooks/index.md)\n\n'
     text+='## '+('What the data represent' if en else '这里的数据分别是什么')+'\n\n'
     text+=('| Collection | Meaning | Where to inspect |\n| --- | --- | --- |\n'
            '| Team-curated experimental NMR | Patent-derived measurements; 2,680,271 stored standard-InChI identities in the current prepared corpus. Curation does not mean we measured these spectra. | [Sources and counts](datasets.md) |\n'
@@ -36,12 +36,13 @@ def homepage(en):
            '| 团队整理的实验 NMR | 从专利整理的实验测量；当前准备库含 2,680,271 个存储的标准 InChI 身份。整理数据不代表实验由我们测量。 | [来源与计数](datasets.md) |\n'
            '| 计算谱与性质 | 计算得到的 IR/Raman 及分子性质，分子记录和构象帧分别计数。 | [数据分布](datasets.md) |\n'
            '| 外部基准 | NMRSpec、NMRexp、NMRGym、MS 等资源保留各自来源和贡献者。 | [数据比较](corpus-comparison.md) |\n\n')
-    text+=('Dataset counts use different units and can overlap. The registry is an access layer, not seven newly measured datasets.\n\n' if en else
-           '不同资源的计数单位不同，也可能包含相同分子。注册入口提供统一访问，不代表七个新测量的数据集。\n\n')
+    text+=('Dataset counts use different units and can overlap. The registry is an access layer, not eight newly measured datasets.\n\n' if en else
+           '不同资源的计数单位不同，也可能包含相同分子。注册入口提供统一访问，不代表八个新测量的数据集。\n\n')
     text+='## '+('Assess a model before using it' if en else '使用前判断模型是否适合')+'\n\n'
     text+=('H/C NMR, MS/MS and vibrational examples contain actual outputs. B/Si and F/P are diagnostic; cross-solvent transfer is currently an experimental-reference baseline. The training API has completed an encoder/generator train–save–reload integration check on tiny examples; large-scale learning claims require separate experiments.\n\n' if en else
            'H/C NMR、MS/MS 与振动谱案例均展示真实输出。B/Si 和 F/P 当前只作诊断，跨溶剂迁移当前为实验参考检索基线。训练接口已完成编码器与生成器的微型训练、保存、重载检查；大规模学习效果需要另外的实验支撑。\n\n')
-    text+='[Model suitability](model-audit.md) · [Evaluation protocols](protocols.md) · [Training overlap](training-overlap.md) · [Publication status](publication.md)\n'
+    text+='[Model suitability](model-audit.md) · [Evaluation protocols](protocols.md) · [Publication status](publication.md)\n'
+    text+='\n[Data](data/index.md) · [Theory](theory/index.md) · [Inversion](inversion/index.md) · [Spectra Harness](harness.md)\n'
     return text
 
 

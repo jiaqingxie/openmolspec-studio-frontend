@@ -7,6 +7,7 @@ import copy
 import io
 import json
 from pathlib import Path
+import sys
 import textwrap
 import xml.etree.ElementTree as ET
 
@@ -27,6 +28,7 @@ GREY = '#A8B3BF'
 LIGHT = '#E9EEF2'
 SVG = 'http://www.w3.org/2000/svg'
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'src'))
 
 
 class ScientificFigure(Figure):
@@ -63,7 +65,9 @@ class ScientificFigure(Figure):
 
 
 def style():
-    plt.rcParams.update({'font.family':'DejaVu Sans','font.size':11,'axes.titlesize':13,
+    from openmolspec.plotting import figure_style
+    figure_style()
+    plt.rcParams.update({'font.family':'Arial','font.size':11,'axes.titlesize':13,
         'axes.titleweight':'normal','axes.labelsize':11,'axes.labelcolor':INK,
         'text.color':INK,'xtick.color':MUTED,'ytick.color':MUTED,
         'xtick.labelsize':10,'ytick.labelsize':10,'axes.edgecolor':'#CAD3DC',
@@ -126,6 +130,8 @@ def molecule(axis, smiles, reference=None, atom_indices=False):
     for cls in (rdMolDraw2D.MolDraw2DCairo,rdMolDraw2D.MolDraw2DSVG):
         draw=cls(width,height);options=draw.drawOptions()
         options.bondLineWidth=2.3;options.padding=.08;options.minFontSize=22;options.maxFontSize=32
+        from openmolspec.plotting import arial_path
+        options.fontFile=arial_path()
         options.addAtomIndices=atom_indices
         options.annotationFontScale=.8
         draw.DrawMolecule(mol);draw.FinishDrawing();drawings.append(draw.GetDrawingText())
@@ -200,24 +206,38 @@ def render_task(task_id, evidence):
         panel(ax,'b','Observed spectrum and mirrored prediction')
         fields=first['input'];footer(fig,f'{fields["adduct"]} · collision energy {fields["collision_energy"]} · {fields["instrument"]}. '+scope)
     elif kind=='ranking':
-        molecule_query=task_id.endswith('.m2s')
-        fig,axes=canvas('Finding a spectrum in a candidate library' if molecule_query else 'Finding a structure in a candidate library','NMR retrieval' if task_id.startswith('nmr.') else 'Multimodal retrieval',
-                        'One recorded query · candidate scores retain the original model ordering',widths=(1.1,1))
-        axes[0].set_position([.15,.205,.35,.53])
-        candidates=p['candidates'][:10];ax=axes[0];positions=np.arange(len(candidates))
-        colors=[TEAL if c['reference_match'] else GREY for c in candidates]
-        scores=[c['score'] for c in candidates]
-        ax.barh(positions,scores,height=.62,color=colors)
-        ax.set_yticks(positions,[f'{i+1:02d}'+('  reference' if c['reference_match'] else '') for i,c in enumerate(candidates)])
-        ax.invert_yaxis();ax.set_xlabel('Model score');clean(ax,'x');panel(ax,'a','Highest-ranked candidates')
-        width=max(max(scores)-min(0,min(scores)),.05)
-        ax.set_xlim(min(0,min(scores))-.02*width,max(scores)+.24*width)
-        for y,c in zip(positions,candidates):ax.text(c['score']+.025*width,y,f'{c["score"]:.3f}',va='center',fontsize=9,color=INK)
-        molecule(axes[1],candidates[0]['smiles']);panel(axes[1],'b','Structure of the top-ranked spectrum' if molecule_query else 'Top-ranked structure')
-        axes[1].text(.5,-.12,'Matches reference' if candidates[0]['reference_match'] else 'Does not match reference',transform=axes[1].transAxes,ha='center',color=TEAL if candidates[0]['reference_match'] else RED,weight='bold')
-        footer(fig,scope+' · Green identifies the reference candidate. Scores are not calibrated probabilities; this example is not an independent benchmark.')
+        style();candidates=p['candidates'];columns=4;rows=int(np.ceil(len(candidates)/columns))
+        fig=plt.figure(figsize=(12.8,2.5+2.2*rows),FigureClass=ScientificFigure)
+        grid=fig.add_gridspec(rows,columns,left=.045,right=.955,top=.80,bottom=.14,wspace=.18,hspace=.55)
+        fig.text(.055,.95,'NMR RETRIEVAL' if task_id.startswith('nmr.') else 'MULTIMODAL RETRIEVAL',fontsize=10,color=TEAL,weight='bold')
+        fig.text(.055,.90,'Recorded candidate structures, in model order',fontsize=19,weight='bold')
+        fig.text(.055,.855,f'{len(candidates)} recorded candidates · '+('structures of candidate spectra' if task_id.endswith('.m2s') else 'spectrum-to-structure query'),fontsize=11,color=MUTED)
+        for index,candidate in enumerate(candidates):
+            ax=fig.add_subplot(grid[index//columns,index%columns]);molecule(ax,candidate['smiles'])
+            color=TEAL if candidate['reference_match'] else INK
+            ax.set_title(f'{index+1:02d}'+('  Reference' if candidate['reference_match'] else ''),loc='left',color=color,fontsize=12,pad=10)
+            ax.text(.5,-.17,f'Score {candidate["score"]:.3f}',transform=ax.transAxes,ha='center',fontsize=11,color=color)
+        footer(fig,scope+' · All candidates retained in the recorded ranking are drawn. Reference labels are for evaluation; scores are not calibrated probabilities.')
     elif kind=='molecules':
         from rdkit import Chem
+        candidates=first.get('candidates')
+        if candidates and len(candidates)>1:
+            structures=[('Reference',p['reference'],None)]+[(f'Rank {i+1}',c.get('canonical_smiles') or c.get('smiles'),c.get('score')) for i,c in enumerate(candidates)]
+            style();columns=3;rows=int(np.ceil(len(structures)/columns))
+            fig=plt.figure(figsize=(12.8,2.5+2.8*rows),FigureClass=ScientificFigure)
+            grid=fig.add_gridspec(rows,columns,left=.05,right=.95,top=.78,bottom=.17,wspace=.2,hspace=.55)
+            fig.text(.055,.95,'STRUCTURE GENERATION',fontsize=10,weight='bold',color=TEAL)
+            fig.text(.055,.89,'Reference and all recorded generated candidates',fontsize=19,weight='bold')
+            fig.text(.055,.835,'NMR + supplied molecular formula · original candidate order',fontsize=11,color=MUTED)
+            reference=None
+            for index,(label,smiles,score) in enumerate(structures):
+                ax=fig.add_subplot(grid[index//columns,index%columns]);mol=molecule(ax,smiles,reference=reference)
+                if index==0:reference=mol
+                match=reference is not None and mol is not None and Chem.MolToSmiles(reference)==Chem.MolToSmiles(mol)
+                ax.set_title(label+(' · Exact match' if index and match else ''),loc='left',fontsize=12,color=TEAL if match else INK,pad=10)
+                if score is not None:ax.text(.5,-.18,f'Score {score:.3f}',transform=ax.transAxes,ha='center',fontsize=11,color=MUTED)
+            footer(fig,scope+' · Every saved candidate is shown, including incorrect structures. Scores retain the original decoding convention.')
+            return fig
         modality='NMR + supplied molecular formula' if task_id.startswith('nmr.') else 'Spectral inputs · no molecular formula supplied'
         fig,axes=canvas('From spectra to a molecular structure','Structure generation',modality+' · first recorded example')
         reference=molecule(axes[0],p['reference']);predicted=molecule(axes[1],p['predicted'],reference=reference)

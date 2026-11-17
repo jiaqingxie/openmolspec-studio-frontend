@@ -46,6 +46,6 @@ Stored source labels: Pistachio (1,705,134), USPTO (646,007), EPO (267,916), xie
 
 ## Contribution and remaining evidence
 
-The defensible contribution is the curated experimental collection together with a consistent access, task and training interface. The current H/C-paired subset is much smaller than the total patent identity count; scale alone does not establish superiority over paired H/C benchmarks. Demonstrating learning value requires fixed source-aware evaluation, training-scale curves, external transfer and multiple seeds. [Current experiments](learning-evidence.md) report what has actually run.
+The defensible contribution is the curated experimental collection together with a consistent access, task and training interface. The current H/C-paired subset is much smaller than the total patent identity count; scale alone does not establish superiority over paired H/C benchmarks. Demonstrating learning value requires fixed source-aware evaluation, training-scale curves, external transfer and multiple seeds. [Current experiments](benchmarks.md) report what has actually run.
 
 The scan uses stored patent InChI and RDKit-generated NMRexp identities. It does not rederive every patent identity, assess manual extraction accuracy or establish redistribution rights. The local NMRexp file also matches the official v2 MD5. Full SHA-256 file fingerprints, RDKit version and validity flags are in the downloadable report. [Version evidence](assets/reports/corpus_comparison_sources.json).

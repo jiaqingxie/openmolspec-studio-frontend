@@ -1,10 +1,17 @@
-# Executed notebooks
+# Tutorials
 
 Each active task notebook shows actual input/output data, a run table, executable analysis and a result figure. These notebooks analyze saved inference; they are not placeholders for hypothetical results.
 
 [SDK: actual NMR inference](sdk-inference.ipynb) · [SDK: training preflight](sdk-training-preflight.ipynb)
 
 [Dataset distributions / 数据分布](datasets-overview.ipynb)
+
+## Theory simulations / 理论模拟
+
+- [NMR FID and Fourier transform](theory-nmr-fourier.ipynb)
+- [NMR relaxation inversion](theory-nmr-inversion.ipynb)
+- [IR and Raman broadening](theory-vibrational-broadening.ipynb)
+- [MS isotope envelopes](theory-ms-isotopes.ipynb)
 
 ## NMR
 

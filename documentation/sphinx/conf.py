@@ -1,23 +1,29 @@
 """Classic Read the Docs presentation for the two independently built locales."""
 import os
-from pathlib import PurePosixPath
+from pathlib import PurePosixPath, Path
 import posixpath
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'src'))
 
 project = "OpenMolSpec"
 author = "OpenMolSpec contributors"
 copyright = "2026, OpenMolSpec contributors"
-release = "1.1.0a2"
-extensions = ["myst_nb"]
+release = "1.0"
+extensions = ["myst_nb", "sphinx.ext.autodoc", "sphinx.ext.napoleon", "sphinx.ext.mathjax"]
+autodoc_typehints = 'description'
 source_suffix = {".md": "myst-nb", ".ipynb": "myst-nb"}
 root_doc = "index"
 exclude_patterns = [".ipynb_checkpoints/**"]
-myst_enable_extensions = ["colon_fence"]
+myst_enable_extensions = ["colon_fence", "dollarmath", "amsmath"]
 myst_heading_anchors = 6
 nb_execution_mode = "off"
 nb_scroll_outputs = True
 nb_ipywidgets_js = {}
 html_theme = "sphinx_rtd_theme"
-html_title = "OpenMolSpec"
+html_title = "OpenMolSpec v1.0"
+html_logo = str(Path(__file__).resolve().parents[1] / 'assets/brand/openmolspec-dark.svg')
+html_favicon = str(Path(__file__).resolve().parents[1] / 'assets/brand/mark.svg')
 html_static_path = ["_static"]
 html_css_files = ["openmolspec.css"]
 templates_path = ["_templates"]

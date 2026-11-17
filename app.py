@@ -31,8 +31,8 @@ from openmolspec_ui.portal import (OnlinePredictionService, primary_navigation, 
 
 
 st.set_page_config(
-    page_title="OpenMolSpec Studio",
-    page_icon="◌",
+    page_title="OpenMolSpec v1.0",
+    page_icon=str(Path(__file__).parent / "documentation/assets/brand/mark.svg"),
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -51,7 +51,7 @@ service = get_service(navigation == "prediction")
 
 def sidebar(workflows: bool = True) -> str:
     with st.sidebar:
-        st.markdown('<div class="brand">OpenMolSpec</div>', unsafe_allow_html=True)
+        st.image(str(Path(__file__).parent / 'documentation/assets/brand/openmolspec-dark.svg'))
         st.markdown('<div class="brand-title">Spectrum–Structure<br>Workbench</div>', unsafe_allow_html=True)
         page = st.radio(
             "工作区",

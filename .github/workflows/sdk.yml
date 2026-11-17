@@ -27,13 +27,19 @@ jobs:
           from openmolspec.dataset import list_datasets
           from openmolspec.model import NMRNet, NMRTransformer
           from openmolspec.task import list_tasks
-          assert len(list_datasets()) == 7
+          assert {'opendatalab_nmr', 'massspecgym_1_5'} <= {c['name'] for c in list_datasets()}
           assert len(list_tasks()) == 31
           assert all(name not in sys.modules for name in ('torch', 'numpy', 'rdkit', 'pandas'))
           PY
       - run: python -m pip install numpy scipy rdkit
       - run: python -m unittest discover -s tests -p test_public_sdk.py -v
       - run: python -m unittest discover -s tests -p test_training_integrity.py -v
+      - run: python -m unittest discover -s tests -p test_dataset_splits.py -v
+      - run: python -m unittest discover -s tests -p test_inversion.py -v
+      - run: python -m unittest discover -s tests -p test_spectra_harness.py -v
+      - run: python -m pip install '.[mcp]'
+      - name: Exercise MCP stdio handshake and tools
+        run: python scripts/verify_spectra_mcp.py --output spectra-mcp-protocol.json
       - uses: actions/upload-artifact@v4
         with:
           name: openmolspec-wheel-${{ matrix.python }}

@@ -1,16 +1,19 @@
 # OpenMolSpec
 
-面向化学谱学的数据集与深度学习平台。平台目标是通过 Python 包 `openmolspec` 统一数据加载、模型调用、自主训练和评测，具体范围与验收见[当前平台目标](docs/OPENMOLSPEC_PLATFORM_GOAL.md)。`openmolspec.dataset` / `openmolspec.model` 类接口现已提供 alpha 版本，支持真实数据加载、冻结推理、训练准备与统一评测。训练启动器已接入原实现，但本轮没有运行训练；完整训练闭环仍待验证。用法见 [Python SDK](documentation/api.zh.md)。
+项目网页：[OpenMolSpec v1.0](https://jiaqingxie.github.io/openmolspec.github.io/)。静态展示数据、任务、教程、理论与真实结果图；详细操作见下方中英文文档。
+
+面向化学谱学的数据集与深度学习平台。v1.0 通过 Python 包 `openmolspec` 提供数据加载、模型调用、训练准备、自主训练与评测。NMRTransformer 已完成编码器和生成器的微型真实训练、保存、重载与重复推理检查；模型效果按各任务的实际评测范围报告。用法见 [Python SDK](documentation/api.zh.md)，功能入口见 [文档目录](documentation/index.zh.md)。
 
 OpenDataLab / WanJuan 清洗所得数据是团队整理的外部实验谱，与 OpenMolSpec 计算谱及接入的外部基准分别报告。当前工作台支持实验 H/C NMR 候选检索与 SMILES 生成，并保留计算 IR/Raman、谱图到性质和 Vib2Mol 工作流。
 
-中英文完整手册已上线：[English](https://openmolspec-10.readthedocs.io/en/latest/) · [简体中文](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)。采用 Sphinx 和经典 `sphinx_rtd_theme`，提供左侧层级目录、全文搜索、上下篇导航和语言切换。共 174 个内容页面（含 74 个经 Jupyter 内核执行的 notebook 预览及下载），另有 35 张真实结果与数据分布图，另有搜索与索引页。源文件位于 [documentation/](documentation/index.md)；旧 [handbook/](handbook/index.md) 保留历史记录。
+中英文完整手册已上线：[English](https://openmolspec-10.readthedocs.io/en/latest/) · [简体中文](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)。采用 Sphinx 和经典 `sphinx_rtd_theme`，提供左侧层级目录、全文搜索、上下篇导航和语言切换。共 228 个内容页面（含 82 个经 Jupyter 内核执行的教程预览及下载），另有 46 张真实结果与数据分布图，另有搜索与索引页。源文件位于 [documentation/](documentation/index.md)；旧 [handbook/](handbook/index.md) 保留历史记录。
 
 ## 安装与启动
 
 ```bash
 python3 -m venv .venv
 .venv/bin/python -m pip install -e ".[production,models]" -r requirements.txt
+export OPENMOLSPEC_ARIAL_FONT=/path/to/installed/Arial.ttf
 export OPENMOLSPEC_ROOT=/path/to/openmolspec-studio-portable
 export OPENMOLSPEC_BENCH_ROOT=/path/to/OpenMolSpec
 export OPENMOLSPEC_DEVICE=cpu
@@ -46,7 +49,7 @@ python scripts/build_readthedocs.py --output site --strict
 
 Read the Docs 使用 `.readthedocs.yaml` 构建 `release/openmolspec-v1` 分支；GitHub Actions 负责严格文档构建检查。前端 Full documentation 默认跳转至已上线的手册，可通过 `OPENMOLSPEC_DOCS_URL` 覆盖地址。发布证据见 [RTD 核验记录](results/readthedocs_publication_20261116.json)。
 
-前端导航为 Tool、Dataset Download、Prediction (Online)、Full documentation。在线 MS 推理可通过 `OPENMOLSPEC_MS_PYTHON` 指定包含作者依赖的 Python。模型与数据路径配置见 [快速开始](documentation/quickstart.zh.md)。
+本地工作台导航包括 Tool、Prediction (Online)、Data、Tasks、Tutorials、Theory、Inversion 与 Documentation。在线 MS 推理可通过 `OPENMOLSPEC_MS_PYTHON` 指定包含作者依赖的 Python。模型与数据路径配置见 [快速开始](documentation/quickstart.zh.md)。
 
 最新证据见 [评测协议](documentation/protocols.zh.md) 和各任务页。旧 F/P 分数因输入与标签错配作废；新推理已对齐，但固态权重的溶液位移参考未核实，不能宣称修复了预测精度。
 

@@ -2,7 +2,7 @@
 
 检查已有 19F 预测与实验参考的配对、位移参考和适用域，不拟合新的校正参数。
 
-## 当前结论
+## 示例与评测
 
 当前固相权重没有验证为溶液位移模型。优先解决数据域与参考兼容，不能直接归因于需要微调。
 
@@ -76,7 +76,22 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.forward.19F --limit 8 --output results/nmr-forward-19F-new.json
 ```
 
-## 边界与来源
+## 调用模型与微调
+
+```python
+from openmolspec.benchmark import Benchmark
+benchmark = Benchmark(workspace='/path/to/workspace',
+    python='/path/to/sdk-env/bin/python',
+    models_root='/path/to/models',
+    nmr_python='/path/to/nmr-env/bin/python')
+result = benchmark.run('nmr.forward.19F', output='19F-results.json', limit=32)
+```
+
+微调使用 [NMRNet 作者训练实现](https://github.com/Colin-Jay/NMRNet)：准备对应核种的逐原子标签、结构／坐标、目标掩码及 train/val LMDB。实现提供 `atom_regloss_mae` 与 `atom_regloss_mse`，在有标签的原子上计算目标。保留 scaler 和参考标准，在验证集选择 checkpoint。该训练流程通过作者实现运行。
+
+$$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
+
+## 数据要求与引用
 
 需要兼容的现成溶液 checkpoint，或作者明确提供的参考转换。不得对测试标签拟合一个偏移来降低误差，也不启动重新训练。
 

@@ -2,7 +2,7 @@
 
 给定结构和实测 H/C 峰，预测逐原子位移并输出候选指认。
 
-## 当前结论
+## 示例与评测
 
 作为已知结构的候选指认流程合理，但尚无实验指认准确率。先验证原子标签和对称性，再决定微调。
 
@@ -173,7 +173,20 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.assignment --limit 8 --output results/nmr-assignment-new.json
 ```
 
-## 边界与来源
+## 调用模型与微调
+
+```python
+from openmolspec.model import NMRNet
+model = NMRNet.from_pretrained('/path/to/models', nucleus='13C',
+    python='/path/to/nmr-env/bin/python')
+result = model.assign(smiles, measured_peaks_ppm)
+```
+
+微调使用 [NMRNet 作者训练实现](https://github.com/Colin-Jay/NMRNet)：准备对应核种的逐原子标签、结构／坐标、目标掩码及 train/val LMDB。实现提供 `atom_regloss_mae` 与 `atom_regloss_mse`，在有标签的原子上计算目标。保留 scaler 和参考标准，在验证集选择 checkpoint。该训练流程通过作者实现运行。 峰指认再按容差最小化匹配代价；匹配本身不会产生实验逐原子真值。
+
+$$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
+
+## 数据要求与引用
 
 匹配残差不等于指认准确率；拓扑对称不保证磁等价。模型不输入溶剂，未做构象系综平均，目前仅覆盖 H/C。
 

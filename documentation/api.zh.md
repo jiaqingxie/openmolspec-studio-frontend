@@ -1,13 +1,13 @@
-# Python SDK — openmolspec 1.1.0a2
+# Python SDK — OpenMolSpec v1.0
 
-数据加载、模型类、训练准备和统一评测入口现已实现。基础安装不依赖第三方库。当前是 alpha SDK：冻结推理已有实际运行证据；训练启动器已用微型 train/val 示例完成编码器和生成器各一步训练，并验证 checkpoint 保存、配置重载与推理结果一致；这是软件链路验证，不是学习性能结论。
+数据加载、模型类、训练准备和统一评测入口现已实现。基础安装不依赖第三方库。当前是 v1.0 SDK：冻结推理已有实际运行证据；训练启动器已用微型 train/val 示例完成编码器和生成器各一步训练，并验证 checkpoint 保存、配置重载与推理结果一致；这是软件链路验证，不是学习性能结论。
 
 ## 安装
 
-[带版本号的发布页](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.1.0a2)提供约 250 KB 的 wheel 及校验和。使用数据加载与模型接口时，可以直接安装到自己的环境：
+[带版本号的发布页](https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/v1.0)提供约 250 KB 的 wheel 及校验和。使用数据加载与模型接口时，可以直接安装到自己的环境：
 
 ```bash
-python -m pip install "https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/download/v1.1.0a2/openmolspec-1.1.0a2-py3-none-any.whl"
+python -m pip install "https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/download/v1.0/openmolspec-1.0.0-py3-none-any.whl"
 ```
 
 需要 notebook、源码及可选依赖时，克隆仓库：
@@ -45,6 +45,7 @@ print(data.summary())
 | `nmrspec_test`、`patent_test_10k`、`nmrexp_exp_10k`、`nmrgym_test` | `test.jsonl` | 整理后的实验评测视图 |
 | `openspec_test` | `openspec_test.lmdb` | OpenMolSpec 计算谱 |
 | `massspecgym_test` | `MassSpecGym_test_full.csv` | 外部实验 MS/MS |
+| `massspecgym_1_5` | 版本化 `MassSpecGym.tsv`，按原始 fold 过滤 | 外部实验 MS/MS；v1.5 |
 
 `root` 接受目录；只有一个测试文件的视图也可直接传文件。旧 LMDB 内含 Python pickle，读取可信文件时需显式 `trusted=True`。原字段保留，`_openmolspec` 补充数据集、实验/计算域、划分、源文件位置和已有模态；不补造缺失采集条件。card 数量只对应审计版本，不自动等于本地文件数量，`verify()` 会拒绝版本不符的文件。
 
@@ -129,7 +130,6 @@ report = bench.run('nmr.retrieval.hc.s2m', datasets=['nmrspec_test'],
 
 完整检查四个本地评测 JSONL，共 39,183 条记录：专利 10,000 条视图中有 5 条核种与结构不一致（5 条 H 标记，其中 2 条同时有 C 标记）；另三份视图在这些检查下未发现标记。这不代表所有原谱或 268 万身份全库均已完成质量核验。[下载审计](assets/reports/sdk_nmr_input_audit_20261117.json)。
 
-NMR Transformer 权重已确认存在评测与训练结构身份重叠，末阶段还发现数据指纹不一致。解释检索与生成分数前，请阅读[训练历史审计](training-overlap.md)。
 
 从仓库复现软件训练链路检查：
 

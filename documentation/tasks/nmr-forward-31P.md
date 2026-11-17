@@ -2,7 +2,7 @@
 
 Evaluate a compatible frozen model for the selected nucleus without fitting a new reference or calibrating against test labels.
 
-## Current evidence
+## Example and evaluation
 
 Current solid-state weights are not validated for solution shifts. Resolve domain/reference compatibility before any fine-tuning decision.
 
@@ -76,7 +76,22 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.forward.31P --limit 8 --output results/nmr-forward-31P-new.json
 ```
 
-## Limits and provenance
+## Call and adapt this model
+
+```python
+from openmolspec.benchmark import Benchmark
+benchmark = Benchmark(workspace='/path/to/workspace',
+    python='/path/to/sdk-env/bin/python',
+    models_root='/path/to/models',
+    nmr_python='/path/to/nmr-env/bin/python')
+result = benchmark.run('nmr.forward.31P', output='31P-results.json', limit=32)
+```
+
+For fine-tuning, use the [NMRNet author training implementation](https://github.com/Colin-Jay/NMRNet), preparing atom-labelled structures/coordinates, target masks and train/validation LMDBs for the selected nucleus. Its `atom_regloss_mae` and `atom_regloss_mse` criteria operate on supervised target atoms. Retain the scaler/reference convention and select the checkpoint on validation data. This author training route is separate from the SDK inference facade.
+
+$$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
+
+## Data requirements and references
 
 A compatible released solution checkpoint or documented reference conversion is required for a valid primary score. No retraining or fitted recalibration is permitted.
 

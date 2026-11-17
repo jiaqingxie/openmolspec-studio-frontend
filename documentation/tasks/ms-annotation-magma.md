@@ -2,7 +2,7 @@
 
 Enumerate candidate molecular fragments and match their masses to observed MS/MS peaks. This is an algorithmic task and uses no trained parameters.
 
-## Current evidence
+## Example and evaluation
 
 Algorithmic annotation, not a trainable neural model. Improve matching and validation rather than propose fine-tuning.
 
@@ -311,7 +311,21 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks ms.annotation.magma --limit 8 --output results/ms-annotation-magma-new.json
 ```
 
-## Limits and provenance
+## Call and adapt this model
+
+```python
+from openmolspec.benchmark import Benchmark
+benchmark = Benchmark(workspace='/path/to/workspace',
+    python='/path/to/task-env/bin/python',
+    magma_source='/path/to/MAGMA-source',
+    ms_input_csv='/path/to/measured-ms.csv',
+    ms_metadata_tsv='/path/to/acquisition-metadata.tsv')
+result = benchmark.run('ms.annotation.magma', output='new-algorithm-results.json', limit=32)
+```
+
+This task is an algorithmic workflow. Adapt its reference library or matching rules; there are no neural parameters or training loss. The task’s matching objective and provenance are described above.
+
+## Data requirements and references
 
 Hydrogen shifts, graph depth and canonicalization have specific engine semantics. Do not reinterpret graph depth as an experimentally measured reaction sequence.
 

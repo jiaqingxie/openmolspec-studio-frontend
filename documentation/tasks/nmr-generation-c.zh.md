@@ -2,9 +2,7 @@
 
 用已有生成模型从实验 H/C NMR 预测 SMILES 候选。
 
-**评测限制：**多个 NMR 视图已确认与 checkpoint 记录的训练数据存在分子重叠，最终生成模型还存在训练文件哈希不一致。现有运行不能证明独立泛化能力。 [Training-history audit / 训练历史审计](../training-overlap.md)
-
-## 当前结论
+## 示例与评测
 
 存在明显数据域差异：专利和 NMRGym 的 32 样本检查均为零精确匹配。先检查独立测试、解析及词表覆盖，再考虑领域微调。
 
@@ -127,7 +125,30 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.generation.c --limit 8 --output results/nmr-generation-c-new.json
 ```
 
-## 边界与来源
+## 调用模型与微调
+
+```python
+from openmolspec.model import NMRTransformer
+model = NMRTransformer.from_pretrained(
+    '/path/to/checkpoint.pt', stage='generate',
+    python='/path/to/nmr-env/bin/python')
+result = model.predict(query, beam_size=5)
+plan = model.training_plan(
+    'prepared-nmr', run_dir='runs/my-model', epochs=10, batch_size=32,
+    alignment_checkpoint='/path/to/alignment.pt')
+print(plan.validate())
+# trained = model.fit(plan)
+```
+
+先用 `prepare_nmr_training` 准备相互独立的 train/val；生成阶段需要对齐 checkpoint。用 H/C 掩码定义输入通道，在验证集选择模型。已有权重可用于初始化。[数据准备与训练指南](../api.md)给出完整流程。
+
+### 训练目标
+
+$$L_{\rm LM}=-\frac{1}{N_{\rm token}}\sum_t\log p_\theta(y_t\mid y_{<t},x,F).$$
+
+生成使用 token 交叉熵，可按配置加入联合对齐项。对齐使用归一化谱学／分子表征的双向对比交叉熵；ITM 配置增加正负配对分类项。具体目标与权重以训练配置为准。
+
+## 数据要求与引用
 
 给定分子式的结构生成与分子式预测、无分子式生成是不同任务。跨数据集 exact match 低或为零时保留真实结果，不替换成缓存答案。
 

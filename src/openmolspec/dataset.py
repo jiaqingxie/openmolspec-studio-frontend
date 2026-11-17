@@ -80,7 +80,7 @@ class SpectraSplit:
         object.__setattr__(self, 'role', _role(self.role))
         if not self.path.is_file():
             raise FileNotFoundError(self.path)
-        if self.format not in ('nmr_jsonl', 'jsonl', 'massspecgym_csv', 'openspec_lmdb'):
+        if self.format not in ('nmr_jsonl', 'jsonl', 'massspecgym_csv', 'massspecgym_tsv', 'openspec_lmdb'):
             raise ValueError(f'Unsupported format: {self.format}')
         if self.format == 'openspec_lmdb' and not self.trusted:
             raise ValueError('Legacy LMDB stores Python pickles; use trusted=True only for trusted files')
@@ -98,11 +98,18 @@ class SpectraSplit:
                             yield number, json.loads(line)
                         except json.JSONDecodeError as exc:
                             raise ValueError(f'{self.path}:{number}: invalid JSON') from exc
-        elif self.format == 'massspecgym_csv':
+        elif self.format in ('massspecgym_csv','massspecgym_tsv'):
             with self.path.open(encoding='utf-8', newline='') as stream:
-                for number, row in enumerate(csv.DictReader(stream), 1):
+                for number, row in enumerate(csv.DictReader(stream,delimiter='\t' if self.format=='massspecgym_tsv' else ','), 1):
                     row = dict(row)
-                    row['peaks'] = ast.literal_eval(row['peaks'])
+                    if self.format=='massspecgym_tsv':
+                        if _role(row['fold'])!=self.role:continue
+                        mz=[float(v) for v in row['mzs'].split(',')]
+                        intensity=[float(v) for v in row['intensities'].split(',')]
+                        if len(mz)!=len(intensity):raise ValueError(f'Peak array mismatch at row {number}')
+                        row['peaks']=list(map(list,zip(mz,intensity)))
+                        row['instrument']=row.get('instrument_type')
+                    else:row['peaks'] = ast.literal_eval(row['peaks'])
                     row['adduct'] = row.get('prec_type', row.get('adduct'))
                     yield number, row
         else:
@@ -192,7 +199,7 @@ class MolecularSpectra:
         return {'verified': True, 'sha256': result, 'scope': 'file identity, not an accuracy or license certification'}
 
     @classmethod
-    def from_jsonl(cls, *, splits, name, domain):
+    def from_jsonl(cls, *, splits, name, domain, format='nmr_jsonl'):
         if domain not in ('experimental', 'computed'):
             raise ValueError('Declare experimental or computed domain explicitly')
         normalized = {}
@@ -200,7 +207,7 @@ class MolecularSpectra:
             role = _role(role)
             if role in normalized:
                 raise ValueError(f'Duplicate split role: {role}')
-            normalized[role] = SpectraSplit(path, role, name, domain)
+            normalized[role] = SpectraSplit(path, role, name, domain,format=format)
         if not normalized:
             raise ValueError('At least one split is required')
         return cls({'name': name, 'domain': domain, 'origin': 'user_supplied',

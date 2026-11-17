@@ -2,7 +2,7 @@
 
 Predict vibrational spectra from a fixed molecular geometry with Xinyu openSpec's Equiformer-v3 Hessian and response checkpoints.
 
-## Current evidence
+## Example and evaluation
 
 Correct Xinyu Hessian/response route and paired geometry. Two examples demonstrate execution only; evaluate a held-out geometry set before adaptation.
 
@@ -122,7 +122,24 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks vibrational.forward --limit 8 --output results/vibrational-forward-new.json
 ```
 
-## Limits and provenance
+## Call and adapt this model
+
+```python
+from openmolspec.benchmark import Benchmark
+benchmark = Benchmark(workspace='/path/to/workspace',
+    python='/path/to/vibrational-env/bin/python',
+    portable_root='/path/to/portable-models')
+result = benchmark.run('vibrational.forward',
+    output='geometry-to-spectrum-results.json', limit=2)
+```
+
+Adapt the [openSpec training implementation](https://github.com/X1nyuLu/openSpec-alpha) with reference geometries, Hessians and response tensors using the same atom ordering, units and mode conventions. Tensor/property losses train the forward model; spectral similarity is a downstream evaluation, not automatically its training loss. Each released direct model trains its selected tensor head; the Hessian/response engine averages Cartesian SmoothL1 terms by the global number of tensor components. Separate checkpoints and target units are retained when reconstructing normal modes.
+
+$$\ell_\beta(r)=\begin{cases}r^2/(2\beta),&|r|<\beta,\\ |r|-\beta/2,&|r|\ge\beta.\end{cases}$$
+
+$$L_{\rm tensor}=\sum_{q\in\{H_i,H_{ij},\partial\mu,\partial\alpha\}}\frac1{N_q}\sum_j\ell_1(\hat T_{qj}-T_{qj}).$$
+
+## Data requirements and references
 
 The default two real Gaussian examples establish paired execution only. Their held-out status is not audited. An independently generated RDKit conformer must not be substituted and presented as the original reference geometry.
 

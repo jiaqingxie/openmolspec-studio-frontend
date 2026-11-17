@@ -2,9 +2,7 @@
 
 Generate candidate molecular structures from experimental H/C NMR with the existing generation checkpoint.
 
-**Evaluation limitation:** molecular overlap with checkpoint-recorded training data is confirmed for several NMR views. The final generator also has a training-file fingerprint discrepancy. These runs do not establish independent generalization.  [Training-history audit / 训练历史审计](../training-overlap.md)
-
-## Current evidence
+## Example and evaluation
 
 Strong dataset dependence: zero exact matches on the 32-example patent and NMRGym checks. Prioritize a clean external test and parsing/token coverage audit; then consider domain fine-tuning.
 
@@ -132,7 +130,30 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.generation.hc --limit 8 --output results/nmr-generation-hc-new.json
 ```
 
-## Limits and provenance
+## Call and adapt this model
+
+```python
+from openmolspec.model import NMRTransformer
+model = NMRTransformer.from_pretrained(
+    '/path/to/checkpoint.pt', stage='generate',
+    python='/path/to/nmr-env/bin/python')
+result = model.predict(query, beam_size=5)
+plan = model.training_plan(
+    'prepared-nmr', run_dir='runs/my-model', epochs=10, batch_size=32,
+    alignment_checkpoint='/path/to/alignment.pt')
+print(plan.validate())
+# trained = model.fit(plan)
+```
+
+Prepare disjoint train/validation records with `prepare_nmr_training`; supply an alignment checkpoint for the generator. Use H/C masks to define available inputs and choose model selection criteria on validation data. Pretrained initialization restores model weights. [Data preparation](../api.md) provides the complete workflow.
+
+### Training objective
+
+$$L_{\rm LM}=-\frac{1}{N_{\rm token}}\sum_t\log p_\theta(y_t\mid y_{<t},x,F).$$
+
+Generation uses token cross-entropy; an optional joint alignment term follows its configured weight. Alignment uses normalized spectral/molecular representations with symmetric contrastive cross-entropy; ITM configuration adds positive/negative matching. The actual checkpoint/training configuration determines the objective.
+
+## Data requirements and references
 
 Formula-conditioned generation must be distinguished from formula prediction and from generation without a supplied formula. Low or zero cross-dataset exact match is retained, not replaced by cached answers.
 

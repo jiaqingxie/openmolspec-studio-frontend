@@ -2,7 +2,7 @@
 
 从固定分子构象预测 IR/Raman，复用 Xinyu openSpec 项目的 Equiformer-v3 Hessian 和 response 权重。
 
-## 当前结论
+## 示例与评测
 
 使用正确的 Xinyu Hessian/response 路径及成对几何。两例只证明流程执行；先做独立构象集评测。
 
@@ -122,7 +122,24 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks vibrational.forward --limit 8 --output results/vibrational-forward-new.json
 ```
 
-## 边界与来源
+## 调用模型与微调
+
+```python
+from openmolspec.benchmark import Benchmark
+benchmark = Benchmark(workspace='/path/to/workspace',
+    python='/path/to/vibrational-env/bin/python',
+    portable_root='/path/to/portable-models')
+result = benchmark.run('vibrational.forward',
+    output='geometry-to-spectrum-results.json', limit=2)
+```
+
+按 [openSpec 训练实现](https://github.com/X1nyuLu/openSpec-alpha)准备参考构象、Hessian 与响应张量，保持原子顺序、单位和模式约定。正向模型训练使用张量／性质目标；下游谱相似度不自动等于其训练 loss。 各 direct 模型训练其选定的张量头；Hessian／响应引擎按全局张量分量数平均 Cartesian SmoothL1。重建简正模式时保留各目标的独立 checkpoint 与单位。
+
+$$\ell_\beta(r)=\begin{cases}r^2/(2\beta),&|r|<\beta,\\ |r|-\beta/2,&|r|\ge\beta.\end{cases}$$
+
+$$L_{\rm tensor}=\sum_{q\in\{H_i,H_{ij},\partial\mu,\partial\alpha\}}\frac1{N_q}\sum_j\ell_1(\hat T_{qj}-T_{qj}).$$
+
+## 数据要求与引用
 
 默认两个真实 Gaussian 日志仅用于配对运行检查，未审计其独立测试身份。不能用新生成的 RDKit 构象代替原参考几何后宣称是严格配对精度。
 

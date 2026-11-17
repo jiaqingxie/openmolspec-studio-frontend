@@ -1,0 +1,64 @@
+{
+  "executed_notebooks": 8,
+  "evaluation_index_sha256": "8302e777ace15736883697b46976a838791c48a1c92583fee806aa011163cb7f",
+  "engine": "jupyter",
+  "scope": "saved_result_analysis_and_explicit_sdk_frozen_inference_no_training",
+  "notebooks": [
+    {
+      "notebook": "documentation/notebooks/theory-ms-isotopes.ipynb",
+      "executed_file": "documentation/notebooks/theory-ms-isotopes.ipynb",
+      "sha256": "dfff079d8ee759045434ecf58b87efe1ccd81d03e6469bc60e06b6823a04ef05",
+      "model_execution_enabled": false,
+      "rich_outputs": 2
+    },
+    {
+      "notebook": "documentation/notebooks/theory-ms-isotopes.zh.ipynb",
+      "executed_file": "documentation/notebooks/theory-ms-isotopes.zh.ipynb",
+      "sha256": "1de8faef287db193079021f26c87b5396bb1e1c907a53e29374f70ee07967620",
+      "model_execution_enabled": false,
+      "rich_outputs": 2
+    },
+    {
+      "notebook": "documentation/notebooks/theory-nmr-fourier.ipynb",
+      "executed_file": "documentation/notebooks/theory-nmr-fourier.ipynb",
+      "sha256": "69d87e94d1213ddbb742d32993ffa419afb2784ae169093739f9592c45c6ea6f",
+      "model_execution_enabled": false,
+      "rich_outputs": 2
+    },
+    {
+      "notebook": "documentation/notebooks/theory-nmr-fourier.zh.ipynb",
+      "executed_file": "documentation/notebooks/theory-nmr-fourier.zh.ipynb",
+      "sha256": "44a75875326d4ba34f3e7638bc4291eec094995f2c01ed50857bd1669852039b",
+      "model_execution_enabled": false,
+      "rich_outputs": 2
+    },
+    {
+      "notebook": "documentation/notebooks/theory-nmr-inversion.ipynb",
+      "executed_file": "documentation/notebooks/theory-nmr-inversion.ipynb",
+      "sha256": "3072b92387957731b21a9bc679c554b64dfffa96e6f4d6862ce9ded8bcbcf203",
+      "model_execution_enabled": false,
+      "rich_outputs": 2
+    },
+    {
+      "notebook": "documentation/notebooks/theory-nmr-inversion.zh.ipynb",
+      "executed_file": "documentation/notebooks/theory-nmr-inversion.zh.ipynb",
+      "sha256": "11ec201f5d1c1aa612038f313993f9d8db8873104176ec731e65a86df74ebe71",
+      "model_execution_enabled": false,
+      "rich_outputs": 2
+    },
+    {
+      "notebook": "documentation/notebooks/theory-vibrational-broadening.ipynb",
+      "executed_file": "documentation/notebooks/theory-vibrational-broadening.ipynb",
+      "sha256": "1d98c724b968b1260ec9cf13fd6f842eb96737704c591b25a14311d0d7b2d701",
+      "model_execution_enabled": false,
+      "rich_outputs": 2
+    },
+    {
+      "notebook": "documentation/notebooks/theory-vibrational-broadening.zh.ipynb",
+      "executed_file": "documentation/notebooks/theory-vibrational-broadening.zh.ipynb",
+      "sha256": "5688f27aa3b82cb9a88140a1f4995c7c70539e05ac4b70d942f8c46b99f7cc9f",
+      "model_execution_enabled": false,
+      "rich_outputs": 2
+    }
+  ]
+}

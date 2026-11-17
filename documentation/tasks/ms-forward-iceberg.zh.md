@@ -2,7 +2,7 @@
 
 给定分子结构、加合物、碰撞能和仪器，预测 MS/MS 的 m/z–强度峰列表。
 
-## 当前结论
+## 示例与评测
 
 采用作者接口并显式提供采集条件，方法适配合理；31 条评分不足以证明广泛精度。先核查协议与训练重叠，再决定微调。
 
@@ -122,7 +122,21 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks ms.forward.iceberg --limit 8 --output results/ms-forward-iceberg-new.json
 ```
 
-## 边界与来源
+## 调用模型与微调
+
+```python
+from openmolspec.model import MSPredictor
+model = MSPredictor(model='iceberg', source='/path/to/ms-pred',
+    weights='/path/to/weights', python='/path/to/ms-env/bin/python')
+result = model.predict(smiles=smiles, adduct='[M+H]+',
+    collision_energy=20., instrument='Orbitrap')
+```
+
+微调使用 [作者训练模块](https://github.com/coleygroup/ms-pred)。准备分子独立的 train/val，包含结构、采集条件、实测峰强度及所选架构需要的碎片目标。ICEBERG 对应 `ms_pred.iceberg.train_gen`、`ms_pred.iceberg.train_inten`；GLACIER 提供 `ms_pred.glacier.train_joint` 及联合对比训练。启动前对照发布配置和各模块的 `--help`。 ICEBERG 碎片生成对有效原子决策使用二元交叉熵，强度模块支持余弦或熵目标。GLACIER 联合／对比损失随配置变化，报告微调时须注明具体变体。
+
+$$L_{\rm cosine}=1-\frac{\hat s\cdot s}{\|\hat s\|\|s\|}.$$
+
+## 数据要求与引用
 
 该口径保留全部实测峰，不等同于只保留可指认峰的 benchmark。预训练使用 MassSpecGym，当前自建划分与权重训练集重叠尚未独立核验；旧权重的仪器/加合物训练覆盖元数据也不完整。
 

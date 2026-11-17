@@ -2,7 +2,7 @@
 
 Run the released liquid All-nucleus NMRNet checkpoint on existing atom-indexed validation records.
 
-## Current evidence
+## Example and evaluation
 
 Unsuitable as an accurate solution predictor: 56.13 ppm MAE, all 32 predictions biased high. Clean data and obtain compatible weights before considering fine-tuning.
 
@@ -80,7 +80,22 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.forward.29Si --limit 8 --output results/nmr-forward-29Si-new.json
 ```
 
-## Limits and provenance
+## Call and adapt this model
+
+```python
+from openmolspec.benchmark import Benchmark
+benchmark = Benchmark(workspace='/path/to/workspace',
+    python='/path/to/sdk-env/bin/python',
+    models_root='/path/to/models',
+    nmr_python='/path/to/nmr-env/bin/python')
+result = benchmark.run('nmr.forward.29Si', output='29Si-results.json', limit=32)
+```
+
+For fine-tuning, use the [NMRNet author training implementation](https://github.com/Colin-Jay/NMRNet), preparing atom-labelled structures/coordinates, target masks and train/validation LMDBs for the selected nucleus. Its `atom_regloss_mae` and `atom_regloss_mse` criteria operate on supervised target atoms. Retain the scaler/reference convention and select the checkpoint on validation data. This author training route is separate from the SDK inference facade.
+
+$$L_{\rm MAE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}|\hat\delta_i-\delta_i|,\qquad L_{\rm MSE}=\frac{1}{N_{\rm labelled}}\sum_{i\in\mathcal M}(\hat\delta_i-\delta_i)^2.$$
+
+## Data requirements and references
 
 Nucleus-specific training coverage, training overlap and experimental assignment provenance are unverified. The model has no solvent input. Primary scoring remains disabled; NMRNet++ B/Si-specific weights are still being sought. No fitting was performed.
 

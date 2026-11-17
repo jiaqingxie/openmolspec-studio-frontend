@@ -20,6 +20,9 @@ python3 -m venv .venv-docs
 This command reads the actual 128-sample frozen gap predictions, recomputes MAE/RMSE and draws the reference/prediction figure. It does not rerun the model.
 
 ```bash
+.venv-docs/bin/python -m pip install -e .
+# Set this to an Arial TTF file installed or licensed on your machine:
+export OPENMOLSPEC_ARIAL_FONT=/path/to/Arial.ttf
 .venv-docs/bin/python - <<'PY'
 import sys
 sys.path.insert(0, 'scripts')

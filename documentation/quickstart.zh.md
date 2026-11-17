@@ -20,6 +20,9 @@ python3 -m venv .venv-docs
 下面的命令读取 128 个样本的真实冻结推理预测，重新计算 MAE/RMSE 并绘制预测与参考对照图。这一步是结果分析，不是重新运行模型。
 
 ```bash
+.venv-docs/bin/python -m pip install -e .
+# Set this to an Arial TTF file installed or licensed on your machine:
+export OPENMOLSPEC_ARIAL_FONT=/path/to/Arial.ttf
 .venv-docs/bin/python - <<'PY'
 import sys
 sys.path.insert(0, 'scripts')

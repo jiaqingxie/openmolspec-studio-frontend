@@ -163,5 +163,35 @@
     "count_scope": "complete scan of local test CSV",
     "license": "See original dataset terms",
     "source_url": "https://huggingface.co/datasets/roman-bushuiev/MassSpecGym"
+  },
+  {
+    "name": "massspecgym_1_5",
+    "version": "1.5 / 018a9542378725cf5620423f930608730c36dd8c",
+    "source": "MassSpecGym",
+    "origin": "external",
+    "domain": "experimental",
+    "format": "massspecgym_tsv",
+    "files": {
+      "train": "MassSpecGym1.5.tsv",
+      "val": "MassSpecGym1.5.tsv",
+      "test": "MassSpecGym1.5.tsv"
+    },
+    "reference_counts": {
+      "spectra": 231104,
+      "unique_connectivities": 28923,
+      "train_spectra": 194119,
+      "val_spectra": 19429,
+      "test_spectra": 17556
+    },
+    "reference_sha256": {
+      "train": "50cfdd1d22f79543c59555f9ce43c6893bd788a19a42b21fb4e2e3a54673c06a",
+      "val": "50cfdd1d22f79543c59555f9ce43c6893bd788a19a42b21fb4e2e3a54673c06a",
+      "test": "50cfdd1d22f79543c59555f9ce43c6893bd788a19a42b21fb4e2e3a54673c06a"
+    },
+    "count_scope": "Complete official v1.5 TSV; fold column selects original benchmark roles",
+    "license": "MIT as declared in the official dataset card",
+    "source_url": "https://huggingface.co/datasets/roman-bushuiev/MassSpecGym",
+    "citation": "https://arxiv.org/abs/2410.23326",
+    "update_citation": "https://arxiv.org/abs/2606.19624"
   }
 ]

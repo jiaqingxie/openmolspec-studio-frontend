@@ -2,7 +2,7 @@
 
 [English](https://openmolspec-10.readthedocs.io/en/latest/) · [简体中文](https://openmolspec-10.readthedocs.io/en/latest/zh/index.html)
 
-Read the Docs builds `release/openmolspec-v1` with the root `.readthedocs.yaml`, Sphinx and the classic RTD theme. The site includes categorized tasks, a real-results gallery, dataset distributions, model review and 74 executed notebooks, including real SDK inference and training preflight. Notebook publication never executes model code.
+Read the Docs builds `release/openmolspec-v1` with the root `.readthedocs.yaml`, Sphinx and the classic RTD theme. The site includes categorized tasks, a real-results gallery, dataset distributions, model review and 82 tutorials, including SDK inference, training preparation and theory simulations. Notebook publication never executes model code.
 
 ```bash
 python scripts/build_bilingual_docs.py --check

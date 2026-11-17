@@ -2,9 +2,7 @@
 
 用已有双编码器，从 NMR 谱检索候选分子，或由分子检索候选谱。
 
-**评测限制：**多个 NMR 视图已确认与 checkpoint 记录的训练数据存在分子重叠，最终生成模型还存在训练文件哈希不一致。现有运行不能证明独立泛化能力。 [Training-history audit / 训练历史审计](../training-overlap.md)
-
-## 当前结论
+## 示例与评测
 
 输入输出对应合理，但目前主要是 32 候选的小池检查。先评更大的独立候选库，再判断泛化和微调需求。
 
@@ -107,7 +105,34 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.retrieval.h.m2s --limit 8 --output results/nmr-retrieval-h-m2s-new.json
 ```
 
-## 边界与来源
+## 调用模型与微调
+
+```python
+from openmolspec.model import NMRTransformer
+model = NMRTransformer.from_pretrained(
+    '/path/to/checkpoint.pt', stage='align',
+    python='/path/to/nmr-env/bin/python')
+from openmolspec.benchmark import Benchmark
+benchmark = Benchmark(workspace='/path/to/workspace',
+    python='/path/to/sdk-env/bin/python',
+    alignment_checkpoint='/path/to/checkpoint.pt',
+    nmr_python='/path/to/nmr-env/bin/python')
+result = benchmark.run('nmr.retrieval.h.m2s', output='m2s-results.json', limit=32)
+plan = model.training_plan(
+    'prepared-nmr', run_dir='runs/my-model', epochs=10, batch_size=32)
+print(plan.validate())
+# trained = model.fit(plan)
+```
+
+先用 `prepare_nmr_training` 准备相互独立的 train/val；生成阶段需要对齐 checkpoint。用 H/C 掩码定义输入通道，在验证集选择模型。已有权重可用于初始化。[数据准备与训练指南](../api.md)给出完整流程。
+
+### 训练目标
+
+$$L_{\rm align}=\tfrac12[\mathrm{CE}(SM^\top/\tau,I)+\mathrm{CE}(MS^\top/\tau,I)]+\lambda_{\rm ITM}L_{\rm match}.$$
+
+生成使用 token 交叉熵，可按配置加入联合对齐项。对齐使用归一化谱学／分子表征的双向对比交叉熵；ITM 配置增加正负配对分类项。具体目标与权重以训练配置为准。
+
+## 数据要求与引用
 
 16、32 和全库候选的成绩不能直接比较。数据来源和训练/测试重叠仍需单独审计。JSONL 中的 smiles 是评测目标或候选身份，不作为谱编码器的输入。
 

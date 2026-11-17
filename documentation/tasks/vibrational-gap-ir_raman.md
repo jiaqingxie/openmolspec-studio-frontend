@@ -2,7 +2,7 @@
 
 Predict the molecular HOMO–LUMO gap in eV from spectral inputs, using the existing shared spectroscopy Transformer.
 
-## Current evidence
+## Example and evaluation
 
 Missing-channel ablation of a four-modal checkpoint. Poor scores do not validate a stand-alone IR/Raman model; use compatible unimodal weights or plan separate adaptation.
 
@@ -92,7 +92,22 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks vibrational.gap.ir_raman --limit 8 --output results/vibrational-gap-ir_raman-new.json
 ```
 
-## Limits and provenance
+## Call and adapt this model
+
+```python
+from openmolspec.model import GapModel
+model = GapModel(root='/path/to/portable-models',
+    python='/path/to/vibrational-env/bin/python')
+result = model.predict(inputs, allow_missing_modalities=True)
+```
+
+Use the [openSpec/Vib2Mol author training workflow](https://github.com/X1nyuLu/openSpec-alpha) for adaptation. Export aligned spectral/structure LMDBs, retain H/C references and normalization, and keep train/validation groups disjoint. Retrieval combines symmetric contrastive cross-entropy with matching cross-entropy; generation adds autoregressive molecular-token cross-entropy. Property regression uses the target transform and regression criterion from its training configuration. SDK classes expose inference; these training workflows run in the author implementation. The current Vib2Conf property engine uses mean SmoothL1 loss on training-normalized targets; its configurable beta is positive and defaults to 1. Retain the training mean/std for validation and inference.
+
+$$\ell_\beta(r)=\begin{cases}r^2/(2\beta),&|r|<\beta,\\ |r|-\beta/2,&|r|\ge\beta.\end{cases}$$
+
+$$L_{\rm gap}=\frac1N\sum_i\ell_\beta\left(\hat z_i-\frac{y_i-\mu_{\rm train}}{\sigma_{\rm train}}\right).$$
+
+## Data requirements and references
 
 A small first-record sample may be biased by source order. Use seeded reservoir sampling for broader checks; missing-channel scores must remain separate from complete-input scores.
 

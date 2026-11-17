@@ -2,7 +2,7 @@
 
 由谱图预测 HOMO–LUMO gap，使用已有共享谱学 Transformer，输出 eV。
 
-## 当前结论
+## 示例与评测
 
 完整输入和单位已对齐；128 样本 MAE 0.131446 eV，优于均值基线 0.899940 eV。下一步是更大独立评测，无证据要求立即微调。
 
@@ -111,7 +111,22 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks vibrational.gap.ir_raman_hc --limit 8 --output results/vibrational-gap-ir_raman_hc-new.json
 ```
 
-## 边界与来源
+## 调用模型与微调
+
+```python
+from openmolspec.model import GapModel
+model = GapModel(root='/path/to/portable-models',
+    python='/path/to/vibrational-env/bin/python')
+result = model.predict(inputs, allow_missing_modalities=False)
+```
+
+通过 [openSpec／Vib2Mol 作者训练流程](https://github.com/X1nyuLu/openSpec-alpha)进行适配。准备谱—结构对齐的 LMDB，保留 H/C 参考和归一化，确保 train/val 分组独立。检索采用双向对比交叉熵与配对分类交叉熵；生成使用分子 token 自回归交叉熵。性质回归按其训练配置保留目标变换和回归准则。SDK 提供推理，相关训练通过作者实现执行。 当前 Vib2Conf 性质引擎对训练集标准化目标使用平均 SmoothL1；beta 为正数，默认 1。验证与推理使用相同的训练均值和标准差。
+
+$$\ell_\beta(r)=\begin{cases}r^2/(2\beta),&|r|<\beta,\\ |r|-\beta/2,&|r|\ge\beta.\end{cases}$$
+
+$$L_{\rm gap}=\frac1N\sum_i\ell_\beta\left(\hat z_i-\frac{y_i-\mu_{\rm train}}{\sigma_{\rm train}}\right).$$
+
+## 数据要求与引用
 
 按文件顺序的首批样本可能来源偏倚，较广的检查使用固定种子的 reservoir 抽样。缺通道与完整输入的成绩必须分开解释。
 

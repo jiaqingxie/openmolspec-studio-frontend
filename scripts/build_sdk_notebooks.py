@@ -19,7 +19,7 @@ def book(kind, en):
     code("import json, os, sys, io, tempfile\nfrom pathlib import Path\nfrom IPython.display import display, SVG\nroot = next(p for p in [Path.cwd(), *Path.cwd().parents] if (p / 'documentation/assets').is_dir())\nfrom openmolspec.dataset import MolecularSpectra, list_datasets\nprint('Registered datasets:', [c['name'] for c in list_datasets()])")
     if kind == 'inference':
         files += ['documentation/assets/sdk-nmr-test-examples.jsonl', 'src/openmolspec/assets/datasets.json',
-                  'scripts/documentation_figures.py', 'openmolspec_bench/assignment.py', 'openmolspec_bench/data.py', 'openmolspec_bench/runner.py']
+                  'scripts/documentation_figures.py', 'src/openmolspec/plotting.py', 'openmolspec_bench/assignment.py', 'openmolspec_bench/data.py', 'openmolspec_bench/runner.py']
         md('This notebook actually calls the frozen checkpoint. Configure OPENMOLSPEC_MODELS_ROOT and OPENMOLSPEC_NMR_PYTHON using the SDK guide. The three documented NMRSpec records are held-out-role examples, not a new dataset or training set.' if en else
            '本 notebook 实际调用冻结权重。按 SDK 指南配置 OPENMOLSPEC_MODELS_ROOT 和 OPENMOLSPEC_NMR_PYTHON。三个 NMRSpec 记录是已有测试视图的文档示例，不是新的数据集或训练集。')
         code("data = MolecularSpectra.from_jsonl(splits={'test': root / 'documentation/assets/sdk-nmr-test-examples.jsonl'}, name='documented_nmrspec_examples', domain='experimental')\nrows = data['test'].head(3)\nprint(json.dumps(rows[0], indent=2, ensure_ascii=False))\nprint('Split roles:', list(data.get_split()))")

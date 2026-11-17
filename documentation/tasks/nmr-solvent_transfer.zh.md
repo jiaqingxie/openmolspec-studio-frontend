@@ -2,7 +2,7 @@
 
 用跨溶剂实验参考估计目标位移；当前提供无训练的参考检索基线。
 
-## 当前结论
+## 示例与评测
 
 参考检索基线可执行，但 H 没有优于位移不变基线。仍需溶剂条件模型及独立配对数据。
 
@@ -112,7 +112,19 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.solvent_transfer --limit 8 --output results/nmr-solvent_transfer-new.json
 ```
 
-## 边界与来源
+## 调用模型与微调
+
+```python
+from openmolspec.benchmark import Benchmark
+benchmark = Benchmark(workspace='/path/to/workspace',
+    python='/path/to/task-env/bin/python',
+    solvent_library='/path/to/solvent-library.json')
+result = benchmark.run('nmr.solvent_transfer', output='new-algorithm-results.json', limit=32)
+```
+
+此任务是算法流程，可调整参考库或匹配规则；没有神经网络参数和训练 loss。具体匹配目标与数据来源见上文。
+
+## 数据要求与引用
 
 这不是神经网络溶剂模型，对两种核尚无稳定收益。参考库较小，温度、浓度及位移参考尚未统一核验；专用神经网络权重仍待取得。
 

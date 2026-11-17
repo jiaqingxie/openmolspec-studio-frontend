@@ -53,8 +53,8 @@ def corpus_page(en):
     providers={key.split(':',1)[1]:v for key,v in pc.items() if key.startswith('provider:')}
     page+=('Stored source labels: ' if en else '原文件保留的来源标签：')+', '.join(f'{key} ({value:,})' for key,value in providers.items())+'.\n\n'
     page+='## '+('Contribution and remaining evidence' if en else '贡献定位与仍需补充的证据')+'\n\n'
-    page+=('The defensible contribution is the curated experimental collection together with a consistent access, task and training interface. The current H/C-paired subset is much smaller than the total patent identity count; scale alone does not establish superiority over paired H/C benchmarks. Demonstrating learning value requires fixed source-aware evaluation, training-scale curves, external transfer and multiple seeds. [Current experiments](learning-evidence.md) report what has actually run.\n\n' if en else
-           '当前可支撑的贡献是整理后的实验数据，以及一致的数据访问、任务和训练接口。H/C 配对子集远小于专利库总身份数，不能仅凭总量声称优于配对 H/C 基准。学习价值需要固定来源控制的评测、训练规模曲线、外部迁移和多随机种子支撑。[当前实验](learning-evidence.md)列出已经实际跑过的内容。\n\n')
+    page+=('The defensible contribution is the curated experimental collection together with a consistent access, task and training interface. The current H/C-paired subset is much smaller than the total patent identity count; scale alone does not establish superiority over paired H/C benchmarks. Demonstrating learning value requires fixed source-aware evaluation, training-scale curves, external transfer and multiple seeds. [Current experiments](benchmarks.md) report what has actually run.\n\n' if en else
+           '当前可支撑的贡献是整理后的实验数据，以及一致的数据访问、任务和训练接口。H/C 配对子集远小于专利库总身份数，不能仅凭总量声称优于配对 H/C 基准。学习价值需要固定来源控制的评测、训练规模曲线、外部迁移和多随机种子支撑。[当前实验](benchmarks.md)列出已经实际跑过的内容。\n\n')
     page+=('The scan uses stored patent InChI and RDKit-generated NMRexp identities. It does not rederive every patent identity, assess manual extraction accuracy or establish redistribution rights. The local NMRexp file also matches the official v2 MD5. Full SHA-256 file fingerprints, RDKit version and validity flags are in the downloadable report. [Version evidence](assets/reports/corpus_comparison_sources.json).\n' if en else
            '扫描采用专利库保存的 InChI，以及 RDKit 从 NMRexp SMILES 生成的身份；没有逐条重建专利身份、人工评估提取精度或确认再分发权限。本地 NMRexp 文件的 MD5 也与官方 v2 一致。完整 SHA-256 文件指纹、RDKit 版本和有效性标记见可下载报告。[版本核对记录](assets/reports/corpus_comparison_sources.json)。\n')
     return page
@@ -88,7 +88,7 @@ def learning_page(en):
     page+='## '+('Experiments still required for the paper' if en else '论文仍需要的实验')+'\n\n'
     page+=('| Experiment | Status |\n| --- | --- |\n| Matched-compute data-scale curves across several seeds | Not completed; requires a suitable training queue |\n| New training with and without the patent corpus | Not completed |\n| External transfer with source/document/scaffold controls | Not completed |\n| Manual source-grounded extraction and atom-assignment quality checks | Not completed |\n\n' if en else
            '| 实验 | 状态 |\n| --- | --- |\n| 统一计算预算、多随机种子的数据规模曲线 | 未完成，需要合适的训练队列 |\n| 加入／不加入专利数据的新训练对照 | 未完成 |\n| 控制来源文档和骨架的外部迁移评测 | 未完成 |\n| 对照原文的人工提取质量与原子指认核验 | 未完成 |\n\n')
-    page+='[Data comparison](corpus-comparison.md) · [Training-history audit](training-overlap.md) · [Model review](model-audit.md)\n'
+    page+='[Data comparison](corpus-comparison.md) · [Data splits](data/splits.md) · [Model review](model-audit.md)\n'
     return page
 
 

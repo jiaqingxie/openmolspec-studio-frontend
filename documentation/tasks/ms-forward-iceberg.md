@@ -2,7 +2,7 @@
 
 Predict an MS/MS peak list from a molecular structure under an explicitly supplied adduct, collision energy and instrument. The model parameters remain frozen.
 
-## Current evidence
+## Example and evaluation
 
 Appropriate author model interface and explicit conditions; 31 scored spectra are insufficient for a broad accuracy claim. Protocol/overlap audit precedes fine-tuning.
 
@@ -122,7 +122,21 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks ms.forward.iceberg --limit 8 --output results/ms-forward-iceberg-new.json
 ```
 
-## Limits and provenance
+## Call and adapt this model
+
+```python
+from openmolspec.model import MSPredictor
+model = MSPredictor(model='iceberg', source='/path/to/ms-pred',
+    weights='/path/to/weights', python='/path/to/ms-env/bin/python')
+result = model.predict(smiles=smiles, adduct='[M+H]+',
+    collision_energy=20., instrument='Orbitrap')
+```
+
+Fine-tune using the [author training modules](https://github.com/coleygroup/ms-pred). Build molecule-disjoint splits with structures, acquisition conditions, measured peak intensities and the fragment targets required by the chosen architecture. ICEBERG exposes `ms_pred.iceberg.train_gen` and `ms_pred.iceberg.train_inten`; GLACIER exposes `ms_pred.glacier.train_joint` and contrastive joint training. Inspect each entry’s `--help` and the released configuration before launching. ICEBERG fragment generation uses binary cross-entropy over valid atom decisions; its intensity module supports cosine or entropy objectives. GLACIER joint/contrastive losses depend on its configuration; preserve the selected variant when reporting fine-tuning.
+
+$$L_{\rm cosine}=1-\frac{\hat s\cdot s}{\|\hat s\|\|s\|}.$$
+
+## Data requirements and references
 
 Pretrained MassSpecGym weights may overlap a differently constructed split. Training overlap and complete instrument/adduct support metadata have not been independently established.
 

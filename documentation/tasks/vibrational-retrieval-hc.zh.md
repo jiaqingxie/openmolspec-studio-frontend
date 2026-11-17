@@ -2,7 +2,7 @@
 
 使用 Xinyu 保存的 Vib2Mol 模型完成结构检索、SMILES 生成或候选重排。完整输入为 IR+Raman+H/C；仅 IR/Raman 的路径作为缺核消融。
 
-## 当前结论
+## 示例与评测
 
 完整四模态协议适配合理。候选池检索／ITM 不等于开放结构生成；需扩大独立候选库验证。
 
@@ -129,7 +129,21 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks vibrational.retrieval.hc --limit 8 --output results/vibrational-retrieval-hc-new.json
 ```
 
-## 边界与来源
+## 调用模型与微调
+
+```python
+from openmolspec.model import Vib2Mol
+model = Vib2Mol(root='/path/to/portable-models',
+    python='/path/to/vibrational-env/bin/python')
+result = model.retrieve(inputs, candidate_smiles,
+    rerank=False, allow_missing_modalities=False)
+```
+
+通过 [openSpec／Vib2Mol 作者训练流程](https://github.com/X1nyuLu/openSpec-alpha)进行适配。准备谱—结构对齐的 LMDB，保留 H/C 参考和归一化，确保 train/val 分组独立。检索采用双向对比交叉熵与配对分类交叉熵；生成使用分子 token 自回归交叉熵。性质回归按其训练配置保留目标变换和回归准则。SDK 提供推理，相关训练通过作者实现执行。
+
+$$L_{\rm retrieval}=L_{\rm contrastive}+L_{\rm matching},\qquad L_{\rm generation}=-\sum_t\log p(y_t\mid y_{<t},s).$$
+
+## 数据要求与引用
 
 生成与重排 checkpoint 的 H/C 参考和归一化缓冲必须一致。小候选池可能让检索分数偏高，必须公布样本 ID、种子和来源组成。
 

@@ -27,8 +27,8 @@ def primary_navigation(st):
     if view not in ("tool", "dataset", "prediction", "documentation"):
         view = "tool"
     documentation = documentation_url()
-    links = [("Tool", "?view=tool", "tool"), ("Dataset Download", "?view=dataset", "dataset"),
-             ("Prediction (Online)", "?view=prediction", "prediction"), ("Full documentation", documentation, "documentation")]
+    links = [("Tool", "?view=tool", "tool"),
+             ("Prediction (Online)", "?view=prediction", "prediction"), ("Data", "?view=dataset", "dataset"), ("Tasks", documentation+"tasks/index.html", "tasks"), ("Tutorials", documentation+"notebooks/index.html", "tutorials"), ("Theory", documentation+"theory/index.html", "theory"), ("Inversion", documentation+"inversion/index.html", "inversion"), ("Documentation", documentation, "documentation")]
     st.markdown('''<style>.oms-nav{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0 22px;border-bottom:1px solid #dfe5dc;margin-bottom:24px}.oms-nav a{padding:10px 18px;border-radius:7px;color:#293c35;text-decoration:none;font-weight:600}.oms-nav a.active{background:#244d3d;color:white}.oms-nav a:hover{background:#e7eee7;color:#173c2d}</style>''', unsafe_allow_html=True)
     anchors = "".join(f'<a class="{"active" if key == view else ""}" href="{html.escape(url, quote=True)}" target="_self">{title}</a>' for title, url, key in links)
     st.markdown(f'<nav class="oms-nav" aria-label="Primary navigation">{anchors}</nav>', unsafe_allow_html=True)
@@ -36,7 +36,14 @@ def primary_navigation(st):
 
 
 def dataset_page(st):
-    st.title("Dataset Download")
+    st.title("Data · OpenMolSpec v1.0")
+    root = Path(__file__).resolve().parents[1]
+    st.link_button("Browse sources, distributions and splits", documentation_url()+"data/index.html")
+    for slug, label in [("nmr", "NMR"), ("ms", "MS"), ("vibrational", "IR / Raman"), ("multimodal", "Multimodal")]:
+        with st.expander(label, expanded=slug=="nmr"):
+            figure=root/"documentation/assets/gallery"/f"data-{slug}-availability.png"
+            if figure.is_file():st.image(str(figure))
+            st.link_button("Data card and citations", documentation_url()+f"data/{slug}.html")
     st.write("获取原始数据与输入模板；下载后请保留来源、划分、单位和许可信息。")
     distribution = os.environ.get("OPENMOLSPEC_DATASET_URL")
     if distribution:

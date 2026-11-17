@@ -4,13 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "openmolspec"
-version = "1.1.0a2"
+version = "1.0.0"
 description = "Spectroscopy datasets, model interfaces and reproducible learning workflows"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = []
 
 [project.optional-dependencies]
+mcp = ["mcp>=2,<3"]
 data = ["numpy>=1.26", "pandas>=2", "pyarrow>=14", "rdkit>=2023.9", "lmdb>=1.4"]
 analysis = ["numpy>=1.26", "scipy>=1.10", "matplotlib>=3.8", "rdkit>=2023.9"]
 models = ["numpy>=1.26", "scipy>=1.10", "rdkit>=2023.9", "torch>=2.4", "tqdm>=4.65", "transformers==4.44.2"]
@@ -31,6 +32,8 @@ production = [
 [project.scripts]
 openmolspec = "openmolspec.cli:main"
 openmolspec-bench = "openmolspec_bench.__main__:main"
+spectra-harness = "openmolspec.harness:main"
+openmolspec-mcp = "openmolspec.mcp:main"
 
 [tool.setuptools.packages.find]
 where = ["src", "."]

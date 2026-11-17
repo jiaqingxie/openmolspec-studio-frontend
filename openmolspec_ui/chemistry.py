@@ -2,12 +2,23 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from functools import lru_cache
+import os
+from pathlib import Path
 
 import numpy as np
 import py3Dmol
 from rdkit import Chem
 from rdkit.Chem import AllChem, rdDetermineBonds, rdMolDescriptors
 from rdkit.Chem.Draw import rdMolDraw2D
+
+
+def _arial(options):
+    configured=os.environ.get('OPENMOLSPEC_ARIAL_FONT')
+    candidates=[Path(configured)] if configured else [Path(__file__).resolve().parents[1]/'.runtime/fonts/Arial.TTF',Path('/usr/share/fonts/truetype/msttcorefonts/Arial.ttf'),Path('/usr/share/fonts/truetype/msttcorefonts/arial.ttf')]
+    font=next((path for path in candidates if path.is_file()),None)
+    if font is None:
+        raise ValueError('Configure OPENMOLSPEC_ARIAL_FONT with an installed Arial TTF for structure drawings.')
+    options.fontFile=str(font)
 
 
 @dataclass
@@ -101,6 +112,7 @@ def smiles_png(smiles: str, width: int = 480, height: int = 300) -> bytes | None
         return None
     AllChem.Compute2DCoords(mol)
     drawer = rdMolDraw2D.MolDraw2DCairo(width, height)
+    _arial(drawer.drawOptions())
     drawer.drawOptions().clearBackground = True
     drawer.drawOptions().bondLineWidth = 2.2
     drawer.drawOptions().padding = 0.12
@@ -112,6 +124,7 @@ def smiles_png(smiles: str, width: int = 480, height: int = 300) -> bytes | None
 def _mol_svg(mol: Chem.Mol, width: int, height: int) -> str:
     AllChem.Compute2DCoords(mol)
     drawer = rdMolDraw2D.MolDraw2DSVG(width, height)
+    _arial(drawer.drawOptions())
     drawer.drawOptions().clearBackground = False
     drawer.drawOptions().bondLineWidth = 2.2
     drawer.drawOptions().padding = 0.12

@@ -1,6 +1,6 @@
 """OpenMolSpec spectroscopy datasets, model interfaces and learning workflows."""
 
-__version__ = "1.1.0a2"
+__version__ = "1.0.0"
 
 from .core.schema import OPEN_SPEC_V1_SCHEMA, SCHEMA_VERSION
 

@@ -50,7 +50,6 @@ class OpenMolSpecService:
         self._tensor_bundles: dict[str, Any] = {}
         self._nmr_bundle: tuple[Any, dict[str, Any]] | None = None
         self._dataset: _DatasetIndex | None = None
-        self._generation: dict[int, dict[str, Any]] | None = None
         self._vib2mol_bundles: dict[int, tuple[Any, Any, str]] = {}
         self._molecular_embeddings: Any | None = None
 
@@ -377,30 +376,10 @@ class OpenMolSpecService:
         return scores
 
     def retrieve(self, inputs: SpectralInput, limit: int = 8) -> list[dict[str, Any]]:
-        if self._direct_vib2mol_enabled():
-            try:
-                return self._retrieve_vib2mol(inputs, limit)
-            except Exception:
-                # A CUDA worker can still be temporarily unavailable. The explicit
-                # backend field keeps this fallback visible to the UI and exports.
-                pass
-        dataset, selected, scores = self.nearest_indices(inputs, limit)
-        return [
-            {
-                **dataset.records[int(index)],
-                "similarity": float(scores[int(index)]),
-                "backend": "spectral-cosine",
-            }
-            for index in selected
-        ]
+        return self._retrieve_vib2mol(inputs, limit)
 
     def _direct_vib2mol_enabled(self) -> bool:
-        setting = os.environ.get("OPENMOLSPEC_VIB2MOL_DIRECT", "auto").lower()
-        if setting in {"0", "false", "off"}:
-            return False
-        if setting in {"1", "true", "on"}:
-            return True
-        return self.device.startswith("cuda")
+        return True
 
     def _load_vib2mol(self, phase: int):
         if phase in self._vib2mol_bundles:
@@ -495,79 +474,8 @@ class OpenMolSpecService:
             for index, score in zip(indices.tolist(), values.tolist())
         ]
 
-    def _load_generation_predictions(self) -> dict[int, dict[str, Any]]:
-        if self._generation is not None:
-            return self._generation
-        if self.assets.generation_predictions is None:
-            raise ModelUnavailable("没有发现 Vib2Mol 生成评估缓存。")
-        predictions: dict[int, dict[str, Any]] = {}
-        with self.assets.generation_predictions.open(encoding="utf-8") as handle:
-            for line in handle:
-                item = json.loads(line)
-                predictions[int(item["index"])] = item
-        self._generation = predictions
-        return predictions
-
     def generate(self, inputs: SpectralInput, limit: int = 5) -> dict[str, Any]:
-        limit = max(int(limit), 3)
-        if self._direct_vib2mol_enabled():
-            try:
-                return self._generate_vib2mol(inputs, limit)
-            except Exception:
-                pass
-        anchor_limit = max(limit * 6, 24)
-        dataset, selected, scores = self.nearest_indices(inputs, anchor_limit)
-        predictions = self._load_generation_predictions()
-        pooled: dict[str, dict[str, Any]] = {}
-        anchors_used: set[int] = set()
-        primary_anchor: int | None = None
-        for selected_index in selected:
-            anchor_index = int(selected_index)
-            cached = predictions.get(anchor_index)
-            if cached is None:
-                continue
-            candidates = cached.get("reranked") or cached.get("unique_candidates") or []
-            probabilities = cached.get("positive_probabilities") or []
-            anchor_similarity = float(scores[anchor_index])
-            for candidate_index, smiles in enumerate(candidates):
-                molecule = Chem.MolFromSmiles(smiles)
-                if molecule is None:
-                    continue
-                canonical = Chem.MolToSmiles(molecule, canonical=True)
-                matching_probability = (
-                    float(probabilities[candidate_index])
-                    if candidate_index < len(probabilities)
-                    else None
-                )
-                confidence = anchor_similarity * (
-                    matching_probability if matching_probability is not None else 1.0
-                )
-                record = {
-                    "smiles": canonical,
-                    "score": confidence,
-                    "matching_probability": matching_probability,
-                    "anchor_similarity": anchor_similarity,
-                    "anchor_index": anchor_index,
-                }
-                previous = pooled.get(canonical)
-                if previous is None or confidence > previous["score"]:
-                    pooled[canonical] = record
-                anchors_used.add(anchor_index)
-                if primary_anchor is None:
-                    primary_anchor = anchor_index
-        if not pooled or primary_anchor is None:
-            raise ModelUnavailable("相近的 test set 样本没有可用的 Vib2Mol 生成候选。")
-        ranked = sorted(pooled.values(), key=lambda item: item["score"], reverse=True)
-        output = []
-        for rank, record in enumerate(ranked[:limit], start=1):
-            output.append({"rank": rank, **record})
-        return {
-            "anchor": dataset.records[primary_anchor],
-            "anchor_similarity": float(scores[primary_anchor]),
-            "anchors_used": len(anchors_used),
-            "candidates": output,
-            "mode": "Vib2Mol test set cache pooled from spectral nearest neighbors",
-        }
+        return self._generate_vib2mol(inputs, max(int(limit), 1))
 
     def _generate_vib2mol(self, inputs: SpectralInput, limit: int) -> dict[str, Any]:
         inputs.require_vibrational_spectrum()

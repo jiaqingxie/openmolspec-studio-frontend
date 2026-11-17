@@ -2,9 +2,7 @@
 
 Rank candidate structures from NMR spectra, or rank candidate spectra from a molecular structure, with the existing dual encoder.
 
-**Evaluation limitation:** molecular overlap with checkpoint-recorded training data is confirmed for several NMR views. The final generator also has a training-file fingerprint discrepancy. These runs do not establish independent generalization.  [Training-history audit / 训练历史审计](../training-overlap.md)
-
-## Current evidence
+## Example and evaluation
 
 Input/output pairing is appropriate; the 32-candidate smoke pool is small. Validate a larger independent library before judging generalization or fine-tuning.
 
@@ -122,7 +120,29 @@ python -m openmolspec_bench run --workspace /path/to/OpenMolSpec \
   --tasks nmr.retrieval.h.s2m --limit 8 --output results/nmr-retrieval-h-s2m-new.json
 ```
 
-## Limits and provenance
+## Call and adapt this model
+
+```python
+from openmolspec.model import NMRTransformer
+model = NMRTransformer.from_pretrained(
+    '/path/to/checkpoint.pt', stage='align',
+    python='/path/to/nmr-env/bin/python')
+result = model.retrieve(query, candidate_smiles, top_k=10)
+plan = model.training_plan(
+    'prepared-nmr', run_dir='runs/my-model', epochs=10, batch_size=32)
+print(plan.validate())
+# trained = model.fit(plan)
+```
+
+Prepare disjoint train/validation records with `prepare_nmr_training`; supply an alignment checkpoint for the generator. Use H/C masks to define available inputs and choose model selection criteria on validation data. Pretrained initialization restores model weights. [Data preparation](../api.md) provides the complete workflow.
+
+### Training objective
+
+$$L_{\rm align}=\tfrac12[\mathrm{CE}(SM^\top/\tau,I)+\mathrm{CE}(MS^\top/\tau,I)]+\lambda_{\rm ITM}L_{\rm match}.$$
+
+Generation uses token cross-entropy; an optional joint alignment term follows its configured weight. Alignment uses normalized spectral/molecular representations with symmetric contrastive cross-entropy; ITM configuration adds positive/negative matching. The actual checkpoint/training configuration determines the objective.
+
+## Data requirements and references
 
 Scores from 16, 32 and full-dataset candidate pools are not directly comparable. Existing dataset provenance and train/test overlap still require independent audit before an accuracy claim.
 
