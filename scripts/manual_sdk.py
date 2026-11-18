@@ -16,6 +16,7 @@ def pages(en):
     text+=t('`MolecularSpectra` groups the named splits. Each `SpectraSplit` reads records as you iterate, keeping memory usage bounded. `select` combines channel filters and a row limit; `head` reads a small list. `verify` checks the complete local files against the dataset version.\n\n','`MolecularSpectra` 按名称组织划分；`SpectraSplit` 在迭代时逐条读取，避免把全库载入内存。`select` 组合通道筛选与行数上限，`head` 返回少量记录；`verify` 核对完整本地文件与数据版本。\n\n')
     cards=json.loads((ROOT/'src/openmolspec/assets/datasets.json').read_text())
     descriptions={
+        'transpeaknet_hsqc_test':t('Author HSQC test ZIP with 479 experimental spectra and expert carbon assignments.','作者发布的 HSQC 测试 ZIP，含 479 张实验谱及专家碳原子指认。'),
         'opendatalab_nmr':t('Cleaned experimental H/C NMR.','清洗后的实验 H/C NMR。'),
         'opendatalab_nmr_prepared':t('Original prepared H/C files.','原始准备版 H/C 文件。'),
         'nmrspec_test':'NMRSpec / NMRTrans', 'nmrgym_test':'NMRGym',
@@ -25,6 +26,8 @@ def pages(en):
         'massspecgym_test':t('Prepared MS/MS evaluation CSV.','整理后的 MS/MS 评测 CSV。'),
         'massspecgym_1_5':t('MassSpecGym v1.5 TSV with source folds.','保留原划分的 MassSpecGym v1.5 TSV。')}
     text+=table([t('Registered name','注册名称'),'Format',t('Description','说明')],[(f'`{card["name"]}`',f'`{card["format"]}`',descriptions.get(card['name'],t('Cleaned experimental ','清洗后的实验 ')+card['name'].removeprefix('opendatalab_').upper())) for card in cards])
+    text+=t('Download the [TransPeakNet test ZIP](https://github.com/siriusxiao62/2dNMR/tree/main/data_annotation) from the authors. The reader preserves the original SMILES order and exposes the measured `hsqc_peaks` as [¹³C ppm, ¹H ppm] pairs and `hsqc_assignments` as per-carbon annotations. The full training and validation spectra are available on request from the authors.\n\n','从作者仓库下载 [TransPeakNet 测试 ZIP](https://github.com/siriusxiao62/2dNMR/tree/main/data_annotation)。读取器保留原始 SMILES 顺序，`hsqc_peaks` 是 [¹³C ppm, ¹H ppm] 坐标对，`hsqc_assignments` 是按碳原子整理的指认。完整训练谱和验证谱需向作者申请。\n\n')
+    text+='```python\nhsqc = molspectra("transpeaknet_hsqc_test", root="HSQC_Annotation_TestData.zip")\nprint(hsqc.verify())\nrecord = hsqc["test"].select(modalities=["HSQC"]).head(1)[0]\nprint(record["smiles"], record["hsqc_peaks"])\n```\n\n'
     text+=t('Each record retains its source fields. `_openmolspec` adds the dataset, domain, split, file locator and detected channels. The [Data guide](data/index.md) describes numerical fields, units, acquisition conditions and cleaned counts.\n\n','每条记录保留来源字段，`_openmolspec` 补充数据集、数据域、划分、文件位置与通道。数值字段、单位、采集条件及清洗后数量见[数据指南](data/index.md)。\n\n')
     text+='## '+t('Import your own measurements','导入自己的测量')+'\n\n'
     text+='```python\nfrom openmolspec.dataset import MolecularSpectra\n\ncustom = MolecularSpectra.from_jsonl(\n    splits={"train": "my-train.jsonl", "val": "my-val.jsonl"},\n    name="my_measurements", domain="experimental")\nprint(custom["train"].head(1))\n```\n\n'

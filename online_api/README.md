@@ -7,9 +7,9 @@ The agent invokes an OpenAI-compatible model API to choose MCP tools and explain
 their returned values. Only public answer text and explicit tool events are
 retained; provider reasoning fields are discarded.
 
-Install the SDK with its MCP extra in the service environment. Configure separate
-an author environment for NMRNet/GLACIER and a separate one for openSpec/Vib2Mol, together with
-their existing checkpoints. The frontend is not a substitute for those weights.
+Install the SDK with its MCP extra in the service environment. Configure an
+author environment for NMRNet, the NMR Transformer and the MS models. Configure
+a separate environment for openSpec/Vib2Mol and TransPeakNet with PyTorch Geometric.
 
 ```bash
 export PYTHONPATH=src:.
@@ -18,8 +18,12 @@ python -m online_api.serve \
   --model-python /path/to/nmr-env/bin/python \
   --models-root /path/to/nmr-models \
   --ms-source /path/to/ms-pred --ms-weights /path/to/ms-checkpoints \
+  --nmr-alignment /path/to/nmr-alignment.pt \
+  --nmr-generation /path/to/nmr-generation.pt \
   --portable-root /path/to/openmolspec-models \
   --vibrational-python /path/to/openspec-env/bin/python \
+  --solvent-library /path/to/solvent_reference_library.json \
+  --transpeaknet-source /path/to/2dNMR \
   --base-url https://hapiopen.cc/v1 \
   --model deepseek-v4.1-flash
 ```
@@ -47,10 +51,17 @@ cloudflared tunnel --url http://127.0.0.1:8721 \
   --edge 127.0.0.1:8744 --ha-connections 1 --no-autoupdate --no-prechecks
 ```
 
-Each line is a separate long-running process. The helpers bind only to loopback
-and read the existing HTTPS proxy setting. Direct-connect hosts do not need them.
-Keep the model service and tunnel alive together. No GitHub Pages process can
-run Python inference by itself.
+The provisioning proxy handles Quick Tunnel creation and can stop after the
+tunnel registers. Keep the edge relay, tunnel and model API running to serve
+new predictions. The helpers bind to loopback and use the existing HTTPS proxy.
+Direct-connect hosts do not need the helpers.
+
+Use the [author repository at commit `2e93db8`](https://github.com/siriusxiao62/2dNMR/tree/2e93db82a9d627ac01109474e9b6e594065e3d56)
+for TransPeakNet. The adapter checks the original 2D checkpoint digest and loads
+only tensors. It predicts carbon and proton shifts and matches them to submitted
+HSQC peaks using OpenMolSpec's distance window. Its assignments preserve original
+SMILES atom order and explicitly return unmatched peaks. The `--transpeaknet-source`
+and `--solvent-library` workflows are available when those local assets are configured.
 
 Public endpoints:
 

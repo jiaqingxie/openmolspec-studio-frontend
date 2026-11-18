@@ -11,6 +11,7 @@ import getpass
 import hashlib
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -24,14 +25,17 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 ORIGINS = {'https://jiaqingxie.github.io', 'http://127.0.0.1:8769', 'http://localhost:8769'}
-TASKS = {'nmr.forward.1H', 'nmr.forward.13C', 'nmr.assignment', 'vibrational.forward',
-         'vibrational.gap.ir_raman_hc', 'vibrational.generation.hc', 'vibrational.retrieval.hc', 'ms.forward.glacier'}
+MCP_TASKS = {'nmr.forward.1H', 'nmr.forward.13C', 'nmr.assignment',
+             'vibrational.gap.ir_raman_hc', 'vibrational.generation.hc', 'vibrational.retrieval.hc',
+             'ms.forward.glacier', 'ms.forward.iceberg', 'nmr.generation.hc', 'nmr.retrieval.hc.s2m'}
+LOCAL_TASKS = {'vibrational.forward', 'nmr.solvent_transfer', 'nmr.hsqc.transpeaknet'}
+TASKS = MCP_TASKS | LOCAL_TASKS
 SYSTEM = """You are the OpenMolSpec spectroscopy assistant. Answer in the user's language.
 Use the MCP tools to discover capabilities, validate a request, and run models.
 All numerical predictions must come from spectra_predict. Do not invent values.
 For prediction, always call spectra_validate first and check valid=true.
 For NMR use SMILES and 1H/13C. Assignment additionally needs measured ppm peaks.
-For MS/MS use ms.forward.glacier with smiles, adduct, collision_energy and instrument.
+For MS/MS use ms.forward.glacier or ms.forward.iceberg with smiles, adduct, collision_energy and instrument.
 Ask for missing acquisition conditions; do not invent them.
 The exact task IDs are nmr.forward.13C, nmr.forward.1H and nmr.assignment.
 NMR prediction inputs have the form {"smiles":"CCO"}.
@@ -57,7 +61,8 @@ def public_inputs(inputs):
     """Limit anonymous work and keep runtime settings under server control."""
     if not isinstance(inputs, dict): raise ValueError('Model inputs must be an object')
     fields = {'smiles', 'nucleus', 'peaks_ppm', 'ir', 'raman', 'nmr_h', 'nmr_c', 'candidates',
-              'adduct', 'collision_energy', 'instrument', 'precursor_mz'}
+              'adduct', 'collision_energy', 'instrument', 'precursor_mz', 'query',
+              'source_solvent', 'target_solvent', 'source_ppm', 'solvent', 'hsqc_peaks'}
     result = {key: value for key, value in inputs.items() if key in fields}
     if 'smiles' in result and (not isinstance(result['smiles'], str) or len(result['smiles']) > 256):
         raise ValueError('SMILES may contain at most 256 characters')
@@ -69,9 +74,47 @@ def public_inputs(inputs):
         if not isinstance(values, list) or not 2 <= len(values) <= 32 or any(
                 not isinstance(value, str) or not value or len(value) > 256 for value in values):
             raise ValueError('Supply 2–32 candidate SMILES, each at most 256 characters')
-    for key in ('adduct', 'instrument'):
+    for key in ('adduct', 'instrument', 'source_solvent', 'target_solvent', 'solvent'):
         if key in result and (not isinstance(result[key], str) or len(result[key]) > 64):
             raise ValueError(key + ' must be a short acquisition condition')
+    if 'source_ppm' in result and not finite_number(result['source_ppm']):
+        raise ValueError('Source shift must be finite')
+    if 'query' in result:
+        result['query'] = nmr_query(result['query'])
+    if 'hsqc_peaks' in result:
+        peaks = result['hsqc_peaks']
+        if not isinstance(peaks, list) or not 1 <= len(peaks) <= 256 or any(
+                not isinstance(peak, list) or len(peak) != 2 or not all(finite_number(v) for v in peak)
+                for peak in peaks):
+            raise ValueError('Supply 1–256 HSQC cross-peaks as [13C ppm, 1H ppm] pairs')
+    return result
+
+
+def finite_number(value):
+    return type(value) in (int, float) and -10000 <= value <= 10000 and math.isfinite(value)
+
+
+def nmr_query(query):
+    if not isinstance(query, dict):
+        raise ValueError('NMR query must be an object')
+    result = {}
+    for nucleus in ('h_nmr', 'c_nmr'):
+        records = query.get(nucleus, [])
+        if not isinstance(records, list) or len(records) > 4:
+            raise ValueError(f'{nucleus} accepts up to four NMR records')
+        result[nucleus] = []
+        for record in records:
+            if not isinstance(record, dict):
+                raise ValueError('Each NMR record must be an object')
+            safe = {k: v for k, v in record.items() if k in ('chemical_shift', 'type', 'frequency', 'solvent')}
+            if not safe.get('chemical_shift') or any(not isinstance(v, str) or len(v) > 3000 for v in safe.values()):
+                raise ValueError('Enter finite NMR peak text in chemical_shift')
+            result[nucleus].append(safe)
+    if 'formula' in query:
+        value = query['formula']
+        if not isinstance(value, str) or len(value) > 120:
+            raise ValueError('Supply a short molecular formula')
+        result['formula'] = value
     return result
 
 
@@ -107,10 +150,14 @@ class Service:
         self.db.execute("UPDATE runs SET status='failed',error='The worker restarted. Submit the request again.' WHERE status IN ('queued','running')")
         self.db.commit()
         self.loop = None; self.queue = None; self.tools = []
+        self.enabled_tasks = TASKS.copy()
+        if not getattr(args, 'transpeaknet_source', None): self.enabled_tasks.discard('nmr.hsqc.transpeaknet')
+        if not getattr(args, 'solvent_library', None): self.enabled_tasks.discard('nmr.solvent_transfer')
+        self.solvent_model = None
 
     def status(self):
         return {'service': 'OpenMolSpec tools', 'version': '1.0', 'connected': self.ready,
-                'model': self.args.model, 'transport': 'MCP stdio', 'tools': sorted(TASKS)}
+                'model': self.args.model, 'transport': 'MCP stdio', 'tools': sorted(self.enabled_tasks)}
 
     def submit(self, payload, client):
         if not self.ready: raise ValueError('The tool service is connecting. Try again shortly.')
@@ -122,7 +169,7 @@ class Service:
             payload = {'kind': 'agent', 'prompt': prompt.strip()}
         else:
             task, inputs = payload.get('task'), payload.get('inputs')
-            if payload.get('kind') != 'tool' or task not in TASKS or not isinstance(inputs, dict):
+            if payload.get('kind') != 'tool' or not isinstance(task, str) or task not in self.enabled_tasks or not isinstance(inputs, dict):
                 raise ValueError('Choose a supported tool and supply its inputs')
             payload = {'kind': 'tool', 'task': task, 'inputs': public_inputs(inputs)}
         with self.lock:
@@ -161,10 +208,13 @@ class Service:
                 'error': row[3], 'events': [{'id': i, 'type': kind, 'data': json.loads(data), 'created_at': created} for i, kind, data, created in events]}
 
     def settings(self, task):
-        if task not in TASKS or task == 'vibrational.forward': raise ValueError('Choose an available MCP model task')
-        if task == 'ms.forward.glacier':
+        if task not in MCP_TASKS: raise ValueError('Choose an available MCP model task')
+        if task.startswith('ms.forward.'):
             return {'source': str(self.args.ms_source), 'weights': str(self.args.ms_weights),
                     'python': self.args.model_python, 'device': 'cpu'}
+        if task in {'nmr.generation.hc', 'nmr.retrieval.hc.s2m'}:
+            checkpoint = self.args.nmr_generation if task == 'nmr.generation.hc' else self.args.nmr_alignment
+            return {'checkpoint': str(checkpoint), 'python': self.args.model_python, 'device': 'cpu'}
         return {'root': str(self.args.models_root if task.startswith('nmr.') else self.args.portable_root),
                 'python': self.args.model_python if task.startswith('nmr.') else self.args.vibrational_python,
                 'device': 'cpu'}
@@ -192,7 +242,7 @@ class Service:
         result = self.unpack(await session.call_tool(name, arguments))
         if name in {'spectra_tasks', 'spectra_datasets'} and isinstance(result, dict) and isinstance(result.get('result'), list):
             result = result['result']
-        if name == 'spectra_tasks': result = [row for row in result if row['task'] in TASKS]
+        if name == 'spectra_tasks': result = [row for row in result if row['task'] in MCP_TASKS]
         if name == 'spectra_predict' and not result.get('completed'):
             raise ValueError(result.get('calls', [{}])[-1].get('error', 'Model execution failed'))
         result = clean(result)
@@ -216,7 +266,7 @@ class Service:
             schema.get('properties', {}).pop('model_settings', None)
             schema['required'] = [name for name in schema.get('required', []) if name != 'model_settings']
             if 'task' in schema.get('properties', {}):
-                schema['properties']['task']['enum'] = sorted(TASKS - {'vibrational.forward'})
+                schema['properties']['task']['enum'] = sorted(MCP_TASKS)
             definitions.append({'type': 'function', 'function': {'name': tool.name,
                 'description': tool.description, 'parameters': schema}})
         self.event(run_id, 'discovery', {'transport': 'MCP stdio', 'tools': [row['function']['name'] for row in definitions]})
@@ -246,7 +296,7 @@ class Service:
                 try:
                     result = await self.call(session, run_id, name, arguments)
                 except (ValueError, KeyError, TypeError) as error:
-                    result = {'error': str(error), 'available_tasks': sorted(TASKS - {'vibrational.forward'})}
+                    result = {'error': str(error), 'available_tasks': sorted(MCP_TASKS)}
                     self.event(run_id, 'tool_error', {'name': name, 'error': str(error)})
                 encoded = model_tool_message(result)
                 messages.append({'role': 'tool', 'tool_call_id': part['id'], 'content': encoded})
@@ -254,22 +304,40 @@ class Service:
 
     async def tool(self, session, run_id, payload):
         task, inputs = payload['task'], payload['inputs']
-        if task == 'vibrational.forward':
-            self.event(run_id, 'tool_start', {'id': run_id, 'name': 'geometry_to_spectra', 'args': inputs})
+        if task in LOCAL_TASKS:
+            self.event(run_id, 'tool_start', {'id': run_id, 'name': task, 'args': inputs})
             start = time.monotonic()
-            result = await asyncio.to_thread(self.geometry, inputs)
-            self.event(run_id, 'tool_end', {'id': run_id, 'name': 'geometry_to_spectra', 'result': result, 'elapsed_seconds': time.monotonic() - start})
+            adapter = {'vibrational.forward': self.geometry, 'nmr.solvent_transfer': self.solvent_transfer,
+                       'nmr.hsqc.transpeaknet': self.transpeaknet}[task]
+            result = await asyncio.to_thread(adapter, inputs)
+            self.event(run_id, 'tool_end', {'id': run_id, 'name': task, 'result': result, 'elapsed_seconds': time.monotonic() - start})
             return result
         valid = await self.call(session, run_id, 'spectra_validate', {'task': task, 'inputs': inputs})
         if not valid.get('valid'): raise ValueError(valid.get('error', 'Invalid model input'))
         return await self.call(session, run_id, 'spectra_predict', {'task': task, 'inputs': inputs})
 
     def geometry(self, inputs):
-        process = subprocess.run([self.args.vibrational_python, '-m', 'online_api.geometry'],
-            input=json.dumps({'smiles': inputs['smiles'], 'root': str(self.args.portable_root)}),
+        return self.local_worker('online_api.geometry', {'smiles': inputs['smiles'], 'root': str(self.args.portable_root)})
+
+    def solvent_transfer(self, inputs):
+        from openmolspec_bench.solvent_transfer import ReferenceTransfer
+        fields = ('smiles', 'nucleus', 'source_solvent', 'target_solvent', 'source_ppm')
+        if any(field not in inputs for field in fields):
+            raise ValueError('Supply a structure, nucleus, both solvents and the observed source shift')
+        if self.solvent_model is None:
+            self.solvent_model = ReferenceTransfer(json.loads(self.args.solvent_library.read_text()))
+        return self.solvent_model.predict(**{field: inputs[field] for field in fields})
+
+    def transpeaknet(self, inputs):
+        return self.local_worker('online_api.transpeaknet',
+                                 {**inputs, 'source': str(self.args.transpeaknet_source)})
+
+    def local_worker(self, module, inputs):
+        process = subprocess.run([self.args.vibrational_python, '-m', module],
+            input=json.dumps(inputs),
             capture_output=True, text=True, cwd=ROOT, timeout=600,
             env={**os.environ, 'OMP_NUM_THREADS': '1', 'OPENBLAS_NUM_THREADS': '1', 'MKL_NUM_THREADS': '1'})
-        if process.returncode: raise ValueError('Geometry prediction failed: ' + process.stderr[-1000:])
+        if process.returncode: raise ValueError('Model execution failed: ' + process.stderr[-1000:])
         line = next(line[14:] for line in reversed(process.stdout.splitlines()) if line.startswith('OMS_RESULT_V1:'))
         return clean(json.loads(line))
 
@@ -350,6 +418,10 @@ def main():
     parser.add_argument('--vibrational-python', default=str(ROOT.parents[1] / 'openmolspec-studio-portable/.venv/bin/python'))
     parser.add_argument('--ms-source', type=Path, default=ROOT.parents[1] / 'mspred/ms-pred-main')
     parser.add_argument('--ms-weights', type=Path, default=ROOT.parents[1] / 'mspred')
+    parser.add_argument('--nmr-generation', type=Path, default=ROOT.parent / 'runs/bebaecf2bca248f1a47eaa01f403002a/best.pt')
+    parser.add_argument('--nmr-alignment', type=Path, default=ROOT.parent / 'runs/f90bd7f743574d18a7f72ae72ce95e59/best.pt')
+    parser.add_argument('--solvent-library', type=Path)
+    parser.add_argument('--transpeaknet-source', type=Path)
     args = parser.parse_args()
     key = os.environ.get('OPENAI_API_KEY') or getpass.getpass('Provider API key (hidden): ')
     args.database.parent.mkdir(parents=True, exist_ok=True)

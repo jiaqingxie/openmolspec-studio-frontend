@@ -8,20 +8,26 @@ interface. GitHub Pages hosts its static frontend; a separate Python service
 executes the real model requests. The Documentation entry opens the canonical
 Read the Docs manual. The complete bilingual manual remains available at `docs/`.
 
-The Tool workspace offers NMR prediction/assignment, GLACIER MS/MS, conformer-based IR/Raman,
-multimodal gap prediction, structure generation/retrieval, and Agent Harness.
+The Tool workspace offers NMR shift prediction and assignment, solvent transfer,
+HSQC assignment through TransPeakNet, H/C NMR search and generation, GLACIER and
+ICEBERG MS/MS, conformer-based IR/Raman, multimodal gap prediction and structure
+generation/retrieval, and Agent Harness.
 The agent uses an OpenAI-compatible model API and the actual OpenMolSpec MCP
 stdio server. Expandable tool steps adapt the interaction in Luffy202's branch
 `codex/next-fastapi-migration`, commit
 `11577df2236241ee28f7c8940faf6ebab5f78476`. The project presentation draws on the
 section pacing of Shanghai AI Lab's [Sage–Taiyi](https://alpha-innovator.github.io/Sage-Taiyi/),
 with original OpenMolSpec styling and content.
+On the homepage, drag oxygen between the highlighted bond positions to switch
+between two `C2H6O` isomers. The example sends the selected SMILES to the Tool.
 
 Dataset previews contain 32 actual test records across eight experimental views,
 with structures, source conditions and downloadable JSON. Missing intensities
 remain missing: the chart labels them as peak positions. Counts distinguish
 spectra from unique molecules. The four-channel Tool example is a computed
 benchmark input, separately identified in the interface.
+The external TransPeakNet dataset card links to the author's HSQC test archive.
+Open that ZIP directly using `molspectra("transpeaknet_hsqc_test", root=zip_path)`.
 
 Build from the release repository after regenerating documentation figures:
 

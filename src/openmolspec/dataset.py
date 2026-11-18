@@ -10,11 +10,14 @@ from contextlib import closing
 from dataclasses import dataclass, replace
 import hashlib
 from importlib.resources import files
+from io import TextIOWrapper
 from itertools import islice
 import json
+import math
 from pathlib import Path
 import sqlite3
 import tempfile
+from zipfile import ZipFile
 
 
 def sha256(path):
@@ -110,6 +113,36 @@ def _nmr(row):
     return row
 
 
+def _hsqc_records(path):
+    prefix = 'HSQC_Annotation_CrossChecked/'
+    with ZipFile(path) as archive:
+        with TextIOWrapper(archive.open(prefix + 'all_test_smiles.csv'), encoding='utf-8-sig', newline='') as stream:
+            structures = list(csv.DictReader(stream))
+        for structure in structures:
+            source_id = structure['File_name']
+            if Path(source_id).name != source_id or not source_id.endswith('.csv'):
+                raise ValueError(f'Invalid HSQC annotation ID: {source_id}')
+            assignments = []
+            with TextIOWrapper(archive.open(prefix + 'Annotation/' + source_id), encoding='utf-8-sig', newline='') as stream:
+                for row in csv.DictReader(stream):
+                    carbon_index = float(row.get('c_idx', row.get('c idx')))
+                    carbon_shift = float(row['C'])
+                    proton_fields = [row.get('H 1', row.get('H1', '')), row.get('H 2', row.get('H2', ''))]
+                    proton_shifts = list(dict.fromkeys(float(value) for value in proton_fields if value.strip()))
+                    if not carbon_index.is_integer() or carbon_index < 0 or not proton_shifts or not all(
+                            math.isfinite(value) for value in [carbon_shift, *proton_shifts]):
+                        raise ValueError(f'Invalid HSQC annotation in {source_id}')
+                    assignments.append({'carbon_atom_index': int(carbon_index), 'carbon_ppm': carbon_shift,
+                                        'proton_ppm': proton_shifts})
+            if not assignments:
+                raise ValueError(f'Empty HSQC annotation in {source_id}')
+            peaks = [[c, h] for c, h in dict.fromkeys((row['carbon_ppm'], h)
+                      for row in assignments for h in row['proton_ppm'])]
+            yield source_id, {'source_id': source_id, 'smiles': structure['SMILES'], 'modality': 'HSQC',
+                              'hsqc_peaks': peaks, 'hsqc_assignments': assignments,
+                              'units': ['13C ppm', '1H ppm'], 'atom_index_basis': 'Original SMILES, zero based'}
+
+
 @dataclass(frozen=True)
 class SpectraSplit:
     """A streaming view of one spectroscopy dataset split.
@@ -117,7 +150,7 @@ class SpectraSplit:
     Parameters
     ----------
     path : str or pathlib.Path
-        JSONL, MassSpecGym CSV/TSV, or openSpec LMDB file.
+        JSONL, MassSpecGym CSV/TSV, openSpec LMDB, or TransPeakNet test ZIP file.
     role : {'train', 'val', 'test'}
         Split to read. ``'valid'`` and ``'validation'`` are aliases for ``'val'``.
     dataset : str
@@ -126,13 +159,13 @@ class SpectraSplit:
         Origin of the spectral measurements.
     format : str, default 'nmr_jsonl'
         Reader format: ``'nmr_jsonl'``, ``'jsonl'``, ``'massspecgym_csv'``,
-        ``'massspecgym_tsv'`` or ``'openspec_lmdb'``.
+        ``'massspecgym_tsv'``, ``'openspec_lmdb'`` or ``'transpeaknet_hsqc_zip'``.
     trusted : bool, default False
         Set to ``True`` when opening a trusted pickle-based LMDB.
     modalities : tuple of str, default ()
         Channels required in each selected record: ``'1H'``, ``'13C'``,
         ``'11B'``, ``'19F'``, ``'29Si'``, ``'31P'``, ``'IR'``, ``'Raman'``,
-        ``'MS'`` or ``'MS/MS'``.
+        ``'MS'``, ``'MS/MS'`` or ``'HSQC'``.
     limit : int or None, default None
         Maximum number of selected records.
 
@@ -162,13 +195,13 @@ class SpectraSplit:
         object.__setattr__(self, 'role', _role(self.role))
         if not self.path.is_file():
             raise FileNotFoundError(self.path)
-        if self.format not in ('nmr_jsonl', 'jsonl', 'massspecgym_csv', 'massspecgym_tsv', 'openspec_lmdb'):
+        if self.format not in ('nmr_jsonl', 'jsonl', 'massspecgym_csv', 'massspecgym_tsv', 'openspec_lmdb', 'transpeaknet_hsqc_zip'):
             raise ValueError(f'Unsupported format: {self.format}')
         if self.format == 'openspec_lmdb' and not self.trusted:
             raise ValueError('Legacy LMDB stores Python pickles; use trusted=True only for trusted files')
         if self.limit is not None and (isinstance(self.limit, bool) or not isinstance(self.limit, int) or self.limit < 1):
             raise ValueError('limit must be positive')
-        if set(self.modalities) - {'1H', '13C', '11B', '19F', '29Si', '31P', 'IR', 'Raman', 'MS', 'MS/MS'}:
+        if set(self.modalities) - {'1H', '13C', '11B', '19F', '29Si', '31P', 'IR', 'Raman', 'MS', 'MS/MS', 'HSQC'}:
             raise ValueError('Unknown modality')
 
     def _raw(self):
@@ -194,6 +227,8 @@ class SpectraSplit:
                     else:row['peaks'] = ast.literal_eval(row['peaks'])
                     row['adduct'] = row.get('prec_type', row.get('adduct'))
                     yield number, row
+        elif self.format == 'transpeaknet_hsqc_zip':
+            yield from _hsqc_records(self.path)
         else:
             import pickle
             from openmolspec_bench.data import readonly_lmdb
@@ -231,6 +266,8 @@ class SpectraSplit:
                     present.add(name)
             if row.get('peaks'):
                 present.add('MS' if row.get('modality')=='MS' else 'MS/MS')
+            if row.get('hsqc_peaks'):
+                present.add('HSQC')
             if row.get('peaks_ppm') and row.get('nucleus') in {'1H','13C','11B','19F','29Si','31P'}:
                 present.add(row['nucleus'])
             if row.get('wavenumber_cm1') and row.get('modality') in {'IR','Raman'}:

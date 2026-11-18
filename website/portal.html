@@ -8,8 +8,10 @@
   <link rel="canonical" href="https://jiaqingxie.github.io/openmolspec.github.io/">
   <link rel="icon" href="assets/brand/mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="portal.css">
+  <link rel="stylesheet" href="launch.css">
   <script src="site.js" defer></script>
   <script src="portal.js" defer></script>
+  <script src="molecule-playground.js" defer></script>
 </head>
 <body class="oms-portal">
   <a class="skip" href="#main">Skip to content</a>
@@ -35,10 +37,9 @@
     <section id="introduction" class="portal-hero" aria-labelledby="portal-title">
       <div class="portal-wrap hero-layout">
         <div class="hero-copy">
-          <p class="eyebrow hero-eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> Molecular spectroscopy, connected</p>
-          <h1 id="portal-title"><img src="assets/brand/mark.svg" alt="" width="62" height="62">OpenMolSpec</h1>
-          <p class="hero-headline">Explore the data.<br><span>Work with the spectra.</span></p>
-          <p class="hero-description">Molecular spectroscopy datasets and tools for NMR, mass spectrometry, infrared and Raman. Browse real records, call a model, and take the result into your own workflow.</p>
+          <p class="eyebrow hero-eyebrow"><span class="eyebrow-line" aria-hidden="true"></span> OpenMolSpec</p>
+          <h1 id="portal-title">Molecular spectra.<br><em>Open to explore.</em></h1>
+          <p class="hero-description">A million-scale dataset and platform for chemical spectroscopic deep learning. Explore experimental records and run models for NMR, MS/MS, IR and Raman.</p>
           <div class="hero-actions">
             <a class="portal-button portal-button-mint" href="#tool">Open the tool <span aria-hidden="true">↗</span></a>
             <a class="hero-text-link" href="#dataset">Explore datasets <span aria-hidden="true">→</span></a>
@@ -48,24 +49,25 @@
           </div>
         </div>
 
-        <figure class="hero-molecule">
-          <div class="molecule-heading">
-            <div><span class="micro-label">A molecular example</span><h2>Structure meets spectra.</h2></div>
-            <span class="viewer-badge"><span aria-hidden="true"></span>3D</span>
+        <section id="molecule-playground" class="molecule-playground" aria-labelledby="playground-title">
+          <div class="playground-heading">
+            <h2 id="playground-title">Same formula, different bonds</h2>
+            <span class="playground-formula">C₂H₆O</span>
           </div>
-          <label class="molecule-select-label" for="conformer-select">Explore a molecule</label>
-          <select id="conformer-select" aria-label="Select a molecular example"></select>
-          <div id="conformer-viewer" role="img" aria-label="Interactive molecular conformer. Drag to rotate and scroll to zoom."></div>
-          <figcaption>
-            <p class="viewer-hint"><span aria-hidden="true">↔</span> Drag to rotate <span class="hint-divider" aria-hidden="true">·</span> Scroll to zoom</p>
-            <p id="conformer-result" aria-live="polite">Loading the molecular example…</p>
-            <a href="https://openmolspec.readthedocs.io/en/latest/tasks/vibrational-gap-ir_raman_hc.html" target="_blank" rel="noopener">View the gap prediction example <span aria-hidden="true">↗</span></a>
-          </figcaption>
-        </figure>
+          <div class="molecule-stage">
+            <canvas id="molecule-canvas" width="660" height="390" role="img" aria-label="Interactive ball-and-stick structure. Drag the orange oxygen to reconnect the atoms."></canvas>
+            <div class="atom-legend"><span><i class="atom-carbon"></i> Carbon</span><span><i class="atom-oxygen"></i> Oxygen</span><span><i class="atom-hydrogen"></i> Hydrogen</span></div>
+          </div>
+          <div class="playground-controls" aria-label="Choose an isomer">
+            <button type="button" data-isomer="ethanol" aria-pressed="true">Ethanol</button>
+            <button type="button" data-isomer="ether" aria-pressed="false">Dimethyl ether</button>
+            <button type="button" id="use-hero-structure" class="playground-use">Use SMILES ↗</button>
+          </div>
+          <p id="molecule-caption" aria-live="polite">Drag the orange oxygen to the outlined bond position.</p>
+        </section>
       </div>
       <div class="portal-wrap hero-bottom">
-        <p>__PLATFORM_STATS__</p>
-        <a href="#tool">Explore the platform <span aria-hidden="true">↓</span></a>
+        <dl class="launch-metrics">__LAUNCH_METRICS__</dl>
       </div>
     </section>
 
@@ -73,8 +75,7 @@
       <div class="portal-wrap">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">01 <span aria-hidden="true">/</span> Tool</p>
-            <h2 id="tool-title">Your spectroscopy workspace.</h2>
+            <h2 id="tool-title">Spectroscopy workspace</h2>
           </div>
           <p>Start with an example or provide your own input. Choose a workflow, inspect its output, and keep the numerical result.</p>
         </div>
@@ -88,13 +89,16 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 3 8 0 4 7-4 7H8l-4-7Zm8 14v4M4 10H1m19 0h3"/></svg>
               Structure → spectra
             </button>
+            <button id="tool-tab-nmr" type="button" role="tab" aria-selected="false" aria-controls="tool-workspace" data-tool-tab="nmr">NMR → structure</button>
+            <button id="tool-tab-hsqc" type="button" role="tab" aria-selected="false" aria-controls="tool-workspace" data-tool-tab="hsqc">HSQC assignment</button>
+            <button id="tool-tab-solvent" type="button" role="tab" aria-selected="false" aria-controls="tool-workspace" data-tool-tab="solvent">Solvent transfer</button>
             <button id="tool-tab-gap" type="button" role="tab" aria-selected="false" aria-controls="tool-workspace" data-tool-tab="gap">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18M3 6h18M12 9v6m-3-3 3 3 3-3"/></svg>
               Spectra → gap
             </button>
             <button id="tool-tab-generate" type="button" role="tab" aria-selected="false" aria-controls="tool-workspace" data-tool-tab="generate">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 18h3l2-12 3 12 3-7 2 7h2m2-13v5m-2-2 2 2 2-2"/></svg>
-              Structure generation
+              Multimodal → structure
             </button>
             <button id="tool-tab-agent" type="button" role="tab" aria-selected="false" aria-controls="tool-workspace" data-tool-tab="agent">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14v12H5zm7-5v5M9 12v3m6-3v3m-6 3h6M2 12h3m14 0h3"/></svg>
@@ -118,6 +122,10 @@
           </div>
         </div>
         <p class="section-footnote">Learn the input fields and model settings in the <a href="https://openmolspec.readthedocs.io/en/latest/tasks/index.html" target="_blank" rel="noopener">task guides <span aria-hidden="true">↗</span></a>.</p>
+        <details class="dataset-summary" id="task-catalog">
+          <summary><span>Browse the full task catalog</span><span class="disclosure-arrow" aria-hidden="true">+</span></summary>
+          <div class="table-scroll"><table class="data-table"><thead><tr><th>Task guide</th><th>Input</th><th>Output</th></tr></thead><tbody>__TASK_ROWS__</tbody></table></div>
+        </details>
       </div>
     </section>
 
@@ -159,8 +167,7 @@
       <div class="portal-wrap">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">02 <span aria-hidden="true">/</span> Dataset</p>
-            <h2 id="dataset-title">Get to know a spectrum.</h2>
+            <h2 id="dataset-title">Explore experimental spectra</h2>
           </div>
           <p>Preview molecular structures, peak lists and acquisition fields. Explore a record before choosing a dataset for your analysis.</p>
         </div>
@@ -182,6 +189,11 @@
             <div class="empty-preview"><img src="assets/brand/mark.svg" alt="" width="72" height="72"><h3>A molecule and its spectrum.</h3><p>Select a record to view its structure, spectrum and experimental metadata.</p></div>
           </aside>
         </div>
+        <article id="dataset-hsqc" class="external-dataset">
+          <div><p class="external-type">Experimental · External dataset</p><h3>TransPeakNet HSQC</h3><p>Expert-annotated C–H cross-peaks with original molecular structures and atom indices.</p></div>
+          <dl><div><dt>Test spectra</dt><dd>479</dd></div><div><dt>Distinct molecules</dt><dd>478</dd></div><div><dt>Assigned carbon rows</dt><dd>7,310</dd></div></dl>
+          <div class="external-dataset-actions"><a href="https://drive.google.com/drive/folders/1wQxk7mnIwi5aAGaF34_hk7xo6IeEh-IE" target="_blank" rel="noopener">Author test data ↗</a><button type="button" data-open-workflow="hsqc">Assign HSQC peaks ↗</button></div>
+        </article>
         <details class="dataset-summary">
           <summary><span>Dataset sizes and sources</span><span class="summary-note">Spectra and molecules, counted separately</span><span class="disclosure-arrow" aria-hidden="true">+</span></summary>
           <div class="table-scroll"><table class="data-table"><thead><tr><th>Dataset / view</th><th>Category</th><th>Description</th><th>Spectra</th><th>Molecules</th></tr></thead><tbody>__DATA_ROWS__</tbody></table></div>
@@ -195,7 +207,6 @@
       <div class="portal-wrap">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">03 <span aria-hidden="true">/</span> Documentation</p>
             <h2 id="documentation-title">Take the next step.</h2>
           </div>
           <p>Follow an executed tutorial, explore a dataset schema, or bring OpenMolSpec into your Python and agent workflows.</p>

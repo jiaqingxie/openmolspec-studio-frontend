@@ -1,5 +1,19 @@
 [
   {
+    "name": "transpeaknet_hsqc_test",
+    "version": "2e93db8",
+    "source": "TransPeakNet expert-annotated HSQC test set",
+    "origin": "external",
+    "domain": "experimental",
+    "format": "transpeaknet_hsqc_zip",
+    "files": {"test": "HSQC_Annotation_TestData.zip"},
+    "reference_counts": {"test": 479, "spectra": 479, "molecules": 478, "assigned_carbon_rows": 7310, "distinct_cross_peaks": 7926},
+    "count_scope": "Complete author ZIP. Unique molecules use canonical isomeric SMILES; coordinate pairs are deduplicated within each spectrum.",
+    "license": "Author-hosted test data. The source repository does not state a separate data redistribution license.",
+    "source_url": "https://github.com/siriusxiao62/2dNMR/blob/2e93db82a9d627ac01109474e9b6e594065e3d56/data_annotation/HSQC_Annotation_TestData.zip",
+    "reference_sha256": {"test": "614be38c96f4bd1b8faad55a13c80423fe39136258bf234c4b0956d38fda0368"}
+  },
+  {
     "name": "opendatalab_nmr",
     "version": "cleaned-2026-11-18",
     "source": "OpenDataLab / WanJuan experimental patent NMR",

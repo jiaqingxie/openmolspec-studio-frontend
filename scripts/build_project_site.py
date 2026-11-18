@@ -75,7 +75,7 @@ def main():
         if path.is_file() and path.stem not in allowed:path.unlink()
     for path in gallery.iterdir():
         if path.stem in allowed and path.suffix in ['.png','.svg','.pdf']:shutil.copyfile(path,output/'assets/gallery'/path.name)
-    for name in ['site.css','site.js','portal.css','portal.js']:
+    for name in ['site.css','site.js','portal.css','portal.js','launch.css','molecule-playground.js']:
         shutil.copyfile(ROOT/'website'/name,output/name)
     shutil.copytree(ROOT/'website/assets',output/'assets',dirs_exist_ok=True)
     text=(ROOT/'website/portal.html').read_text()
@@ -83,7 +83,11 @@ def main():
     proof=json.loads((ROOT/'results/doc_notebook_execution.json').read_text())
     summary=json.loads((assets/'cleaned-data-summary.json').read_text())
     cleaned=summary['nmr']
-    text=text.replace('__PLATFORM_STATS__', f'{cleaned["counts"]["h_spectra"]+cleaned["counts"]["c_spectra"]:,} H/C spectra <span aria-hidden="true">/</span> {len(tasks)} tasks <span aria-hidden="true">/</span> {proof["executed_notebooks"]} executed tutorials')
+    metrics=[(f'{(cleaned["counts"]["h_spectra"]+cleaned["counts"]["c_spectra"])/1e6:.2f}M', 'Experimental H/C spectra'),
+             (f'{cleaned["molecular_identities"]/1e6:.2f}M', 'Unique H/C molecules'),
+             (str(len(verification['tasks'])), 'Online workflows'),
+             (str(proof['executed_notebooks']), 'Executed tutorials')]
+    text=text.replace('__LAUNCH_METRICS__', ''.join(f'<div><dt>{label}</dt><dd>{value}</dd></div>' for value,label in metrics))
     if not cleaned['completed']:
         raise ValueError('The project site requires the completed cleaned NMR collection')
     text=text.replace('__INTRO_COUNTS__',f'The cleaned H/C NMR collection contains {cleaned["molecular_identities"]:,} molecular identities. Explore {len(tasks)} tasks and {proof["executed_notebooks"]} tutorials covering prediction, structure elucidation, training and spectroscopy.')
@@ -91,6 +95,7 @@ def main():
     def totals(name):return counts[name]['spectra'],counts[name]['molecules']
     rows=[('OpenDataLab · cleaned H/C NMR','Experimental · OpenMolSpec collection','Proton and carbon chemical shifts, molecular structures, formulas and experimental conditions; predefined train/validation/test files.',cleaned['counts']['h_spectra']+cleaned['counts']['c_spectra'],cleaned['molecular_identities'],DOCS+'data/nmr.html'),
           ('NMRexp v2 · H/C view','Experimental · external','Literature-derived proton and carbon spectra paired with valid molecular structures.',*totals('nmrexp_hc'),'https://zenodo.org/records/17296666'),
+          ('TransPeakNet · HSQC test set','Experimental · external','Expert-annotated 2D C–H cross-peaks. The authors provide training and validation spectra upon request.',479,478,'https://github.com/siriusxiao62/2dNMR/blob/2e93db82a9d627ac01109474e9b6e594065e3d56/data_annotation/HSQC_Annotation_TestData.zip'),
           ('OpenMolSpec · computed test view','Computed · OpenMolSpec benchmark','IR/Raman spectra for 20,390 calculation records, with H/C shifts, structures and electronic properties.',*totals('openspec_test'),DOCS+'data/vibrational.html'),
           ('MassSpecGym v1.5 · prediction view','Experimental · external','Tandem mass spectra paired with molecular structures and acquisition conditions for forward prediction.',*totals('massspecgym_1_5'),'https://huggingface.co/datasets/roman-bushuiev/MassSpecGym'),
           ('MassBank · MS2 view','Experimental · external','Numerical tandem mass spectra with parseable molecular structures and repository acquisition metadata.',*totals('massbank_ms2'),'https://github.com/MassBank/MassBank-data'),
@@ -130,6 +135,12 @@ def main():
         task_names[slug]=title;task_families[slug]=family
         task_rows.append(f'<tr data-family="{family}"><td><a href="{DOCS}tasks/{slug}.html">{escape(title)}</a><small>{task.id}</small></td><td>{escape(inputs)}</td><td>{escape(outputs)}</td></tr>')
     text=text.replace('__TASK_ROWS__',''.join(task_rows))
+    examples = assets/'examples'
+    generation = json.loads((examples/'nmr-generation-hc.json').read_text())['examples'][0]
+    retrieval = json.loads((examples/'nmr-retrieval-hc-s2m.json').read_text())['examples'][0]
+    nmr_samples = {'generate': {'query': generation['input']},
+                   'retrieve': {'query': retrieval['input'], 'candidates': [row['smiles'] for row in retrieval['output']]}}
+    (output/'assets/nmr-workspace-examples.json').write_text(json.dumps(nmr_samples, ensure_ascii=False)+'\n')
     tutorials=[('SDK inference','sdk-inference','Call NMRNet on a real molecular input and compare measured peaks.'),('Training workflow','sdk-training-preflight','Prepare train/validation data and inspect an explicit training plan.'),('NMR Fourier transform','theory-nmr-fourier','Simulate an FID and recover its frequencies.'),('NMR inversion','theory-nmr-inversion','Recover a relaxation distribution from simulated noisy signals.'),('IR / Raman broadening','theory-vibrational-broadening','Connect normal-mode activities to continuous spectra.'),('MS isotope envelopes','theory-ms-isotopes','Explore isotope probabilities and resolving power.')]
     text=text.replace('__TUTORIALS__',''.join(f'<a class="tutorial-card" href="{DOCS}notebooks/{slug}.html"><h3>{title}</h3><p>{desc}</p><span>Open executed tutorial →</span></a>' for title,slug,desc in tutorials))
     cards=[]
@@ -146,7 +157,7 @@ def main():
     (output/'.nojekyll').write_text('')
     (output/'README.md').write_text('# OpenMolSpec v1.0 project site\n\nhttps://jiaqingxie.github.io/openmolspec.github.io/\n\nIntroduction, online tools, experimental dataset previews and a Documentation entry. GitHub Pages serves the static frontend; model requests execute on the separate Python API.\nSource: https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/website\nDeployment: https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/online_api\n\nThe full bilingual manual is also bundled at docs/. The public API currently uses a temporary demonstration tunnel; permanent hosting requires a stable HTTPS origin and supervised model processes. No provider key is included in this repository.\n')
     report={'completed':True,'active_tasks':len(tasks),'scientific_figures':len(cards),'executed_tutorials':proof['executed_notebooks'],
-        'cleaned_nmr_molecular_identities':cleaned['molecular_identities'],'interactive_3d_examples':3,
+        'cleaned_nmr_molecular_identities':cleaned['molecular_identities'],'interactive_molecular_isomers':2,
         'manual_html_pages':manifest['html_pages'],'manual_languages':manifest['languages'],
         'dataset_preview_records':len(preview['samples']),'dataset_preview_views':len(preview['datasets']),
         'verified_online_workflows':len(verification['tasks']),'agent_demo':'recorded real API and MCP execution',

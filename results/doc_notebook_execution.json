@@ -329,28 +329,28 @@
     {
       "notebook": "documentation/notebooks/sdk-inference.ipynb",
       "executed_file": "documentation/notebooks/sdk-inference.ipynb",
-      "sha256": "5d3fa9f91f87e6aba71eb2835b3a8017897c6131ee8904b10823548ae0fe6bd4",
+      "sha256": "fa2248f8ff9da4a9abf641e4d724e6a460c579421f47c76548cad4871bd9fba0",
       "model_execution_enabled": true,
       "rich_outputs": 1
     },
     {
       "notebook": "documentation/notebooks/sdk-inference.zh.ipynb",
       "executed_file": "documentation/notebooks/sdk-inference.zh.ipynb",
-      "sha256": "48f15af636fc9d63114d75b505d881ba0e0021bcea0664fa3a623e7248cf424a",
+      "sha256": "d3ca418132b7b4d93ccd96dfa347d38c09edab3a1660843cad9a9e92e1ec6af7",
       "model_execution_enabled": true,
       "rich_outputs": 1
     },
     {
       "notebook": "documentation/notebooks/sdk-training-preflight.ipynb",
       "executed_file": "documentation/notebooks/sdk-training-preflight.ipynb",
-      "sha256": "f0f1be1c3b05b7449d62be9791c29f2d9a237fd27600e8659822401c5a295a4b",
+      "sha256": "7da171de6ae670583beb1af3bb7807465aaab1fd367f61da35f63f730acbc8ff",
       "model_execution_enabled": false,
       "rich_outputs": 0
     },
     {
       "notebook": "documentation/notebooks/sdk-training-preflight.zh.ipynb",
       "executed_file": "documentation/notebooks/sdk-training-preflight.zh.ipynb",
-      "sha256": "e19eb6a0807d8deb0a28419d02285b62f4d49c17304399f27e2cd9d8f70f4030",
+      "sha256": "1aeb94e0a5318c84e781880b5738c466590233b2ed36e4ef4ebbc53ce86b55fb",
       "model_execution_enabled": false,
       "rich_outputs": 0
     },
