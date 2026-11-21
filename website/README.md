@@ -2,8 +2,7 @@
 
 Public URL: https://jiaqingxie.github.io/openmolspec.github.io/
 
-The public project site has four main entries: Introduction, Tool, Dataset and
-Documentation. `portal.html`, `portal.css` and `portal.js` implement the active
+The project navigation opens the workspace, datasets, documentation and source repository. `portal.html`, `portal.css` and `portal.js` implement the active
 interface. GitHub Pages hosts its static frontend; a separate Python service
 executes the real model requests. The Documentation entry opens the bilingual manual bundled with the same site release at `docs/`. The documentation section also links to Read the Docs.
 
@@ -17,8 +16,8 @@ stdio server. Expandable tool steps adapt the interaction in Luffy202's branch
 `11577df2236241ee28f7c8940faf6ebab5f78476`. The project presentation draws on the
 section pacing of Shanghai AI Lab's [Sage–Taiyi](https://alpha-innovator.github.io/Sage-Taiyi/),
 with original OpenMolSpec styling and content.
-On the homepage, drag oxygen between the highlighted bond positions to switch
-between two `C2H6O` isomers. The example sends the selected SMILES to the Tool.
+The homepage displays the three measured cross-peaks of butanenitrile (TransPeakNet spectrum 32869). Surface and contour views share the measured coordinates and use illustrative peak shapes. “Try HSQC example” loads the same molecule, solvent and peaks into the workspace. The default workspace chart displays the recorded NMRNet carbon shifts for ethanol until a user runs a model.
+Under the workspace, expand “Compare ethanol and dimethyl ether” to drag oxygen between the highlighted bond positions and send either isomer to the model form.
 
 Dataset previews contain 32 actual test records across eight experimental views,
 with structures, source conditions and downloadable JSON. Missing intensities

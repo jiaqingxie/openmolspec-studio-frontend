@@ -4,6 +4,7 @@ No server or frontend build dependency is required. Relative asset paths support
 the requested /openmolspec.github.io/ project URL and local preview prefixes.
 """
 import argparse
+import hashlib
 from html import escape
 import json
 from pathlib import Path
@@ -76,10 +77,20 @@ def main():
         if path.is_file() and path.stem not in allowed:path.unlink()
     for path in gallery.iterdir():
         if path.stem in allowed and path.suffix in ['.png','.svg','.pdf']:shutil.copyfile(path,output/'assets/gallery'/path.name)
-    for name in ['site.css','site.js','portal.css','portal.js','launch.css','molecule-playground.js']:
-        shutil.copyfile(ROOT/'website'/name,output/name)
-    shutil.copytree(ROOT/'website/assets',output/'assets',dirs_exist_ok=True)
     text=(ROOT/'website/portal.html').read_text()
+    for name in ['site.css','site.js','portal.css','portal.js','launch.css','molecule-playground.js','hsqc-figure.js']:
+        asset = ROOT/'website'/name
+        shutil.copyfile(asset,output/name)
+        version = hashlib.sha256(asset.read_bytes()).hexdigest()[:12]
+        text = text.replace(f'"{name}"', f'"{name}?v={version}"')
+    shutil.copytree(ROOT/'website/assets',output/'assets',dirs_exist_ok=True)
+    hsqc = json.loads((assets/'examples/nmr-hsqc-transpeaknet.json').read_text())['examples'][0]
+    text = text.replace('__HSQC_PEAKS__', json.dumps(hsqc['reference']['peaks_c_h_ppm']))
+    carbon = next(row for event in recording['events']
+                  if event['type'] == 'tool_end' and event['data'].get('name') == 'spectra_predict'
+                  for row in event['data']['result']['result'].get('records', [])
+                  if row.get('nucleus') == '13C' and row.get('smiles') == 'CCO')
+    text = text.replace('__ETHANOL_CARBON_SHIFTS__', json.dumps(carbon['prediction_ppm']))
     tasks=[task for task in TASKS if task.enabled]
     proof=json.loads((ROOT/'results/doc_notebook_execution.json').read_text())
     summary=json.loads((assets/'cleaned-data-summary.json').read_text())
@@ -162,7 +173,7 @@ def main():
         'manual_html_pages':manifest['html_pages'],'manual_languages':manifest['languages'],
         'dataset_preview_records':len(preview['samples']),'dataset_preview_views':len(preview['datasets']),
         'verified_online_workflows':len(verification['tasks']),'agent_demo':'recorded real API and MCP execution',
-        'navigation':['Introduction','Tool','Dataset','Documentation'],
+        'navigation':['Workspace','Datasets','Documentation','GitHub'],
         'cdn_dependencies':False,'online_inference_requires_api':True,
         'target':'https://jiaqingxie.github.io/openmolspec.github.io/'}
     (output/'build-report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
