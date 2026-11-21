@@ -1,5 +1,5 @@
 {
-  "model_config_sha256": "e668ff8075ebbd7a8b7fe50e07ed962eb889b80e0a8425cff293890b8b213d6b",
+  "model_config_sha256": "6f08e5689aa7c6808a3031a6af0a64c82b76308b057688a50a9d49022a5535e6",
   "test_data_sha256": "900a93cf21e8475f07ddc3f6364e80cfa6f646c361524a49592358ac686909ea",
   "groups": {
     "P=O": {
@@ -7,48 +7,48 @@
       "measurements": 4676,
       "tree_macro": 3.9933982032656568,
       "single_gnn_macro": 3.62430638901785,
-      "ensemble_macro": 3.559760837858729,
-      "ensemble_observation_mae": 2.709207484808694
+      "ensemble_macro": 3.513126795334103,
+      "ensemble_observation_mae": 2.6626343138828554
     },
     "P=S": {
       "molecules": 243,
       "measurements": 327,
       "tree_macro": 6.699973296881579,
       "single_gnn_macro": 6.173399217184353,
-      "ensemble_macro": 5.791530569512168,
-      "ensemble_observation_mae": 4.984543110952465
+      "ensemble_macro": 5.630631859083398,
+      "ensemble_observation_mae": 4.861854454720057
     },
     "neutral P, three carbon neighbours": {
       "molecules": 364,
       "measurements": 583,
       "tree_macro": 9.173392791457536,
       "single_gnn_macro": 7.598326582958508,
-      "ensemble_macro": 7.18365956098039,
-      "ensemble_observation_mae": 5.460172304301973
+      "ensemble_macro": 7.101170229407879,
+      "ensemble_observation_mae": 5.39625294096932
     },
     "neutral P, three neighbours including a heteroatom": {
       "molecules": 311,
       "measurements": 401,
       "tree_macro": 16.982432458060398,
       "single_gnn_macro": 11.657309722916745,
-      "ensemble_macro": 10.477175143197929,
-      "ensemble_observation_mae": 9.488424168270425
+      "ensemble_macro": 10.54648769672635,
+      "ensemble_observation_mae": 9.595696552419307
     },
     "other P environments": {
       "molecules": 495,
       "measurements": 577,
       "tree_macro": 21.812909999704175,
       "single_gnn_macro": 13.743470631827408,
-      "ensemble_macro": 12.297477074173564,
-      "ensemble_observation_mae": 11.835564056484083
+      "ensemble_macro": 12.061607172041228,
+      "ensemble_observation_mae": 11.673091266134582
     },
     "positive P": {
       "molecules": 101,
       "measurements": 129,
       "tree_macro": 10.335159240159209,
       "single_gnn_macro": 6.880464908423598,
-      "ensemble_macro": 6.984780392064513,
-      "ensemble_observation_mae": 6.117905403033708
+      "ensemble_macro": 7.15129951178044,
+      "ensemble_observation_mae": 6.181591426272725
     }
   }
 }
