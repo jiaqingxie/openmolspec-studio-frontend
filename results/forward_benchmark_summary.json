@@ -1,0 +1,224 @@
+{
+  "tasks": {
+    "nmr.forward.1H": {
+      "benchmark": [
+        "nmrspec_test",
+        "nmrexp_exp_10k",
+        "nmrgym_test"
+      ],
+      "selected_scores": [
+        0.3498205071678617,
+        0.33886783832685985,
+        0.4173902886958736
+      ],
+      "counts": [
+        1000,
+        991,
+        980
+      ],
+      "metric": "molecule-averaged matched peak error including 1 ppm per unmatched peak",
+      "selected_models": "peak_spectrum",
+      "evidence": "results/forward_peak_model_1H.json"
+    },
+    "nmr.forward.13C": {
+      "benchmark": [
+        "nmrspec_test",
+        "nmrexp_exp_10k",
+        "nmrgym_test"
+      ],
+      "selected_scores": [
+        1.2166401102832674,
+        1.143182243434084,
+        2.771536800048897
+      ],
+      "counts": [
+        1000,
+        748,
+        980
+      ],
+      "metric": "molecule-averaged matched peak error including 10 ppm per unmatched peak",
+      "selected_models": {
+        "NMRNet++_folds": 5,
+        "symmetry_resolved": true
+      },
+      "evidence": "results/forward_carbon_folds.json"
+    },
+    "nmr.forward.31P": {
+      "benchmark": "Measured solution shifts with a single symmetry-distinct environment",
+      "selected_scores": [
+        4.2681895437618484,
+        5.538348462728547
+      ],
+      "counts": [
+        6693,
+        4248
+      ],
+      "metric": "observation MAE and connectivity-weighted MAE in ppm",
+      "selected_models": {
+        "31P-gnn-r1": 0.3,
+        "31P-gnn-r2": 0.3,
+        "31P-gnn-width96": 0.4
+      },
+      "evidence": "results/forward_selection_31P.json",
+      "config_sha256": "6f08e5689aa7c6808a3031a6af0a64c82b76308b057688a50a9d49022a5535e6",
+      "release_tag": "solution-31p-6f08e5689aa7",
+      "capacity_comparison": {
+        "report": "results/forward_capacity_31P.json",
+        "adopted": true
+      }
+    },
+    "nmr.forward.19F": {
+      "benchmark": "Measured solution shifts with a single symmetry-distinct environment",
+      "selected_scores": [
+        5.923589188692947,
+        5.621859443033962
+      ],
+      "counts": [
+        15803,
+        14330
+      ],
+      "metric": "observation MAE and connectivity-weighted MAE in ppm",
+      "selected_models": {
+        "19F-gnn-refined": 0.6,
+        "19F-tree-r2": 0.4
+      },
+      "evidence": "results/forward_selection_19F.json",
+      "config_sha256": "da9d2c0e7ce41e5e3b070f57916861c9c4cc2e267830df0b856d197a3f0ec100",
+      "release_tag": "solution-nmr-v2",
+      "capacity_comparison": {
+        "report": "results/forward_capacity_19F.json",
+        "adopted": false
+      }
+    },
+    "nmr.forward.11B": {
+      "benchmark": "Measured solution shifts with a single symmetry-distinct environment",
+      "selected_scores": [
+        1.2397650996037344,
+        1.2827103190532836
+      ],
+      "counts": [
+        1669,
+        1517
+      ],
+      "metric": "observation MAE and connectivity-weighted MAE in ppm",
+      "selected_models": {
+        "11B-gnn": 0.5,
+        "11B-gnn-r2": 0.5
+      },
+      "evidence": "results/forward_selection_11B.json",
+      "config_sha256": "5835cef1af2200d0fa84e47cdbb401ac6f392781f673d76822816359302cda8c",
+      "release_tag": "solution-nmr-v2"
+    },
+    "nmr.forward.29Si": {
+      "benchmark": "Measured solution shifts with a single symmetry-distinct environment",
+      "selected_scores": [
+        1.955667531204312,
+        2.034231771969249
+      ],
+      "counts": [
+        187,
+        177
+      ],
+      "metric": "observation MAE and connectivity-weighted MAE in ppm",
+      "selected_models": {
+        "29Si-gnn": 0.8,
+        "29Si-tree-r2": 0.2
+      },
+      "evidence": "results/forward_selection_29Si.json",
+      "config_sha256": "52c2d4269bf57697d0ec2d61217142f7a70a312fe7c63e0039135e5614476ce7",
+      "release_tag": "solution-nmr-v2"
+    },
+    "nmr.hsqc.transpeaknet": {
+      "benchmark": "Expert HSQC peak assignments",
+      "selected_scores": [
+        2.005156499630574,
+        0.16415643707451738
+      ],
+      "counts": [
+        479,
+        7926
+      ],
+      "metric": "carbon and proton expert-test MAE in ppm",
+      "selected_models": {
+        "TransPeakNet": {
+          "depths": [
+            3,
+            3
+          ],
+          "strengths": [
+            0.85,
+            0.85
+          ]
+        }
+      },
+      "evidence": "results/forward_selection_hsqc.json"
+    },
+    "vibrational.forward": {
+      "benchmark": "QM9S paired Hessian/response derivatives at reserved native geometries",
+      "selected_scores": [
+        0.98345124371437,
+        0.9849866301108531
+      ],
+      "counts": 303,
+      "metric": "IR and Raman cosine similarity",
+      "selected_models": {
+        "openSpec_Equiformer_v3": {
+          "ir": [
+            "modes",
+            0.9975,
+            2.0
+          ],
+          "raman": [
+            "modes",
+            0.9975,
+            2.0
+          ]
+        }
+      },
+      "evidence": "results/forward_selection_vibrational.json"
+    },
+    "ms.forward.glacier": {
+      "benchmark": "Independent additional MassSpecGym test structures",
+      "selected_scores": 0.6039401769683989,
+      "counts": [
+        875,
+        1024
+      ],
+      "metric": "mean paired full-reference cosine similarity",
+      "selected_models": {
+        "model": "GLACIER",
+        "calibration": "energy"
+      },
+      "evidence": "results/forward_confirmation_glacier.json",
+      "baseline_cosine": 0.6008619775142657,
+      "candidate_cosine": 0.6039401769683989,
+      "paired_difference_ci95": [
+        0.0004888209540038699,
+        0.005579350103925645
+      ],
+      "adopted": true
+    },
+    "ms.forward.iceberg": {
+      "benchmark": "Independent additional MassSpecGym test structures",
+      "selected_scores": 0.51751945844935,
+      "counts": [
+        875,
+        1024
+      ],
+      "metric": "mean paired full-reference cosine similarity",
+      "selected_models": {
+        "model": "ICEBERG",
+        "calibration": "instrument"
+      },
+      "evidence": "results/forward_confirmation_iceberg.json",
+      "baseline_cosine": 0.5118066757513605,
+      "candidate_cosine": 0.51751945844935,
+      "paired_difference_ci95": [
+        0.0017854164439222962,
+        0.009563187442116537
+      ],
+      "adopted": true
+    }
+  },
+  "selection": "Choose model or settings on the development identities, then evaluate on held-out identities. Reused NMR audit sets measure benchmark progress. External applicability depends on target, conditions and domain."
+}

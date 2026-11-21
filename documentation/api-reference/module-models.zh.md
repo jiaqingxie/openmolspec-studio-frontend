@@ -393,7 +393,7 @@ Public model facades. Heavy dependencies load only inside the selected runtime.
 
       Supported model operations, nuclei and input domain.
 
-.. py:class:: MSPredictor(*, model, source, weights, python=None, device='cpu')
+.. py:class:: MSPredictor(*, model, source, weights, python=None, device='cpu', author_baseline=False)
 
    Predict tandem mass spectra with GLACIER or ICEBERG.
 
@@ -407,6 +407,8 @@ Public model facades. Heavy dependencies load only inside the selected runtime.
    :type python: str or None, default None
    :param device: Inference device.
    :type device: str, default 'cpu'
+   :param author_baseline: Return the original checkpoint intensities for comparison.
+   :type author_baseline: bool, default False
 
    `Source code <https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/src/openmolspec/model.py#L407>`__
 
@@ -428,7 +430,7 @@ Public model facades. Heavy dependencies load only inside the selected runtime.
       :returns: Numerical predicted MS/MS peaks and the acquisition/model metadata.
       :rtype: dict
 
-      `Source code <https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/src/openmolspec/model.py#L432>`__
+      `Source code <https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/src/openmolspec/model.py#L436>`__
 
    .. py:method:: save_config(path)
 

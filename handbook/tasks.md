@@ -6,12 +6,12 @@
 
 | ID | 任务 | 谱型 | 数据域 | 适配器 | 指标 |
 | --- | --- | --- | --- | --- | --- |
-| `nmr.forward.1H` | 结构 → 1H 峰列表 | 1H | experimental | nmrnet_predictions | matched_peak_mae_ppm, matched_peak_rmse_ppm, peak_count_mae, matched_fraction |
-| `nmr.forward.13C` | 结构 → 13C 峰列表 | 13C | experimental | nmrnet_predictions | matched_peak_mae_ppm, matched_peak_rmse_ppm, peak_count_mae, matched_fraction |
-| `nmr.forward.19F` | 结构 → 19F 峰列表 | 19F | experimental | nmrnet_hetero_predictions | mae_ppm, rmse_ppm |
-| `nmr.forward.31P` | 结构 → 31P 峰列表 | 31P | experimental | nmrnet_hetero_predictions | mae_ppm, rmse_ppm |
-| `nmr.forward.11B` | 结构 → 11B 峰列表 | 11B | experimental | nmrnet_bsi_diagnostic | mae_ppm, rmse_ppm |
-| `nmr.forward.29Si` | 结构 → 29Si 峰列表 | 29Si | experimental | nmrnet_bsi_diagnostic | mae_ppm, rmse_ppm |
+| `nmr.forward.1H` | 结构 → 1H 峰列表 | 1H | experimental | nmrnet_predictions | count_penalized_error_ppm, matched_peak_mae_ppm, matched_peak_rmse_ppm, peak_count_mae, matched_fraction |
+| `nmr.forward.13C` | 结构 → 13C 峰列表 | 13C | experimental | nmrnet_predictions | count_penalized_error_ppm, matched_peak_mae_ppm, matched_peak_rmse_ppm, peak_count_mae, matched_fraction |
+| `nmr.forward.19F` | 结构 → 19F 峰列表 | 19F | experimental | solution_chemical_shift | mae_ppm, molecule_macro_mae_ppm, rmse_ppm |
+| `nmr.forward.31P` | 结构 → 31P 峰列表 | 31P | experimental | solution_chemical_shift | mae_ppm, molecule_macro_mae_ppm, rmse_ppm |
+| `nmr.forward.11B` | 结构 → 11B 峰列表 | 11B | experimental | solution_chemical_shift | mae_ppm, molecule_macro_mae_ppm, rmse_ppm |
+| `nmr.forward.29Si` | 结构 → 29Si 峰列表 | 29Si | experimental | solution_chemical_shift | mae_ppm, molecule_macro_mae_ppm, rmse_ppm |
 | `nmr.retrieval.h.s2m` | 谱图 → 结构检索 · H | 1H | experimental | spec2struct_alignment | recall_at_1, recall_at_5, recall_at_10, mrr |
 | `nmr.retrieval.h.m2s` | 结构 → 谱图检索 · H | 1H | experimental | spec2struct_alignment | recall_at_1, recall_at_5, recall_at_10, mrr |
 | `nmr.generation.h` | 谱图 → SMILES · H | 1H | experimental | spec2struct_generation | valid_rate, exact_rate, formula_match_rate |
@@ -44,17 +44,17 @@
 
 ## 任务说明
 
-- **nmr.forward.1H**：对已有 NMRNet/NMRNet++ 推理文件评分；无逐原子指认时使用最小代价峰匹配。
+- **nmr.forward.1H**：用训练后的氢谱模型或五折 NMRNet++ 碳谱预测与实测峰列表配对，对漏峰和多报峰计入惩罚；同时提供原始逐原子基线。
 
-- **nmr.forward.13C**：对已有 NMRNet/NMRNet++ 推理文件评分；无逐原子指认时使用最小代价峰匹配。
+- **nmr.forward.13C**：用训练后的氢谱模型或五折 NMRNet++ 碳谱预测与实测峰列表配对，对漏峰和多报峰计入惩罚；同时提供原始逐原子基线。
 
-- **nmr.forward.19F**：已拦截旧输入错配；冻结重跑后固相权重的溶液位移参考仍未确认，默认跳过正式评分，仅显式允许跨域诊断。
+- **nmr.forward.19F**：使用实验溶液谱训练的模型预测化学位移，以按分子连通性留出的实测单环境谱评分。可显式选择旧模型进行冻结诊断。
 
-- **nmr.forward.31P**：已拦截旧输入错配；冻结重跑后固相权重的溶液位移参考仍未确认，默认跳过正式评分，仅显式允许跨域诊断。
+- **nmr.forward.31P**：使用实验溶液谱训练的模型预测化学位移，以按分子连通性留出的实测单环境谱评分。可显式选择旧模型进行冻结诊断。
 
-- **nmr.forward.11B**：已用液相 All-nucleus NMRNet 各完成 32 分子冻结诊断；B/Si 训练覆盖与实验标签来源未验证，正式评分仍跳过。
+- **nmr.forward.11B**：使用实验溶液谱训练的模型预测化学位移，以按分子连通性留出的实测单环境谱评分。可显式选择旧模型进行冻结诊断。
 
-- **nmr.forward.29Si**：已用液相 All-nucleus NMRNet 各完成 32 分子冻结诊断；B/Si 训练覆盖与实验标签来源未验证，正式评分仍跳过。
+- **nmr.forward.29Si**：使用实验溶液谱训练的模型预测化学位移，以按分子连通性留出的实测单环境谱评分。可显式选择旧模型进行冻结诊断。
 
 - **nmr.generation.h**：显式提供分子式；模型按分子式重排 beam，需与无分子式结果分开比较。
 
@@ -64,7 +64,7 @@
 
 - **vibrational.gap.ir_raman_hc**：按 checkpoint 的 ir-raman-nmr 完整输入运行；同时报告训练均值常量基线。
 
-- **vibrational.forward**：已有 Hessian/response 模型在原始 Gaussian 日志的同一几何上预测；默认两个真实日志示例，仅作配对流程检查。
+- **vibrational.forward**：在相同的核坐标上预测 IR 和 Raman。安装 QM9S 验证包后默认使用预留结构；也支持指定 Gaussian 日志复核原始 openSpec 协议。
 
 - **vibrational.retrieval**：已有 Vib2Mol checkpoint 直接编码本次选中样本；提供 IR+Raman，不提供 H/C。
 

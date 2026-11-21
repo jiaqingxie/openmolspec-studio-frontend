@@ -113,6 +113,15 @@
       "openmolspec.analysis.visualize_opt_trajectory.main",
       "openmolspec.analysis.visualize_opt_trajectory.ATOM_COLORS"
     ],
+    "openmolspec.assigned_shifts": [
+      "openmolspec.assigned_shifts.assigned_sites",
+      "openmolspec.assigned_shifts.AssignedShiftPredictor",
+      "openmolspec.assigned_shifts.AssignedShiftPredictor.predict",
+      "openmolspec.assigned_shifts.merge_peaks",
+      "openmolspec.assigned_shifts.combine_sites",
+      "openmolspec.assigned_shifts.PeakSpectrumPredictor",
+      "openmolspec.assigned_shifts.PeakSpectrumPredictor.predict"
+    ],
     "openmolspec.benchmark": [
       "openmolspec.benchmark.Benchmark",
       "openmolspec.benchmark.Benchmark.run",
@@ -337,6 +346,12 @@
     "openmolspec.parsing.trajectory": [
       "openmolspec.parsing.trajectory.parse_gaussian_trajectory"
     ],
+    "openmolspec.peak_learning": [
+      "openmolspec.peak_learning.environments",
+      "openmolspec.peak_learning.estimate",
+      "openmolspec.peak_learning.PeakLearningPredictor",
+      "openmolspec.peak_learning.PeakLearningPredictor.predict"
+    ],
     "openmolspec.phosphorus_gnn": [
       "openmolspec.phosphorus_gnn.GraphIndex",
       "openmolspec.phosphorus_gnn.GraphIndex.add",
@@ -541,6 +556,6 @@
       "openmolspec.release.build_splits"
     ]
   },
-  "module_count": 54,
-  "object_count": 432
+  "module_count": 56,
+  "object_count": 443
 }
