@@ -193,8 +193,8 @@ def main():
         query = source.parent / 'molecule.json'
         query.write_text(json.dumps(request['molecule'], allow_nan=False))
         predict_request(SimpleNamespace(model=request['model'], source=Path(request['source']),
-                                       weights=Path(request['weights']), device=request['device'], threads=2,
-                                       predict_request=query, output=output))
+                                       weights=Path(request['weights']), device=request['device'], threads=1,
+                                       author_baseline=request.get('author_baseline', False), predict_request=query, output=output))
         return
     else:
         raise ValueError('Unknown inference backend')

@@ -589,7 +589,11 @@ class Runner:
                 if task.backend == "magma_algorithm":
                     command.extend(["--source", str(self.args.magma_source or parent / "MassSpecGym-MAGMA-annotation")])
                 else:
-                    command.extend(["--model", task.id.split(".")[-1], "--source", str(self.args.ms_source or parent / "ms-pred-repro"),
+                    from .ms import default_ms_source
+                    command.extend(["--threads", str(self.args.threads)])
+                    if getattr(self.args, "ms_author_baseline", False):
+                        command.append("--author-baseline")
+                    command.extend(["--model", task.id.split(".")[-1], "--source", str(self.args.ms_source or default_ms_source(parent)),
                                     "--weights", str(self.args.ms_weights or parent / "mspred"), "--device", self.args.device])
                 environment = dict(os.environ, MPLCONFIGDIR="/tmp/openmolspec-mpl", NUMBA_CACHE_DIR="/tmp/openmolspec-numba",
                                    OPENBLAS_NUM_THREADS="1", OMP_NUM_THREADS=str(self.args.threads))

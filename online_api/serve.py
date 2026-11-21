@@ -235,7 +235,7 @@ class Service:
             return {'root': str(self.args.models_root), 'python': self.args.solution_python, 'backend': 'nmrnetpp'}
         if task.startswith('ms.forward.'):
             return {'source': str(self.args.ms_source), 'weights': str(self.args.ms_weights),
-                    'python': self.args.model_python, 'device': 'cpu'}
+                    'python': getattr(self.args, 'ms_python', None) or self.args.model_python, 'device': 'cpu'}
         if task in {'nmr.generation.hc', 'nmr.retrieval.hc.s2m'}:
             checkpoint = self.args.nmr_generation if task == 'nmr.generation.hc' else self.args.nmr_alignment
             return {'checkpoint': str(checkpoint), 'python': self.args.model_python, 'device': 'cpu'}
@@ -464,6 +464,7 @@ def main():
     parser.add_argument('--model-python', default=os.environ.get('OPENMOLSPEC_NMR_PYTHON', sys.executable))
     parser.add_argument('--vibrational-python', default=str(ROOT.parents[1] / 'openmolspec-studio-portable/.venv/bin/python'))
     parser.add_argument('--ms-source', type=Path, default=ROOT.parents[1] / 'mspred/ms-pred-main')
+    parser.add_argument('--ms-python', default=os.environ.get('OPENMOLSPEC_MS_PYTHON'), help='Interpreter containing the upstream MS model dependencies')
     parser.add_argument('--ms-weights', type=Path, default=ROOT.parents[1] / 'mspred')
     parser.add_argument('--nmr-generation', type=Path, default=ROOT.parent / 'runs/bebaecf2bca248f1a47eaa01f403002a/best.pt')
     parser.add_argument('--nmr-alignment', type=Path, default=ROOT.parent / 'runs/f90bd7f743574d18a7f72ae72ce95e59/best.pt')

@@ -1,0 +1,56 @@
+{
+  "glacier": {
+    "kind": "energy",
+    "fallback": [
+      1.2,
+      1.5,
+      100
+    ],
+    "settings": {
+      "low": [
+        1.2,
+        1.5,
+        100
+      ],
+      "high": [
+        1.2,
+        1.0,
+        100
+      ],
+      "medium": [
+        1.2,
+        1.0,
+        50
+      ]
+    },
+    "checkpoints": [
+      "5a47cecca707d3abd5a49c7dbac99d100aa2a586d5d4f848f1e8e35140d7db11"
+    ],
+    "maximum_heavy_atoms": 40
+  },
+  "iceberg": {
+    "kind": "instrument",
+    "fallback": [
+      1.2,
+      0.5,
+      100
+    ],
+    "settings": {
+      "Orbitrap": [
+        1.2,
+        0.5,
+        100
+      ],
+      "QTOF": [
+        1.2,
+        0.5,
+        100
+      ]
+    },
+    "checkpoints": [
+      "77d78adf7b60e2fdf68b45db39346c7bde2a1a2dbf57c5e7fc2b05223d43f16a",
+      "d2785ff38beb52a1a22200832ed07b9817709470aa03d45bf6af75905bdaa7fa"
+    ],
+    "maximum_heavy_atoms": 40
+  }
+}

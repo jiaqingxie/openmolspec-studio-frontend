@@ -1,0 +1,110 @@
+{
+  "model": "iceberg",
+  "validation_plan_sha256": "e53f97f32193b2e1b0d4bc9d3c535241921ebdaea5516c8e9d16f372af0e7f74",
+  "checkpoints": [
+    "77d78adf7b60e2fdf68b45db39346c7bde2a1a2dbf57c5e7fc2b05223d43f16a",
+    "d2785ff38beb52a1a22200832ed07b9817709470aa03d45bf6af75905bdaa7fa"
+  ],
+  "validation": {
+    "passed": 280,
+    "skipped": 104
+  },
+  "validation_cvs": [
+    {
+      "kind": "incumbent",
+      "prior_count": 0,
+      "out_of_fold_cosine": 0.5166745073707666
+    },
+    {
+      "kind": "global",
+      "prior_count": 0,
+      "out_of_fold_cosine": 0.5237697442344534
+    },
+    {
+      "kind": "instrument",
+      "prior_count": 12,
+      "out_of_fold_cosine": 0.5254473009318273
+    },
+    {
+      "kind": "instrument",
+      "prior_count": 48,
+      "out_of_fold_cosine": 0.5255432063513196
+    },
+    {
+      "kind": "instrument",
+      "prior_count": 144,
+      "out_of_fold_cosine": 0.5256501448293613
+    },
+    {
+      "kind": "energy",
+      "prior_count": 12,
+      "out_of_fold_cosine": 0.5215345846758506
+    },
+    {
+      "kind": "energy",
+      "prior_count": 48,
+      "out_of_fold_cosine": 0.523485698673363
+    },
+    {
+      "kind": "energy",
+      "prior_count": 144,
+      "out_of_fold_cosine": 0.5230566635893672
+    },
+    {
+      "kind": "instrument_energy",
+      "prior_count": 12,
+      "out_of_fold_cosine": 0.5227691813471479
+    },
+    {
+      "kind": "instrument_energy",
+      "prior_count": 48,
+      "out_of_fold_cosine": 0.5227599635687546
+    },
+    {
+      "kind": "instrument_energy",
+      "prior_count": 144,
+      "out_of_fold_cosine": 0.5230491878282253
+    }
+  ],
+  "original_test_removed": 384,
+  "confirmation_sample_size": 1024,
+  "confirmed_identities": 875,
+  "skipped": 149,
+  "audited_ids_sha256": "b897072d20d3e2195cd31e728331237c2634b62a62dd85857336ebca1274e294",
+  "source_prediction_sha256": "285b3dba74b9714b0103038f48ae7be5cc071aa2a9b3eb3c976d785ede50403d",
+  "baseline": {
+    "cosine_similarity": 0.5118066757513605,
+    "entropy_similarity": 0.4344397475685572,
+    "predicted_nonzero_bins": 100.0,
+    "reference_nonzero_bins": 30.193142857142856
+  },
+  "candidate": {
+    "cosine_similarity": 0.51751945844935,
+    "entropy_similarity": 0.46082102832529315,
+    "predicted_nonzero_bins": 100.0,
+    "reference_nonzero_bins": 30.193142857142856
+  },
+  "cosine_difference_ci95": [
+    0.0017854164439222962,
+    0.009563187442116537
+  ],
+  "selected_kind": "instrument",
+  "fallback": [
+    1.2,
+    0.5,
+    100
+  ],
+  "settings": {
+    "Orbitrap": [
+      1.2,
+      0.5,
+      100
+    ],
+    "QTOF": [
+      1.2,
+      0.5,
+      100
+    ]
+  },
+  "promoted": true
+}

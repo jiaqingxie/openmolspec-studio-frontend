@@ -1,0 +1,114 @@
+{
+  "model": "glacier",
+  "validation_plan_sha256": "b71783642968d2879b76a03f037d83eb28e420eebf8001fdc100072a1e2545d6",
+  "checkpoints": [
+    "5a47cecca707d3abd5a49c7dbac99d100aa2a586d5d4f848f1e8e35140d7db11"
+  ],
+  "validation": {
+    "passed": 280,
+    "skipped": 104
+  },
+  "validation_cvs": [
+    {
+      "kind": "incumbent",
+      "prior_count": 0,
+      "out_of_fold_cosine": 0.5858391506707309
+    },
+    {
+      "kind": "global",
+      "prior_count": 0,
+      "out_of_fold_cosine": 0.5868755035017384
+    },
+    {
+      "kind": "instrument",
+      "prior_count": 12,
+      "out_of_fold_cosine": 0.5871771003569888
+    },
+    {
+      "kind": "instrument",
+      "prior_count": 48,
+      "out_of_fold_cosine": 0.5877039767982736
+    },
+    {
+      "kind": "instrument",
+      "prior_count": 144,
+      "out_of_fold_cosine": 0.587878274101825
+    },
+    {
+      "kind": "energy",
+      "prior_count": 12,
+      "out_of_fold_cosine": 0.5886512231661201
+    },
+    {
+      "kind": "energy",
+      "prior_count": 48,
+      "out_of_fold_cosine": 0.5893446379597753
+    },
+    {
+      "kind": "energy",
+      "prior_count": 144,
+      "out_of_fold_cosine": 0.5887503676991909
+    },
+    {
+      "kind": "instrument_energy",
+      "prior_count": 12,
+      "out_of_fold_cosine": 0.589257798580829
+    },
+    {
+      "kind": "instrument_energy",
+      "prior_count": 48,
+      "out_of_fold_cosine": 0.5892974418124326
+    },
+    {
+      "kind": "instrument_energy",
+      "prior_count": 144,
+      "out_of_fold_cosine": 0.5874476375746925
+    }
+  ],
+  "original_test_removed": 384,
+  "confirmation_sample_size": 1024,
+  "confirmed_identities": 875,
+  "skipped": 149,
+  "audited_ids_sha256": "b897072d20d3e2195cd31e728331237c2634b62a62dd85857336ebca1274e294",
+  "source_prediction_sha256": "ebf9423beeceaec7a306404eb0a4bd202cf72111463c4b4e247466e904993c86",
+  "baseline": {
+    "cosine_similarity": 0.6008619775142657,
+    "entropy_similarity": 0.5324104667029679,
+    "predicted_nonzero_bins": 100.0,
+    "reference_nonzero_bins": 30.193142857142856
+  },
+  "candidate": {
+    "cosine_similarity": 0.6039401769683989,
+    "entropy_similarity": 0.5644318895508809,
+    "predicted_nonzero_bins": 92.17142857142858,
+    "reference_nonzero_bins": 30.193142857142856
+  },
+  "cosine_difference_ci95": [
+    0.0004888209540038699,
+    0.005579350103925645
+  ],
+  "selected_kind": "energy",
+  "fallback": [
+    1.2,
+    1.5,
+    100
+  ],
+  "settings": {
+    "low": [
+      1.2,
+      1.5,
+      100
+    ],
+    "high": [
+      1.2,
+      1.0,
+      100
+    ],
+    "medium": [
+      1.2,
+      1.0,
+      50
+    ]
+  },
+  "promoted": true
+}

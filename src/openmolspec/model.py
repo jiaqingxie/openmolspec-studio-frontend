@@ -419,13 +419,17 @@ class MSPredictor(_ConfiguredModel):
         Interpreter of the MS model environment.
     device : str, default 'cpu'
         Inference device.
+    author_baseline : bool, default False
+        Return the original checkpoint intensities for comparison.
     """
     capabilities = {'predict': True, 'fit': False, 'domain': 'experimental MS/MS'}
 
-    def __init__(self, *, model, source, weights, python=None, device='cpu'):
+    def __init__(self, *, model, source, weights, python=None, device='cpu', author_baseline=False):
         if model not in ('glacier', 'iceberg'):
             raise ValueError('model must be glacier or iceberg')
-        self.config = {'model': model, 'source': str(Path(source).expanduser().resolve()),
+        if not isinstance(author_baseline, bool):
+            raise ValueError('author_baseline must be a boolean')
+        self.config = {'model': model, 'author_baseline': author_baseline, 'source': str(Path(source).expanduser().resolve()),
                        'weights': str(Path(weights).expanduser().resolve()),
                        'python': str(python or sys.executable), 'device': device}
 

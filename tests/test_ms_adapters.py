@@ -3,10 +3,28 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from openmolspec_bench.ms import select_ms_records, spectrum_metrics
+from openmolspec_bench.ms import apply_released_profile, released_profile, select_ms_records, spectrum_metrics
 
 
 class MassSpectrumTests(unittest.TestCase):
+    def test_calibration_is_bound_to_frozen_weights_and_molecule_size(self):
+        import json
+        from importlib.resources import files
+
+        data = json.loads(files("openmolspec").joinpath("assets/ms-forward-calibration.json").read_text())
+        checkpoint = data["iceberg"]["checkpoints"]
+        self.assertIsNone(released_profile("iceberg", ["different_weights"]))
+        self.assertIsNone(released_profile("iceberg", checkpoint, author_baseline=True))
+        profile = released_profile("iceberg", checkpoint)
+        peaks = [[20.0, 0.5], [40.0, 1.0]]
+        request = {"instrument": "Orbitrap", "precursor_mz": 40.0, "collision_energy": 20.0}
+        chosen, info = apply_released_profile(peaks, request, profile, 40)
+        self.assertEqual(info["profile"], "massspecgym")
+        self.assertAlmostEqual(dict(chosen)[40.0], 0.5)
+        original, info = apply_released_profile(peaks, request, profile, 41)
+        self.assertEqual(original, peaks)
+        self.assertEqual(info["profile"], "author")
+
     def test_identical_mass_spectra_score_one(self):
         peaks = [[31.0178, 1.], [47.0491, .4]]
         result = spectrum_metrics(peaks, peaks)

@@ -120,6 +120,51 @@ def calibrated_peaks(peaks, precursor_mz, power, precursor_weight, keep):
     return chosen[top][chosen[top, 1] > 0]
 
 
+def calibration_group(row, kind):
+    try:
+        energy = float(row["collision_energy"])
+        band = "low" if energy <= 20 else "medium" if energy <= 40 else "high"
+    except (ValueError, TypeError):
+        band = "unspecified"
+    if kind == "energy":
+        return band
+    if kind == "instrument":
+        return row["instrument"]
+    if kind == "instrument_energy":
+        return row["instrument"] + "|" + band
+    return "global"
+
+
+def released_profile(model, checkpoints, author_baseline=False):
+    """Use a published calibration only with the checkpoint digests tested for it."""
+    from importlib.resources import files
+
+    if author_baseline:
+        return None
+    profiles = files("openmolspec").joinpath("assets/ms-forward-calibration.json")
+    with profiles.open() as stream:
+        profile = json.load(stream).get(model)
+    if profile and profile["checkpoints"] == checkpoints:
+        return profile
+    return None
+
+
+def apply_released_profile(prediction, row, profile, heavy_atoms):
+    """Apply validated relative-intensity settings within the evaluated size range."""
+    if not profile or heavy_atoms > profile["maximum_heavy_atoms"]:
+        return prediction, {"profile": "author"}
+    key = calibration_group(row, profile["kind"])
+    params = profile["settings"].get(key, profile["fallback"])
+    peaks = calibrated_peaks(prediction, row["precursor_mz"], *params)
+    return peaks, {"profile": "massspecgym", "group": key, "settings": params}
+
+
+def default_ms_source(parent):
+    """Prefer the implementation accompanying the released weights when installed."""
+    source = parent / "mspred/ms-pred-main"
+    return source if (source / "src/ms_pred").is_dir() else parent / "ms-pred-repro"
+
+
 def load_frozen_model(args):
     import torch
     torch.set_num_threads(args.threads)
@@ -165,10 +210,13 @@ def predict_request(args):
     peaks = prediction.detach().cpu().numpy()
     if peaks.ndim != 2 or peaks.shape[1] != 2 or not np.isfinite(peaks).all():
         raise ValueError("Model produced invalid mass/intensity pairs")
-    output = {"model": args.model, "training_performed": False, "inference_mode": "direct_frozen_checkpoint",
+    metadata = [{"name": path.name, "sha256": sha256(path)} for path in paths]
+    profile = released_profile(args.model, [item["sha256"] for item in metadata], getattr(args, "author_baseline", False))
+    peaks, calibration = apply_released_profile(peaks, {**row, "precursor_mz": precursor}, profile, molecule.GetNumHeavyAtoms())
+    output = {"model": args.model, "threads": args.threads, "training_performed": False, "inference_mode": "direct_frozen_checkpoint",
               "smiles": Chem.MolToSmiles(molecule, isomericSmiles=True), "adduct": adduct, "instrument": instrument,
               "collision_energy": float(ce), "precursor_mz": precursor, "predicted_peaks": peaks.tolist(),
-              "checkpoints": [{"name": path.name, "sha256": sha256(path)} for path in paths]}
+              "checkpoints": metadata, "calibration": calibration}
     args.output.write_text(json.dumps(output, indent=2, allow_nan=False) + "\n")
     return 0
 
@@ -191,7 +239,8 @@ def evaluate(args):
               "scoring": {"num_bins": 150000, "upper_limit_da": 1500, "pooling": "max", "prediction_top_peaks": 100,
                           "reference": "all_observed_peaks_from_our_test_CSV_without_MAGMa_filtering"},
               "training_overlap_audit": "pretrained_MassSpecGym_weights; our_split_overlap_not_independently_reaudited",
-              "device": args.device, "records": []}
+              "device": args.device, "threads": args.threads, "records": []}
+    profile = released_profile(args.model, [item["sha256"] for item in report["checkpoints"]], getattr(args, "author_baseline", False))
     model, _ = load_frozen_model(args)
     started = time.monotonic()
     for row in rows:
@@ -216,7 +265,8 @@ def evaluate(args):
                                                   threshold=0., device=args.device, max_nodes=100, instrument=[instrument],
                                                   binned_out=False, canonical_root_smi=True)["spec"][0]
             predicted = predicted.detach().cpu().numpy()
-            entry.update(status="passed", predicted_peaks=predicted.tolist(), metrics=spectrum_metrics(predicted, row["reference_peaks"]))
+            predicted, info = apply_released_profile(predicted, row, profile, row["heavy_atoms"])
+            entry.update(status="passed", calibration=info, predicted_peaks=predicted.tolist(), metrics=spectrum_metrics(predicted, row["reference_peaks"]))
         except UnsupportedCondition as error:
             entry.update(status="skipped", reason=str(error))
         except Exception as error:
@@ -239,15 +289,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parent = Path(__file__).resolve().parents[3]
     parser.add_argument("--model", choices=("glacier", "iceberg"), required=True)
-    parser.add_argument("--source", type=Path, default=parent / "ms-pred-repro")
+    parser.add_argument("--source", type=Path, default=default_ms_source(parent))
     parser.add_argument("--weights", type=Path, default=parent / "mspred")
     parser.add_argument("--input-csv", type=Path, default=parent / "MassSpecGym-MAGMA-annotation/data/MassSpecGym_test_full.csv")
     parser.add_argument("--metadata-tsv", type=Path, default=parent / "MassSpecGym-MAGMA-annotation/data/MassSpecGym1.5.tsv")
     parser.add_argument("--limit", type=int, default=8)
     parser.add_argument("--max-heavy-atoms", type=int, default=40)
+    parser.add_argument("--author-baseline", action="store_true", help="Return the original frozen model's intensities")
     parser.add_argument("--allow-repeated-molecules", action="store_true")
     parser.add_argument("--predict-request", type=Path, help="JSON molecule request for direct online inference")
-    parser.add_argument("--threads", type=int, default=2)
+    parser.add_argument("--threads", type=int, default=1, help="CPU threads; the published confirmation uses one")
     parser.add_argument("--device", default="cpu")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()

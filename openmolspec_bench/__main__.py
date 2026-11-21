@@ -58,6 +58,7 @@ def main():
     hsqc.add_argument("--hsqc-calibration", type=Path, help="Use the frozen HSQC residual tables")
     hsqc.add_argument("--hsqc-author-baseline", action="store_true", help="Reproduce raw author HSQC predictions")
     run.add_argument("--transpeaknet-source", type=Path, help="Author 2dNMR checkout with HSQC weights and test ZIP")
+    run.add_argument("--ms-author-baseline", action="store_true", help="Evaluate the original MS checkpoint intensities")
     run.add_argument("--ms-source", type=Path)
     run.add_argument("--ms-weights", type=Path)
     run.add_argument("--ms-input-csv", type=Path)

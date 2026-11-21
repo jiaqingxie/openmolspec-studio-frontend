@@ -16,6 +16,7 @@ export PYTHONPATH=src:.
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 python -m online_api.serve \
   --model-python /path/to/nmr-env/bin/python \
+  --ms-python /path/to/ms-env/bin/python \
   --models-root /path/to/nmr-models \
   --ms-source /path/to/ms-pred --ms-weights /path/to/ms-checkpoints \
   --nmr-alignment /path/to/nmr-alignment.pt \
