@@ -10,6 +10,7 @@
 | [openmolspec.analysis.plot_element_coverage](module-analysis-plot_element_coverage.md) | Plot documented element coverage of OpenMolSpec and public reference sets. |
 | [openmolspec.analysis.plot_openmolspec_overview](module-analysis-plot_openmolspec_overview.md) | Create a publication-style overview figure for OpenMolSpec. |
 | [openmolspec.analysis.visualize_opt_trajectory](module-analysis-visualize_opt_trajectory.md) | Visualize one molecular optimization trajectory as an animated GIF. |
+| [openmolspec.assigned_shifts](module-assigned_shifts.md) | Predict experimental 1H and 13C shifts for symmetry-distinct heavy-atom sites. |
 | [openmolspec.cli](module-cli.md) | OpenMolSpec staged data-production entry point. |
 | [openmolspec.core.processing](module-core-processing.md) | Shared structured processing results for the extraction CLIs. |
 | [openmolspec.core.progress](module-core-progress.md) | Progress reporting that stays readable in terminals and log files. |
@@ -19,6 +20,7 @@
 | [openmolspec.legacy.extract_spectra](module-legacy-extract_spectra.md) | Extract structures, quantum properties, IR and Raman data from Gaussian logs. |
 | [openmolspec.legacy.function](module-legacy-function.md) |  |
 | [openmolspec.maintenance.parse_zinc_v2_nmr](module-maintenance-parse_zinc_v2_nmr.md) | Parse only the ZINCV2 NMR Gaussian logs. |
+| [openmolspec.peak_learning](module-peak_learning.md) | Estimate H/C site shifts using observed spectra matched to atom environments. |
 | [openmolspec.phosphorus_gnn](module-phosphorus_gnn.md) | Bond-conditioned message passing from a molecular graph to a solution NMR chemical shift. |
 | [openmolspec.plotting](module-plotting.md) | Shared Arial typography for scientific figures and molecular drawings. |
 | [openmolspec.solution_shifts](module-solution_shifts.md) | Atom-centred chemical-shift prediction for experimental solution NMR. |
