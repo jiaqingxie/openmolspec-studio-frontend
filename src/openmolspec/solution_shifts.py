@@ -1,4 +1,4 @@
-"""Atom-centred chemical-shift prediction for experimental phosphorus and fluorine NMR."""
+"""Atom-centred chemical-shift prediction for experimental solution NMR."""
 
 from functools import lru_cache
 from pathlib import Path
@@ -6,7 +6,7 @@ import gzip
 import json
 
 
-NUCLEI = {"31P": 15, "19F": 9}
+NUCLEI = {"31P": 15, "19F": 9, "11B": 5, "29Si": 14}
 BINS = 1536
 SOLVENTS = (
     "unknown",
@@ -98,14 +98,14 @@ def analyte(smiles, nucleus):
     return parts[mapping.index(group)], group
 
 
-def site_features(mol, nucleus):
+def site_features(mol, nucleus, target_atoms=None):
     """Return symmetry classes, nested rooted environments and sparse shell descriptors."""
     from collections import Counter
     from rdkit import Chem
     from rdkit.Chem import rdFingerprintGenerator
 
     atoms = list(mol.GetAtoms())
-    targets = [a.GetIdx() for a in atoms if a.GetAtomicNum() == NUCLEI[nucleus]]
+    targets = list(target_atoms) if target_atoms is not None else [a.GetIdx() for a in atoms if a.GetAtomicNum() == NUCLEI[nucleus]]
     if not targets:
         raise ValueError("The structure contains no atom of the requested nucleus")
     classes = {}
@@ -202,7 +202,28 @@ class SolutionShiftPredictor:
         if self.config["feature_schema"] != 1:
             raise ValueError("Unsupported solution-shift feature schema")
         self._graph_model = None
-        if self.config.get("engine") == "phosphorus_gnn":
+        self.components = []
+        if self.config.get("engine") == "solution_ensemble":
+            from openmolspec_bench.data import sha256
+
+            self.nucleus = self.config["nucleus"]
+            names = set()
+            for item in self.config["components"]:
+                name = item["name"]
+                if not name or name in (".", "..") or name != Path(name).name or name in names:
+                    raise ValueError("Invalid solution ensemble component name")
+                names.add(name)
+                path = root / name
+                if sha256(path / "model.json") != item["sha256"]:
+                    raise ValueError("Solution ensemble component digest mismatch")
+                model = SolutionShiftPredictor(path)
+                if model.nucleus != self.nucleus or not 0 < item["weight"] <= 1:
+                    raise ValueError("Invalid solution ensemble component")
+                self.components.append((model, item["weight"]))
+            if abs(sum(weight for _, weight in self.components) - 1) > 1e-9:
+                raise ValueError("Solution ensemble weights must sum to one")
+            return
+        if self.config.get("engine") in ("phosphorus_gnn", "solution_gnn"):
             from .phosphorus_gnn import PhosphorusGNNPredictor
             self._graph_model = PhosphorusGNNPredictor(root)
             self.nucleus = self._graph_model.nucleus
@@ -223,6 +244,18 @@ class SolutionShiftPredictor:
 
     def predict(self, smiles, solvent=None):
         """Predict ppm for every target atom of one connected molecule, optionally in a named solvent."""
+        if getattr(self, "components", None):
+            outputs = [(m.predict(smiles, solvent), w) for m, w in self.components]
+            result = outputs[0][0]
+            if any(len(p["environments"]) != len(result["environments"]) for p, _ in outputs):
+                raise ValueError("Solution ensemble environment counts differ")
+            for i, env in enumerate(result["environments"]):
+                if any(p["environments"][i]["atom_indices"] != env["atom_indices"] for p, _ in outputs):
+                    raise ValueError("Solution ensemble atom indices differ")
+                env["prediction_ppm"] = sum(p["environments"][i]["prediction_ppm"] * w for p, w in outputs)
+            by_atom = {i: env["prediction_ppm"] for env in result["environments"] for i in env["atom_indices"]}
+            result["prediction_ppm"] = [by_atom[i] for i in result["atom_indices"]]
+            return result
         if getattr(self, "_graph_model", None) is not None:
             return self._graph_model.predict(smiles, solvent)
         mol, original_indices = analyte(smiles, self.nucleus)
@@ -263,7 +296,7 @@ def main(argv=None):
         "--model-dir",
         required=True,
         type=Path,
-        help="Fitted 31P or 19F model directory",
+        help="Fitted solution-shift model directory",
     )
     parser.add_argument("--smiles", required=True)
     parser.add_argument(

@@ -28,7 +28,8 @@ ORIGINS = {'https://jiaqingxie.github.io', 'http://127.0.0.1:8769', 'http://loca
 MCP_TASKS = {'nmr.forward.1H', 'nmr.forward.13C', 'nmr.assignment',
              'vibrational.gap.ir_raman_hc', 'vibrational.generation.hc', 'vibrational.retrieval.hc',
              'ms.forward.glacier', 'ms.forward.iceberg', 'nmr.generation.hc', 'nmr.retrieval.hc.s2m'}
-LOCAL_TASKS = {'nmr.forward.31P', 'vibrational.forward', 'nmr.solvent_transfer', 'nmr.hsqc.transpeaknet'}
+SOLUTION_TASKS = {f'nmr.forward.{n}' for n in ('31P', '19F', '11B', '29Si')}
+LOCAL_TASKS = SOLUTION_TASKS | { 'vibrational.forward', 'nmr.solvent_transfer', 'nmr.hsqc.transpeaknet'}
 TASKS = MCP_TASKS | LOCAL_TASKS
 SYSTEM = """You are the OpenMolSpec spectroscopy assistant. Answer in the user's language.
 Use the MCP tools to discover capabilities, validate a request, and run models.
@@ -156,6 +157,14 @@ class Service:
         phosphorus = getattr(args, 'phosphorus_model', None)
         if phosphorus is None or not (phosphorus / 'model.json').is_file():
             self.enabled_tasks.discard('nmr.forward.31P')
+        self.solution_models = {'nmr.forward.31P': phosphorus}
+        root = getattr(args, 'solution_model_root', None)
+        for task in SOLUTION_TASKS - {'nmr.forward.31P'}:
+            model = root / task.rsplit('.', 1)[1] if root else None
+            if model is not None and (model / 'model.json').is_file():
+                self.solution_models[task] = model
+            else:
+                self.enabled_tasks.discard(task)
         self.solvent_model = None
 
     def status(self):
@@ -312,9 +321,12 @@ class Service:
         if task in LOCAL_TASKS:
             self.event(run_id, 'tool_start', {'id': run_id, 'name': task, 'args': inputs})
             start = time.monotonic()
-            adapter = {'nmr.forward.31P': self.phosphorus, 'vibrational.forward': self.geometry, 'nmr.solvent_transfer': self.solvent_transfer,
-                       'nmr.hsqc.transpeaknet': self.transpeaknet}[task]
-            result = await asyncio.to_thread(adapter, inputs)
+            if task in SOLUTION_TASKS:
+                result = await asyncio.to_thread(self.solution_shifts, task, inputs)
+            else:
+                adapter = {'vibrational.forward': self.geometry, 'nmr.solvent_transfer': self.solvent_transfer,
+                           'nmr.hsqc.transpeaknet': self.transpeaknet}[task]
+                result = await asyncio.to_thread(adapter, inputs)
             self.event(run_id, 'tool_end', {'id': run_id, 'name': task, 'result': result, 'elapsed_seconds': time.monotonic() - start})
             return result
         valid = await self.call(session, run_id, 'spectra_validate', {'task': task, 'inputs': inputs})
@@ -337,11 +349,11 @@ class Service:
         return self.local_worker('online_api.transpeaknet',
                                  {**inputs, 'source': str(self.args.transpeaknet_source)})
 
-    def phosphorus(self, inputs):
+    def solution_shifts(self, task, inputs):
         if not inputs.get('smiles'):
-            raise ValueError('Enter a SMILES containing phosphorus')
+            raise ValueError('Enter a SMILES containing the selected nucleus')
         return self.local_worker('online_api.phosphorus',
-                                 {'model_dir': str(self.args.phosphorus_model), 'smiles': inputs['smiles'],
+                                 {'model_dir': str(self.solution_models[task]), 'nucleus': task.rsplit('.', 1)[1], 'smiles': inputs['smiles'],
                                   'solvent': inputs.get('solvent') or None}, python=self.args.solution_python)
 
     def local_worker(self, module, inputs, python=None):
@@ -435,6 +447,7 @@ def main():
     parser.add_argument('--ms-weights', type=Path, default=ROOT.parents[1] / 'mspred')
     parser.add_argument('--nmr-generation', type=Path, default=ROOT.parent / 'runs/bebaecf2bca248f1a47eaa01f403002a/best.pt')
     parser.add_argument('--nmr-alignment', type=Path, default=ROOT.parent / 'runs/f90bd7f743574d18a7f72ae72ce95e59/best.pt')
+    parser.add_argument('--solution-model-root', type=Path, default=ROOT.parent/'runs/solution-shifts-selected')
     parser.add_argument('--phosphorus-model', type=Path, default=ROOT.parent/'runs/solution-shifts-selected/31P')
     parser.add_argument('--solution-python', default=os.environ.get('OPENMOLSPEC_SOLUTION_PYTHON', sys.executable))
     parser.add_argument('--solvent-library', type=Path)

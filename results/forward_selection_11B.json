@@ -1,0 +1,493 @@
+{
+  "nucleus": "11B",
+  "selection_metric": "validation molecule-weighted MAE in ppm",
+  "validation": [
+    {
+      "models": {
+        "11B-gnn": 0.5,
+        "11B-gnn-r2": 0.5
+      },
+      "macro_mae_ppm": 1.4826613780946074
+    },
+    {
+      "models": {
+        "11B-gnn": 0.4,
+        "11B-gnn-r2": 0.6
+      },
+      "macro_mae_ppm": 1.4826811540600286
+    },
+    {
+      "models": {
+        "11B-gnn": 0.6,
+        "11B-gnn-r2": 0.4
+      },
+      "macro_mae_ppm": 1.4842564341548576
+    },
+    {
+      "models": {
+        "11B-gnn": 0.30000000000000004,
+        "11B-gnn-r2": 0.7
+      },
+      "macro_mae_ppm": 1.4868996525297598
+    },
+    {
+      "models": {
+        "11B-gnn": 0.7,
+        "11B-gnn-r2": 0.3
+      },
+      "macro_mae_ppm": 1.488359025252853
+    },
+    {
+      "models": {
+        "11B-gnn": 0.19999999999999996,
+        "11B-gnn-r2": 0.8
+      },
+      "macro_mae_ppm": 1.4938487281265391
+    },
+    {
+      "models": {
+        "11B-gnn": 0.8,
+        "11B-gnn-r2": 0.2
+      },
+      "macro_mae_ppm": 1.4958932622298462
+    },
+    {
+      "models": {
+        "11B-gnn": 0.09999999999999998,
+        "11B-gnn-r2": 0.9
+      },
+      "macro_mae_ppm": 1.503143938582591
+    },
+    {
+      "models": {
+        "11B-gnn": 0.9,
+        "11B-gnn-r2": 0.1
+      },
+      "macro_mae_ppm": 1.5070926186117939
+    },
+    {
+      "models": {
+        "11B-tree-r2": 0.09999999999999998,
+        "11B-gnn-r2": 0.9
+      },
+      "macro_mae_ppm": 1.5070940673385955
+    },
+    {
+      "models": {
+        "11B-gnn-r2": 1.0
+      },
+      "macro_mae_ppm": 1.5138502057452636
+    },
+    {
+      "models": {
+        "11B-tree": 0.09999999999999998,
+        "11B-gnn-r2": 0.9
+      },
+      "macro_mae_ppm": 1.5166873180942397
+    },
+    {
+      "models": {
+        "11B-gnn": 0.9,
+        "11B-tree-r2": 0.1
+      },
+      "macro_mae_ppm": 1.5186151847031917
+    },
+    {
+      "models": {
+        "11B-gnn": 1.0
+      },
+      "macro_mae_ppm": 1.5213597964040888
+    },
+    {
+      "models": {
+        "11B-tree-r2": 0.19999999999999996,
+        "11B-gnn-r2": 0.8
+      },
+      "macro_mae_ppm": 1.5244076739233872
+    },
+    {
+      "models": {
+        "11B-tree": 0.09999999999999998,
+        "11B-gnn": 0.9
+      },
+      "macro_mae_ppm": 1.5290584417938018
+    },
+    {
+      "models": {
+        "11B-gnn": 0.8,
+        "11B-tree-r2": 0.2
+      },
+      "macro_mae_ppm": 1.533274222143356
+    },
+    {
+      "models": {
+        "11B-tree": 0.19999999999999996,
+        "11B-gnn-r2": 0.8
+      },
+      "macro_mae_ppm": 1.5468387896586773
+    },
+    {
+      "models": {
+        "11B-tree": 0.19999999999999996,
+        "11B-gnn": 0.8
+      },
+      "macro_mae_ppm": 1.5568450633669462
+    },
+    {
+      "models": {
+        "11B-tree-r2": 0.30000000000000004,
+        "11B-gnn-r2": 0.7
+      },
+      "macro_mae_ppm": 1.5581904180066546
+    },
+    {
+      "models": {
+        "11B-gnn": 0.7,
+        "11B-tree-r2": 0.3
+      },
+      "macro_mae_ppm": 1.564515993093187
+    },
+    {
+      "models": {
+        "11B-tree": 0.30000000000000004,
+        "11B-gnn-r2": 0.7
+      },
+      "macro_mae_ppm": 1.5966536627504848
+    },
+    {
+      "models": {
+        "11B-tree-r2": 0.4,
+        "11B-gnn-r2": 0.6
+      },
+      "macro_mae_ppm": 1.601045294193702
+    },
+    {
+      "models": {
+        "11B-tree": 0.30000000000000004,
+        "11B-gnn": 0.7
+      },
+      "macro_mae_ppm": 1.6051619344489247
+    },
+    {
+      "models": {
+        "11B-gnn": 0.6,
+        "11B-tree-r2": 0.4
+      },
+      "macro_mae_ppm": 1.6086744344260426
+    },
+    {
+      "models": {
+        "11B-tree-r2": 0.5,
+        "11B-gnn-r2": 0.5
+      },
+      "macro_mae_ppm": 1.650776791605546
+    },
+    {
+      "models": {
+        "11B-tree": 0.4,
+        "11B-gnn-r2": 0.6
+      },
+      "macro_mae_ppm": 1.659331077229899
+    },
+    {
+      "models": {
+        "11B-gnn": 0.5,
+        "11B-tree-r2": 0.5
+      },
+      "macro_mae_ppm": 1.6596539234121606
+    },
+    {
+      "models": {
+        "11B-tree": 0.4,
+        "11B-gnn": 0.6
+      },
+      "macro_mae_ppm": 1.6680012634009824
+    },
+    {
+      "models": {
+        "11B-tree-r2": 0.6,
+        "11B-gnn-r2": 0.4
+      },
+      "macro_mae_ppm": 1.7072381030812154
+    },
+    {
+      "models": {
+        "11B-gnn": 0.4,
+        "11B-tree-r2": 0.6
+      },
+      "macro_mae_ppm": 1.7161119962534095
+    },
+    {
+      "models": {
+        "11B-tree": 0.5,
+        "11B-gnn-r2": 0.5
+      },
+      "macro_mae_ppm": 1.734908232087384
+    },
+    {
+      "models": {
+        "11B-tree": 0.5,
+        "11B-gnn": 0.5
+      },
+      "macro_mae_ppm": 1.7378434278077741
+    },
+    {
+      "models": {
+        "11B-tree-r2": 0.7,
+        "11B-gnn-r2": 0.3
+      },
+      "macro_mae_ppm": 1.7695758848225576
+    },
+    {
+      "models": {
+        "11B-gnn": 0.30000000000000004,
+        "11B-tree-r2": 0.7
+      },
+      "macro_mae_ppm": 1.7768583180494604
+    },
+    {
+      "models": {
+        "11B-tree": 0.6,
+        "11B-gnn": 0.4
+      },
+      "macro_mae_ppm": 1.812707690269314
+    },
+    {
+      "models": {
+        "11B-tree": 0.6,
+        "11B-gnn-r2": 0.4
+      },
+      "macro_mae_ppm": 1.8133886493824671
+    },
+    {
+      "models": {
+        "11B-tree-r2": 0.8,
+        "11B-gnn-r2": 0.2
+      },
+      "macro_mae_ppm": 1.8379719396116312
+    },
+    {
+      "models": {
+        "11B-gnn": 0.19999999999999996,
+        "11B-tree-r2": 0.8
+      },
+      "macro_mae_ppm": 1.84420465495516
+    },
+    {
+      "models": {
+        "11B-tree": 0.7,
+        "11B-gnn": 0.3
+      },
+      "macro_mae_ppm": 1.893958294240577
+    },
+    {
+      "models": {
+        "11B-tree": 0.7,
+        "11B-gnn-r2": 0.3
+      },
+      "macro_mae_ppm": 1.8944402767265258
+    },
+    {
+      "models": {
+        "11B-tree-r2": 0.9,
+        "11B-gnn-r2": 0.1
+      },
+      "macro_mae_ppm": 1.9147231140594314
+    },
+    {
+      "models": {
+        "11B-gnn": 0.09999999999999998,
+        "11B-tree-r2": 0.9
+      },
+      "macro_mae_ppm": 1.9178829312641317
+    },
+    {
+      "models": {
+        "11B-tree": 0.8,
+        "11B-gnn-r2": 0.2
+      },
+      "macro_mae_ppm": 1.9813979359292355
+    },
+    {
+      "models": {
+        "11B-tree": 0.8,
+        "11B-gnn": 0.2
+      },
+      "macro_mae_ppm": 1.9833551994230876
+    },
+    {
+      "models": {
+        "11B-tree-r2": 1.0
+      },
+      "macro_mae_ppm": 1.9966488342048296
+    },
+    {
+      "models": {
+        "11B-tree": 0.09999999999999998,
+        "11B-tree-r2": 0.9
+      },
+      "macro_mae_ppm": 1.9978702245611157
+    },
+    {
+      "models": {
+        "11B-tree": 0.19999999999999996,
+        "11B-tree-r2": 0.8
+      },
+      "macro_mae_ppm": 2.007100653150157
+    },
+    {
+      "models": {
+        "11B-tree": 0.30000000000000004,
+        "11B-tree-r2": 0.7
+      },
+      "macro_mae_ppm": 2.021295082558549
+    },
+    {
+      "models": {
+        "11B-tree": 0.4,
+        "11B-tree-r2": 0.6
+      },
+      "macro_mae_ppm": 2.036406555974566
+    },
+    {
+      "models": {
+        "11B-tree": 0.5,
+        "11B-tree-r2": 0.5
+      },
+      "macro_mae_ppm": 2.053024243505066
+    },
+    {
+      "models": {
+        "11B-tree": 0.6,
+        "11B-tree-r2": 0.4
+      },
+      "macro_mae_ppm": 2.07159662252102
+    },
+    {
+      "models": {
+        "11B-tree": 0.9,
+        "11B-gnn-r2": 0.1
+      },
+      "macro_mae_ppm": 2.0742523593459867
+    },
+    {
+      "models": {
+        "11B-tree": 0.9,
+        "11B-gnn": 0.1
+      },
+      "macro_mae_ppm": 2.076410865775836
+    },
+    {
+      "models": {
+        "11B-tree": 0.7,
+        "11B-tree-r2": 0.3
+      },
+      "macro_mae_ppm": 2.0921196236195034
+    },
+    {
+      "models": {
+        "11B-tree": 0.8,
+        "11B-tree-r2": 0.2
+      },
+      "macro_mae_ppm": 2.1163038464661383
+    },
+    {
+      "models": {
+        "11B-tree": 0.9,
+        "11B-tree-r2": 0.1
+      },
+      "macro_mae_ppm": 2.143315698584128
+    },
+    {
+      "models": {
+        "11B-tree": 1.0
+      },
+      "macro_mae_ppm": 2.172728884423084
+    }
+  ],
+  "selected": {
+    "11B-gnn": 0.5,
+    "11B-gnn-r2": 0.5
+  },
+  "validation_identities": 1501,
+  "validation_observations": 1681,
+  "training_identities": 13011,
+  "graph_runs": {
+    "11B-gnn": {
+      "best": {
+        "epoch": 66,
+        "seconds": 139.3,
+        "pure": 1.609941958917528,
+        "validation": 1.5213597964040888,
+        "weight": 1.0,
+        "lr": 0.00030375000000000004
+      },
+      "seed": 4327,
+      "parameters": 99425,
+      "train_records": 13405
+    },
+    "11B-gnn-r2": {
+      "best": {
+        "epoch": 59,
+        "seconds": 102.3,
+        "pure": 1.5756572154250423,
+        "validation": 1.5138502337010735,
+        "weight": 0.75,
+        "lr": 6.1509375e-05
+      },
+      "seed": 8161,
+      "parameters": 99425,
+      "train_records": 13405
+    }
+  },
+  "split_sha256": "5fc5aa71165e879f6100a1ff7a7c9f6158cfd2e3407e8bfe86fada27e2551e83",
+  "test": {
+    "11B-tree": {
+      "observations": 1669,
+      "identities": 1517,
+      "mae_ppm": 1.7716843782255258,
+      "molecule_macro_mae_ppm": 1.838533431295648,
+      "median_absolute_ppm": 0.4299999999999997,
+      "p90_absolute_ppm": 3.971559762280813,
+      "rmse_ppm": 4.813474931960988
+    },
+    "11B-gnn": {
+      "observations": 1669,
+      "identities": 1517,
+      "mae_ppm": 1.280745723173531,
+      "molecule_macro_mae_ppm": 1.326658175060288,
+      "median_absolute_ppm": 0.4000000000000057,
+      "p90_absolute_ppm": 2.3499999999999988,
+      "rmse_ppm": 3.8485188072092993
+    },
+    "11B-tree-r2": {
+      "observations": 1669,
+      "identities": 1517,
+      "mae_ppm": 1.647956048843191,
+      "molecule_macro_mae_ppm": 1.7142397618137786,
+      "median_absolute_ppm": 0.4299999999999997,
+      "p90_absolute_ppm": 3.642683375549067,
+      "rmse_ppm": 4.327301410581982
+    },
+    "11B-gnn-r2": {
+      "observations": 1669,
+      "identities": 1517,
+      "mae_ppm": 1.2794747041481709,
+      "molecule_macro_mae_ppm": 1.3191374386708703,
+      "median_absolute_ppm": 0.3807140350341882,
+      "p90_absolute_ppm": 2.501401367187498,
+      "rmse_ppm": 3.700311217038029
+    },
+    "selected": {
+      "observations": 1669,
+      "identities": 1517,
+      "mae_ppm": 1.2397650996037344,
+      "molecule_macro_mae_ppm": 1.2827103190532836,
+      "median_absolute_ppm": 0.3824570274353043,
+      "p90_absolute_ppm": 2.351059997558594,
+      "rmse_ppm": 3.698260092203861
+    }
+  },
+  "model_config_sha256": "5835cef1af2200d0fa84e47cdbb401ac6f392781f673d76822816359302cda8c",
+  "test_predictions_verified_with_sdk": true
+}

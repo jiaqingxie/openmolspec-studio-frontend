@@ -1,4 +1,4 @@
-"""Train a four-layer bond-conditioned 31P GNN on the frozen solution-shift split."""
+"""Train a four-layer bond-conditioned solution-shift GNN on the frozen solution-shift split."""
 
 import argparse
 from collections import Counter
@@ -56,7 +56,7 @@ def prepare(args):
             if not selected:
                 continue
             group, codes, _ = sites[0]
-            mol, _ = analyte(smiles, "31P")
+            mol, _ = analyte(smiles, cfg["nucleus"])
             ids, g = rd.add(mol, [group[0]])
             if role == "train":
                 for _, solvent, peak in selected:
@@ -70,7 +70,8 @@ def prepare(args):
         (k, idx, g, s, np.median(list(labels)), None)
         for (k, s, _), (idx, g, labels) in training.items()
     ]
-    assert len(train) == 37434 and len(validation) == 6813
+    if len(set(r[0] for r in train)) != cfg["training_identities"] or not validation:
+        raise ValueError("Graph records differ from the frozen training partition")
     return rd.arrays(), train, validation
 
 
@@ -107,13 +108,17 @@ def main():
     for key in ("features", "tree", "output"):
         p.add_argument("--" + key, type=Path, required=True)
     p.add_argument("--epochs", type=int, default=140)
+    p.add_argument("--seed", type=int, default=4327)
+    p.add_argument("--warm-start", type=Path, help="Initial weights for a second training phase")
+    p.add_argument("--learning-rate", type=float, default=.0015)
+    p.add_argument("--scale", type=float, default=40.0)
     p.add_argument("--threads", type=int, default=2)
     args = p.parse_args()
     RDLogger.DisableLog("rdApp.*")
     args.output.mkdir(parents=True, exist_ok=True)
     torch.set_num_threads(args.threads)
-    torch.manual_seed(4327)
-    rng = np.random.default_rng(4327)
+    torch.manual_seed(args.seed)
+    rng = np.random.default_rng(args.seed)
     # Rebuild graphs for a new experiment so the supplied data and roles are always verified.
     arrays, train, valid = prepare(args)
     print(
@@ -127,9 +132,14 @@ def main():
     batches, train_y, _, _ = pack(train, arrays, 256, rng)
     val_batches, y, local, w = pack(valid, arrays, 512)
     mean = float(np.median(train_y))
-    scale = 40.0
+    scale = args.scale
     net = PhosphorusGNN()
-    optimizer = torch.optim.AdamW(net.parameters(), lr=0.0015, weight_decay=0.0002)
+    if args.warm_start is not None:
+        initial = torch.load(args.warm_start, weights_only=True, map_location="cpu")
+        if initial["center"] != mean or initial["scale"] != scale:
+            raise ValueError("Warm-start target normalization differs")
+        net.load_state_dict(initial["state"])
+    optimizer = torch.optim.AdamW(net.parameters(), lr=args.learning_rate, weight_decay=0.0002)
     schedule = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer,
         mode="min",
@@ -208,7 +218,8 @@ def main():
         split_sha256=sha256(args.tree / "identity-splits.tsv.gz"),
         checkpoint_sha256=sha256(args.output / "gnn.pt"),
         weight_grid=WEIGHTS,
-        seed=4327,
+        initial_weights_sha256=sha256(args.warm_start) if args.warm_start else None,
+        seed=args.seed,
         train_records=len(train),
         train_identities=len(set(r[0] for r in train)),
         validation_records=len(valid),

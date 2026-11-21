@@ -20,14 +20,12 @@ TASKS = []
 for nucleus in ("1H", "13C", "19F", "31P", "11B", "29Si"):
     TASKS.append(Task(
         f"nmr.forward.{nucleus}", f"结构 → {nucleus} 峰列表", "forward", (nucleus,),
-        "experimental", ("nmrnet_predictions" if nucleus in ("1H", "13C") else
-                         "solution_chemical_shift" if nucleus in ("19F", "31P") else "nmrnet_bsi_diagnostic"),
+        "experimental", ("nmrnet_predictions" if nucleus in ("1H", "13C") else "solution_chemical_shift"),
         (("mae_ppm", "rmse_ppm") if nucleus in ("19F", "31P", "11B", "29Si") else
          ("matched_peak_mae_ppm", "matched_peak_rmse_ppm", "peak_count_mae", "matched_fraction")),
         "对已有 NMRNet/NMRNet++ 推理文件评分；无逐原子指认时使用最小代价峰匹配。"
         if nucleus in ("1H", "13C") else
-        "使用实验溶液谱训练的模型预测化学位移，在按分子连通性保留的验证池评分。旧固相权重可显式选择用于诊断。"
-        if nucleus in ("19F", "31P") else "已用液相 All-nucleus NMRNet 各完成 32 分子冻结诊断；B/Si 训练覆盖与实验标签来源未验证，正式评分仍跳过。"))
+        "使用实验溶液谱训练的模型预测化学位移，以按分子连通性留出的实测单环境谱评分。可显式选择旧模型进行冻结诊断。"))
 for view, modalities in (("h", ("1H",)), ("c", ("13C",)), ("hc", ("1H", "13C"))):
     for direction in ("s2m", "m2s"):
         TASKS.append(Task(f"nmr.retrieval.{view}.{direction}",

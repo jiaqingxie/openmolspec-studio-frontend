@@ -1,4 +1,4 @@
-"""Prepare measured solution spectra, molecule identities and atom-centred features for F/P."""
+"""Prepare measured solution spectra, molecule identities and atom-centred features for solution NMR."""
 
 import argparse
 import ast
@@ -22,7 +22,7 @@ def measurements(args):
     import pyarrow.parquet as pq
 
     nuc = args.nucleus
-    symbol = nuc[-1]
+    symbol = nuc.lstrip("0123456789")
     pool = args.pool_root / ("pool_" + symbol) / "valid.lmdb"
     env = readonly_lmdb(pool)
     with env.begin() as txn:
@@ -69,6 +69,28 @@ def measurements(args):
             except (ValueError, TypeError, IndexError, SyntaxError):
                 values = []
             yield row["SMILES"], "NMRexp", "", row["NMR_solvent"], values, None
+    if nuc == "11B" and args.boron:
+        # Solvent structures in the measured JACS Au collection include deuterium.
+        solvents = {
+            "[2H]C(Cl)(Cl)Cl": "CDCl3",
+            "[2H]c1c([2H])c([2H])c([2H])c([2H])c1[2H]": "C6D6",
+            "[2H]C([2H])([2H])S(=O)C([2H])([2H])[2H]": "DMSO-d6",
+            "[2H]C([2H])([2H])C(=O)C([2H])([2H])[2H]": "acetone-d6",
+            "[2H]C([2H])([2H])C#N": "CD3CN",
+            "[2H]OC([2H])([2H])[2H]": "CD3OD",
+            "[2H]C([2H])(Cl)Cl": "CD2Cl2",
+            "[2H]C1([2H])OC([2H])([2H])C([2H])([2H])C1([2H])[2H]": "THF-d8",
+            "[2H]c1c([2H])c([2H])c(C([2H])([2H])[2H])c([2H])c1[2H]": "toluene-d8",
+            "[2H]O[2H]": "D2O",
+        }
+        with args.boron.open() as stream:
+            for row in csv.DictReader(stream):
+                solvent = row["solvent"].strip()
+                try:
+                    values = [float(row["ppm_values"])]
+                except ValueError:
+                    values = []
+                yield row["Smiles"], "JACSAu11B", "", solvents.get(solvent, solvent), values, None
     if nuc == "31P":
         with args.ilm.open() as stream:
             names = next(
@@ -97,6 +119,7 @@ def main():
     for name in ("wanjuan", "nmrexp", "pool-root", "output"):
         cli.add_argument("--" + name, type=Path, required=True)
     cli.add_argument("--ilm", type=Path, help="Measured Ilm CSV, required for 31P")
+    cli.add_argument("--boron", type=Path, help="Measured JACS Au 11B CSV")
     cli.add_argument("--nucleus", choices=NUCLEI, required=True)
     args = cli.parse_args()
     if args.nucleus == "31P" and not args.ilm:
@@ -142,11 +165,13 @@ def main():
     paths.extend(
         [
             args.nmrexp / f"nmrexp_{args.nucleus}_usable.parquet",
-            args.pool_root / ("pool_" + args.nucleus[-1]) / "valid.lmdb",
+            args.pool_root / ("pool_" + args.nucleus.lstrip("0123456789")) / "valid.lmdb",
         ]
     )
     if args.nucleus == "31P":
         paths.append(args.ilm)
+    if args.nucleus == "11B" and args.boron:
+        paths.append(args.boron)
     args.output.with_suffix(".manifest.json").write_text(
         json.dumps(
             {

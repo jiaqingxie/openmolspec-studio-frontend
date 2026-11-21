@@ -492,7 +492,8 @@ class Runner:
             if not self.args.allow_cross_domain_diagnostic and not self.args.fp_inference_root:
                 from .solution_evaluation import evaluate
                 return evaluate(self, task.modalities[0])
-            return self.hetero(task)
+            if task.modalities[0] in ("19F", "31P"):
+                return self.hetero(task)
         if task.backend == "transpeaknet":
             if self.args.transpeaknet_source is None:
                 raise MissingAsset('Supply --transpeaknet-source with the author 2dNMR checkout')
@@ -522,7 +523,7 @@ class Runner:
             result = evaluate(library, self.args.limit, self.args.seed)
             result['library'] = self.artifact(library_path)
             return result
-        if task.backend == "nmrnet_bsi_diagnostic":
+        if task.backend == "nmrnet_bsi_diagnostic" or (task.backend == "solution_chemical_shift" and task.modalities[0] in ("11B", "29Si")):
             import subprocess
             import tempfile
             if 'bsi_diagnostic' not in self.encoded:

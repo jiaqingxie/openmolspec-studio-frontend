@@ -51,7 +51,7 @@ def training_scaffolds(features, roles):
     return {s for k in fitted for s in candidates[k] if s}
 
 
-def score_partition(features, roles, role, tree, gnn, scaffolds):
+def score_partition(features, roles, role, tree, gnn, scaffolds, detailed=True):
     rows = []
     index = GraphIndex()
     observed_scaffolds = defaultdict(set)
@@ -69,10 +69,10 @@ def score_partition(features, roles, role, tree, gnn, scaffolds):
         if not unique:
             continue
         members, codes, descriptors = sites[0]
-        mol, _ = analyte(smiles, "31P")
+        mol, _ = analyte(smiles, tree.nucleus)
         root, g = index.add(mol, [members[0]])
         local = root_estimate(tree.tables, codes)
-        group = phosphorus_group(smiles)
+        group = phosphorus_group(smiles) if tree.nucleus == "31P" else tree.nucleus
         for source, solvent, target in unique:
             rows.append(
                 (
@@ -120,6 +120,8 @@ def score_partition(features, roles, role, tree, gnn, scaffolds):
     truth = np.array([r[4] for r in rows])
     keys = np.array([r[0] for r in rows])
     groups = np.array([r[5] for r in rows])
+    if not detailed:
+        return rows, truth, preds
     new = np.array(
         [
             bool(s) and "" not in s and s.isdisjoint(scaffolds)
@@ -134,6 +136,8 @@ def score_partition(features, roles, role, tree, gnn, scaffolds):
     info = {}
     rng = np.random.default_rng(20261121)
     for group, mask in masks.items():
+        if not mask.any():
+            continue
         truth_part = truth[mask]
         part_keys = keys[mask]
         info[group] = {

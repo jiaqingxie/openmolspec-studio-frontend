@@ -1,4 +1,4 @@
-"""Bond-conditioned message passing from a molecular graph to a phosphorus shift."""
+"""Bond-conditioned message passing from a molecular graph to a solution NMR chemical shift."""
 
 from pathlib import Path
 import gzip
@@ -73,7 +73,7 @@ class GraphIndex:
             mol.GetRingInfo().NumRings() / 5,
             sum(a.GetIsAromatic() for a in atoms) / size,
             sum(a.GetFormalCharge() for a in atoms) / 3,
-            sum(a.GetAtomicNum() == 15 for a in atoms) / 3,
+            sum(a.GetAtomicNum() == atoms[roots[0]].GetAtomicNum() for a in atoms) / 3,
         ]
         return [states[i] for i in roots], global_features
 
@@ -173,7 +173,7 @@ class PhosphorusGNNPredictor:
             ("environments.json.gz", "environments_sha256"),
         ]:
             if sha256(directory / name) != cfg[field]:
-                raise ValueError(f"Invalid 31P artifact digest for {name}")
+                raise ValueError(f"Invalid solution-shift artifact digest for {name}")
         ckpt = torch.load(directory / "gnn.pt", map_location="cpu", weights_only=True)
         self.model = PhosphorusGNN(ckpt["width"])
         self.model.load_state_dict(ckpt["state"])
@@ -181,12 +181,12 @@ class PhosphorusGNNPredictor:
         self.center, self.scale = ckpt["center"], ckpt["scale"]
         with gzip.open(directory / "environments.json.gz", "rt") as f:
             self.tables = json.load(f)
-        self.nucleus = "31P"
+        self.nucleus = cfg["nucleus"]
 
     @torch.inference_mode()
     def predict(self, smiles, solvent=None):
-        mol, original = analyte(smiles, "31P")
-        sites = site_features(mol, "31P")
+        mol, original = analyte(smiles, self.nucleus)
+        sites = site_features(mol, self.nucleus)
         graph = GraphIndex()
         roots, conditions = graph.add(mol, [s[0][0] for s in sites])
         batch = graph_batch(graph.arrays(), roots)
@@ -210,7 +210,7 @@ class PhosphorusGNNPredictor:
         rows = sorted((i, e["prediction_ppm"]) for e in envs for i in e["atom_indices"])
         return dict(
             smiles=smiles,
-            nucleus="31P",
+            nucleus=self.nucleus,
             solvent=solvent,
             unit="ppm",
             environments=envs,

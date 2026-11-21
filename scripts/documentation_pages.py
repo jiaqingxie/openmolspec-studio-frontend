@@ -22,6 +22,9 @@ def solution_task_page(nucleus, en):
     if nucleus == '31P' and (ROOT/'results/phosphorus_gnn_selection.json').is_file():
         from phosphorus_model_card import model_card
         return model_card(en)
+    if (ROOT / "results" / f"forward_selection_{nucleus}.json").is_file() and nucleus in ("11B", "29Si", "19F"):
+        from solution_ensemble_card import model_card
+        return model_card(nucleus, en)
     report = json.loads((ROOT / 'results' / f'solution_shifts_{nucleus}.json').read_text())
     single = report['metrics']['test_single']
     unseen = report['metrics']['test_single_unseen_scaffold']
@@ -210,7 +213,7 @@ def build_pages(tasks,profile,profile_zh):
                 page+='\n</details>\n\n'
                 page+=f'\n[Model implementation / 模型实现]({source}) · [Model review / 模型检查](../model-audit.md)\n'
                 page+=reference_list(reference_keys(task),en)
-            if task.id in ('nmr.forward.19F', 'nmr.forward.31P'):
+            if task.id in ('nmr.forward.19F', 'nmr.forward.31P') or (task.id in ('nmr.forward.11B', 'nmr.forward.29Si') and (ROOT/'results'/f'forward_selection_{task.modalities[0]}.json').is_file()):
                 page = solution_task_page(task.modalities[0], en)
             files[f'tasks/{slug}{suffix}.md']=page
             files[f'notebooks/{slug}{suffix}.ipynb']=json.dumps(notebook(task,language),ensure_ascii=False,indent=2)+'\n'

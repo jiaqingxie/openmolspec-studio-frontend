@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / "src"), str(ROOT)]
 import lightgbm as lgb
 import numpy as np
-from openmolspec.solution_shifts import feature_matrix, root_estimate
+from openmolspec.solution_shifts import NUCLEI, feature_matrix, root_estimate
 from openmolspec_bench.data import sha256
 
 ORDER = {"": 0, "train": 1, "val": 2, "test": 3, "pool": 4}
@@ -105,7 +105,7 @@ def metrics(errors, keys):
 def main():
     cli = argparse.ArgumentParser(description=__doc__)
     cli.add_argument("--features", required=True, type=Path)
-    cli.add_argument("--nucleus", required=True, choices=("31P", "19F"))
+    cli.add_argument("--nucleus", required=True, choices=NUCLEI)
     cli.add_argument("--output", required=True, type=Path)
     cli.add_argument("--report", required=True, type=Path)
     cli.add_argument(
@@ -113,6 +113,9 @@ def main():
         type=Path,
         help="Directory containing the original frozen 32-row prediction fold and manifest",
     )
+    cli.add_argument("--max-rounds", type=int, default=1000)
+    cli.add_argument("--num-leaves", type=int, default=63)
+    cli.add_argument("--min-leaf", type=int, default=15)
     cli.add_argument("--threads", type=int, default=2)
     cli.add_argument(
         "--fixed-rounds", type=int, help="Reproduce a previously selected tree count"
@@ -218,8 +221,8 @@ def main():
         "objective": "regression_l1",
         "metric": "l1",
         "learning_rate": 0.055,
-        "num_leaves": 63,
-        "min_data_in_leaf": 15,
+        "num_leaves": args.num_leaves,
+        "min_data_in_leaf": args.min_leaf,
         "feature_fraction": 0.85,
         "num_threads": args.threads,
         "verbosity": -1,
@@ -238,7 +241,7 @@ def main():
     tree = lgb.train(
         params,
         fit,
-        num_boost_round=args.fixed_rounds or 1000,
+        num_boost_round=args.fixed_rounds or args.max_rounds,
         valid_sets=[hold],
         callbacks=callbacks,
     )
@@ -401,7 +404,7 @@ def main():
     print(
         "Completed",
         args.nucleus,
-        {k: quality[k] for k in ("test_single", "pool_single", "legacy_first32")},
+        {k: quality[k] for k in ("test_single", "pool_single", "legacy_first32") if k in quality},
         flush=True,
     )
 

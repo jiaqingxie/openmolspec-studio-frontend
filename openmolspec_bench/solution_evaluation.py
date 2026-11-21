@@ -21,7 +21,7 @@ def historical_rows(path, nucleus):
                 row = pickle.loads(value)
                 mask = np.asarray(row["atoms_target_mask"], dtype=bool)
                 atoms = np.asarray(row["atoms"])
-                symbol = nucleus[-1]
+                symbol = nucleus.lstrip("0123456789")
                 if (
                     mask.sum() != 1
                     or atoms[mask].item() != symbol
@@ -64,7 +64,7 @@ def evaluate(runner, nucleus):
         }
 
     if historical:
-        path = args.models_root / "nmrnetpp" / f"pool_{nucleus[-1]}" / "valid.lmdb"
+        path = args.models_root / "nmrnetpp" / ("pool_" + nucleus.lstrip("0123456789")) / "valid.lmdb"
         dataset = runner.artifact(path)
         if dataset["sha256"] != model.config["reserved_pool_sha256"]:
             raise ValueError("Historical pool digest mismatch")
