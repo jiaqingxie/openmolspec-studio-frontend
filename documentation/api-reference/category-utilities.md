@@ -19,5 +19,7 @@
 | [openmolspec.legacy.extract_spectra](module-legacy-extract_spectra.md) | Extract structures, quantum properties, IR and Raman data from Gaussian logs. |
 | [openmolspec.legacy.function](module-legacy-function.md) |  |
 | [openmolspec.maintenance.parse_zinc_v2_nmr](module-maintenance-parse_zinc_v2_nmr.md) | Parse only the ZINCV2 NMR Gaussian logs. |
+| [openmolspec.phosphorus_gnn](module-phosphorus_gnn.md) | Bond-conditioned message passing from a molecular graph to a phosphorus shift. |
 | [openmolspec.plotting](module-plotting.md) | Shared Arial typography for scientific figures and molecular drawings. |
+| [openmolspec.solution_shifts](module-solution_shifts.md) | Atom-centred chemical-shift prediction for experimental phosphorus and fluorine NMR. |
 | [openmolspec](module-openmolspec.md) | OpenMolSpec spectroscopy datasets, model interfaces and learning workflows. |
