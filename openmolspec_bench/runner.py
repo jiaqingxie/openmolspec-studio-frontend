@@ -488,7 +488,10 @@ class Runner:
             return self.nmr(task, dataset)
         if task.backend == "nmrnet_predictions":
             return self.forward(task, dataset)
-        if task.backend == "nmrnet_hetero_predictions":
+        if task.backend == "solution_chemical_shift":
+            if not self.args.allow_cross_domain_diagnostic and not self.args.fp_inference_root:
+                from .solution_evaluation import evaluate
+                return evaluate(self, task.modalities[0])
             return self.hetero(task)
         if task.backend == "transpeaknet":
             if self.args.transpeaknet_source is None:

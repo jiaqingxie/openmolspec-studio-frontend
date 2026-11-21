@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 
 from ._runtime import invoke
+from .solution_shifts import SolutionShiftPredictor as SolutionShiftPredictor
 
 
 class _ConfiguredModel:
@@ -80,7 +81,7 @@ class NMRNet(_ConfiguredModel):
 
     def __init__(self, *, models_root, nucleus='13C', python=None, device='cpu'):
         if nucleus not in self.capabilities['nuclei']:
-            raise ValueError('Public NMRNet API supports verified H/C adapters only; B/Si/F/P remain diagnostic')
+            raise ValueError('NMRNet supports 1H and 13C here. Use SolutionShiftPredictor for 19F and 31P.')
         if device != 'cpu':
             raise ValueError('This author-runtime adapter currently supports CPU inference')
         self.config = {'models_root': str(Path(models_root).expanduser().resolve()),

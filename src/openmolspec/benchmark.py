@@ -21,7 +21,7 @@ class Benchmark:
         ``portable_root``, ``alignment_checkpoint``, ``generation_checkpoint``,
         ``transpeaknet_source``, ``nmr_python``, ``ms_python``, ``solvent_library``, ``ms_source``,
         ``ms_weights``, ``ms_input_csv``, ``ms_metadata_tsv``, ``magma_source``,
-        ``gap_lmdb`` and ``fp_inference_root``.
+        ``gap_lmdb``, ``fp_inference_root`` and ``solution_shift_root``.
 
     Examples
     --------
@@ -32,7 +32,7 @@ class Benchmark:
     def __init__(self, *, workspace, python=None, **assets):
         allowed = {'portable_root', 'models_root', 'alignment_checkpoint', 'generation_checkpoint',
                    'transpeaknet_source', 'nmr_python', 'ms_python', 'solvent_library', 'ms_source', 'ms_weights',
-                   'ms_input_csv', 'ms_metadata_tsv', 'magma_source', 'gap_lmdb', 'fp_inference_root'}
+                   'ms_input_csv', 'ms_metadata_tsv', 'magma_source', 'gap_lmdb', 'fp_inference_root', 'solution_shift_root'}
         if set(assets) - allowed:
             raise ValueError(f'Unknown asset options: {set(assets) - allowed}')
         self.python = str(python or sys.executable)
@@ -40,7 +40,7 @@ class Benchmark:
         self.assets = assets
 
     def run(self, tasks, *, output, datasets=None, limit=32, seed=42, sampling='reservoir', device='cpu',
-            allow_cross_domain_diagnostic=False):
+            allow_cross_domain_diagnostic=False, solution_reference="test"):
         """Evaluate selected tasks and save their predictions and metrics.
 
         Parameters
@@ -62,6 +62,9 @@ class Benchmark:
         allow_cross_domain_diagnostic : bool, default False
             Enable the F/P comparison of solid-state model predictions with
             solution-reference records. The result retains both domain labels.
+
+        solution_reference : {"test", "historical-pool"}, default "test"
+            Reference set for the fitted 19F and 31P solution models.
 
         Returns
         -------
@@ -89,6 +92,8 @@ class Benchmark:
         command = [self.python, '-m', 'openmolspec_bench', 'run', '--workspace', str(self.workspace),
                    '--tasks', *tasks, '--limit', str(limit), '--seed', str(seed), '--sampling', sampling,
                    '--device', device, '--output', str(output)]
+        if solution_reference != "test":
+            command += ["--solution-reference", solution_reference]
         if datasets:
             command += ['--datasets', *([datasets] if isinstance(datasets, str) else datasets)]
         if allow_cross_domain_diagnostic:

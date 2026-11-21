@@ -11,6 +11,8 @@ requires-python = ">=3.10"
 dependencies = []
 
 [project.optional-dependencies]
+phosphorus-gnn = ["numpy>=1.26", "rdkit>=2023.9", "torch>=2.4"]
+solution-nmr = ["numpy>=1.26", "scipy>=1.10", "rdkit>=2023.9", "lightgbm>=3.3.5,<5"]
 hsqc = ["numpy>=1.24", "scipy>=1.10", "rdkit>=2023.9", "torch>=2.4", "torch-geometric==2.7.0"]
 mcp = ["mcp>=2,<3"]
 data = ["numpy>=1.26", "pandas>=2", "pyarrow>=14", "rdkit>=2023.9", "lmdb>=1.4"]
@@ -31,6 +33,7 @@ production = [
 
 
 [project.scripts]
+openmolspec-solution-shift = "openmolspec.solution_shifts:main"
 openmolspec = "openmolspec.cli:main"
 openmolspec-bench = "openmolspec_bench.__main__:main"
 spectra-harness = "openmolspec.harness:main"

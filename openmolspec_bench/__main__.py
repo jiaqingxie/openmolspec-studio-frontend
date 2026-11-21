@@ -42,6 +42,8 @@ def main():
     run.add_argument("--datasets", nargs="+", default=["nmrspec_test", "patent_test_10k", "nmrexp_exp_10k", "nmrgym_test"])
     run.add_argument("--alignment-checkpoint", type=Path)
     run.add_argument("--generation-checkpoint", type=Path)
+    run.add_argument("--solution-reference", choices=("test", "historical-pool"), default="test", help="Measured structure-disjoint test set or original uncorrected LMDB pool")
+    run.add_argument("--solution-shift-root", type=Path, help="Directory with fitted solution models (defaults to the selected checkpoint per nucleus, then WORKSPACE/runs/solution-shifts-v1)")
     run.add_argument("--fp-inference-root", type=Path, help="Exact prepared F.lmdb/P.lmdb and frozen prediction folders")
     run.add_argument("--allow-cross-domain-diagnostic", action="store_true", help="Report unverified solid-to-solution F/P diagnostic errors separately")
     run.add_argument("--gap-lmdb", type=Path)
@@ -84,18 +86,24 @@ def main():
     args.models_root = args.models_root or args.workspace.parent / "models"
     args.alignment_checkpoint = args.alignment_checkpoint or args.workspace / "runs/f90bd7f743574d18a7f72ae72ce95e59/best.pt"
     args.generation_checkpoint = args.generation_checkpoint or args.workspace / "runs/bebaecf2bca248f1a47eaa01f403002a/best.pt"
-    import torch
-    torch.set_num_threads(args.threads)
-    if args.device.startswith("cuda") and not torch.cuda.is_available():
-        parser.error("CUDA unavailable; use --device cpu")
+    selected = [task for task in TASKS if task.enabled] if "all" in args.tasks else [BY_ID[key] for key in args.tasks]
+    solution_only = (all(t.backend == "solution_chemical_shift" for t in selected)
+                     and not args.allow_cross_domain_diagnostic and not args.fp_inference_root)
+    torch_version = None
+    if not solution_only or args.device.startswith("cuda"):
+        import torch
+        torch.set_num_threads(args.threads)
+        torch_version = torch.__version__
+        if args.device.startswith("cuda") and not torch.cuda.is_available():
+            parser.error("CUDA unavailable; use --device cpu")
     from .runner import MissingAsset, Runner
     runner = Runner(args)
-    selected = [task for task in TASKS if task.enabled] if "all" in args.tasks else [BY_ID[key] for key in args.tasks]
     started = time.monotonic()
     result = {"schema_version": 1, "release": "1.0.0", "started_at": datetime.now(timezone.utc).isoformat(),
-              "purpose": ("hsqc_checkpoint_evaluation" if [t.backend for t in selected] == ["transpeaknet"]
+              "purpose": ("solution_shift_checkpoint_evaluation" if solution_only else
+                          "hsqc_checkpoint_evaluation" if [t.backend for t in selected] == ["transpeaknet"]
                           else "pipeline_smoke_evaluation"), "limit": args.limit,
-              "device": args.device, "python": platform.python_version(), "torch": torch.__version__,
+              "device": args.device, "python": platform.python_version(), "torch": torch_version,
               "implementation_sha256": implementation_sha256(),
               "training_performed": False, "results": []}
     args.output.parent.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,47 @@
+{
+  "reference_sha256": "900a93cf21e8475f07ddc3f6364e80cfa6f646c361524a49592358ac686909ea",
+  "groups": {
+    "P=O": {
+      "identities": 2735,
+      "observations": 4676,
+      "mae_ppm": 3.1679828559993823,
+      "median_absolute_ppm": 0.8003617626725266,
+      "molecule_macro_mae_ppm": 4.1087913593587615
+    },
+    "P=S": {
+      "identities": 243,
+      "observations": 327,
+      "mae_ppm": 6.624495887029971,
+      "median_absolute_ppm": 2.113772971120369,
+      "molecule_macro_mae_ppm": 7.717957105707498
+    },
+    "neutral P, three carbon neighbours": {
+      "identities": 364,
+      "observations": 583,
+      "mae_ppm": 7.40841570723189,
+      "median_absolute_ppm": 1.1300000000000008,
+      "molecule_macro_mae_ppm": 9.52018092599453
+    },
+    "neutral P, three neighbours including a heteroatom": {
+      "identities": 311,
+      "observations": 401,
+      "mae_ppm": 17.933878847643047,
+      "median_absolute_ppm": 6.899999999999977,
+      "molecule_macro_mae_ppm": 19.46878094544062
+    },
+    "other P environments": {
+      "identities": 495,
+      "observations": 577,
+      "mae_ppm": 22.430068394448185,
+      "median_absolute_ppm": 7.7200574531447295,
+      "molecule_macro_mae_ppm": 24.153046124732924
+    },
+    "positive P": {
+      "identities": 101,
+      "observations": 129,
+      "mae_ppm": 9.728687476560435,
+      "median_absolute_ppm": 4.3265461738734885,
+      "molecule_macro_mae_ppm": 11.03467080154608
+    }
+  }
+}

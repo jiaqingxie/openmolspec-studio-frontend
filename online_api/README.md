@@ -89,3 +89,5 @@ They cover runtime-setting isolation, invalid requests, queue and daily budgets,
 bounded candidates, and path redaction. Model execution is verified separately
 with actual requests to every exposed workflow, including GLACIER MS/MS with
 explicit adduct, collision energy and instrument fields.
+
+The structure form runs the validation-selected phosphorus model as `nmr.forward.31P`. Supply a phosphorus-containing SMILES and an optional solvent such as `CDCl3`. Configure the inference-only checkpoint directory with `--phosphorus-model` and its Python environment with `--solution-python`. The service advertises the task when `model.json` is available. Each result gives zero-based input atom indices, shifts in ppm and the checkpoint SHA-256. An empty solvent uses the unknown-solvent category.

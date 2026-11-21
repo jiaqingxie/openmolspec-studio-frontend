@@ -1,0 +1,92 @@
+{
+  "nucleus": "31P",
+  "monitor": "molecule-macro MAE on the frozen validation split, original environment weight 1.0",
+  "fit_identities": 35696,
+  "validation_identities": 4372,
+  "test_scored": false,
+  "split_sha256": "91cef933976836b691f7fee397f2fe5239760abf764524f35a0ce5de70d81969",
+  "original_booster_sha256": "772182ac4d137fca52db621c0b0bb315d1bb8e7d878435a5f43bdefb15657d9f",
+  "released_1000_rounds": {
+    "round": 1000,
+    "ensemble": 7.772458680562508,
+    "trees_only": 8.057194189948914
+  },
+  "early_stopping_trial": {
+    "patience_rounds": 300,
+    "min_material_improvement_ppm": 0.02,
+    "rounds_run": 2006,
+    "best_validation": {
+      "round": 2005,
+      "ensemble": 7.456906224844106,
+      "trees_only": 7.673900975066267
+    },
+    "stop_reason": "validation_plateau"
+  },
+  "fixed_budget_6000_rounds": {
+    "rounds_run": 6000,
+    "best_validation": {
+      "round": 5960,
+      "ensemble": 7.170915632739434,
+      "trees_only": 7.310757157213973
+    },
+    "last": {
+      "round": 6000,
+      "ensemble": 7.176117810482629,
+      "trees_only": 7.315369999508917
+    },
+    "fit_seconds": 148.87,
+    "trajectory": [
+      {
+        "round": 100,
+        "ensemble": 9.845329227621413,
+        "trees_only": 10.813938736268366
+      },
+      {
+        "round": 300,
+        "ensemble": 8.530912660487363,
+        "trees_only": 9.04444486487418
+      },
+      {
+        "round": 500,
+        "ensemble": 8.218116446063702,
+        "trees_only": 8.602514690798914
+      },
+      {
+        "round": 750,
+        "ensemble": 7.930172290648225,
+        "trees_only": 8.254747190363869
+      },
+      {
+        "round": 1000,
+        "ensemble": 7.772458680562508,
+        "trees_only": 8.057194189948914
+      },
+      {
+        "round": 2000,
+        "ensemble": 7.457159633734774,
+        "trees_only": 7.67414453882599
+      },
+      {
+        "round": 3000,
+        "ensemble": 7.338785923726868,
+        "trees_only": 7.522975515588205
+      },
+      {
+        "round": 4000,
+        "ensemble": 7.266372486376183,
+        "trees_only": 7.424697594391237
+      },
+      {
+        "round": 5000,
+        "ensemble": 7.2123756649035995,
+        "trees_only": 7.359200206481521
+      },
+      {
+        "round": 6000,
+        "ensemble": 7.176117810482629,
+        "trees_only": 7.315369999508917
+      }
+    ],
+    "candidate_booster_sha256": "d14927a1b73d754bdd32167c2c8d902c305ecc103fb121a3e2d4acd84872a09b"
+  }
+}

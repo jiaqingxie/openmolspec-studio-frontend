@@ -18,6 +18,41 @@ from documentation_research import corpus_page, learning_page
 ROOT=Path(__file__).resolve().parents[1]
 
 
+def solution_task_page(nucleus, en):
+    if nucleus == '31P' and (ROOT/'results/phosphorus_gnn_selection.json').is_file():
+        from phosphorus_model_card import model_card
+        return model_card(en)
+    report = json.loads((ROOT / 'results' / f'solution_shifts_{nucleus}.json').read_text())
+    single = report['metrics']['test_single']
+    unseen = report['metrics']['test_single_unseen_scaffold']
+    sample = 'CCOP(=O)(OCC)OCC' if nucleus == '31P' else 'Fc1ccccc1'
+    slug = f'nmr-forward-{nucleus}'
+    if en:
+        title = f'{nucleus} solution chemical shifts from SMILES'
+        intro = 'Predict shifts in ppm from a molecular structure and optional NMR solvent. Each environment includes its zero-based input atom indices. Symmetry-equivalent atoms share one predicted peak.'
+        accuracy = (f"The held-out single-environment test contains {single['observations']:,} observations across {single['identities']:,} connectivities. "
+                    f"MAE is {single['mae_ppm']:.2f} ppm and median absolute error is {single['median_absolute_ppm']:.2f} ppm. "
+                    f"MAE is {unseen['mae_ppm']:.2f} ppm on the subset with nonempty scaffolds absent from training.")
+        limitation = 'Training uses experimental records with one observed signal and one graph-equivalence class. On multisite spectra, validation compares sorted peak lists when the observed count matches. Chemical shifts do not determine coupling constants, line shapes or intensities.'
+        archive = 'The archived solid-state diagnostic is available in the original notebook.'
+    else:
+        title = f'从 SMILES 预测 {nucleus} 溶液化学位移'
+        intro = '输入分子结构和可选的核磁溶剂，输出各化学环境的预测位移（ppm）以及输入 SMILES 中从零开始的原子编号。对称等价的原子共享一个预测峰。'
+        accuracy = (f"单一环境测试集含 {single['identities']:,} 种留出分子和 {single['observations']:,} 条观测。"
+                    f"MAE 为 {single['mae_ppm']:.2f} ppm，中位绝对误差为 {single['median_absolute_ppm']:.2f} ppm。"
+                    f"训练中未出现的非空骨架子集 MAE 为 {unseen['mae_ppm']:.2f} ppm。")
+        limitation = '训练使用只含一个观测峰且只有一类图对称位点的实验记录。多环境分子的评测仅在峰数匹配时比较排序后的峰列表。输出覆盖峰位置，逐峰归属、耦合常数、强度和线形仍需额外证据。'
+        archive = '原固态权重的历史诊断保存在旧版笔记本中。'
+    return (f'# {title}\n\n{intro}\n\n{accuracy}\n\n{limitation}\n\n'
+            f'```python\nfrom openmolspec.model import SolutionShiftPredictor\n\n'
+            f'model = SolutionShiftPredictor("/path/to/OpenMolSpec/runs/solution-shifts-v1/{nucleus}")\n'
+            f'print(model.predict("{sample}", solvent="CDCl3")["environments"])\n```\n\n'
+            f'```bash\npython -m pip install -e ".[solution-nmr]"\n'
+            f'python -m openmolspec_bench run --workspace /path/to/OpenMolSpec --tasks nmr.forward.{nucleus} '
+            f'--limit 100000 --output results/{slug}-test.json\n```\n\n'
+            f'{archive} [Notebook](../notebooks/{slug}.ipynb)\n')
+
+
 def reference_keys(task):
     name=task.id
     if name=='nmr.hsqc.transpeaknet':return ['transpeaknet']
@@ -175,6 +210,8 @@ def build_pages(tasks,profile,profile_zh):
                 page+='\n</details>\n\n'
                 page+=f'\n[Model implementation / 模型实现]({source}) · [Model review / 模型检查](../model-audit.md)\n'
                 page+=reference_list(reference_keys(task),en)
+            if task.id in ('nmr.forward.19F', 'nmr.forward.31P'):
+                page = solution_task_page(task.modalities[0], en)
             files[f'tasks/{slug}{suffix}.md']=page
             files[f'notebooks/{slug}{suffix}.ipynb']=json.dumps(notebook(task,language),ensure_ascii=False,indent=2)+'\n'
         # Retain protocol/publication details; these pages are maintained below.

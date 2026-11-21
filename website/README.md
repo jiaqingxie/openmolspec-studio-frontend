@@ -6,7 +6,7 @@ The project navigation opens the workspace, datasets, documentation and source r
 interface. GitHub Pages hosts its static frontend; a separate Python service
 executes the real model requests. The Documentation entry opens the bilingual manual bundled with the same site release at `docs/`. The documentation section also links to Read the Docs.
 
-The Tool workspace offers NMR shift prediction and assignment, solvent transfer,
+The Tool workspace offers NMR shift prediction and assignment, including the validation-selected ³¹P solution checkpoint under [Structure → Predict ³¹P solution NMR](https://jiaqingxie.github.io/openmolspec.github.io/#tool-31p), solvent transfer,
 TransPeakNet HSQC prediction from SMILES and solvent, with optional measured peaks for assignment, H/C NMR search and generation, GLACIER and
 ICEBERG MS/MS, conformer-based IR/Raman, multimodal gap prediction and structure
 generation/retrieval, and Agent Harness.

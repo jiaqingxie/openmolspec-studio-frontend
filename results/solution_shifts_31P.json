@@ -1,0 +1,520 @@
+{
+  "nucleus": "31P",
+  "source_manifest": {
+    "counts": {
+      "raw_legacy": 7498,
+      "raw_WanJuan": 21662,
+      "raw_NMRexp": 32890,
+      "raw_Ilm": 43317,
+      "written_structures": 85761,
+      "unsupported_cofragment_records": 2861,
+      "missing_connectivity_key_records": 23,
+      "invalid_structure_records": 175,
+      "multiple_target_components_records": 163
+    },
+    "sources": {
+      ".runtime/manual-data-v1/experimental/31P-test.jsonl": "bbbc3ed7fd48313cf30760b2aa5e34501ef14c08efb3f545c1f5a49d51ceaf47",
+      ".runtime/manual-data-v1/experimental/31P-val.jsonl": "23c24f45fcfd1a1b8885eeacdf7adb7aeb5958016416e7b1d15b351d5cf35a55",
+      ".runtime/manual-data-v1/experimental/31P-train.jsonl": "865d9a2a49bb91d410d7eb542954822c807a4991d8a452b55e954116be6479d9",
+      "../../data/NMRExp/nmrexp_31P_usable.parquet": "7b0476372faf7f36c994920f932f067eaa8e603ea377de9b96f64402cb98fb5b",
+      "../../models/nmrnetpp/pool_P/valid.lmdb": "d888bd18512fe23ba5314691417a55af578d4e7c505b383443acacea08395b38",
+      "../../data/ilm-nmr-p31/Ilm-NMR-P31-master/Ilm-NMR-P31.csv": "22b53cbcba9165eb4bfc83ef21529c201749225f3de45b63f13838ae26d8974a"
+    },
+    "output_sha256": "79be03a6ad19892292753ef8c444f3e738a7ca2856ca12629a866b4041c044cc"
+  },
+  "feature_schema": 1,
+  "split": "First InChIKey block of target-containing component. pool > WanJuan test > WanJuan val > WanJuan train. Other identities use SHA256 80/10/10.",
+  "split_identity_counts": {
+    "pool": 7221,
+    "test": 4865,
+    "val": 5172,
+    "train": 41432
+  },
+  "fitted_training_identities": 35696,
+  "fitted_training_rows": 37434,
+  "test_identities_in_fitted_training": 0,
+  "raw_observation_coverage": {
+    "pool/legacy/input": 7323,
+    "pool/legacy/usable": 7323,
+    "pool/NMRexp/input": 6811,
+    "pool/WanJuan/input": 2460,
+    "pool/Ilm/input": 6157,
+    "test/WanJuan/input": 1389,
+    "test/WanJuan/usable": 970,
+    "test/WanJuan/unmatched_cardinality": 419,
+    "test/NMRexp/input": 2621,
+    "test/NMRexp/usable": 2536,
+    "test/Ilm/input": 3535,
+    "test/Ilm/usable": 3521,
+    "val/WanJuan/input": 1923,
+    "val/WanJuan/usable": 1289,
+    "val/WanJuan/unmatched_cardinality": 634,
+    "val/NMRexp/input": 2526,
+    "val/NMRexp/usable": 2452,
+    "val/Ilm/input": 3463,
+    "val/Ilm/usable": 3454,
+    "train/WanJuan/input": 14988,
+    "train/WanJuan/usable": 9116,
+    "train/WanJuan/unmatched_cardinality": 4442,
+    "train/WanJuan/unassigned_multisite": 1430,
+    "train/Ilm/input": 28491,
+    "train/Ilm/usable": 28376,
+    "train/NMRexp/input": 20458,
+    "train/NMRexp/usable": 19027,
+    "train/NMRexp/unmatched_cardinality": 735,
+    "test/NMRexp/unmatched_cardinality": 85,
+    "train/NMRexp/unassigned_multisite": 696,
+    "val/NMRexp/unmatched_cardinality": 74,
+    "train/Ilm/unmatched_cardinality": 115,
+    "val/Ilm/unmatched_cardinality": 9,
+    "test/Ilm/unmatched_cardinality": 14
+  },
+  "training_median_ppm": 23.5,
+  "parameters": {
+    "objective": "regression_l1",
+    "metric": "l1",
+    "learning_rate": 0.055,
+    "num_leaves": 63,
+    "min_data_in_leaf": 15,
+    "feature_fraction": 0.85,
+    "num_threads": 2,
+    "verbosity": -1,
+    "seed": 7351,
+    "max_bin": 63,
+    "force_col_wise": true,
+    "deterministic": true
+  },
+  "best_iteration": 1000,
+  "validation_macro_mae_by_weight": {
+    "0": 8.057194189948914,
+    "0.25": 7.940437562037886,
+    "0.5": 7.846989325952714,
+    "0.75": 7.783267459194432,
+    "1.0": 7.772458680562508
+  },
+  "environment_weight": 1.0,
+  "metrics": {
+    "pool_single": {
+      "observations": 7323,
+      "identities": 7221,
+      "mae_ppm": 5.0235321757157045,
+      "molecule_macro_mae_ppm": 5.057923774551279,
+      "median_absolute_ppm": 0.8809438172237929,
+      "p90_absolute_ppm": 9.003415218662154,
+      "rmse_ppm": 71.57227721402296,
+      "train_median_baseline_mae_ppm": 20.16859537677156
+    },
+    "pool_single_legacy": {
+      "observations": 7323,
+      "identities": 7221,
+      "mae_ppm": 5.0235321757157045,
+      "molecule_macro_mae_ppm": 5.057923774551279,
+      "median_absolute_ppm": 0.8809438172237929,
+      "p90_absolute_ppm": 9.003415218662154,
+      "rmse_ppm": 71.57227721402296,
+      "train_median_baseline_mae_ppm": 20.16859537677156
+    },
+    "legacy_first32": {
+      "observations": 31,
+      "identities": 31,
+      "mae_ppm": 15.896250241630241,
+      "molecule_macro_mae_ppm": 15.896250241630241,
+      "median_absolute_ppm": 0.9550004577636741,
+      "p90_absolute_ppm": 5.680000305175781,
+      "rmse_ppm": 66.12248595482667,
+      "train_median_baseline_mae_ppm": 22.674193882173107,
+      "old_model_mae_on_same_rows_ppm": 218.00931946692927
+    },
+    "pool_single_unseen_scaffold": {
+      "observations": 1760,
+      "identities": 1747,
+      "mae_ppm": 6.090366062956708,
+      "molecule_macro_mae_ppm": 6.100015402579443,
+      "median_absolute_ppm": 1.470000457763673,
+      "p90_absolute_ppm": 13.922794067559666,
+      "rmse_ppm": 17.127993480350526,
+      "train_median_baseline_mae_ppm": 23.348540030853737
+    },
+    "test_single": {
+      "observations": 6693,
+      "identities": 4248,
+      "mae_ppm": 6.3779231903490015,
+      "molecule_macro_mae_ppm": 8.400029007202004,
+      "median_absolute_ppm": 1.1000000000000014,
+      "p90_absolute_ppm": 13.726966312614234,
+      "rmse_ppm": 40.12195777426914,
+      "train_median_baseline_mae_ppm": 24.471153668011357
+    },
+    "test_single_WanJuan": {
+      "observations": 783,
+      "identities": 711,
+      "mae_ppm": 7.550822683681709,
+      "molecule_macro_mae_ppm": 7.155629428598325,
+      "median_absolute_ppm": 1.9104999999999999,
+      "p90_absolute_ppm": 21.85143364918195,
+      "rmse_ppm": 17.38123573146356,
+      "train_median_baseline_mae_ppm": 27.082376756066413
+    },
+    "test_multi": {
+      "observations": 525,
+      "identities": 203,
+      "mae_ppm": 11.003000568969014,
+      "molecule_macro_mae_ppm": 9.475905043249083,
+      "median_absolute_ppm": 4.420328788786847,
+      "p90_absolute_ppm": 29.655299114143986,
+      "rmse_ppm": 32.40608877498203,
+      "train_median_baseline_mae_ppm": 29.78067619047619
+    },
+    "test_multi_WanJuan": {
+      "observations": 297,
+      "identities": 103,
+      "mae_ppm": 14.895130292611308,
+      "molecule_macro_mae_ppm": 13.49188037129734,
+      "median_absolute_ppm": 5.691154013190145,
+      "p90_absolute_ppm": 34.8541015433161,
+      "rmse_ppm": 41.975265245950304,
+      "train_median_baseline_mae_ppm": 34.431127946127944
+    },
+    "test_single_NMRexp": {
+      "observations": 2430,
+      "identities": 2240,
+      "mae_ppm": 4.376094738356089,
+      "molecule_macro_mae_ppm": 4.518547252918009,
+      "median_absolute_ppm": 0.75,
+      "p90_absolute_ppm": 6.3078354769282035,
+      "rmse_ppm": 59.78805403511947,
+      "train_median_baseline_mae_ppm": 18.840711069958846
+    },
+    "test_single_unseen_scaffold": {
+      "observations": 1759,
+      "identities": 1225,
+      "mae_ppm": 9.121523964809548,
+      "molecule_macro_mae_ppm": 11.149429199305755,
+      "median_absolute_ppm": 1.590215302863192,
+      "p90_absolute_ppm": 19.35306678512199,
+      "rmse_ppm": 71.79636189662448,
+      "train_median_baseline_mae_ppm": 29.537271176805007
+    },
+    "test_single_Ilm": {
+      "observations": 3480,
+      "identities": 3224,
+      "mae_ppm": 7.511849292378676,
+      "molecule_macro_mae_ppm": 7.671319953766294,
+      "median_absolute_ppm": 1.3999999999999986,
+      "p90_absolute_ppm": 18.453501958458993,
+      "rmse_ppm": 23.065030791445015,
+      "train_median_baseline_mae_ppm": 27.815230632183905
+    },
+    "test_multi_NMRexp": {
+      "observations": 228,
+      "identities": 100,
+      "mae_ppm": 5.932989481592868,
+      "molecule_macro_mae_ppm": 5.339450455359379,
+      "median_absolute_ppm": 2.7045864279563396,
+      "p90_absolute_ppm": 13.576463687896261,
+      "rmse_ppm": 11.089757508728509,
+      "train_median_baseline_mae_ppm": 23.72285087719298
+    },
+    "val_single": {
+      "observations": 6813,
+      "identities": 4372,
+      "mae_ppm": 5.849236275942229,
+      "molecule_macro_mae_ppm": 7.772458680562508,
+      "median_absolute_ppm": 1.0315095941239623,
+      "p90_absolute_ppm": 14.049755699613984,
+      "rmse_ppm": 19.108132284878177,
+      "train_median_baseline_mae_ppm": 24.086378937325698
+    },
+    "val_single_WanJuan": {
+      "observations": 1033,
+      "identities": 888,
+      "mae_ppm": 6.563543813729219,
+      "molecule_macro_mae_ppm": 6.554530385836782,
+      "median_absolute_ppm": 1.4725,
+      "p90_absolute_ppm": 18.496495435185068,
+      "rmse_ppm": 17.7161707791227,
+      "train_median_baseline_mae_ppm": 30.01130638915779
+    },
+    "val_multi": {
+      "observations": 648,
+      "identities": 222,
+      "mae_ppm": 11.115734968200332,
+      "molecule_macro_mae_ppm": 10.266868388381903,
+      "median_absolute_ppm": 5.229605883225027,
+      "p90_absolute_ppm": 27.494656830090268,
+      "rmse_ppm": 30.28162176531353,
+      "train_median_baseline_mae_ppm": 31.94968364197531
+    },
+    "val_multi_WanJuan": {
+      "observations": 442,
+      "identities": 130,
+      "mae_ppm": 13.275941886205102,
+      "molecule_macro_mae_ppm": 13.036736922841515,
+      "median_absolute_ppm": 7.06118922676149,
+      "p90_absolute_ppm": 33.70755157751342,
+      "rmse_ppm": 35.13114437280464,
+      "train_median_baseline_mae_ppm": 35.88707013574661
+    },
+    "val_single_NMRexp": {
+      "observations": 2353,
+      "identities": 2192,
+      "mae_ppm": 2.6400412072756345,
+      "molecule_macro_mae_ppm": 2.732771313236629,
+      "median_absolute_ppm": 0.6900000000000013,
+      "p90_absolute_ppm": 5.474718915847444,
+      "rmse_ppm": 9.258121122307749,
+      "train_median_baseline_mae_ppm": 15.52519043773906
+    },
+    "val_single_Ilm": {
+      "observations": 3427,
+      "identities": 3220,
+      "mae_ppm": 7.837376430607691,
+      "molecule_macro_mae_ppm": 8.036474886234364,
+      "median_absolute_ppm": 1.2818844993212117,
+      "p90_absolute_ppm": 19.348359617000177,
+      "rmse_ppm": 23.925188885282942,
+      "train_median_baseline_mae_ppm": 28.17859559381383
+    },
+    "val_multi_NMRexp": {
+      "observations": 206,
+      "identities": 92,
+      "mae_ppm": 6.480727891704666,
+      "molecule_macro_mae_ppm": 6.352923720123756,
+      "median_absolute_ppm": 2.445839226169195,
+      "p90_absolute_ppm": 12.815132252619481,
+      "rmse_ppm": 15.373290237425605,
+      "train_median_baseline_mae_ppm": 23.50150485436894
+    }
+  },
+  "legacy_rows": [
+    {
+      "index": 0,
+      "smiles": "COc1ccc(P(=O)(CCCc2ccccc2)OCC)cc1",
+      "target_ppm": 44.90999984741211,
+      "old_ppm": 246.23046875,
+      "new_ppm": 44.5
+    },
+    {
+      "index": 1,
+      "smiles": "CC1(C)OB(c2ccccc2[P@](=O)(OCC(F)(F)F)c2ccccc2)OC1(C)C",
+      "target_ppm": 31.329999923706055,
+      "old_ppm": 245.92550659179688,
+      "new_ppm": 34.10231558695356
+    },
+    {
+      "index": 2,
+      "smiles": "CCCCCCOC(=O)C(C)(C)NP(=O)(CO[C@H](C)Cn1cnc2c(N)ncnc21)NC(C)(C)C(=O)O[C@H]1CC[C@H](C(F)(F)F)CC1",
+      "target_ppm": 17.889999389648438,
+      "old_ppm": 241.65689086914062,
+      "new_ppm": 18.41
+    },
+    {
+      "index": 3,
+      "smiles": "O=[P@@]1(c2ccccc2O)C=C(c2ccccc2F)Oc2ccccc21",
+      "target_ppm": 10.5600004196167,
+      "old_ppm": 254.984619140625,
+      "new_ppm": 11.454999999999998
+    },
+    {
+      "index": 4,
+      "smiles": "CC(NS(=O)(=O)N1CCCCC1)P(=O)(Oc1ccccc1)c1ccccc1",
+      "target_ppm": -38.400001525878906,
+      "old_ppm": 224.19635009765625,
+      "new_ppm": 28.888351860310287
+    },
+    {
+      "index": 5,
+      "smiles": "COC(=O)[C@H](CCP(=O)(O)C(O)c1ccc([N+](=O)[O-])cc1[N+](=O)[O-])NC(=O)OCc1ccccc1",
+      "target_ppm": 47.959999084472656,
+      "old_ppm": 219.62075805664062,
+      "new_ppm": 44.052674589885314
+    },
+    {
+      "index": 6,
+      "smiles": "CCOP(=O)(Cc1ccc(OC)cc1)Oc1ccccc1",
+      "target_ppm": 24.229999542236328,
+      "old_ppm": 237.01638793945312,
+      "new_ppm": 23.945
+    },
+    {
+      "index": 7,
+      "smiles": "O=P(c1ccccc1)(c1ccccc1)c1cnc2c(Br)cccc2n1",
+      "target_ppm": 17.25,
+      "old_ppm": 265.5497131347656,
+      "new_ppm": 19.652500000000003
+    },
+    {
+      "index": 8,
+      "smiles": "CCCCOCC[N]1CC[CH2][Ru]1([Cl])([Cl])[PH](c1ccccc1)(c1ccccc1)c1ccccc1",
+      "target_ppm": -20.399999618530273,
+      "old_ppm": 231.36875915527344,
+      "new_ppm": -20.475
+    },
+    {
+      "index": 9,
+      "smiles": "c1ccc(CC(c2ccccc2)P(=O)(OCC)OCC)cc1",
+      "target_ppm": 28.149999618530273,
+      "old_ppm": 234.17529296875,
+      "new_ppm": 25.384999999999998
+    },
+    {
+      "index": 10,
+      "smiles": "c1(P2(=O)C=C(c3cc(-n4c5ccccc5c5ccccc54)cc(-n4c5ccccc5c5ccccc54)c3)Oc3ccccc32)ccccc1",
+      "target_ppm": -1.4900000095367432,
+      "old_ppm": 234.45281982421875,
+      "new_ppm": -1.545
+    },
+    {
+      "index": 11,
+      "smiles": "C[C@H](CCC(=O)OCOC(=O)CCC(CP(=O)(O)O)C(=O)O)C1CCC2C3CCC4C[C@H](O)CC[C@]4(C)C3C[C@H](O)[C@@]21C",
+      "target_ppm": 28.43000030517578,
+      "old_ppm": 239.26385498046875,
+      "new_ppm": 22.75
+    },
+    {
+      "index": 12,
+      "smiles": "CC(C)P1OCCN1c1ccccn1",
+      "target_ppm": 115.30000305175781,
+      "old_ppm": 190.14837646484375,
+      "new_ppm": 112.4044071368425
+    },
+    {
+      "index": 13,
+      "smiles": "O=P(C1C=CC=CC=1)(C1C=CC=CC=1)C1=NC2C(=CC(=C(C=2)Cl)Cl)N=C1",
+      "target_ppm": 17.3799991607666,
+      "old_ppm": 258.7693786621094,
+      "new_ppm": 20.552500000000002
+    },
+    {
+      "index": 14,
+      "smiles": "P(=O)(OC)(OC)C(C)OC(=O)c1ccccc1",
+      "target_ppm": 24.899999618530273,
+      "old_ppm": 212.80007934570312,
+      "new_ppm": 23.67
+    },
+    {
+      "index": 15,
+      "smiles": "CC[C@@H](c1ccccc1)P(=O)(O)O",
+      "target_ppm": 26.200000762939453,
+      "old_ppm": 241.2034149169922,
+      "new_ppm": 21.202288676194584
+    },
+    {
+      "index": 16,
+      "smiles": "C(c1ccc([C@@H](N[S@@](=O)C(C)(C)C)c2ccccc2P(c2ccccc2)c2ccccc2)cc1)(F)(F)F",
+      "target_ppm": -18.530000686645508,
+      "old_ppm": 257.8510437011719,
+      "new_ppm": -18.674999999999997
+    },
+    {
+      "index": 17,
+      "smiles": "CC1C=CC([C@H](P(OCC)(OCC)=O)CC(C(=O)OC(C)(C)C)(C)C)=CC=1",
+      "target_ppm": 29.1299991607666,
+      "old_ppm": 235.0872039794922,
+      "new_ppm": 28.48
+    },
+    {
+      "index": 18,
+      "smiles": "CC1(C)COP(=S)(O/C(=C\\SSCc2ccccc2)C(C)(C)C)OC1",
+      "target_ppm": 55.540000915527344,
+      "old_ppm": 197.0713653564453,
+      "new_ppm": 55.465
+    },
+    {
+      "index": 19,
+      "smiles": "CC[P+](CC)(CC)[Au-][S]c1ccc(C)cc1",
+      "target_ppm": 39.08000183105469,
+      "old_ppm": 212.6087188720703,
+      "new_ppm": 37.4
+    },
+    {
+      "index": 21,
+      "smiles": "Cc1ccc(P(=O)(c2ccc(C)cc2)n2c3ccccc3c3ccccc32)cc1",
+      "target_ppm": 27.399999618530273,
+      "old_ppm": 282.0169372558594,
+      "new_ppm": 27.5
+    },
+    {
+      "index": 22,
+      "smiles": "CCCP(=O)(O)[C@]12CC(=O)[C@@H]3C[C@@H](Oc4cc(-c5csc(NC(C)C)n5)nc5cc(OC)ccc45)CN3C(=O)[C@@H](CC(=O)OC3CCCC3)CCCCC/C=C\\[C@@H]1C2",
+      "target_ppm": 22.299999237060547,
+      "old_ppm": 220.17100524902344,
+      "new_ppm": 44.66324370410833
+    },
+    {
+      "index": 23,
+      "smiles": "c1(C(C)(C)C)ccc(C2=C[C@H](C(=O)OC)[C@@H]2P(=O)(c2ccccc2)c2ccccc2)cc1",
+      "target_ppm": 29.0,
+      "old_ppm": 239.37738037109375,
+      "new_ppm": 26.96963435504005
+    },
+    {
+      "index": 24,
+      "smiles": "CCOP(=O)(SC1CCCCC1)c1ccccc1",
+      "target_ppm": 44.20000076293945,
+      "old_ppm": 241.5044403076172,
+      "new_ppm": 46.21720879102594
+    },
+    {
+      "index": 25,
+      "smiles": "CC(C)(C)OP(Cl)Cl",
+      "target_ppm": -178.0,
+      "old_ppm": 246.79190063476562,
+      "new_ppm": 183.0830549950118
+    },
+    {
+      "index": 26,
+      "smiles": "O=C1/C(=C(\\c2cccc(Br)c2)P(=O)(c2ccccc2)c2ccccc2)Nc2ccccc21",
+      "target_ppm": 31.760000228881836,
+      "old_ppm": 251.13780212402344,
+      "new_ppm": 31.759999999999998
+    },
+    {
+      "index": 27,
+      "smiles": "P(C(CCNc1ccccc1)c1ccccc1)(OCC)(=O)OCC",
+      "target_ppm": 28.5,
+      "old_ppm": 237.43783569335938,
+      "new_ppm": 29.35
+    },
+    {
+      "index": 28,
+      "smiles": "CC(C)(C)c1ccc(/C=C/P(c2ccccc2)(c2ccccc2)=O)cc1",
+      "target_ppm": 24.700000762939453,
+      "old_ppm": 225.14382934570312,
+      "new_ppm": 24.35
+    },
+    {
+      "index": 29,
+      "smiles": "CC(C)[P@@](c1ccc(C(C)(C)C)cc1)(c1ccc(F)cc1)=O",
+      "target_ppm": 36.70000076293945,
+      "old_ppm": 224.7621307373047,
+      "new_ppm": 37.05
+    },
+    {
+      "index": 30,
+      "smiles": "S(c1ccc(/C=C(\\C)P(c2ccccc2)(c2ccccc2)=O)cc1)C",
+      "target_ppm": 34.27000045776367,
+      "old_ppm": 230.19931030273438,
+      "new_ppm": 33.315
+    },
+    {
+      "index": 31,
+      "smiles": "CCCCOP(=O)(OCCCC)c1cnc2cc(Br)ccc2n1",
+      "target_ppm": 8.729999542236328,
+      "old_ppm": 268.7453308105469,
+      "new_ppm": 9.513579729379186
+    }
+  ],
+  "model": {
+    "feature_schema": 1,
+    "nucleus": "31P",
+    "environment_weight": 1.0,
+    "reserved_pool_sha256": "d888bd18512fe23ba5314691417a55af578d4e7c505b383443acacea08395b38",
+    "training_identities": 35696,
+    "identity_splits_sha256": "91cef933976836b691f7fee397f2fe5239760abf764524f35a0ce5de70d81969",
+    "booster_sha256": "772182ac4d137fca52db621c0b0bb315d1bb8e7d878435a5f43bdefb15657d9f",
+    "environments_sha256": "0d021f5b45a1ede0fac2e73bb5cf637a889c34b1bc729600cb074d726373e4c4",
+    "test_references_sha256": "900a93cf21e8475f07ddc3f6364e80cfa6f646c361524a49592358ac686909ea"
+  },
+  "heldout_predictions_sha256": "f48965191c700c7388f579b97246956409f1f042317aaa6e70c07b653b9556dc"
+}

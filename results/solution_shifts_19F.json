@@ -1,0 +1,494 @@
+{
+  "nucleus": "19F",
+  "source_manifest": {
+    "counts": {
+      "raw_legacy": 9144,
+      "raw_WanJuan": 56679,
+      "raw_NMRexp": 195077,
+      "written_structures": 229506,
+      "unsupported_cofragment_records": 4323,
+      "missing_connectivity_key_records": 9,
+      "multiple_target_components_records": 1565
+    },
+    "sources": {
+      ".runtime/manual-data-v1/experimental/19F-test.jsonl": "0606749f2d4dea385e28867934a0df4a8e3a90c1ebfb38c249c818cdf912575d",
+      ".runtime/manual-data-v1/experimental/19F-val.jsonl": "eb5e5e58250611bdb59a09bf723a8232d6b8ccdbf7c55c472ed52ccc10234948",
+      ".runtime/manual-data-v1/experimental/19F-train.jsonl": "3db8729edbb3dec890670c3124619ff11b0e81a0d1ecbd28b62b8bdc5cf1e7b1",
+      "../../data/NMRExp/nmrexp_19F_usable.parquet": "af54ec2f6842c8c7e4695a62ac1a3975ae93ae09a75f57ca30f944f04bd71d5f",
+      "../../models/nmrnetpp/pool_F/valid.lmdb": "bdc4ff2df194352b4e14c6f618ccbe92ecc02c3a96f1bc4b442bd8bf6d63d4bf"
+    },
+    "output_sha256": "839ea9e400e9ae4905c4c06e9c62293173207a79348b5c1fa3ae8484b25a4521"
+  },
+  "feature_schema": 1,
+  "split": "First InChIKey block of target-containing component. pool > WanJuan test > WanJuan val > WanJuan train. Other identities use SHA256 80/10/10.",
+  "split_identity_counts": {
+    "pool": 9012,
+    "test": 20536,
+    "val": 20166,
+    "train": 168052
+  },
+  "fitted_training_identities": 116126,
+  "fitted_training_rows": 118491,
+  "test_identities_in_fitted_training": 0,
+  "raw_observation_coverage": {
+    "pool/legacy/input": 9108,
+    "pool/legacy/usable": 9108,
+    "pool/NMRexp/input": 9158,
+    "pool/WanJuan/input": 1968,
+    "test/WanJuan/input": 4799,
+    "test/WanJuan/usable": 3853,
+    "test/WanJuan/unmatched_cardinality": 946,
+    "test/NMRexp/input": 18139,
+    "test/NMRexp/usable": 15674,
+    "test/NMRexp/unmatched_cardinality": 2465,
+    "val/WanJuan/input": 4596,
+    "val/WanJuan/usable": 3580,
+    "val/WanJuan/unmatched_cardinality": 1016,
+    "val/NMRexp/input": 18030,
+    "val/NMRexp/usable": 15549,
+    "val/NMRexp/unmatched_cardinality": 2481,
+    "train/WanJuan/input": 42432,
+    "train/WanJuan/unassigned_multisite": 11098,
+    "train/WanJuan/unmatched_cardinality": 8656,
+    "train/WanJuan/usable": 22678,
+    "train/NMRexp/input": 146773,
+    "train/NMRexp/usable": 107720,
+    "train/NMRexp/unassigned_multisite": 19156,
+    "train/NMRexp/unmatched_cardinality": 19897
+  },
+  "training_median_ppm": -75.61,
+  "parameters": {
+    "objective": "regression_l1",
+    "metric": "l1",
+    "learning_rate": 0.055,
+    "num_leaves": 63,
+    "min_data_in_leaf": 15,
+    "feature_fraction": 0.85,
+    "num_threads": 2,
+    "verbosity": -1,
+    "seed": 7351,
+    "max_bin": 63,
+    "force_col_wise": true,
+    "deterministic": true
+  },
+  "best_iteration": 999,
+  "validation_macro_mae_by_weight": {
+    "0": 6.082112183382359,
+    "0.25": 5.9615107017335225,
+    "0.5": 5.878033162959874,
+    "0.75": 5.830089823879606,
+    "1.0": 5.844451843893265
+  },
+  "environment_weight": 0.75,
+  "metrics": {
+    "pool_single": {
+      "observations": 9108,
+      "identities": 9012,
+      "mae_ppm": 316.5419769481368,
+      "molecule_macro_mae_ppm": 319.84892646179173,
+      "median_absolute_ppm": 1.4041525417491485,
+      "p90_absolute_ppm": 8.763193207737094,
+      "rmse_ppm": 23244.244858444,
+      "train_median_baseline_mae_ppm": 365.07576082477556
+    },
+    "pool_single_legacy": {
+      "observations": 9108,
+      "identities": 9012,
+      "mae_ppm": 316.5419769481368,
+      "molecule_macro_mae_ppm": 319.84892646179173,
+      "median_absolute_ppm": 1.4041525417491485,
+      "p90_absolute_ppm": 8.763193207737094,
+      "rmse_ppm": 23244.244858444,
+      "train_median_baseline_mae_ppm": 365.07576082477556
+    },
+    "legacy_first32": {
+      "observations": 32,
+      "identities": 32,
+      "mae_ppm": 7.215750115713771,
+      "molecule_macro_mae_ppm": 7.215750115713771,
+      "median_absolute_ppm": 0.9012259087873105,
+      "p90_absolute_ppm": 9.002776698337088,
+      "rmse_ppm": 25.163912331667817,
+      "train_median_baseline_mae_ppm": 54.17218685388565,
+      "old_model_mae_on_same_rows_ppm": 356.3447307944298
+    },
+    "pool_single_unseen_scaffold": {
+      "observations": 1844,
+      "identities": 1833,
+      "mae_ppm": 193.4718160678156,
+      "molecule_macro_mae_ppm": 194.56362072554347,
+      "median_absolute_ppm": 1.5414283896271286,
+      "p90_absolute_ppm": 11.373830464486952,
+      "rmse_ppm": 2899.146382100104,
+      "train_median_baseline_mae_ppm": 236.82763931470942
+    },
+    "test_single": {
+      "observations": 15803,
+      "identities": 14330,
+      "mae_ppm": 6.096848404101416,
+      "molecule_macro_mae_ppm": 5.788960274590752,
+      "median_absolute_ppm": 0.5178150072133008,
+      "p90_absolute_ppm": 5.297370599689757,
+      "rmse_ppm": 70.99853828974385,
+      "train_median_baseline_mae_ppm": 33.33079693729039
+    },
+    "test_single_WanJuan": {
+      "observations": 2517,
+      "identities": 2257,
+      "mae_ppm": 15.61628990435018,
+      "molecule_macro_mae_ppm": 14.549008137450697,
+      "median_absolute_ppm": 1.0204258126849481,
+      "p90_absolute_ppm": 14.858199838324492,
+      "rmse_ppm": 170.7852334440539,
+      "train_median_baseline_mae_ppm": 46.870954310687324
+    },
+    "test_multi": {
+      "observations": 8687,
+      "identities": 3256,
+      "mae_ppm": 13.153617762347585,
+      "molecule_macro_mae_ppm": 11.908433305205149,
+      "median_absolute_ppm": 3.8966061434336154,
+      "p90_absolute_ppm": 25.67559006417772,
+      "rmse_ppm": 72.63673651543438,
+      "train_median_baseline_mae_ppm": 45.461089513065495
+    },
+    "test_multi_WanJuan": {
+      "observations": 2988,
+      "identities": 1064,
+      "mae_ppm": 18.715516843246238,
+      "molecule_macro_mae_ppm": 17.810631516846367,
+      "median_absolute_ppm": 3.5654594697113353,
+      "p90_absolute_ppm": 30.83445282529171,
+      "rmse_ppm": 118.68514548397383,
+      "train_median_baseline_mae_ppm": 51.03982550200803
+    },
+    "test_single_unseen_scaffold": {
+      "observations": 3834,
+      "identities": 3618,
+      "mae_ppm": 7.061130919246626,
+      "molecule_macro_mae_ppm": 6.333484318396006,
+      "median_absolute_ppm": 0.673016942047532,
+      "p90_absolute_ppm": 6.762483646728073,
+      "rmse_ppm": 30.589475068709135,
+      "train_median_baseline_mae_ppm": 35.01667892540427
+    },
+    "test_multi_NMRexp": {
+      "observations": 5699,
+      "identities": 2200,
+      "mae_ppm": 10.237500118247711,
+      "molecule_macro_mae_ppm": 9.064727113770108,
+      "median_absolute_ppm": 4.032596969319599,
+      "p90_absolute_ppm": 23.587279388142367,
+      "rmse_ppm": 25.63112547131005,
+      "train_median_baseline_mae_ppm": 42.53614423583085
+    },
+    "test_single_NMRexp": {
+      "observations": 13286,
+      "identities": 12146,
+      "mae_ppm": 4.293413641484665,
+      "molecule_macro_mae_ppm": 4.171318328385991,
+      "median_absolute_ppm": 0.45098861147438996,
+      "p90_absolute_ppm": 4.404187463954685,
+      "rmse_ppm": 21.680149759391917,
+      "train_median_baseline_mae_ppm": 30.765647448441968
+    },
+    "val_single": {
+      "observations": 15491,
+      "identities": 13962,
+      "mae_ppm": 6.6379967585434665,
+      "molecule_macro_mae_ppm": 5.830089823879605,
+      "median_absolute_ppm": 0.5097892665775419,
+      "p90_absolute_ppm": 4.938649828125136,
+      "rmse_ppm": 96.41429692735443,
+      "train_median_baseline_mae_ppm": 33.63827403008199
+    },
+    "val_single_WanJuan": {
+      "observations": 2321,
+      "identities": 2047,
+      "mae_ppm": 21.746618187171094,
+      "molecule_macro_mae_ppm": 16.50561067727081,
+      "median_absolute_ppm": 0.9171188688734588,
+      "p90_absolute_ppm": 14.402423680198567,
+      "rmse_ppm": 244.08791751625446,
+      "train_median_baseline_mae_ppm": 48.78033735458854
+    },
+    "val_multi": {
+      "observations": 8505,
+      "identities": 3194,
+      "mae_ppm": 11.195182585983781,
+      "molecule_macro_mae_ppm": 9.825157498071388,
+      "median_absolute_ppm": 3.821692968497331,
+      "p90_absolute_ppm": 24.370763608105335,
+      "rmse_ppm": 30.726854245826722,
+      "train_median_baseline_mae_ppm": 44.88732884185773
+    },
+    "val_multi_WanJuan": {
+      "observations": 2877,
+      "identities": 1020,
+      "mae_ppm": 13.952595092190302,
+      "molecule_macro_mae_ppm": 12.609295300778326,
+      "median_absolute_ppm": 3.7118044571271724,
+      "p90_absolute_ppm": 26.442160246089106,
+      "rmse_ppm": 41.95271192181762,
+      "train_median_baseline_mae_ppm": 49.38150705596107
+    },
+    "val_single_NMRexp": {
+      "observations": 13170,
+      "identities": 11966,
+      "mae_ppm": 3.975346011706358,
+      "molecule_macro_mae_ppm": 4.043841089530351,
+      "median_absolute_ppm": 0.465492282909409,
+      "p90_absolute_ppm": 4.341832438024251,
+      "rmse_ppm": 20.83542395033515,
+      "train_median_baseline_mae_ppm": 30.96972968868641
+    },
+    "val_multi_NMRexp": {
+      "observations": 5628,
+      "identities": 2185,
+      "mae_ppm": 9.785609774975224,
+      "molecule_macro_mae_ppm": 8.515850669130343,
+      "median_absolute_ppm": 3.865036590965829,
+      "p90_absolute_ppm": 23.48491757570816,
+      "rmse_ppm": 22.957814284908682,
+      "train_median_baseline_mae_ppm": 42.58993176972282
+    }
+  },
+  "legacy_rows": [
+    {
+      "index": 0,
+      "smiles": "CCC(C)NC(=O)/C(F)=C(\\c1ccccc1)C(C)C(=O)OCC",
+      "target_ppm": -121.0199966430664,
+      "old_ppm": 262.4828796386719,
+      "new_ppm": -121.83115713993008
+    },
+    {
+      "index": 1,
+      "smiles": "CC(C)OC1(c2ccc(F)cc2)CCCCC1",
+      "target_ppm": -116.19999694824219,
+      "old_ppm": 254.3622283935547,
+      "new_ppm": -114.86295301664995
+    },
+    {
+      "index": 2,
+      "smiles": "CC(=O)C(F)S(=O)(=O)c1ccccc1",
+      "target_ppm": -179.58999633789062,
+      "old_ppm": 303.3087158203125,
+      "new_ppm": -179.66595492042927
+    },
+    {
+      "index": 3,
+      "smiles": "CC(F)C(=O)c1ccc(Cl)cc1",
+      "target_ppm": -180.39999389648438,
+      "old_ppm": 308.06219482421875,
+      "new_ppm": -180.88645921078052
+    },
+    {
+      "index": 4,
+      "smiles": "CN(C)CCc1c[nH]c2ncc(F)cc12",
+      "target_ppm": -139.39999389648438,
+      "old_ppm": 255.62518310546875,
+      "new_ppm": -136.2145303693043
+    },
+    {
+      "index": 5,
+      "smiles": "CN(Cc1ccccc1OCc1ccc(F)cc1Cl)C12CC3CC(CC(C3)C1)C2",
+      "target_ppm": -112.69999694824219,
+      "old_ppm": 254.45614624023438,
+      "new_ppm": -112.17532710580967
+    },
+    {
+      "index": 6,
+      "smiles": "Cc1cc(C)c(C(=O)F)c(C)c1",
+      "target_ppm": 52.0,
+      "old_ppm": 226.51092529296875,
+      "new_ppm": 46.37444204974922
+    },
+    {
+      "index": 7,
+      "smiles": "N1(Cc2ccccc2)C(=O)CC(S(=O)(=O)c2ccc(F)cc2)C1=O",
+      "target_ppm": -110.51000213623047,
+      "old_ppm": 253.54632568359375,
+      "new_ppm": -103.72155999626027
+    },
+    {
+      "index": 8,
+      "smiles": "C=CC[C@@]1(c2ccc(F)cc2)C(=O)N(C(OC(C)(C)C)=O)c2ccc(C)cc21",
+      "target_ppm": -115.0,
+      "old_ppm": 228.67869567871094,
+      "new_ppm": -114.8033001736364
+    },
+    {
+      "index": 9,
+      "smiles": "C[C@@H](COc1nc(N2CC3CCC(C3)C2)c2cc(Cl)c(-c3cc(O)cc4ccccc34)c(F)c2n1)CN1C2CC3CC1CC(C2)O3",
+      "target_ppm": -122.38999938964844,
+      "old_ppm": 229.95542907714844,
+      "new_ppm": -122.50834020935784
+    },
+    {
+      "index": 10,
+      "smiles": "O=C(F)N1CCC(c2ccccc2)CC1",
+      "target_ppm": -25.559999465942383,
+      "old_ppm": 216.47171020507812,
+      "new_ppm": -22.512917370844658
+    },
+    {
+      "index": 11,
+      "smiles": "O(C)C1C=CC(C2[B-]3(F)[N+]4C(=C(C5C=CC([C@@H]6[C@H](C(NC(C7N=NN(CC8C=CC=CC=8)C=7)(C)C)=O)CC6)=CC=5)C=CC=4C4=CC=C(C5C=CC(OC)=CC=5)[N+]34)C=2)=CC=1",
+      "target_ppm": -132.89999389648438,
+      "old_ppm": 229.4026641845703,
+      "new_ppm": -152.83860445792004
+    },
+    {
+      "index": 12,
+      "smiles": "[C@@H]1(c2ccccc2)N[C@@H](c2ccccc2)Cc2ccc(F)cc21",
+      "target_ppm": -116.80000305175781,
+      "old_ppm": 267.882080078125,
+      "new_ppm": -116.22766362521511
+    },
+    {
+      "index": 13,
+      "smiles": "C=CCCCCS(=O)(=O)/C(F)=C(\\Oc1ncccn1)c1ccccc1",
+      "target_ppm": -139.61000061035156,
+      "old_ppm": 276.201416015625,
+      "new_ppm": -139.5923833245913
+    },
+    {
+      "index": 14,
+      "smiles": "C(C)OC(=O)/C=C(\\C=S(C)(C)=O)c1ccc(F)cc1",
+      "target_ppm": -111.1500015258789,
+      "old_ppm": 254.99102783203125,
+      "new_ppm": -107.24323742050447
+    },
+    {
+      "index": 15,
+      "smiles": "NCc1cccc(-c2cc(COc3ccccc3CC(=O)O)c(F)c3ccoc23)c1",
+      "target_ppm": -124.69000244140625,
+      "old_ppm": 255.39601135253906,
+      "new_ppm": -124.10919320816647
+    },
+    {
+      "index": 16,
+      "smiles": "C(CCCc1ccc2c(c1)CC(C)(F)CO2)#N",
+      "target_ppm": -153.4499969482422,
+      "old_ppm": 315.7698059082031,
+      "new_ppm": -152.41226915785197
+    },
+    {
+      "index": 17,
+      "smiles": "O=C(c1ccc2c(c1)nc(-c1cc3ccc(-c4ccccc4-c4ccc(Cl)cc4)nc3cc1F)n2C1CCCCC1)N1CCC(O)CC1",
+      "target_ppm": -112.66999816894531,
+      "old_ppm": 232.17523193359375,
+      "new_ppm": -112.8771487984446
+    },
+    {
+      "index": 18,
+      "smiles": "CCc1nn(-c2ccccc2)c2c1CC(c1ccccc1)=C(F)O2",
+      "target_ppm": -99.0999984741211,
+      "old_ppm": 241.75160217285156,
+      "new_ppm": -98.50613104053964
+    },
+    {
+      "index": 19,
+      "smiles": "CC1C[C@H](C(=O)c2ccccc2)c2ccc(F)cc2N(C)C1=O",
+      "target_ppm": -112.5999984741211,
+      "old_ppm": 255.77142333984375,
+      "new_ppm": -111.6763824584013
+    },
+    {
+      "index": 20,
+      "smiles": "c1(/C=C(\\F)C(c2ccccc2)=O)ccccc1",
+      "target_ppm": -119.9000015258789,
+      "old_ppm": 252.37059020996094,
+      "new_ppm": -119.02116572402407
+    },
+    {
+      "index": 21,
+      "smiles": "c1(C(=O)C23CC(c4cccc(F)c4)(C2)N(c2ccccc2)C[C@H]3C=C)ccccc1",
+      "target_ppm": -112.76000213623047,
+      "old_ppm": 252.974365234375,
+      "new_ppm": -113.01098776451106
+    },
+    {
+      "index": 22,
+      "smiles": "CN1CC[C@@](O)(C#Cc2cccc(-c3ccc4nc(CF)nc(N)c4n3)c2)C1=O",
+      "target_ppm": -77.31999969482422,
+      "old_ppm": 349.29315185546875,
+      "new_ppm": -216.64011036616114
+    },
+    {
+      "index": 23,
+      "smiles": "CC1(O)C=C(c2cccc(F)c2)C1",
+      "target_ppm": -113.9800033569336,
+      "old_ppm": 263.90631103515625,
+      "new_ppm": -113.19995881794745
+    },
+    {
+      "index": 24,
+      "smiles": "C([2H])(CCCN(F)S(=O)(=O)c1ccc(C)cc1)c1ccccc1",
+      "target_ppm": -49.63999938964844,
+      "old_ppm": 240.4315643310547,
+      "new_ppm": -49.84141368066189
+    },
+    {
+      "index": 25,
+      "smiles": "COc1cc(C=O)ccc1OS(=O)(=O)F",
+      "target_ppm": 40.400001525878906,
+      "old_ppm": 182.5127716064453,
+      "new_ppm": 40.25419964969067
+    },
+    {
+      "index": 26,
+      "smiles": "CC(C)(C)P(C(C)(C)C)(=O)n1ccc2ccc(F)c(N)c12",
+      "target_ppm": -141.33999633789062,
+      "old_ppm": 264.38641357421875,
+      "new_ppm": -132.7244855133636
+    },
+    {
+      "index": 27,
+      "smiles": "N#Cc1ccc(C(=O)[B-]2(F)Oc3ccccc3-c3cccc[n+]32)cc1",
+      "target_ppm": -159.3000030517578,
+      "old_ppm": 189.0505828857422,
+      "new_ppm": -157.12049073063338
+    },
+    {
+      "index": 28,
+      "smiles": "CC(F)(C(=O)Nc1ccccn1)N1C(=O)c2ccccc2C1=O",
+      "target_ppm": -115.2300033569336,
+      "old_ppm": 270.5307922363281,
+      "new_ppm": -124.27580959680513
+    },
+    {
+      "index": 29,
+      "smiles": "C(#N)C1C(F)=C2[Si](CCCC2=CC=1)(OC(C)(C)C)C",
+      "target_ppm": -93.37999725341797,
+      "old_ppm": 245.6970977783203,
+      "new_ppm": -104.99822644585481
+    },
+    {
+      "index": 30,
+      "smiles": "c1(C(=O)c2ccccc2C(=O)F)ccccc1",
+      "target_ppm": 27.34000015258789,
+      "old_ppm": 224.55746459960938,
+      "new_ppm": 29.21143253491399
+    },
+    {
+      "index": 31,
+      "smiles": "CC1=C(C=O)[C@@H]([C@@H](/C=C/c2ccccc2)c2ccccc2)c2cccc(F)c21",
+      "target_ppm": -119.0,
+      "old_ppm": 236.66860961914062,
+      "new_ppm": -112.97906707294406
+    }
+  ],
+  "model": {
+    "feature_schema": 1,
+    "nucleus": "19F",
+    "environment_weight": 0.75,
+    "reserved_pool_sha256": "bdc4ff2df194352b4e14c6f618ccbe92ecc02c3a96f1bc4b442bd8bf6d63d4bf",
+    "training_identities": 116126,
+    "identity_splits_sha256": "fc29c969d6e44b27cc0d85da00bc2c380767747195dd50152f8a54dd61a92e99",
+    "booster_sha256": "6c7a468333600d9fbb83ce69e46e05c4890376fdfa95e1fea96d696871ba8f7f",
+    "environments_sha256": "de6978c81ae1ebf6f92712067fb02243146c56c341359a5c6bb5d3da31450e10",
+    "test_references_sha256": "49f26484036ca4451534e52b674f30bb984324ab1ed13eacc056d8249f9fed9f"
+  },
+  "heldout_predictions_sha256": "000e561d2225bcf7f586ba6f25f13c7285f2edcab8abfc91bb976296078c0832"
+}

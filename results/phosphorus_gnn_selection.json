@@ -1,0 +1,1465 @@
+{
+  "selection_metric": "validation molecule-macro MAE (ppm)",
+  "winner": "gnn",
+  "validation_scores": {
+    "gnn": 5.28236743233611,
+    "tree": 7.170915632739434
+  },
+  "tree_rounds": 5960,
+  "gnn_best_epoch": 90,
+  "gnn_epochs_run": 108,
+  "gnn_parameters": 99425,
+  "gnn_environment_weight": 0.75,
+  "gnn_validation_history": [
+    {
+      "epoch": 1,
+      "seconds": 4.4,
+      "pure": 12.237454250792549,
+      "validation": 10.057214092437112,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 2,
+      "seconds": 8.5,
+      "pure": 10.144377177166406,
+      "validation": 8.63593500624019,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 3,
+      "seconds": 12.7,
+      "pure": 9.300572206542904,
+      "validation": 7.911676784369661,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 4,
+      "seconds": 16.4,
+      "pure": 9.079560183461421,
+      "validation": 7.749602065982526,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 5,
+      "seconds": 20.6,
+      "pure": 8.807053703988744,
+      "validation": 7.47196269145983,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 6,
+      "seconds": 24.8,
+      "pure": 8.176823400388804,
+      "validation": 7.11021306242673,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 7,
+      "seconds": 27.8,
+      "pure": 7.91592101469917,
+      "validation": 6.896495973903573,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 8,
+      "seconds": 31.5,
+      "pure": 7.80711253240595,
+      "validation": 6.816511776658646,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 9,
+      "seconds": 35.6,
+      "pure": 7.678200824938818,
+      "validation": 6.735241236241848,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 10,
+      "seconds": 39.7,
+      "pure": 7.51871317971877,
+      "validation": 6.672862310199508,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 11,
+      "seconds": 43.5,
+      "pure": 7.5290927689552225,
+      "validation": 6.662578144984419,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 12,
+      "seconds": 47.6,
+      "pure": 7.294876270300095,
+      "validation": 6.492572630502801,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 13,
+      "seconds": 51.3,
+      "pure": 7.190868178829076,
+      "validation": 6.36227013708074,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 14,
+      "seconds": 55.5,
+      "pure": 7.1905994217512355,
+      "validation": 6.372452713600794,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 15,
+      "seconds": 59.6,
+      "pure": 7.327244375109586,
+      "validation": 6.448850008000948,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 16,
+      "seconds": 63.2,
+      "pure": 7.17124089161113,
+      "validation": 6.395856806771424,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 17,
+      "seconds": 67.3,
+      "pure": 7.303560899299084,
+      "validation": 6.423302626568736,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 18,
+      "seconds": 71.1,
+      "pure": 7.098907895456537,
+      "validation": 6.317237161419793,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 19,
+      "seconds": 75.2,
+      "pure": 6.777433917132661,
+      "validation": 6.120220015947693,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 20,
+      "seconds": 78.9,
+      "pure": 6.912346445111451,
+      "validation": 6.261609073590574,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 21,
+      "seconds": 83.0,
+      "pure": 7.193065473315649,
+      "validation": 6.36361438437735,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 22,
+      "seconds": 87.8,
+      "pure": 6.853000365270818,
+      "validation": 6.245064421624553,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 23,
+      "seconds": 92.5,
+      "pure": 6.660848695311766,
+      "validation": 6.1002674549005285,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 24,
+      "seconds": 97.6,
+      "pure": 6.93833654846117,
+      "validation": 6.306781250646403,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 25,
+      "seconds": 101.4,
+      "pure": 6.622478223610095,
+      "validation": 6.0863348615180275,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 26,
+      "seconds": 105.5,
+      "pure": 6.6599863250067,
+      "validation": 6.072343947915149,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 27,
+      "seconds": 109.9,
+      "pure": 6.661135897902732,
+      "validation": 6.0874688326324895,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 28,
+      "seconds": 114.3,
+      "pure": 7.030698400316156,
+      "validation": 6.285990401874976,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 29,
+      "seconds": 118.2,
+      "pure": 6.437057853912174,
+      "validation": 5.953650183492604,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 30,
+      "seconds": 122.6,
+      "pure": 6.731049263173312,
+      "validation": 6.162146524890063,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 31,
+      "seconds": 126.9,
+      "pure": 7.111560795454268,
+      "validation": 6.345106971871839,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 32,
+      "seconds": 130.9,
+      "pure": 6.519404404383654,
+      "validation": 6.020623301035546,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 33,
+      "seconds": 135.2,
+      "pure": 6.679733328799091,
+      "validation": 6.140826745483024,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 34,
+      "seconds": 139.9,
+      "pure": 6.435444300114304,
+      "validation": 5.96653662222173,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 35,
+      "seconds": 144.2,
+      "pure": 6.3517947186581685,
+      "validation": 5.85259389081779,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 36,
+      "seconds": 147.5,
+      "pure": 6.597278424290165,
+      "validation": 6.009410870783319,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 37,
+      "seconds": 150.2,
+      "pure": 6.368494435674703,
+      "validation": 5.906523284434149,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 38,
+      "seconds": 152.8,
+      "pure": 6.463057457270664,
+      "validation": 5.97744521129638,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 39,
+      "seconds": 155.4,
+      "pure": 6.2669012930101955,
+      "validation": 5.818678408933646,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 40,
+      "seconds": 158.0,
+      "pure": 6.367861021534393,
+      "validation": 5.940485571740572,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 41,
+      "seconds": 161.3,
+      "pure": 6.333101556803209,
+      "validation": 5.885431084052515,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 42,
+      "seconds": 165.1,
+      "pure": 6.2228597274179,
+      "validation": 5.823423179311866,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 43,
+      "seconds": 169.4,
+      "pure": 6.230861794527863,
+      "validation": 5.769310086283701,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 44,
+      "seconds": 173.8,
+      "pure": 6.226024793231786,
+      "validation": 5.805916617693941,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 45,
+      "seconds": 177.6,
+      "pure": 6.230766635987329,
+      "validation": 5.827557764676213,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 46,
+      "seconds": 181.8,
+      "pure": 6.544441279741313,
+      "validation": 6.115609965510144,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 47,
+      "seconds": 184.5,
+      "pure": 6.116164599771545,
+      "validation": 5.74995734269558,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 48,
+      "seconds": 187.5,
+      "pure": 6.217855191856152,
+      "validation": 5.847331949619654,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 49,
+      "seconds": 190.7,
+      "pure": 6.349343886588588,
+      "validation": 5.908776661447238,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 50,
+      "seconds": 193.7,
+      "pure": 6.020826826533191,
+      "validation": 5.681242501346123,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 51,
+      "seconds": 196.7,
+      "pure": 6.153802825353921,
+      "validation": 5.784238072877546,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 52,
+      "seconds": 199.8,
+      "pure": 6.002202576768797,
+      "validation": 5.6781350680852745,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 53,
+      "seconds": 202.5,
+      "pure": 6.3261047694013754,
+      "validation": 5.832318043859372,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 54,
+      "seconds": 205.1,
+      "pure": 6.176023471754119,
+      "validation": 5.739925777233957,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 55,
+      "seconds": 207.7,
+      "pure": 6.014866611665819,
+      "validation": 5.660907769474453,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 56,
+      "seconds": 210.3,
+      "pure": 5.984239016406776,
+      "validation": 5.654423658033686,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 57,
+      "seconds": 213.0,
+      "pure": 6.066695457458229,
+      "validation": 5.710982854918787,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 58,
+      "seconds": 215.6,
+      "pure": 6.058485224042721,
+      "validation": 5.710823108040637,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 59,
+      "seconds": 218.6,
+      "pure": 6.138604734068016,
+      "validation": 5.800155113494621,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 60,
+      "seconds": 222.2,
+      "pure": 6.403135392414593,
+      "validation": 5.972983637202771,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 61,
+      "seconds": 224.8,
+      "pure": 6.103265160120726,
+      "validation": 5.697179696606255,
+      "weight": 1.0,
+      "lr": 0.0015
+    },
+    {
+      "epoch": 62,
+      "seconds": 227.4,
+      "pure": 6.117202815128407,
+      "validation": 5.775565346488213,
+      "weight": 1.0,
+      "lr": 0.000675
+    },
+    {
+      "epoch": 63,
+      "seconds": 229.9,
+      "pure": 5.689716642541117,
+      "validation": 5.475683381045486,
+      "weight": 1.0,
+      "lr": 0.000675
+    },
+    {
+      "epoch": 64,
+      "seconds": 232.6,
+      "pure": 5.692208813461268,
+      "validation": 5.493864547442218,
+      "weight": 0.75,
+      "lr": 0.000675
+    },
+    {
+      "epoch": 65,
+      "seconds": 235.2,
+      "pure": 5.667177152174531,
+      "validation": 5.473804194659522,
+      "weight": 0.75,
+      "lr": 0.000675
+    },
+    {
+      "epoch": 66,
+      "seconds": 237.8,
+      "pure": 5.578091043654187,
+      "validation": 5.3698702336035735,
+      "weight": 0.75,
+      "lr": 0.000675
+    },
+    {
+      "epoch": 67,
+      "seconds": 240.4,
+      "pure": 5.6877768504539965,
+      "validation": 5.452584086794017,
+      "weight": 1.0,
+      "lr": 0.000675
+    },
+    {
+      "epoch": 68,
+      "seconds": 243.0,
+      "pure": 5.670227495792685,
+      "validation": 5.452624007685168,
+      "weight": 0.75,
+      "lr": 0.000675
+    },
+    {
+      "epoch": 69,
+      "seconds": 245.6,
+      "pure": 5.677741900524021,
+      "validation": 5.462828266223766,
+      "weight": 0.75,
+      "lr": 0.000675
+    },
+    {
+      "epoch": 70,
+      "seconds": 248.2,
+      "pure": 5.658205178075534,
+      "validation": 5.458673896050481,
+      "weight": 0.75,
+      "lr": 0.000675
+    },
+    {
+      "epoch": 71,
+      "seconds": 250.8,
+      "pure": 5.609206457927313,
+      "validation": 5.430738652520772,
+      "weight": 0.75,
+      "lr": 0.000675
+    },
+    {
+      "epoch": 72,
+      "seconds": 253.4,
+      "pure": 5.6423635363477205,
+      "validation": 5.4450777227939575,
+      "weight": 0.75,
+      "lr": 0.00030375000000000004
+    },
+    {
+      "epoch": 73,
+      "seconds": 255.9,
+      "pure": 5.545916826102306,
+      "validation": 5.3885710348949765,
+      "weight": 0.75,
+      "lr": 0.00030375000000000004
+    },
+    {
+      "epoch": 74,
+      "seconds": 258.5,
+      "pure": 5.444724119851005,
+      "validation": 5.302181716316091,
+      "weight": 0.75,
+      "lr": 0.00030375000000000004
+    },
+    {
+      "epoch": 75,
+      "seconds": 261.1,
+      "pure": 5.529042676034702,
+      "validation": 5.366905435203801,
+      "weight": 0.75,
+      "lr": 0.00030375000000000004
+    },
+    {
+      "epoch": 76,
+      "seconds": 263.7,
+      "pure": 5.491011378589374,
+      "validation": 5.345413791553612,
+      "weight": 0.75,
+      "lr": 0.00030375000000000004
+    },
+    {
+      "epoch": 77,
+      "seconds": 266.6,
+      "pure": 5.489965427215481,
+      "validation": 5.332990820887562,
+      "weight": 0.75,
+      "lr": 0.00030375000000000004
+    },
+    {
+      "epoch": 78,
+      "seconds": 269.2,
+      "pure": 5.4671244135045605,
+      "validation": 5.325100744236652,
+      "weight": 0.75,
+      "lr": 0.00030375000000000004
+    },
+    {
+      "epoch": 79,
+      "seconds": 271.8,
+      "pure": 5.48771219241588,
+      "validation": 5.339401453734168,
+      "weight": 0.75,
+      "lr": 0.00030375000000000004
+    },
+    {
+      "epoch": 80,
+      "seconds": 274.4,
+      "pure": 5.45469023269825,
+      "validation": 5.318209557721944,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 81,
+      "seconds": 277.0,
+      "pure": 5.442221664431544,
+      "validation": 5.317737159229717,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 82,
+      "seconds": 279.7,
+      "pure": 5.43738883341721,
+      "validation": 5.3128530004398895,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 83,
+      "seconds": 282.3,
+      "pure": 5.4151232216425536,
+      "validation": 5.297492915185447,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 84,
+      "seconds": 285.0,
+      "pure": 5.4267850973213605,
+      "validation": 5.307672060480749,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 85,
+      "seconds": 287.7,
+      "pure": 5.4340186697831685,
+      "validation": 5.314717420842582,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 86,
+      "seconds": 290.3,
+      "pure": 5.423904248695991,
+      "validation": 5.296521097644624,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 87,
+      "seconds": 292.9,
+      "pure": 5.430831240188636,
+      "validation": 5.312114538072151,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 88,
+      "seconds": 295.5,
+      "pure": 5.443081294455226,
+      "validation": 5.315674515039565,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 89,
+      "seconds": 298.1,
+      "pure": 5.415685281647722,
+      "validation": 5.297134299726155,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 90,
+      "seconds": 300.7,
+      "pure": 5.4004003859614365,
+      "validation": 5.282367429252985,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 91,
+      "seconds": 303.3,
+      "pure": 5.408917563923908,
+      "validation": 5.296615165137195,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 92,
+      "seconds": 305.9,
+      "pure": 5.433243809695948,
+      "validation": 5.312351420060118,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 93,
+      "seconds": 309.0,
+      "pure": 5.42242967561947,
+      "validation": 5.310412456357471,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 94,
+      "seconds": 311.7,
+      "pure": 5.430751224818644,
+      "validation": 5.316472306242935,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 95,
+      "seconds": 315.6,
+      "pure": 5.410527787839794,
+      "validation": 5.3019145602426265,
+      "weight": 0.75,
+      "lr": 0.0001366875
+    },
+    {
+      "epoch": 96,
+      "seconds": 319.8,
+      "pure": 5.428257682371403,
+      "validation": 5.314338080927146,
+      "weight": 0.75,
+      "lr": 6.1509375e-05
+    },
+    {
+      "epoch": 97,
+      "seconds": 322.8,
+      "pure": 5.397682826933602,
+      "validation": 5.295729541647205,
+      "weight": 0.75,
+      "lr": 6.1509375e-05
+    },
+    {
+      "epoch": 98,
+      "seconds": 325.7,
+      "pure": 5.402114558787086,
+      "validation": 5.297802989854412,
+      "weight": 0.75,
+      "lr": 6.1509375e-05
+    },
+    {
+      "epoch": 99,
+      "seconds": 328.4,
+      "pure": 5.402058268526483,
+      "validation": 5.294222274703226,
+      "weight": 0.75,
+      "lr": 6.1509375e-05
+    },
+    {
+      "epoch": 100,
+      "seconds": 331.2,
+      "pure": 5.402925254760859,
+      "validation": 5.298347770266513,
+      "weight": 0.75,
+      "lr": 6.1509375e-05
+    },
+    {
+      "epoch": 101,
+      "seconds": 333.7,
+      "pure": 5.408846949441535,
+      "validation": 5.3054708311009895,
+      "weight": 0.75,
+      "lr": 6.1509375e-05
+    },
+    {
+      "epoch": 102,
+      "seconds": 336.1,
+      "pure": 5.409673281876618,
+      "validation": 5.303539247253181,
+      "weight": 0.75,
+      "lr": 2.767921875e-05
+    },
+    {
+      "epoch": 103,
+      "seconds": 338.7,
+      "pure": 5.399181137070128,
+      "validation": 5.297994492810993,
+      "weight": 0.75,
+      "lr": 2.767921875e-05
+    },
+    {
+      "epoch": 104,
+      "seconds": 341.1,
+      "pure": 5.3907458662129395,
+      "validation": 5.29109960050047,
+      "weight": 0.75,
+      "lr": 2.767921875e-05
+    },
+    {
+      "epoch": 105,
+      "seconds": 343.9,
+      "pure": 5.40308250853362,
+      "validation": 5.299106889345826,
+      "weight": 0.75,
+      "lr": 2.767921875e-05
+    },
+    {
+      "epoch": 106,
+      "seconds": 347.9,
+      "pure": 5.40023804798269,
+      "validation": 5.2996539381698495,
+      "weight": 0.75,
+      "lr": 2.767921875e-05
+    },
+    {
+      "epoch": 107,
+      "seconds": 351.3,
+      "pure": 5.396724241510716,
+      "validation": 5.297814500475278,
+      "weight": 0.75,
+      "lr": 2.767921875e-05
+    },
+    {
+      "epoch": 108,
+      "seconds": 354.2,
+      "pure": 5.401884025989711,
+      "validation": 5.299977956614531,
+      "weight": 0.75,
+      "lr": 2e-05
+    }
+  ],
+  "train_identities": 35696,
+  "validation": {
+    "all": {
+      "tree": {
+        "observations": 6813,
+        "identities": 4372,
+        "mae_ppm": 5.423975824472539,
+        "molecule_macro_mae_ppm": 7.170915632739434,
+        "median_absolute_ppm": 0.9950000000000001,
+        "p90_absolute_ppm": 12.502300584926077,
+        "rmse_ppm": 17.705434111707255
+      },
+      "gnn_raw": {
+        "observations": 6813,
+        "identities": 4372,
+        "mae_ppm": 4.214858217751086,
+        "molecule_macro_mae_ppm": 5.400400393422788,
+        "median_absolute_ppm": 1.130220794677733,
+        "p90_absolute_ppm": 8.324027954101565,
+        "rmse_ppm": 13.759799488576254
+      },
+      "gnn": {
+        "observations": 6813,
+        "identities": 4372,
+        "mae_ppm": 4.070926819367872,
+        "molecule_macro_mae_ppm": 5.28236743233611,
+        "median_absolute_ppm": 0.9021049690246583,
+        "p90_absolute_ppm": 8.352290676116946,
+        "rmse_ppm": 13.900331736609276
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -1.888548200403324,
+        "paired_molecule_bootstrap_95": [
+          -2.3055367171314733,
+          -1.474524174931977
+        ]
+      }
+    },
+    "unseen_scaffold": {
+      "tree": {
+        "observations": 1899,
+        "identities": 1322,
+        "mae_ppm": 6.595405538911972,
+        "molecule_macro_mae_ppm": 7.998680950105565,
+        "median_absolute_ppm": 1.4929885175942736,
+        "p90_absolute_ppm": 15.8,
+        "rmse_ppm": 21.26550078707419
+      },
+      "gnn_raw": {
+        "observations": 1899,
+        "identities": 1322,
+        "mae_ppm": 5.428882162257833,
+        "molecule_macro_mae_ppm": 6.4811240028188015,
+        "median_absolute_ppm": 1.4853811645507804,
+        "p90_absolute_ppm": 13.053766250610353,
+        "rmse_ppm": 14.385634627672962
+      },
+      "gnn": {
+        "observations": 1899,
+        "identities": 1322,
+        "mae_ppm": 5.243952039022581,
+        "molecule_macro_mae_ppm": 6.272547973458236,
+        "median_absolute_ppm": 1.2347357940673795,
+        "p90_absolute_ppm": 12.859848499298094,
+        "rmse_ppm": 14.228809245411737
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -1.726132976647329,
+        "paired_molecule_bootstrap_95": [
+          -2.6986718995346672,
+          -0.84880074028163
+        ]
+      }
+    },
+    "P=O": {
+      "tree": {
+        "observations": 4894,
+        "identities": 2897,
+        "mae_ppm": 2.4868676744536846,
+        "molecule_macro_mae_ppm": 3.036508859746209,
+        "median_absolute_ppm": 0.7200000000000024,
+        "p90_absolute_ppm": 5.370213340586527,
+        "rmse_ppm": 8.426596048089406
+      },
+      "gnn_raw": {
+        "observations": 4894,
+        "identities": 2897,
+        "mae_ppm": 2.29440364829883,
+        "molecule_macro_mae_ppm": 2.7625430056182627,
+        "median_absolute_ppm": 0.9004772186279304,
+        "p90_absolute_ppm": 4.439079360961914,
+        "rmse_ppm": 6.956890849465514
+      },
+      "gnn": {
+        "observations": 4894,
+        "identities": 2897,
+        "mae_ppm": 2.1835383314679873,
+        "molecule_macro_mae_ppm": 2.667288828647631,
+        "median_absolute_ppm": 0.6924418830871599,
+        "p90_absolute_ppm": 4.285613555908198,
+        "rmse_ppm": 7.556799205219701
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -0.3692200310985781,
+        "paired_molecule_bootstrap_95": [
+          -0.5010916004674741,
+          -0.24183979896390492
+        ]
+      }
+    },
+    "P=S": {
+      "tree": {
+        "observations": 330,
+        "identities": 246,
+        "mae_ppm": 7.711591280444962,
+        "molecule_macro_mae_ppm": 9.109356059672466,
+        "median_absolute_ppm": 2.6766754736188147,
+        "p90_absolute_ppm": 20.565503438193392,
+        "rmse_ppm": 16.69976067493445
+      },
+      "gnn_raw": {
+        "observations": 330,
+        "identities": 246,
+        "mae_ppm": 7.092499158107873,
+        "molecule_macro_mae_ppm": 8.117535278764844,
+        "median_absolute_ppm": 1.9997268676757791,
+        "p90_absolute_ppm": 18.166012603759764,
+        "rmse_ppm": 18.917343797154732
+      },
+      "gnn": {
+        "observations": 330,
+        "identities": 246,
+        "mae_ppm": 6.75470721874815,
+        "molecule_macro_mae_ppm": 7.902456798747304,
+        "median_absolute_ppm": 1.9146778106689482,
+        "p90_absolute_ppm": 15.880865791320801,
+        "rmse_ppm": 18.300076083491287
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -1.2068992609251608,
+        "paired_molecule_bootstrap_95": [
+          -2.508949443928105,
+          0.16865752251864186
+        ]
+      }
+    },
+    "neutral P, three carbon neighbours": {
+      "tree": {
+        "observations": 482,
+        "identities": 300,
+        "mae_ppm": 5.812490841643925,
+        "molecule_macro_mae_ppm": 7.150130406648691,
+        "median_absolute_ppm": 1.3933306930444314,
+        "p90_absolute_ppm": 13.285167665756914,
+        "rmse_ppm": 16.277924148733174
+      },
+      "gnn_raw": {
+        "observations": 482,
+        "identities": 300,
+        "mae_ppm": 5.493612611699401,
+        "molecule_macro_mae_ppm": 6.494195990922717,
+        "median_absolute_ppm": 1.6825080871582032,
+        "p90_absolute_ppm": 12.629505195617682,
+        "rmse_ppm": 15.567090781871164
+      },
+      "gnn": {
+        "observations": 482,
+        "identities": 300,
+        "mae_ppm": 4.942555825846818,
+        "molecule_macro_mae_ppm": 6.026875156790416,
+        "median_absolute_ppm": 1.2507628440856937,
+        "p90_absolute_ppm": 12.409064390182497,
+        "rmse_ppm": 14.913424480530388
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -1.1232552498582753,
+        "paired_molecule_bootstrap_95": [
+          -1.9203143380695542,
+          -0.3737470761746824
+        ]
+      }
+    },
+    "neutral P, three neighbours including a heteroatom": {
+      "tree": {
+        "observations": 408,
+        "identities": 337,
+        "mae_ppm": 19.145999054177306,
+        "molecule_macro_mae_ppm": 21.14220579554008,
+        "median_absolute_ppm": 7.312946604592582,
+        "p90_absolute_ppm": 51.522954075418816,
+        "rmse_ppm": 35.02331380828139
+      },
+      "gnn_raw": {
+        "observations": 408,
+        "identities": 337,
+        "mae_ppm": 12.870133926223307,
+        "molecule_macro_mae_ppm": 14.280945469351598,
+        "median_absolute_ppm": 3.9914955139160213,
+        "p90_absolute_ppm": 27.00564056396485,
+        "rmse_ppm": 29.39249934345773
+      },
+      "gnn": {
+        "observations": 408,
+        "identities": 337,
+        "mae_ppm": 12.720381911146873,
+        "molecule_macro_mae_ppm": 14.15485428171884,
+        "median_absolute_ppm": 3.9748657226562614,
+        "p90_absolute_ppm": 27.00564056396485,
+        "rmse_ppm": 29.424907172079156
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -6.987351513821239,
+        "paired_molecule_bootstrap_95": [
+          -9.569526959983737,
+          -4.527775992615829
+        ]
+      }
+    },
+    "other P environments": {
+      "tree": {
+        "observations": 525,
+        "identities": 465,
+        "mae_ppm": 19.22540731972105,
+        "molecule_macro_mae_ppm": 20.986157852082965,
+        "median_absolute_ppm": 8.078052437255842,
+        "p90_absolute_ppm": 44.92127726904963,
+        "rmse_ppm": 43.81854858697227
+      },
+      "gnn_raw": {
+        "observations": 525,
+        "identities": 465,
+        "mae_ppm": 11.9920694329398,
+        "molecule_macro_mae_ppm": 12.971929184930726,
+        "median_absolute_ppm": 4.913298797607421,
+        "p90_absolute_ppm": 28.521101531982445,
+        "rmse_ppm": 28.71371783333847
+      },
+      "gnn": {
+        "observations": 525,
+        "identities": 465,
+        "mae_ppm": 11.996499253754388,
+        "molecule_macro_mae_ppm": 12.962776875256637,
+        "median_absolute_ppm": 4.94622802734375,
+        "p90_absolute_ppm": 28.521101531982445,
+        "rmse_ppm": 28.71958721326027
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -8.02338097682633,
+        "paired_molecule_bootstrap_95": [
+          -11.30327751971274,
+          -5.018924462430915
+        ]
+      }
+    },
+    "positive P": {
+      "tree": {
+        "observations": 174,
+        "identities": 129,
+        "mae_ppm": 8.801521426310192,
+        "molecule_macro_mae_ppm": 10.058806722835907,
+        "median_absolute_ppm": 2.590724522172958,
+        "p90_absolute_ppm": 23.058103688568448,
+        "rmse_ppm": 18.569143031332825
+      },
+      "gnn_raw": {
+        "observations": 174,
+        "identities": 129,
+        "mae_ppm": 5.469657974462399,
+        "molecule_macro_mae_ppm": 6.370034733587457,
+        "median_absolute_ppm": 1.910818481445311,
+        "p90_absolute_ppm": 12.91072998046875,
+        "rmse_ppm": 13.73548664809032
+      },
+      "gnn": {
+        "observations": 174,
+        "identities": 129,
+        "mae_ppm": 5.457152919166391,
+        "molecule_macro_mae_ppm": 6.3610809506113215,
+        "median_absolute_ppm": 1.9321023750305182,
+        "p90_absolute_ppm": 12.757637465286262,
+        "rmse_ppm": 13.756694462581546
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -3.697725772224586,
+        "paired_molecule_bootstrap_95": [
+          -5.6664811374827115,
+          -1.8862009159401154
+        ]
+      }
+    }
+  },
+  "split_sha256": "91cef933976836b691f7fee397f2fe5239760abf764524f35a0ce5de70d81969",
+  "gnn_sha256": "ad492944c5159d1b345c673ff52aa0210bf1513bd61e8ea8855dc3c70b9e5488",
+  "tree_sha256": "d14927a1b73d754bdd32167c2c8d902c305ecc103fb121a3e2d4acd84872a09b",
+  "feature_sha256": "79be03a6ad19892292753ef8c444f3e738a7ca2856ca12629a866b4041c044cc",
+  "test": {
+    "all": {
+      "tree": {
+        "observations": 6693,
+        "identities": 4248,
+        "mae_ppm": 5.9351956057164665,
+        "molecule_macro_mae_ppm": 7.76723753328239,
+        "median_absolute_ppm": 1.0799999999999996,
+        "p90_absolute_ppm": 12.456721199956476,
+        "rmse_ppm": 39.49666850447549
+      },
+      "gnn_raw": {
+        "observations": 6693,
+        "identities": 4248,
+        "mae_ppm": 4.741313047765449,
+        "molecule_macro_mae_ppm": 6.119706990999568,
+        "median_absolute_ppm": 1.1638507843017578,
+        "p90_absolute_ppm": 8.854699096679695,
+        "rmse_ppm": 37.90642044548953
+      },
+      "gnn": {
+        "observations": 6693,
+        "identities": 4248,
+        "mae_ppm": 4.5623101938412685,
+        "molecule_macro_mae_ppm": 5.954268052592518,
+        "median_absolute_ppm": 0.9452926826477057,
+        "p90_absolute_ppm": 8.620929565429687,
+        "rmse_ppm": 37.9045324003221
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -1.812969480689873,
+        "paired_molecule_bootstrap_95": [
+          -2.239341055044581,
+          -1.3907638597723562
+        ]
+      }
+    },
+    "unseen_scaffold": {
+      "tree": {
+        "observations": 1759,
+        "identities": 1225,
+        "mae_ppm": 8.841697900817412,
+        "molecule_macro_mae_ppm": 10.795037860704703,
+        "median_absolute_ppm": 1.67344560552455,
+        "p90_absolute_ppm": 17.785889166915435,
+        "rmse_ppm": 71.59727245217488
+      },
+      "gnn_raw": {
+        "observations": 1759,
+        "identities": 1225,
+        "mae_ppm": 7.480149255289552,
+        "molecule_macro_mae_ppm": 9.23368805423659,
+        "median_absolute_ppm": 1.429901123046875,
+        "p90_absolute_ppm": 12.489869461059575,
+        "rmse_ppm": 70.94648837204167
+      },
+      "gnn": {
+        "observations": 1759,
+        "identities": 1225,
+        "mae_ppm": 7.4093975406774675,
+        "molecule_macro_mae_ppm": 9.175618632354476,
+        "median_absolute_ppm": 1.2777646636962903,
+        "p90_absolute_ppm": 12.430699234008797,
+        "rmse_ppm": 70.95690318528177
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -1.6194192283502253,
+        "paired_molecule_bootstrap_95": [
+          -2.528552869673454,
+          -0.8133173810969007
+        ]
+      }
+    },
+    "P=O": {
+      "tree": {
+        "observations": 4676,
+        "identities": 2735,
+        "mae_ppm": 3.0691810594080833,
+        "molecule_macro_mae_ppm": 3.993398203265657,
+        "median_absolute_ppm": 0.8000000000000043,
+        "p90_absolute_ppm": 5.389436208345511,
+        "rmse_ppm": 42.83523194172951
+      },
+      "gnn_raw": {
+        "observations": 4676,
+        "identities": 2735,
+        "mae_ppm": 2.918332901876823,
+        "molecule_macro_mae_ppm": 3.7928065788919856,
+        "median_absolute_ppm": 0.9170586013793942,
+        "p90_absolute_ppm": 4.652497100830079,
+        "rmse_ppm": 42.82529491120316
+      },
+      "gnn": {
+        "observations": 4676,
+        "identities": 2735,
+        "mae_ppm": 2.7556307447657,
+        "molecule_macro_mae_ppm": 3.62430638901785,
+        "median_absolute_ppm": 0.7467889785766608,
+        "p90_absolute_ppm": 4.330609771728515,
+        "rmse_ppm": 42.8147720164631
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -0.369091814247807,
+        "paired_molecule_bootstrap_95": [
+          -0.4844377677678566,
+          -0.2543788454083918
+        ]
+      }
+    },
+    "P=S": {
+      "tree": {
+        "observations": 327,
+        "identities": 243,
+        "mae_ppm": 5.828516207127176,
+        "molecule_macro_mae_ppm": 6.699973296881579,
+        "median_absolute_ppm": 1.9183564439590768,
+        "p90_absolute_ppm": 15.402483445730388,
+        "rmse_ppm": 12.61476395865656
+      },
+      "gnn_raw": {
+        "observations": 327,
+        "identities": 243,
+        "mae_ppm": 5.716082626366106,
+        "molecule_macro_mae_ppm": 6.374876478375723,
+        "median_absolute_ppm": 1.7014923095703125,
+        "p90_absolute_ppm": 11.75679324340821,
+        "rmse_ppm": 13.427885874217564
+      },
+      "gnn": {
+        "observations": 327,
+        "identities": 243,
+        "mae_ppm": 5.365406469409255,
+        "molecule_macro_mae_ppm": 6.173399217184354,
+        "median_absolute_ppm": 1.5470531463623018,
+        "p90_absolute_ppm": 11.993491333007823,
+        "rmse_ppm": 12.572775854048247
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -0.5265740796972258,
+        "paired_molecule_bootstrap_95": [
+          -1.2936351754509297,
+          0.24792315667773274
+        ]
+      }
+    },
+    "neutral P, three carbon neighbours": {
+      "tree": {
+        "observations": 583,
+        "identities": 364,
+        "mae_ppm": 7.150123065441477,
+        "molecule_macro_mae_ppm": 9.173392791457536,
+        "median_absolute_ppm": 1.17,
+        "p90_absolute_ppm": 22.013475847538952,
+        "rmse_ppm": 20.662648611216923
+      },
+      "gnn_raw": {
+        "observations": 583,
+        "identities": 364,
+        "mae_ppm": 6.343717213581274,
+        "molecule_macro_mae_ppm": 8.1960187259711,
+        "median_absolute_ppm": 1.5750798034667959,
+        "p90_absolute_ppm": 14.176830749511725,
+        "rmse_ppm": 19.44072289126541
+      },
+      "gnn": {
+        "observations": 583,
+        "identities": 364,
+        "mae_ppm": 5.750647379714547,
+        "molecule_macro_mae_ppm": 7.598326582958508,
+        "median_absolute_ppm": 1.0436405181884787,
+        "p90_absolute_ppm": 12.403319335937507,
+        "rmse_ppm": 19.14985230962425
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -1.5750662084990281,
+        "paired_molecule_bootstrap_95": [
+          -2.479929540557688,
+          -0.7522550114085135
+        ]
+      }
+    },
+    "neutral P, three neighbours including a heteroatom": {
+      "tree": {
+        "observations": 401,
+        "identities": 311,
+        "mae_ppm": 15.80136953519347,
+        "molecule_macro_mae_ppm": 16.982432458060394,
+        "median_absolute_ppm": 6.058467616318211,
+        "p90_absolute_ppm": 48.10976613222812,
+        "rmse_ppm": 28.353609013735383
+      },
+      "gnn_raw": {
+        "observations": 401,
+        "identities": 311,
+        "mae_ppm": 10.682741139723475,
+        "molecule_macro_mae_ppm": 11.78982801400989,
+        "median_absolute_ppm": 3.406675415039061,
+        "p90_absolute_ppm": 23.57538604736328,
+        "rmse_ppm": 25.142066912322278
+      },
+      "gnn": {
+        "observations": 401,
+        "identities": 311,
+        "mae_ppm": 10.486410177730265,
+        "molecule_macro_mae_ppm": 11.657309722916745,
+        "median_absolute_ppm": 3.0731011962890733,
+        "p90_absolute_ppm": 23.738067626953125,
+        "rmse_ppm": 25.131123174317967
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -5.325122735143651,
+        "paired_molecule_bootstrap_95": [
+          -7.480437224100141,
+          -2.96519078683439
+        ]
+      }
+    },
+    "other P environments": {
+      "tree": {
+        "observations": 577,
+        "identities": 495,
+        "mae_ppm": 20.421075818317167,
+        "molecule_macro_mae_ppm": 21.812909999704175,
+        "median_absolute_ppm": 7.368369991811342,
+        "p90_absolute_ppm": 50.608314090998725,
+        "rmse_ppm": 45.57777330243248
+      },
+      "gnn_raw": {
+        "observations": 577,
+        "identities": 495,
+        "mae_ppm": 13.008564185897855,
+        "molecule_macro_mae_ppm": 13.65645022793651,
+        "median_absolute_ppm": 4.809028625488281,
+        "p90_absolute_ppm": 30.201446174621577,
+        "rmse_ppm": 29.160644106965215
+      },
+      "gnn": {
+        "observations": 577,
+        "identities": 495,
+        "mae_ppm": 13.114855020248706,
+        "molecule_macro_mae_ppm": 13.74347063182741,
+        "median_absolute_ppm": 4.859422302246095,
+        "p90_absolute_ppm": 30.049282760620112,
+        "rmse_ppm": 29.644012679508702
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -8.069439367876765,
+        "paired_molecule_bootstrap_95": [
+          -11.239180454636298,
+          -5.239835705218417
+        ]
+      }
+    },
+    "positive P": {
+      "tree": {
+        "observations": 129,
+        "identities": 101,
+        "mae_ppm": 9.139667268244622,
+        "molecule_macro_mae_ppm": 10.33515924015921,
+        "median_absolute_ppm": 3.931905686014421,
+        "p90_absolute_ppm": 23.034419325890333,
+        "rmse_ppm": 17.44507322878242
+      },
+      "gnn_raw": {
+        "observations": 129,
+        "identities": 101,
+        "mae_ppm": 5.660594518498857,
+        "molecule_macro_mae_ppm": 6.655510333347635,
+        "median_absolute_ppm": 2.205565872192384,
+        "p90_absolute_ppm": 11.919500427246092,
+        "rmse_ppm": 11.782216635897443
+      },
+      "gnn": {
+        "observations": 129,
+        "identities": 101,
+        "mae_ppm": 5.975004643654638,
+        "molecule_macro_mae_ppm": 6.880464908423598,
+        "median_absolute_ppm": 2.3852369308471673,
+        "p90_absolute_ppm": 13.433572540283214,
+        "rmse_ppm": 12.071491882488962
+      },
+      "gnn_minus_tree_macro_ppm": {
+        "difference": -3.454694331735612,
+        "paired_molecule_bootstrap_95": [
+          -6.764893748459507,
+          -0.36147913836575657
+        ]
+      }
+    }
+  },
+  "test_predictions_sha256": "93dac13ef68aa62e9cb9a92b326cf46a690f399732eb65a916ede8dd0898421e"
+}

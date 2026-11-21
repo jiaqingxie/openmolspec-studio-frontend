@@ -33,9 +33,11 @@ python -m openmolspec_bench run \
   --output results/my_smoke.json
 ```
 
-统一目录保留 35 个任务配置，其中 32 项继续推进、3 项按用户要求停用（SpectraLLM、分子式预测、谱学 QA）。32 个活跃任务均有运行入口；F/P 正式评分仍受适用域门槛限制，B/Si 只报诊断，跨溶剂目前为实验参考检索基线。覆盖 H/C NMR、TransPeakNet HSQC、Xinyu 四模态 Vib2Mol、gap、构象到 IR/Raman、GLACIER/ICEBERG 和 MAGMa。接口存在不代表精度已验证。结果记录数据与权重 SHA-256、样本、候选池和状态。流程入口只进行推理或已有预测评分。
+统一目录保留 35 个任务配置，其中 32 项继续推进、3 项按用户要求停用（SpectraLLM、分子式预测、谱学 QA）。32 个活跃任务均有运行入口；³¹P 和 ¹⁹F 使用现有实验数据训练的溶液位移模型，B/Si 只报诊断，跨溶剂目前为实验参考检索基线。覆盖 H/C NMR、TransPeakNet HSQC、Xinyu 四模态 Vib2Mol、gap、构象到 IR/Raman、GLACIER/ICEBERG 和 MAGMa。接口存在不代表精度已验证。结果记录数据与权重 SHA-256、样本、候选池和状态。流程入口只进行推理或已有预测评分。
 
 详情见[任务目录](handbook/tasks.md)、[数据格式](handbook/data.md)、[评测口径](handbook/benchmark.md)、[Studio 操作](handbook/studio.md)及[结果](handbook/results.md)。旧核心项目说明仍位于 [docs/openmolspec_core.md](docs/openmolspec_core.md)。
+
+³¹P 与 ¹⁹F 的 CPU 预测器接收 SMILES 和可选溶剂。当前选出的 ³¹P 模型在 4,248 种留出分子上的观测 MAE 为 4.56 ppm，分子等权 MAE 为 5.95 ppm。[在线预测 ³¹P](https://jiaqingxie.github.io/openmolspec.github.io/#tool-31p) · [同划分模型比较](documentation/tasks/nmr-forward-31P.zh.md)。¹⁹F 的观测 MAE 为 6.10 ppm。权重位置、模型调研、按骨架和谱源拆分的误差、历史标签复核及复现命令见[实验报告](docs/SOLUTION_NMR_RESEARCH.zh.md)。
 
 ## 构建使用手册
 
