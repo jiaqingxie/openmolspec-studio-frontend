@@ -1,4 +1,5 @@
 {
+  "cosine_similarity_report": "results/forward_cosine_similarity.json",
   "tasks": {
     "nmr.forward.1H": {
       "benchmark": [

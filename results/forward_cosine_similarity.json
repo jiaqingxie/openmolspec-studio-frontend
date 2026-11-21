@@ -1,0 +1,200 @@
+{
+  "nmr_profile": "Unit-area Lorentzians on all real ppm coordinates. HSQC uses the product of both axes. All listed peaks, no alignment, no clipping, no experimental intensities or multiplet simulation.",
+  "nmr_aggregation": "Equal weight per held-out H/C molecule or expert HSQC spectrum. For single-environment measurements, first average within connectivity, then across connectivities.",
+  "nmr_width_sensitivity": "Half and double both refer to the listed reference FWHM, scaled along every axis.",
+  "tasks": {
+    "nmr.forward.1H": {
+      "cosine": 0.43847638560973684,
+      "half_width_cosine": 0.27750483824537847,
+      "double_width_cosine": 0.6126983055956627,
+      "molecules": 2971,
+      "fwhm_ppm": [
+        0.05
+      ],
+      "model_config_sha256": "f2bb1807b8f8f6047342e1c148da461560f78d593adca394d3f563f1e6ce2217",
+      "splits": {
+        "nmrspec_test": {
+          "cosine": 0.44170389004482696,
+          "half_width_cosine": 0.2775998929266387,
+          "double_width_cosine": 0.6180406052817282,
+          "molecules": 1000,
+          "count_penalized_error_ppm": 0.3498205071678617,
+          "reference_sha256": "256ca2d733db0103e99aad5855bc66b73e3a0bd2117ce2bd3204b63eff0f67a2"
+        },
+        "nmrexp_exp_10k": {
+          "cosine": 0.436410179808238,
+          "half_width_cosine": 0.2742850299480997,
+          "double_width_cosine": 0.6138669568732672,
+          "molecules": 991,
+          "count_penalized_error_ppm": 0.33886783832685985,
+          "reference_sha256": "e074dab3cc749e126bea8abc348a46f895dd033e5b45a21cacb28035741a2d11"
+        },
+        "nmrgym_test": {
+          "cosine": 0.4372724116446295,
+          "half_width_cosine": 0.2806637926753215,
+          "double_width_cosine": 0.6060652105934442,
+          "molecules": 980,
+          "count_penalized_error_ppm": 0.4173902886958736,
+          "reference_sha256": "bf8cb0cdcaf19884349e15230206c6110a29b479b1a04bec7ec0b9e5bff3ff9b"
+        }
+      }
+    },
+    "nmr.forward.13C": {
+      "cosine": 0.7828747258192432,
+      "half_width_cosine": 0.6498533794165663,
+      "double_width_cosine": 0.8806273231619912,
+      "molecules": 2728,
+      "fwhm_ppm": [
+        1.0
+      ],
+      "model_config_sha256": "5ed10d023793bfa52aca0396741c95c81e6ff538aedb6f44b546d9cea6a4ff9c",
+      "splits": {
+        "nmrspec_test": {
+          "cosine": 0.8567691814460089,
+          "half_width_cosine": 0.7387794432473003,
+          "double_width_cosine": 0.9295738596822467,
+          "molecules": 1000,
+          "count_penalized_error_ppm": 1.2166401093698231,
+          "reference_sha256": "256ca2d733db0103e99aad5855bc66b73e3a0bd2117ce2bd3204b63eff0f67a2"
+        },
+        "nmrexp_exp_10k": {
+          "cosine": 0.8716397303488275,
+          "half_width_cosine": 0.7683747615677011,
+          "double_width_cosine": 0.9345995894584495,
+          "molecules": 748,
+          "count_penalized_error_ppm": 1.1431822472725606,
+          "reference_sha256": "e074dab3cc749e126bea8abc348a46f895dd033e5b45a21cacb28035741a2d11"
+        },
+        "nmrgym_test": {
+          "cosine": 0.6397209717224122,
+          "half_width_cosine": 0.4686492389269939,
+          "double_width_cosine": 0.7894867193762704,
+          "molecules": 980,
+          "count_penalized_error_ppm": 2.771536805913537,
+          "reference_sha256": "bf8cb0cdcaf19884349e15230206c6110a29b479b1a04bec7ec0b9e5bff3ff9b"
+        }
+      }
+    },
+    "nmr.forward.31P": {
+      "cosine": 0.4622740635809982,
+      "half_width_cosine": 0.3210985159051193,
+      "double_width_cosine": 0.6084812975554382,
+      "molecules": 4248,
+      "observations": 6693,
+      "fwhm_ppm": [
+        1.0
+      ],
+      "per_observation": {
+        "cosine": 0.5170698853657103,
+        "half_width_cosine": 0.3641566190217169,
+        "double_width_cosine": 0.6655493794026888
+      },
+      "observation_mae_ppm": 4.268189630220197,
+      "molecule_macro_mae_ppm": 5.538348532278627,
+      "model_config_sha256": "6f08e5689aa7c6808a3031a6af0a64c82b76308b057688a50a9d49022a5535e6",
+      "reference_sha256": "900a93cf21e8475f07ddc3f6364e80cfa6f646c361524a49592358ac686909ea",
+      "replay_sha256": "838abd9a1037f7568930a3585c46af952c6f2b138ce835d29a252e06f54f250e"
+    },
+    "nmr.forward.19F": {
+      "cosine": 0.637437191212145,
+      "half_width_cosine": 0.5020254427272193,
+      "double_width_cosine": 0.7589789422780889,
+      "molecules": 14330,
+      "observations": 15803,
+      "fwhm_ppm": [
+        1.0
+      ],
+      "per_observation": {
+        "cosine": 0.635532330018285,
+        "half_width_cosine": 0.5001869659546705,
+        "double_width_cosine": 0.7571006217183147
+      },
+      "observation_mae_ppm": 5.923589186122135,
+      "molecule_macro_mae_ppm": 5.621859439881985,
+      "model_config_sha256": "da9d2c0e7ce41e5e3b070f57916861c9c4cc2e267830df0b856d197a3f0ec100",
+      "reference_sha256": "49f26484036ca4451534e52b674f30bb984324ab1ed13eacc056d8249f9fed9f",
+      "replay_sha256": "44581f6472d12428d410051172fe4679343dce47f736d3ca071984043e1571d2"
+    },
+    "nmr.forward.11B": {
+      "cosine": 0.7185184859347287,
+      "half_width_cosine": 0.5623139736795033,
+      "double_width_cosine": 0.8357615679818616,
+      "molecules": 1517,
+      "observations": 1669,
+      "fwhm_ppm": [
+        1.0
+      ],
+      "per_observation": {
+        "cosine": 0.7280753504831112,
+        "half_width_cosine": 0.5730912236402597,
+        "double_width_cosine": 0.8425826424341728
+      },
+      "observation_mae_ppm": 1.2397650623195826,
+      "molecule_macro_mae_ppm": 1.282710269032307,
+      "model_config_sha256": "5835cef1af2200d0fa84e47cdbb401ac6f392781f673d76822816359302cda8c",
+      "reference_sha256": "d9adfbe11efd3ebcd81c0648a1824740c3c72176b90175e971b21cd0b31d7bf4",
+      "replay_sha256": "a7d23d0b8c064c19b66f96383ae57c9a537b12ff453bc885669be92c4b6caa14"
+    },
+    "nmr.forward.29Si": {
+      "cosine": 0.5141924271464486,
+      "half_width_cosine": 0.33936262640324816,
+      "double_width_cosine": 0.6960100694542027,
+      "molecules": 177,
+      "observations": 187,
+      "fwhm_ppm": [
+        1.0
+      ],
+      "per_observation": {
+        "cosine": 0.527254333801394,
+        "half_width_cosine": 0.35121527086538484,
+        "double_width_cosine": 0.7070715144064107
+      },
+      "observation_mae_ppm": 1.9556673669887346,
+      "molecule_macro_mae_ppm": 2.03423161841152,
+      "model_config_sha256": "52c2d4269bf57697d0ec2d61217142f7a70a312fe7c63e0039135e5614476ce7",
+      "reference_sha256": "6172838fe7eeee13eeee05b878a0a329c05e8a8c7903b493bda831b6a6c8d58b",
+      "replay_sha256": "a7d23d0b8c064c19b66f96383ae57c9a537b12ff453bc885669be92c4b6caa14"
+    },
+    "nmr.hsqc.transpeaknet": {
+      "cosine": 0.21149151020436904,
+      "half_width_cosine": 0.08222484373551411,
+      "double_width_cosine": 0.43473543193865116,
+      "spectra": 479,
+      "observed_crosspeaks": 7926,
+      "predicted_crosspeaks": 7613,
+      "axes": [
+        "13C",
+        "1H"
+      ],
+      "fwhm_ppm": [
+        1.0,
+        0.05
+      ],
+      "checkpoint_sha256": "ff72d33b422dee68b8f359536079b25bf165e81d363652308da65ecd89ed2523",
+      "calibration_sha256": "d6deafd1d0859e809347a918e0384e1e45b7f1f8311260d7052d72af0bb1468a",
+      "reference_sha256": "614be38c96f4bd1b8faad55a13c80423fe39136258bf234c4b0956d38fda0368",
+      "replay_sha256": "281d69ed588eeb99d50dca217c410776e0f6e9c2be1bc65f0bfd93dde69a3a44"
+    },
+    "vibrational.forward": {
+      "ir_cosine": 0.98345124371437,
+      "raman_cosine": 0.9849866301108531,
+      "molecules": 303,
+      "reference": "QM9S calculated intensity profiles",
+      "replay_sha256": "9a6f56c51b3aaf06d9d87e1280e1f5536248c47fde8bec967b4b45fcc3a54dc7"
+    },
+    "ms.forward.glacier": {
+      "cosine": 0.6039401769683989,
+      "molecules": 875,
+      "sampled": 1024,
+      "reference": "MassSpecGym measured tandem MS, all observed peaks",
+      "evidence_sha256": "13107786f634b861a8bbcee30a855d81b99aec51e8f1676d3862d3258c4097df"
+    },
+    "ms.forward.iceberg": {
+      "cosine": 0.51751945844935,
+      "molecules": 875,
+      "sampled": 1024,
+      "reference": "MassSpecGym measured tandem MS, all observed peaks",
+      "evidence_sha256": "ac30b1930b3dfd156f1862c777861e34b961798b6ffdfe10f2af8270536d3e54"
+    }
+  }
+}
