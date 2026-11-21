@@ -6,6 +6,32 @@ import tempfile
 from types import SimpleNamespace
 
 
+def released_shift(request):
+    """Return a single prediction from an installed, validation-selected solution NMR model."""
+    from openmolspec_bench.data import sha256
+
+    directory = Path(request["model_dir"])
+    config = json.loads((directory / "model.json").read_text())
+    nucleus = request["nucleus"]
+    if config.get("nucleus") != nucleus:
+        raise ValueError("Configured checkpoint nucleus differs from the requested nucleus")
+    engine = config.get("engine", "lightgbm")
+    if engine == "peak_spectrum":
+        from .assigned_shifts import PeakSpectrumPredictor
+        predictor = PeakSpectrumPredictor(directory)
+    else:
+        from .solution_shifts import SolutionShiftPredictor
+        predictor = SolutionShiftPredictor(directory)
+    record = predictor.predict(request["smiles"], request.get("solvent"))
+    if engine == "peak_spectrum":
+        if not record["peaks"]:
+            raise ValueError("This molecule has no site of the requested nucleus")
+        record["atom_indices"] = [p["atom_indices"] for p in record["peaks"]]
+    digest = config.get("gnn_sha256") or config.get("booster_sha256") or sha256(directory / "model.json")
+    return dict(task="nmr.forward." + nucleus, model=engine, records=[record],
+                checkpoint_sha256=digest, unit="ppm")
+
+
 def nmrnet(request):
     from rdkit import Chem
     from openmolspec_bench.assignment import predict_atoms, assign_peaks
@@ -146,11 +172,14 @@ def vibrational(request):
 
 
 def main():
-    import torch
-    torch.set_num_threads(2)
     source, output = map(Path, sys.argv[1:])
     request = json.loads(source.read_text())
-    if request['backend'] == 'nmrnet':
+    if request['backend'] not in ('released_shift', 'carbon_folds'):
+        import torch
+        torch.set_num_threads(2)
+    if request['backend'] == 'released_shift':
+        result = released_shift(request)
+    elif request['backend'] == 'nmrnet':
         result = nmrnet(request)
     elif request['backend'] == 'carbon_folds':
         from openmolspec_bench.carbon import predict

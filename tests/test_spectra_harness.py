@@ -9,6 +9,24 @@ class SpectraHarnessTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'1024'):
             SpectraHarness().validate('vibrational.gap.ir_raman_hc',{'ir':[1,2]},{'root':'models'})
 
+    def test_solution_nucleus_uses_the_installed_registry_and_solvent(self):
+        from pathlib import Path
+        from tempfile import TemporaryDirectory
+        from unittest.mock import patch
+        harness = SpectraHarness()
+        with TemporaryDirectory() as temp:
+            root = Path(temp)
+            directory = root / "31P"
+            directory.mkdir()
+            (directory / "model.json").write_text('{"nucleus":"31P"}')
+            with patch("openmolspec._runtime.invoke", return_value={"unit":"ppm"}) as invoke:
+                result = harness.run("nmr.forward.31P", {"smiles":"CP", "solvent":"CDCl3"}, {"root":temp})
+            self.assertTrue(result["completed"])
+            request = invoke.call_args.args[0]
+            self.assertEqual(request["backend"], "released_shift")
+            self.assertEqual(request["model_dir"], str(directory))
+            self.assertEqual(request["solvent"], "CDCl3")
+
     def test_plugin_repeated_outputs_and_failure_trace(self):
         plugin=HarnessPlugin('test',('test',),lambda *args:None,lambda *args:{'shifts':[1.2]})
         r=SpectraHarness([plugin]).run('test',{}, {},repeats=2)

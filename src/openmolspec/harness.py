@@ -159,9 +159,10 @@ def _nmr_validate(task,x,config):
     if task.startswith('nmr.forward.') or task=='nmr.assignment':
         if not isinstance(x.get('smiles'),str) or not x['smiles'].strip():raise ValueError('Supply a SMILES structure')
         nucleus=task.rsplit('.',1)[-1] if task.startswith('nmr.forward.') else x.get('nucleus','13C')
-        if nucleus not in ('1H','13C'):raise ValueError('Direct NMRNet SDK supports 1H/13C')
+        if task == 'nmr.assignment' and nucleus not in ('1H','13C'):
+            raise ValueError('Atom assignment supports 1H and 13C')
         if task=='nmr.assignment':_finite_vector(x.get('peaks_ppm'),'peaks_ppm')
-        if not config.get('root'):raise ValueError('Supply the NMRNet model root')
+        if not config.get('root'):raise ValueError('Supply the selected model directory or model root')
     else:
         if not config.get('checkpoint'):raise ValueError('Supply a compatible NMR Transformer checkpoint')
         query=x.get('query')
@@ -180,10 +181,15 @@ def _nmr_execute(task,x,config):
     settings={k:v for k,v in config.items() if k in ('python','device')}
     if task.startswith('nmr.forward.') or task=='nmr.assignment':
         nucleus=task.rsplit('.',1)[-1] if task.startswith('nmr.forward.') else x.get('nucleus','13C')
+        from pathlib import Path
+        from ._runtime import invoke
+        root = Path(config['root']).expanduser().resolve()
+        if task.startswith('nmr.forward.') and config.get('backend') not in ('nmrnet', 'nmrnetpp'):
+            directory = root if (root / 'model.json').is_file() else root / nucleus
+            if nucleus not in ('1H', '13C') or (directory / 'model.json').is_file():
+                return invoke(dict(backend='released_shift', model_dir=str(directory), nucleus=nucleus,
+                                   smiles=x['smiles'], solvent=x.get('solvent')), python=config.get('python'))
         if task == 'nmr.forward.13C':
-            from pathlib import Path
-            from ._runtime import invoke
-            root = Path(config['root']).expanduser().resolve()
             preset = config.get('backend')
             if preset == 'nmrnetpp' or (preset is None and (root / 'nmrnetpp/checkpoints').is_dir()):
                 return invoke(dict(backend='carbon_folds', models_root=str(root), smiles=[x['smiles']]), python=config.get('python'))
@@ -241,7 +247,7 @@ def default_plugins():
         The three plugin families and their task bindings.
     """
     from openmolspec_bench.catalog import TASKS
-    nmr=tuple(t.id for t in TASKS if t.enabled and (t.id in ('nmr.forward.1H','nmr.forward.13C','nmr.assignment') or t.id.startswith('nmr.generation.') or t.id.startswith('nmr.retrieval.') and t.id.endswith('.s2m')))
+    nmr=tuple(t.id for t in TASKS if t.enabled and ((t.id.startswith('nmr.forward.') or t.id == 'nmr.assignment') or t.id.startswith('nmr.generation.') or t.id.startswith('nmr.retrieval.') and t.id.endswith('.s2m')))
     ms=tuple(t.id for t in TASKS if t.id.startswith('ms.forward.'))
     vib=tuple(t.id for t in TASKS if t.enabled and (t.id.startswith('vibrational.') and t.id!='vibrational.forward' or t.id.startswith('spectroscopy.reranking')))
     return [HarnessPlugin('NMR Spectra Harness',nmr,_nmr_validate,_nmr_execute),

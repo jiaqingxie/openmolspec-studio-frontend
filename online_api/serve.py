@@ -29,16 +29,17 @@ MCP_TASKS = {'nmr.forward.1H', 'nmr.forward.13C', 'nmr.assignment',
              'vibrational.gap.ir_raman_hc', 'vibrational.generation.hc', 'vibrational.retrieval.hc',
              'ms.forward.glacier', 'ms.forward.iceberg', 'nmr.generation.hc', 'nmr.retrieval.hc.s2m'}
 SOLUTION_TASKS = {f'nmr.forward.{n}' for n in ('31P', '19F', '11B', '29Si')}
+MCP_TASKS |= SOLUTION_TASKS
 LOCAL_TASKS = SOLUTION_TASKS | { 'vibrational.forward', 'nmr.solvent_transfer', 'nmr.hsqc.transpeaknet'}
 TASKS = MCP_TASKS | LOCAL_TASKS
 SYSTEM = """You are the OpenMolSpec spectroscopy assistant. Answer in the user's language.
 Use the MCP tools to discover capabilities, validate a request, and run models.
 All numerical predictions must come from spectra_predict. Do not invent values.
 For prediction, always call spectra_validate first and check valid=true.
-For NMR use SMILES and 1H/13C. Assignment additionally needs measured ppm peaks.
+For NMR supply SMILES and the requested nucleus. For 1H/13C assignment also supply measured ppm peaks.
 For MS/MS use ms.forward.glacier or ms.forward.iceberg with smiles, adduct, collision_energy and instrument.
 Ask for missing acquisition conditions; do not invent them.
-The exact task IDs are nmr.forward.13C, nmr.forward.1H and nmr.assignment.
+NMR shift tasks are nmr.forward.1H, nmr.forward.13C, nmr.forward.11B, nmr.forward.29Si, nmr.forward.31P and nmr.forward.19F. Use nmr.assignment for atom assignments.
 NMR prediction inputs have the form {"smiles":"CCO"}.
 Report atom indices and ppm units. No hidden model paths or configuration are needed.
 For spectra-to-property/generation use full supplied IR/Raman/H/C arrays, not invented arrays.
@@ -224,6 +225,12 @@ class Service:
 
     def settings(self, task):
         if task not in MCP_TASKS: raise ValueError('Choose an available MCP model task')
+        if task in SOLUTION_TASKS:
+            if task not in self.enabled_tasks:
+                raise ValueError('The requested solution model is unavailable')
+            return {'root': str(self.solution_models[task]), 'python': self.args.solution_python}
+        if task == 'nmr.forward.1H' and self.peak_root and (self.peak_root / '1H/model.json').is_file():
+            return {'root': str(self.peak_root / '1H'), 'python': self.args.solution_python}
         if task == 'nmr.forward.13C' and (self.args.models_root / 'nmrnetpp/checkpoints').is_dir():
             return {'root': str(self.args.models_root), 'python': self.args.solution_python, 'backend': 'nmrnetpp'}
         if task.startswith('ms.forward.'):
@@ -259,7 +266,7 @@ class Service:
         result = self.unpack(await session.call_tool(name, arguments))
         if name in {'spectra_tasks', 'spectra_datasets'} and isinstance(result, dict) and isinstance(result.get('result'), list):
             result = result['result']
-        if name == 'spectra_tasks': result = [row for row in result if row['task'] in MCP_TASKS]
+        if name == 'spectra_tasks': result = [row for row in result if row['task'] in MCP_TASKS and row['task'] in self.enabled_tasks]
         if name == 'spectra_predict' and not result.get('completed'):
             raise ValueError(result.get('calls', [{}])[-1].get('error', 'Model execution failed'))
         result = clean(result)
