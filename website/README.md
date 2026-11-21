@@ -5,8 +5,7 @@ Public URL: https://jiaqingxie.github.io/openmolspec.github.io/
 The public project site has four main entries: Introduction, Tool, Dataset and
 Documentation. `portal.html`, `portal.css` and `portal.js` implement the active
 interface. GitHub Pages hosts its static frontend; a separate Python service
-executes the real model requests. The Documentation entry opens the canonical
-Read the Docs manual. The complete bilingual manual remains available at `docs/`.
+executes the real model requests. The Documentation entry opens the bilingual manual bundled with the same site release at `docs/`. The documentation section also links to Read the Docs.
 
 The Tool workspace offers NMR shift prediction and assignment, solvent transfer,
 TransPeakNet HSQC prediction from SMILES and solvent, with optional measured peaks for assignment, H/C NMR search and generation, GLACIER and
