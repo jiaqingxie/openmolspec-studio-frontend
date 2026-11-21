@@ -31,6 +31,7 @@ DATA_FIGURES=[
 def contract(task):
     name=task.id
     if name.startswith('nmr.forward.'):return 'Molecular structure; nucleus','Atom-indexed shifts (ppm)'
+    if name=='nmr.hsqc.transpeaknet':return 'Known structure and solvent','Carbon-indexed HSQC cross-peaks (ppm)'
     if name=='nmr.assignment':return 'Known structure; observed H/C peaks','Candidate peak-to-atom assignments'
     if name=='nmr.solvent_transfer':return 'Structure; source shifts; solvent pair','Target shifts and reference provenance'
     if name.startswith('nmr.retrieval.'):

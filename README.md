@@ -6,7 +6,7 @@
 
 OpenDataLab / WanJuan 清洗所得数据是团队整理的外部实验谱，与 OpenMolSpec 计算谱及接入的外部基准分别报告。当前工作台支持实验 H/C NMR 候选检索与 SMILES 生成，并保留计算 IR/Raman、谱图到性质和 Vib2Mol 工作流。
 
-中英文完整手册已上线：[English](https://openmolspec.readthedocs.io/en/latest/) · [简体中文](https://openmolspec.readthedocs.io/en/latest/zh/index.html)。采用 Sphinx 和经典 `sphinx_rtd_theme`，提供左侧层级目录、全文搜索、上下篇导航和语言切换。包含 82 个经 Jupyter 内核执行的教程预览及下载；项目网页保留 42 张真实结果与数据分布图。源文件位于 [documentation/](documentation/index.md)；旧 [handbook/](handbook/index.md) 保留历史记录。
+中英文完整手册已上线：[English](https://openmolspec.readthedocs.io/en/latest/) · [简体中文](https://openmolspec.readthedocs.io/en/latest/zh/index.html)。采用 Sphinx 和经典 `sphinx_rtd_theme`，提供左侧层级目录、全文搜索、上下篇导航和语言切换。包含 84 个经 Jupyter 内核执行的教程预览及下载；项目网页保留 43 张真实结果与数据分布图。源文件位于 [documentation/](documentation/index.md)；旧 [handbook/](handbook/index.md) 保留历史记录。
 
 ## 安装与启动
 
@@ -33,7 +33,7 @@ python -m openmolspec_bench run \
   --output results/my_smoke.json
 ```
 
-统一目录保留 34 个任务配置，其中 31 项继续推进、3 项按用户要求停用（SpectraLLM、分子式预测、谱学 QA）。31 个活跃任务均有运行入口；F/P 正式评分仍受适用域门槛限制，B/Si 只报诊断，跨溶剂目前为实验参考检索基线。覆盖 H/C NMR、Xinyu 四模态 Vib2Mol、gap、构象到 IR/Raman、GLACIER/ICEBERG 和 MAGMa。接口存在不代表精度已验证。结果记录数据与权重 SHA-256、样本、候选池和状态。流程入口只进行推理或已有预测评分。
+统一目录保留 35 个任务配置，其中 32 项继续推进、3 项按用户要求停用（SpectraLLM、分子式预测、谱学 QA）。32 个活跃任务均有运行入口；F/P 正式评分仍受适用域门槛限制，B/Si 只报诊断，跨溶剂目前为实验参考检索基线。覆盖 H/C NMR、TransPeakNet HSQC、Xinyu 四模态 Vib2Mol、gap、构象到 IR/Raman、GLACIER/ICEBERG 和 MAGMa。接口存在不代表精度已验证。结果记录数据与权重 SHA-256、样本、候选池和状态。流程入口只进行推理或已有预测评分。
 
 详情见[任务目录](handbook/tasks.md)、[数据格式](handbook/data.md)、[评测口径](handbook/benchmark.md)、[Studio 操作](handbook/studio.md)及[结果](handbook/results.md)。旧核心项目说明仍位于 [docs/openmolspec_core.md](docs/openmolspec_core.md)。
 
@@ -57,4 +57,21 @@ Read the Docs 使用 `.readthedocs.yaml` 构建 `release/openmolspec-v1` 分支�
 
 当前模型来源和接入条件见 [后续模型核查](docs/ACTIVE_MODEL_FOLLOWUP.md)。
 
+二维 HSQC 可用 TransPeakNet 从 SMILES 和溶剂预测交叉峰。用冻结权重重算作者笔记本的 511 行溶剂记录，¹³C / ¹H MAE 为 2.024874 / 0.165062 ppm。对公开的 479 张谱等权平均，结果为 2.027531 / 0.165891 ppm。网页的峰匹配规则另行评测，7,926 个不同观测峰中有 5,141 个命中专家给出的碳位点，未匹配峰计入分母。[中文任务指南](documentation/tasks/nmr-hsqc-transpeaknet.zh.md) · [完整预测](results/transpeaknet_hsqc_479.json)
+
 原子指认使用冻结 NMRNet H/C 权重，可在 Prediction (Online) 中直接运行。跨溶剂页面明确标注参考检索基线；源数据准备和部署变量见 [接入与发布说明](docs/REMAINING_TASKS_DELIVERY.md)。
+
+### simpleNMR 归属样例
+
+作者的 2-乙基-1-茚酮工作簿含一维氢谱、碳谱、纯位移氢谱及 HSQC、COSY、HMBC。脚本从工作簿重算碳信号的候选原子，最后与作者保存的演示表按信号编号核对。逐碳位移、候选原子和 HSQC 峰见[样例结果](results/simplenmr_indanone.json)。[作者仓库](https://github.com/EricHughesABC/simpleNMR/tree/685b819a54fb49ccba63290cd1b493a00ae33ebd)
+
+在单独的 Python 3.10 环境中运行。脚本使用 Java 11 或更高版本。Linux 下使用平台的 classpath 分隔符调用作者的 NMRShiftDB 预测器，并在临时目录中读写工作文件。
+
+```bash
+git clone --depth 1 --filter=blob:none --sparse https://github.com/EricHughesABC/simpleNMR.git
+git -C simpleNMR fetch --depth 1 origin 685b819a54fb49ccba63290cd1b493a00ae33ebd
+git -C simpleNMR checkout 685b819a54fb49ccba63290cd1b493a00ae33ebd
+git -C simpleNMR sparse-checkout set csTables exampleProblems/2-ethyl-1-indanone
+python -m pip install 'numpy==1.26.4' 'pandas==1.5.3' 'rdkit==2024.9.6' 'nmrglue==0.11' 'PyQt5==5.15.11' 'openpyxl==3.1.5' scipy networkx PyYAML pillow
+python scripts/reproduce_simplenmr.py --source simpleNMR --output results/indanone-local.json
+```

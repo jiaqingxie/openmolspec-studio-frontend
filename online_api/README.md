@@ -28,7 +28,7 @@ python -m online_api.serve \
   --model deepseek-v4.1-flash
 ```
 
-Enter the provider key at the hidden prompt. A deployment secret can instead
+For a model-only deployment, add `--tools-only`. The spectroscopy tools then run without a language-model provider. For the agent, enter the provider key at the hidden prompt. A deployment secret can instead
 provide `OPENAI_API_KEY`. Never put it in frontend configuration, a command-line
 argument, the source tree or screenshots. The service binds to `127.0.0.1:8721`.
 Run it under a process supervisor for a persistent deployment. A restart marks
@@ -58,8 +58,8 @@ Direct-connect hosts do not need the helpers.
 
 Use the [author repository at commit `2e93db8`](https://github.com/siriusxiao62/2dNMR/tree/2e93db82a9d627ac01109474e9b6e594065e3d56)
 for TransPeakNet. The adapter checks the original 2D checkpoint digest and loads
-only tensors. It predicts carbon and proton shifts and matches them to submitted
-HSQC peaks using OpenMolSpec's distance window. Its assignments preserve original
+only tensors. Supply SMILES and solvent to predict cross-peaks. Include `hsqc_peaks`
+to match measured peaks using OpenMolSpec's distance window. Its assignments preserve original
 SMILES atom order and explicitly return unmatched peaks. The `--transpeaknet-source`
 and `--solvent-library` workflows are available when those local assets are configured.
 

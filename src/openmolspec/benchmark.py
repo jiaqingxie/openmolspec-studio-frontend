@@ -19,7 +19,7 @@ class Benchmark:
     **assets
         Model/data locations accepted by the benchmark CLI: ``models_root``,
         ``portable_root``, ``alignment_checkpoint``, ``generation_checkpoint``,
-        ``nmr_python``, ``ms_python``, ``solvent_library``, ``ms_source``,
+        ``transpeaknet_source``, ``nmr_python``, ``ms_python``, ``solvent_library``, ``ms_source``,
         ``ms_weights``, ``ms_input_csv``, ``ms_metadata_tsv``, ``magma_source``,
         ``gap_lmdb`` and ``fp_inference_root``.
 
@@ -31,7 +31,7 @@ class Benchmark:
     """
     def __init__(self, *, workspace, python=None, **assets):
         allowed = {'portable_root', 'models_root', 'alignment_checkpoint', 'generation_checkpoint',
-                   'nmr_python', 'ms_python', 'solvent_library', 'ms_source', 'ms_weights',
+                   'transpeaknet_source', 'nmr_python', 'ms_python', 'solvent_library', 'ms_source', 'ms_weights',
                    'ms_input_csv', 'ms_metadata_tsv', 'magma_source', 'gap_lmdb', 'fp_inference_root'}
         if set(assets) - allowed:
             raise ValueError(f'Unknown asset options: {set(assets) - allowed}')

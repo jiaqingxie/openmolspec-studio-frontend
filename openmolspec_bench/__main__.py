@@ -51,6 +51,7 @@ def main():
     run.add_argument("--nmr-python", default=sys.executable, help="Interpreter containing frozen NMRNet dependencies")
     run.add_argument("--assignment-nucleus", choices=("1H", "13C"), default="13C")
     run.add_argument("--solvent-library", type=Path, default=Path(__file__).resolve().parents[1]/".runtime/solvent_reference_library.json")
+    run.add_argument("--transpeaknet-source", type=Path, help="Author 2dNMR checkout with HSQC weights and test ZIP")
     run.add_argument("--ms-source", type=Path)
     run.add_argument("--ms-weights", type=Path)
     run.add_argument("--ms-input-csv", type=Path)
@@ -92,7 +93,8 @@ def main():
     selected = [task for task in TASKS if task.enabled] if "all" in args.tasks else [BY_ID[key] for key in args.tasks]
     started = time.monotonic()
     result = {"schema_version": 1, "release": "1.0.0", "started_at": datetime.now(timezone.utc).isoformat(),
-              "purpose": "pipeline_smoke_evaluation", "limit": args.limit,
+              "purpose": ("hsqc_checkpoint_evaluation" if [t.backend for t in selected] == ["transpeaknet"]
+                          else "pipeline_smoke_evaluation"), "limit": args.limit,
               "device": args.device, "python": platform.python_version(), "torch": torch.__version__,
               "implementation_sha256": implementation_sha256(),
               "training_performed": False, "results": []}

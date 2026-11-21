@@ -76,6 +76,10 @@ for id_, title, backend, metrics in (
                       ("IR", "Raman", "1H", "13C"), "computed", backend, metrics,
                       "使用 Xinyu 保存的四模态 checkpoint、H/C 参考与归一化；生成按原评测脚本去重和 ITM 重排。"))
 
+TASKS.append(Task("nmr.hsqc.transpeaknet", "结构与溶剂 → HSQC 交叉峰", "forward", ("HSQC",),
+                  "experimental", "transpeaknet", ("carbon_mae_ppm", "proton_mae_ppm"),
+                  "使用作者二维谱权重，按专家标注的原子编号计算每张谱的碳、氢位移误差。"))
+
 for model in ("glacier", "iceberg"):
     TASKS.append(Task(f"ms.forward.{model}", f"分子 → MS/MS（{model.upper()}）", "forward", ("MS/MS",),
                       "experimental", f"ms_pretrained_{model}", ("cosine_similarity", "entropy_similarity"),

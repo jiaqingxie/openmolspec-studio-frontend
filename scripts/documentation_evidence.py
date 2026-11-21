@@ -33,6 +33,22 @@ def compact(value, limit=8):
     return value
 
 
+def hsqc_evidence():
+    name = 'transpeaknet_hsqc_479.json'
+    report = read(name)
+    row, = report['results']
+    if row['status'] != 'passed' or row['spectra'] != 479:
+        raise ValueError('Expected a completed evaluation on the full HSQC ZIP')
+    notebook = row['notebook_protocol']
+    return {'task': row['task'], 'enabled': True, 'status': 'recorded_results',
+            'training_performed': False, 'source_files': [name],
+            'source_hashes': {name: hashlib.sha256((ROOT/'results'/name).read_bytes()).hexdigest()},
+            'runs': [{'dataset': '479 expert spectra', 'status': 'passed', 'metrics': row['metrics']},
+                     {'dataset': 'Author notebook (511 solvent rows)', 'status': 'passed', 'metrics': notebook['metrics']}],
+            'examples': [row['example']], 'plot': {'kind': 'hsqc', 'label': row['example']['sample_id']},
+            'selection_policy': 'Butanenitrile, the existing website example (32869.csv).'}
+
+
 def collect():
     bundles={t.id:{'task':t.id,'enabled':t.enabled,'source_files':[],'runs':[],'examples':[],
                   'selection_policy':'First recorded example in the cited run; not selected by prediction quality.',
@@ -187,6 +203,7 @@ def collect():
         if not b['enabled']:b['status']='deferred_by_user'
         elif task.endswith(('11B','29Si','19F','31P')):b['status']='diagnostic_only'
         else:b['status']='recorded_results'
+    bundles['nmr.hsqc.transpeaknet'] = hsqc_evidence()
     return bundles
 
 

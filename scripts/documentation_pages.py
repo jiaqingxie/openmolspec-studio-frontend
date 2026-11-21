@@ -20,6 +20,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 def reference_keys(task):
     name=task.id
+    if name=='nmr.hsqc.transpeaknet':return ['transpeaknet']
     if name.startswith('nmr.forward.') or name=='nmr.assignment':return ['nmrnet','opendatalab']
     if name=='nmr.solvent_transfer':return ['nmrshiftdb']
     if name.startswith('nmr.'):return ['nmrtrans','nmrgym','opendatalab']
@@ -33,6 +34,7 @@ def notebook(task,language):
     from manual_profiles import profile
     title,purpose,method,metrics,_,_=profile(task,en)
     runtime_options=' --fp-inference-root /path/to/frozen-fp --allow-cross-domain-diagnostic' if id_ in ['nmr.forward.19F','nmr.forward.31P'] else ''
+    if id_ == 'nmr.hsqc.transpeaknet':runtime_options = ' --transpeaknet-source /path/to/2dNMR'
     cells=[]
     def markdown(text):cells.append({'cell_type':'markdown','metadata':{},'source':[text]})
     def code(text):cells.append({'cell_type':'code','metadata':{},'source':[text],'execution_count':None,'outputs':[]})
@@ -159,6 +161,7 @@ def build_pages(tasks,profile,profile_zh):
                 page+='## '+('Reproduce' if en else '复现方式')+'\n\n'
                 page+=f'[Notebook with executed figures](../notebooks/{slug}.ipynb) · [Quick Start](../quickstart.md)\n\n'
                 extra=' --fp-inference-root /path/to/frozen-fp --allow-cross-domain-diagnostic' if task.id in ['nmr.forward.19F','nmr.forward.31P'] else ''
+                if task.id == 'nmr.hsqc.transpeaknet':extra = ' --transpeaknet-source /path/to/2dNMR'
                 page+=f'```bash\npython -m openmolspec_bench run --workspace /path/to/OpenMolSpec \\\n  --tasks {task.id}{extra} --limit 8 --output results/{slug}-new.json\n```\n\n'
                 page+=training_section(task,en)+'\n'
                 if task.id.startswith('nmr.forward.'):

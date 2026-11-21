@@ -25,6 +25,11 @@ def io_contract(task,en):
                 ('reference peaks','Optional measured ppm values for evaluation; not an inference input.','评测时提供实测 ppm 标签；标签不作为模型推理输入。')]
         outputs=[('prediction_ppm','Per-atom chemical shifts in ppm, with atom indices or a peak list.','逐原子化学位移（ppm）及原子编号，或整理后的峰列表。'),
                  ('error / coverage','Reference-matched errors and peak coverage.','与参考谱匹配后的误差及峰覆盖率。')]
+    elif id_=='nmr.hsqc.transpeaknet':
+        fields=[('smiles', 'Original atom order of the known structure.', '保留原子顺序的已知结构。'),
+                ('solvent', 'One of the nine author solvent classes.', '作者定义的九种溶剂类别之一。')]
+        outputs=[('carbon_atom_index', 'Zero-based protonated carbon indices.', '带氢碳原子的编号，从零开始。'),
+                 ('carbon_ppm / proton_ppm', 'Per-carbon shifts and two proton head outputs in ppm.', '各碳位点的碳位移及两个氢位移输出，单位为 ppm。')]
     elif id_=='nmr.assignment':
         fields=[('smiles','Known molecular structure.','已知分子结构。'),('nucleus / peaks_ppm','1H or 13C and the measured 1D peak positions in ppm.','1H 或 13C，以及实测一维峰位置（ppm）。'),('tolerance_ppm','Maximum allowed peak/site residual: default H 0.5, C 5 ppm.','峰与预测位点的最大允许残差，默认 H 0.5、C 5 ppm。')]
         outputs=[('assignments','Peak index → candidate atom indices, predicted ppm, residual and alternatives.','峰编号 → 候选原子编号、预测位移、残差与备选位点。'),('unmatched','Indices of unmatched peaks and predicted sites.','未匹配峰与预测位点的编号。')]
@@ -232,6 +237,7 @@ def assessment(task,en):
     if id_.endswith('29Si'):return ('Unsuitable as an accurate solution predictor: 56.13 ppm MAE, all 32 predictions biased high. Clean data and obtain compatible weights before considering fine-tuning.' if en else '当前不适合精确溶液位移预测：MAE 56.13 ppm，32 个预测全部偏高。先清理数据并确认相容权重，再考虑微调。')
     if id_.endswith('11B'):return ('Diagnostic only: 8.68 ppm MAE, correlation 0.217. Weak discrimination and unaudited coverage; nucleus-specific adaptation is a candidate after data repair.' if en else '仅作诊断：MAE 8.68 ppm，相关系数 0.217。区分能力弱、覆盖未核验；数据修复后可考虑 B 专项适配。')
     if id_.endswith(('19F','31P')):return ('Current solid-state weights are not validated for solution shifts. Resolve domain/reference compatibility before any fine-tuning decision.' if en else '当前固相权重没有验证为溶液位移模型。优先解决数据域与参考兼容，不能直接归因于需要微调。')
+    if id_=='nmr.hsqc.transpeaknet':return ('The frozen model reproduces the two MAEs saved in the author notebook.' if en else '冻结权重复现了作者笔记本保存的两项 MAE。')
     if id_=='nmr.solvent_transfer':return ('Executable reference baseline; H does not improve on unchanged shifts. A solvent-conditioned model and independent paired data are still needed.' if en else '参考检索基线可执行，但 H 没有优于位移不变基线。仍需溶剂条件模型及独立配对数据。')
     if id_=='nmr.assignment':return ('Reasonable candidate pipeline for a known structure; no experimental assignment accuracy yet. Validate atom labels and symmetry before proposing fine-tuning.' if en else '作为已知结构的候选指认流程合理，但尚无实验指认准确率。先验证原子标签和对称性，再决定微调。')
     if id_.startswith('nmr.generation.'):return ('Strong dataset dependence: zero exact matches on the 32-example patent and NMRGym checks. Prioritize a clean external test and parsing/token coverage audit; then consider domain fine-tuning.' if en else '存在明显数据域差异：专利和 NMRGym 的 32 样本检查均为零精确匹配。先检查独立测试、解析及词表覆盖，再考虑领域微调。')

@@ -5,6 +5,14 @@ def training_section(task,en):
     id_=task.id
     if not task.enabled:return ''
     title='## Call and adapt this model' if en else '## 调用模型与微调'
+    if id_ == 'nmr.hsqc.transpeaknet':
+        intro = ('From the OpenMolSpec source checkout, install the HSQC dependencies and get the frozen author release.' if en else
+                 '在 OpenMolSpec 源码目录中安装 HSQC 依赖，并下载作者发布的代码、权重和测试集。')
+        commands = """python -m pip install -e '.[hsqc]'
+git clone https://github.com/siriusxiao62/2dNMR.git
+git -C 2dNMR checkout 2e93db82a9d627ac01109474e9b6e594065e3d56
+python -m openmolspec_bench run --tasks nmr.hsqc.transpeaknet --transpeaknet-source 2dNMR --limit 479 --output results/hsqc-local.json"""
+        return title + '\n\n' + intro + '\n\n```bash\n' + commands + '\n```\n'
     if id_.startswith(('nmr.retrieval.','nmr.generation.')):
         generate='.generation.' in id_;stage='generate' if generate else 'align'
         code=f"from openmolspec.model import NMRTransformer\nmodel = NMRTransformer.from_pretrained(\n    '/path/to/checkpoint.pt', stage='{stage}',\n    python='/path/to/nmr-env/bin/python')\n"

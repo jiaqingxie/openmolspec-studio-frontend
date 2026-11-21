@@ -21,3 +21,4 @@
 | [从 ¹H + ¹³C NMR 解析结构](nmr-generation-hc.md) | `nmr.generation.hc` |
 | [峰到原子的指认](nmr-assignment.md) | `nmr.assignment` |
 | [跨溶剂化学位移迁移](nmr-solvent_transfer.md) | `nmr.solvent_transfer` |
+| [HSQC 交叉峰预测](nmr-hsqc-transpeaknet.md) | `nmr.hsqc.transpeaknet` |

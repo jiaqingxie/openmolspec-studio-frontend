@@ -17,6 +17,14 @@ def profile(task,en=True):
                 '使用固态 NMRNet 权重，为准备好的分子构象生成逐原子 F/P 预测。基准将保存的预测与严格配对的 LMDB 标签计分；调用时指定冻结推理目录，并选择跨数据域比较选项。')
         metrics='MAE and RMSE are reported in ppm.' if en else 'MAE 和 RMSE 的单位均为 ppm。'
         return title,purpose,method,metrics,'','https://github.com/Colin-Jay/NMRNet'
+    if name=='nmr.hsqc.transpeaknet':
+        return ('HSQC cross-peak prediction' if en else 'HSQC 交叉峰预测',
+                'Predict C–H cross-peaks from a known structure and solvent.' if en else '根据已知分子结构与溶剂预测碳氢交叉峰。',
+                'Load the released TransPeakNet weights and encode the original SMILES with explicit hydrogens. The benchmark pairs each predicted carbon and its two ordered proton outputs with the expert row for the same carbon index.' if en else
+                '加载 TransPeakNet 作者权重，按输入 SMILES 的顺序补氢建图。对每个碳位点，按原子编号将模型的碳输出和两个有序氢输出与专家标注配对。',
+                'The full ZIP gives one vote to each of 479 spectra. The author notebook gives one vote to each of 511 metadata rows covering 472 spectra. The full-ZIP run uses the unknown class for 38 conflicting and seven missing solvent labels.' if en else
+                '全量评测对 479 张谱等权平均。作者笔记本对溶剂表中的 511 行等权平均，覆盖 472 张谱。全量评测将 38 张有多种溶剂类别和 7 张缺溶剂记录的谱设为 unknown。',
+                '', 'https://github.com/siriusxiao62/2dNMR/tree/2e93db82a9d627ac01109474e9b6e594065e3d56')
     if name=='nmr.assignment':
         return ('Peak-to-atom assignment' if en else '峰到原子的指认',
                 'Assign measured NMR peaks to atoms in a known molecular structure.' if en else '将实测 NMR 峰与已知分子结构中的原子对应起来。',

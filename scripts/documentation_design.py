@@ -52,6 +52,7 @@ def homepage(en):
 
 def caption(task,evidence,en):
     notes={
+        'hsqc':('Observed and predicted HSQC cross-peaks for butanenitrile in CDCl₃.','丁腈在 CDCl₃ 中的实测和预测 HSQC 交叉峰。'),
         'parity':('Predicted and reference values.','预测值与参考值。'),
         'vibrational':('IR and Raman spectra for the displayed molecular geometry.','所示分子构象的 IR 与 Raman 光谱。'),
         'molecules':('Reference structure and generated candidates.','参考结构与生成候选。'),

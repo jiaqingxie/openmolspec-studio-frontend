@@ -157,12 +157,14 @@ class Service:
 
     def status(self):
         return {'service': 'OpenMolSpec tools', 'version': '1.0', 'connected': self.ready,
-                'model': self.args.model, 'transport': 'MCP stdio', 'tools': sorted(self.enabled_tasks)}
+                'model': self.args.model if self.key else None, 'agent_available': bool(self.key), 'transport': 'MCP stdio', 'tools': sorted(self.enabled_tasks)}
 
     def submit(self, payload, client):
         if not self.ready: raise ValueError('The tool service is connecting. Try again shortly.')
         if not isinstance(payload, dict): raise ValueError('The request must be an object')
         if payload.get('kind') == 'agent':
+            if not self.key:
+                raise ValueError('The agent is offline. The spectroscopy tools are available.')
             prompt = payload.get('prompt')
             if not isinstance(prompt, str) or not prompt.strip() or len(prompt) > 4000:
                 raise ValueError('Enter a question of 1–4,000 characters')
@@ -351,7 +353,7 @@ class Service:
         async with stdio_client(parameters) as (reader, writer):
             async with ClientSession(reader, writer, read_timeout_seconds=600) as session:
                 await session.initialize(); self.ready = True
-                print('OpenMolSpec MCP connected; model API configured; tool service ready.', flush=True)
+                print('OpenMolSpec MCP connected; tool service ready.', flush=True)
                 while True:
                     run_id, payload = await self.queue.get()
                     with self.lock:
@@ -361,7 +363,10 @@ class Service:
                         with self.lock:
                             self.db.execute("UPDATE runs SET status='completed',result=? WHERE id=?", (json.dumps(clean(result), ensure_ascii=False, allow_nan=False), run_id)); self.db.commit()
                     except Exception as error:
-                        message = clean(str(error)).replace(self.key, '[redacted]')[:1000]
+                        message = clean(str(error))
+                        if self.key:
+                            message = message.replace(self.key, '[redacted]')
+                        message = message[:1000]
                         self.event(run_id, 'error', {'message': message})
                         with self.lock:
                             self.db.execute("UPDATE runs SET status='failed',error=? WHERE id=?", (message, run_id)); self.db.commit()
@@ -422,8 +427,9 @@ def main():
     parser.add_argument('--nmr-alignment', type=Path, default=ROOT.parent / 'runs/f90bd7f743574d18a7f72ae72ce95e59/best.pt')
     parser.add_argument('--solvent-library', type=Path)
     parser.add_argument('--transpeaknet-source', type=Path)
+    parser.add_argument('--tools-only', action='store_true', help='Serve model tools without a language-model provider')
     args = parser.parse_args()
-    key = os.environ.get('OPENAI_API_KEY') or getpass.getpass('Provider API key (hidden): ')
+    key = None if args.tools_only else (os.environ.get('OPENAI_API_KEY') or getpass.getpass('Provider API key (hidden): '))
     args.database.parent.mkdir(parents=True, exist_ok=True)
     service = Service(args, key)
     server = ThreadingHTTPServer(('127.0.0.1', args.port), handler(service))

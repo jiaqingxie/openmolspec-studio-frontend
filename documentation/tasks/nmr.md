@@ -21,3 +21,4 @@ Choose a task to see its purpose, inputs, outputs, model call and examples.
 | [Structure elucidation from ¹H + ¹³C NMR](nmr-generation-hc.md) | `nmr.generation.hc` |
 | [Peak-to-atom assignment](nmr-assignment.md) | `nmr.assignment` |
 | [Cross-solvent chemical shift transfer](nmr-solvent_transfer.md) | `nmr.solvent_transfer` |
+| [HSQC cross-peak prediction](nmr-hsqc-transpeaknet.md) | `nmr.hsqc.transpeaknet` |

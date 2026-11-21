@@ -146,7 +146,20 @@ def metrics_box(axis, text, color=TEAL):
 def render_task(task_id, evidence):
     b=evidence;p=b['plot'];kind=p['kind'];first=b['examples'][0]
     scope=p['label']
-    if kind=='parity':
+    if kind=='hsqc':
+        fig,(structure,ax)=canvas('Butanenitrile in CDCl₃','HSQC',scope)
+        molecule(structure,first['input']['smiles'],atom_indices=True)
+        panel(structure,'a','Butanenitrile')
+        for peaks,marker,color,label in [(first['reference']['peaks_c_h_ppm'],'o',TEAL,'Observed'),
+                                         (first['output']['peaks_c_h_ppm'],'x',ORANGE,'Predicted')]:
+            c,h=np.array(peaks).T
+            ax.scatter(h,c,marker=marker,color=color,label=label)
+        ax.set(xlabel='¹H (ppm)',ylabel='¹³C (ppm)')
+        ax.invert_xaxis()
+        ax.invert_yaxis()
+        ax.legend()
+        panel(ax,'b','HSQC cross-peaks')
+    elif kind=='parity':
         x,y=np.asarray(p['x']),np.asarray(p['y']);error=y-x
         gap='.gap.' in task_id
         title='Predicting the HOMO–LUMO gap' if gap else task_id.rsplit('.',1)[-1]+' chemical-shift diagnostic'

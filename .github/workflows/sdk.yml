@@ -28,7 +28,9 @@ jobs:
           from openmolspec.model import NMRNet, NMRTransformer
           from openmolspec.task import list_tasks
           assert {'opendatalab_nmr', 'massspecgym_1_5'} <= {c['name'] for c in list_datasets()}
-          assert len(list_tasks()) == 31
+          tasks = list_tasks()
+          assert len(tasks) == 32
+          assert 'nmr.hsqc.transpeaknet' in {task['id'] for task in tasks}
           assert all(name not in sys.modules for name in ('torch', 'numpy', 'rdkit', 'pandas'))
           PY
       - run: python -m pip install numpy scipy rdkit

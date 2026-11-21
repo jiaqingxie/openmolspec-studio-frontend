@@ -36,6 +36,7 @@
 | `vibrational.retrieval.hc` | IR + Raman + H/C → 结构检索 | IR, Raman, 1H, 13C | computed | vib2mol_retrieval | recall_at_1, recall_at_5, recall_at_10, mrr |
 | `vibrational.generation.hc` | IR + Raman + H/C → SMILES（Xinyu 协议） | IR, Raman, 1H, 13C | computed | vib2mol_generation | exact_canonical_top1, exact_canonical_top5, valid_smiles_fraction |
 | `spectroscopy.reranking.hc` | IR + Raman + H/C + 候选 → ITM 重排 | IR, Raman, 1H, 13C | computed | vib2mol_reranking | top_1_hit_rate, mrr |
+| `nmr.hsqc.transpeaknet` | 结构与溶剂 → HSQC 交叉峰 | HSQC | experimental | transpeaknet | carbon_mae_ppm, proton_mae_ppm |
 | `ms.forward.glacier` | 分子 → MS/MS（GLACIER） | MS/MS | experimental | ms_pretrained_glacier | cosine_similarity, entropy_similarity |
 | `ms.forward.iceberg` | 分子 → MS/MS（ICEBERG） | MS/MS | experimental | ms_pretrained_iceberg | cosine_similarity, entropy_similarity |
 | `ms.annotation.magma` | MS/MS 峰 → MAGMa 候选碎片标注 | MS/MS | experimental | magma_algorithm | matched_peak_fraction, checked_fragments |
@@ -84,6 +85,8 @@
 - **vibrational.generation.hc**：使用 Xinyu 保存的四模态 checkpoint、H/C 参考与归一化；生成按原评测脚本去重和 ITM 重排。
 
 - **spectroscopy.reranking.hc**：使用 Xinyu 保存的四模态 checkpoint、H/C 参考与归一化；生成按原评测脚本去重和 ITM 重排。
+
+- **nmr.hsqc.transpeaknet**：使用作者二维谱权重，按专家标注的原子编号计算每张谱的碳、氢位移误差。
 
 - **ms.forward.glacier**：直接调用作者的冻结 checkpoint；使用我们测试 CSV 的实测谱并核对分子、加合物和采集条件。
 

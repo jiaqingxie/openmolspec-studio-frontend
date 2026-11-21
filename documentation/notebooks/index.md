@@ -32,6 +32,7 @@ Follow the tutorials to learn how to load spectra, call models, interpret their 
 - [Structure elucidation from ¹H + ¹³C NMR](nmr-generation-hc.ipynb)
 - [Peak-to-atom assignment](nmr-assignment.ipynb)
 - [Cross-solvent chemical shift transfer](nmr-solvent_transfer.ipynb)
+- [HSQC cross-peak prediction](nmr-hsqc-transpeaknet.ipynb)
 
 ## Mass spectrometry
 

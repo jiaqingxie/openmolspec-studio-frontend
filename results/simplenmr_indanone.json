@@ -1,0 +1,148 @@
+{
+  "method": "simpleNMR c13ppm initialization with NMRShiftDB HOSE predictions",
+  "source": "https://github.com/EricHughesABC/simpleNMR/tree/685b819a54fb49ccba63290cd1b493a00ae33ebd",
+  "workbook": "exampleProblems/2-ethyl-1-indanone/2-ethyl-1-indanone.xlsx",
+  "workbook_sha256": "5776b4f7c08309ddc57faa6eccf957e7dbab3afdfd4d5fdf182fe3c0d2f294b3",
+  "implementation_sha256": "66125f0dbb41fc5594ebb9446f07086a3ed7a3c64b2b6ad5600aa818cdcdb2c7",
+  "experiments": [
+    "molecule",
+    "H1_1D",
+    "H1_pureshift",
+    "C13_1D",
+    "HSQC",
+    "COSY",
+    "HMBC"
+  ],
+  "smiles": "CCC1C(=O)c2ccccc2C1",
+  "atom_index_basis": "Zero-based RDKit atom index in the workbook SMILES.",
+  "carbon_candidates": [
+    {
+      "signal": "C1",
+      "carbon_ppm": 208.9336188069547,
+      "candidate_atom": 3,
+      "predicted_ppm": 208.97
+    },
+    {
+      "signal": "C2",
+      "carbon_ppm": 153.8100526069828,
+      "candidate_atom": 10,
+      "predicted_ppm": 153.81
+    },
+    {
+      "signal": "C3",
+      "carbon_ppm": 136.9549969177157,
+      "candidate_atom": 5,
+      "predicted_ppm": 136.92
+    },
+    {
+      "signal": "C4",
+      "carbon_ppm": 134.588170574813,
+      "candidate_atom": 8,
+      "predicted_ppm": 134.49
+    },
+    {
+      "signal": "C5",
+      "carbon_ppm": 127.2744965014768,
+      "candidate_atom": 7,
+      "predicted_ppm": 127.2
+    },
+    {
+      "signal": "C6",
+      "carbon_ppm": 126.5228936322802,
+      "candidate_atom": 9,
+      "predicted_ppm": 126.51
+    },
+    {
+      "signal": "C7",
+      "carbon_ppm": 123.8164006081059,
+      "candidate_atom": 6,
+      "predicted_ppm": 123.8
+    },
+    {
+      "signal": "C8",
+      "carbon_ppm": 48.74283709642998,
+      "candidate_atom": 2,
+      "predicted_ppm": 48.74
+    },
+    {
+      "signal": "C9",
+      "carbon_ppm": 32.31778497175137,
+      "candidate_atom": 11,
+      "predicted_ppm": 32.32
+    },
+    {
+      "signal": "C10",
+      "carbon_ppm": 24.45305591018212,
+      "candidate_atom": 1,
+      "predicted_ppm": 24.46
+    },
+    {
+      "signal": "C11",
+      "carbon_ppm": 11.58185677519031,
+      "candidate_atom": 0,
+      "predicted_ppm": 11.61
+    }
+  ],
+  "hsqc": [
+    {
+      "carbon_ppm": 123.8164006081059,
+      "proton_ppm": 7.738317037494763,
+      "candidate_carbon_atom": 6
+    },
+    {
+      "carbon_ppm": 134.588170574813,
+      "proton_ppm": 7.567532179805442,
+      "candidate_carbon_atom": 8
+    },
+    {
+      "carbon_ppm": 126.5228936322802,
+      "proton_ppm": 7.449581258386512,
+      "candidate_carbon_atom": 9
+    },
+    {
+      "carbon_ppm": 127.2744965014768,
+      "proton_ppm": 7.349129475095356,
+      "candidate_carbon_atom": 7
+    },
+    {
+      "carbon_ppm": 32.31778497175137,
+      "proton_ppm": 3.308679437958763,
+      "candidate_carbon_atom": 11
+    },
+    {
+      "carbon_ppm": 32.31778497175137,
+      "proton_ppm": 2.812309654526748,
+      "candidate_carbon_atom": 11
+    },
+    {
+      "carbon_ppm": 48.74283709642998,
+      "proton_ppm": 2.606526520581883,
+      "candidate_carbon_atom": 2
+    },
+    {
+      "carbon_ppm": 24.45305591018212,
+      "proton_ppm": 1.965452325708671,
+      "candidate_carbon_atom": 1
+    },
+    {
+      "carbon_ppm": 24.45305591018212,
+      "proton_ppm": 1.532180396102761,
+      "candidate_carbon_atom": 1
+    },
+    {
+      "carbon_ppm": 11.58185677519031,
+      "proton_ppm": 1.001821902076419,
+      "candidate_carbon_atom": 0
+    }
+  ],
+  "cosy_rows": 12,
+  "hmbc_rows": 26,
+  "author_comparison": {
+    "source": "exampleProblems/2-ethyl-1-indanone/html/2-ethyl-1-indanone.html",
+    "sha256": "8c369f29cb54e8606d246c83561e663e3168d60be1085ff982f43eabe97907b9",
+    "carbon_signals": 11,
+    "same_atom_index": 11
+  },
+  "assignment_accuracy": null,
+  "validation": "Candidate coverage and carbon index integrity."
+}

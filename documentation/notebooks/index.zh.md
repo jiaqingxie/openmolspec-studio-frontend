@@ -32,6 +32,7 @@
 - [从 ¹H + ¹³C NMR 解析结构](nmr-generation-hc.ipynb)
 - [峰到原子的指认](nmr-assignment.ipynb)
 - [跨溶剂化学位移迁移](nmr-solvent_transfer.ipynb)
+- [HSQC 交叉峰预测](nmr-hsqc-transpeaknet.ipynb)
 
 ## 质谱 MS
 

@@ -9,7 +9,7 @@ executes the real model requests. The Documentation entry opens the canonical
 Read the Docs manual. The complete bilingual manual remains available at `docs/`.
 
 The Tool workspace offers NMR shift prediction and assignment, solvent transfer,
-HSQC assignment through TransPeakNet, H/C NMR search and generation, GLACIER and
+TransPeakNet HSQC prediction from SMILES and solvent, with optional measured peaks for assignment, H/C NMR search and generation, GLACIER and
 ICEBERG MS/MS, conformer-based IR/Raman, multimodal gap prediction and structure
 generation/retrieval, and Agent Harness.
 The agent uses an OpenAI-compatible model API and the actual OpenMolSpec MCP

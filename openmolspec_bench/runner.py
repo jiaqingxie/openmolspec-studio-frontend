@@ -490,6 +490,11 @@ class Runner:
             return self.forward(task, dataset)
         if task.backend == "nmrnet_hetero_predictions":
             return self.hetero(task)
+        if task.backend == "transpeaknet":
+            if self.args.transpeaknet_source is None:
+                raise MissingAsset('Supply --transpeaknet-source with the author 2dNMR checkout')
+            from .hsqc_evaluation import run
+            return run(self)
         if task.backend == "nmrnet_atom_assignment":
             import subprocess
             import tempfile
