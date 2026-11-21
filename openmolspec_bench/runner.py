@@ -187,8 +187,13 @@ class Runner:
                                              for identity, ref, pred in list(zip(identities, expected, predicted))[:3]],
                                 "prediction_files": [self.artifact(file) for file in files],
                                 "metadata": self.artifact(meta)})
+        peak_root = getattr(self.args, "peak_model_root", None) or self.args.workspace / "runs/peak-models-selected"
+        selected = peak_root / task.modalities[0]
+        if (selected / "model.json").is_file():
+            from .peak_evaluation import evaluate
+            results.insert(0, evaluate(self, selected, reference))
         if not results:
-            raise MissingAsset("No existing NMRNet/NMRNet++ predictions matched the selected references")
+            raise MissingAsset("No selected peak model or matching NMRNet/NMRNet++ predictions")
         return {"models": results, "dataset": self.artifact(path), "selection": selection,
                 "solvent_filter": "none; retain recorded reference peaks",
                 "domain_verification": "legacy_dataset_source_not_independently_reaudited",

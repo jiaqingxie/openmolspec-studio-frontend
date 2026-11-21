@@ -215,6 +215,11 @@ def build_pages(tasks,profile,profile_zh):
                 page+=reference_list(reference_keys(task),en)
             if task.id in ('nmr.forward.19F', 'nmr.forward.31P') or (task.id in ('nmr.forward.11B', 'nmr.forward.29Si') and (ROOT/'results'/f'forward_selection_{task.modalities[0]}.json').is_file()):
                 page = solution_task_page(task.modalities[0], en)
+            if task.id in ('nmr.forward.1H', 'nmr.forward.13C'):
+                comparison = ROOT / 'results' / f'forward_peak_model_{task.modalities[0]}.json'
+                if comparison.is_file() and json.loads(comparison.read_text()).get('deployed_model') == 'peak_spectrum':
+                    from peak_model_card import model_card as peak_card
+                    page = peak_card(task.modalities[0], en)
             from forward_calibration_cards import updated_page
             files[f'tasks/{slug}{suffix}.md']=updated_page(page, task.id, en)
             files[f'notebooks/{slug}{suffix}.ipynb']=json.dumps(notebook(task,language),ensure_ascii=False,indent=2)+'\n'

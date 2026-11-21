@@ -1,0 +1,201 @@
+{
+  "nucleus": "1H",
+  "reference": "median assigned shift per symmetry class and solvent; H attached to the same heavy-atom site are pooled",
+  "split_identity_counts": {
+    "train": 13072,
+    "val": 1686,
+    "test": 1720
+  },
+  "training_site_records": 94316,
+  "source": {
+    "counts": {
+      "input": 58187,
+      "train/13C/spectra": 27368,
+      "train/13C/sites": 285735,
+      "train/1H/spectra": 14080,
+      "train/1H/sites": 101807,
+      "program_generated_13C": 7654,
+      "test/13C/spectra": 3482,
+      "test/13C/sites": 35742,
+      "val/13C/spectra": 3367,
+      "val/13C/sites": 35351,
+      "external_or_missing_connectivity": 817,
+      "val/1H/spectra": 1830,
+      "val/1H/sites": 13187,
+      "test/1H/spectra": 1851,
+      "test/1H/sites": 13649,
+      "invalid_or_multicomponent": 1943
+    },
+    "sdf_sha256": "0e86688360e23c88ccf0eb82a1251315fa57ec6f5b376dc8886f3311793a0afe",
+    "external_unique": 37375,
+    "output_sha256": "99419bc56b4c1282c656cbdc3cb1922b0beea31f042ebda4af8c2c1d977328eb"
+  },
+  "grid": [
+    {
+      "leaves": 31,
+      "min_leaf": 12,
+      "rounds": 1709,
+      "weight": 0.0,
+      "mae": 0.3859039635171605
+    },
+    {
+      "leaves": 31,
+      "min_leaf": 12,
+      "rounds": 1709,
+      "weight": 0.2,
+      "mae": 0.37173853430386267
+    },
+    {
+      "leaves": 31,
+      "min_leaf": 12,
+      "rounds": 1709,
+      "weight": 0.4,
+      "mae": 0.35947738586118055
+    },
+    {
+      "leaves": 31,
+      "min_leaf": 12,
+      "rounds": 1709,
+      "weight": 0.6,
+      "mae": 0.34947209138780805
+    },
+    {
+      "leaves": 31,
+      "min_leaf": 12,
+      "rounds": 1709,
+      "weight": 0.8,
+      "mae": 0.34264318575365593
+    },
+    {
+      "leaves": 31,
+      "min_leaf": 12,
+      "rounds": 1709,
+      "weight": 1.0,
+      "mae": 0.3415808328877671
+    },
+    {
+      "leaves": 63,
+      "min_leaf": 10,
+      "rounds": 623,
+      "weight": 0.0,
+      "mae": 0.36157006416887877
+    },
+    {
+      "leaves": 63,
+      "min_leaf": 10,
+      "rounds": 623,
+      "weight": 0.2,
+      "mae": 0.34989874769811563
+    },
+    {
+      "leaves": 63,
+      "min_leaf": 10,
+      "rounds": 623,
+      "weight": 0.4,
+      "mae": 0.3401942347082162
+    },
+    {
+      "leaves": 63,
+      "min_leaf": 10,
+      "rounds": 623,
+      "weight": 0.6,
+      "mae": 0.33262090777711073
+    },
+    {
+      "leaves": 63,
+      "min_leaf": 10,
+      "rounds": 623,
+      "weight": 0.8,
+      "mae": 0.3277514443462841
+    },
+    {
+      "leaves": 63,
+      "min_leaf": 10,
+      "rounds": 623,
+      "weight": 1.0,
+      "mae": 0.3277746924218372
+    },
+    {
+      "leaves": 95,
+      "min_leaf": 20,
+      "rounds": 2178,
+      "weight": 0.0,
+      "mae": 0.3344091547872766
+    },
+    {
+      "leaves": 95,
+      "min_leaf": 20,
+      "rounds": 2178,
+      "weight": 0.2,
+      "mae": 0.3257749253120924
+    },
+    {
+      "leaves": 95,
+      "min_leaf": 20,
+      "rounds": 2178,
+      "weight": 0.4,
+      "mae": 0.31922533087424476
+    },
+    {
+      "leaves": 95,
+      "min_leaf": 20,
+      "rounds": 2178,
+      "weight": 0.6,
+      "mae": 0.3144311210108788
+    },
+    {
+      "leaves": 95,
+      "min_leaf": 20,
+      "rounds": 2178,
+      "weight": 0.8,
+      "mae": 0.3119522740558664
+    },
+    {
+      "leaves": 95,
+      "min_leaf": 20,
+      "rounds": 2178,
+      "weight": 1.0,
+      "mae": 0.31340461644562734
+    }
+  ],
+  "selected": {
+    "leaves": 95,
+    "min_leaf": 20,
+    "rounds": 2178,
+    "weight": 0.8,
+    "mae": 0.3119522740558664
+  },
+  "test": {
+    "observations": 12610,
+    "identities": 1720,
+    "mae_ppm": 0.27789383902893,
+    "molecule_macro_mae_ppm": 0.3119287982071283,
+    "median_absolute_ppm": 0.12007509891347379,
+    "p90_absolute_ppm": 0.6788639293434867,
+    "rmse_ppm": 0.5634641857664948
+  },
+  "tree_only_test": {
+    "observations": 12610,
+    "identities": 1720,
+    "mae_ppm": 0.31495533052963326,
+    "molecule_macro_mae_ppm": 0.3374615094843053,
+    "median_absolute_ppm": 0.1554078972928542,
+    "p90_absolute_ppm": 0.7371114484124281,
+    "rmse_ppm": 0.6300529073620668
+  },
+  "train_median_test": {
+    "observations": 12610,
+    "identities": 1720,
+    "mae_ppm": 2.179492141554322,
+    "molecule_macro_mae_ppm": 2.215555413883541,
+    "median_absolute_ppm": 2.255,
+    "p90_absolute_ppm": 3.6449999999999996,
+    "rmse_ppm": 2.5935252685355645
+  },
+  "config": {
+    "nucleus": "1H",
+    "lookup_weight": 0.8,
+    "tree_sha256": "abdb868fe33e6035db2435adef9c425107d8fa6a43a8c55c341c13c95a005332",
+    "lookup_sha256": "33102a6b897f3f82e9c642225494ef42c85e208aa8b518f4046ec5914587c6cf"
+  }
+}

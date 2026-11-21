@@ -165,6 +165,7 @@ class Service:
                 self.solution_models[task] = model
             else:
                 self.enabled_tasks.discard(task)
+        self.peak_root = getattr(args, 'peak_model_root', None)
         self.solvent_model = None
 
     def status(self):
@@ -318,10 +319,20 @@ class Service:
 
     async def tool(self, session, run_id, payload):
         task, inputs = payload['task'], payload['inputs']
-        if task in LOCAL_TASKS:
+        peak_dir = None
+        if self.peak_root and task in ('nmr.forward.1H', 'nmr.forward.13C'):
+            candidate = self.peak_root / task.rsplit('.', 1)[1]
+            if (candidate / 'model.json').is_file():
+                peak_dir = candidate.resolve()
+        if task in LOCAL_TASKS or peak_dir:
             self.event(run_id, 'tool_start', {'id': run_id, 'name': task, 'args': inputs})
             start = time.monotonic()
-            if task in SOLUTION_TASKS:
+            if peak_dir:
+                if not inputs.get('smiles'):
+                    raise ValueError('Enter a molecular SMILES')
+                payload = dict(model_dir=str(peak_dir), nucleus=task.rsplit('.', 1)[1], smiles=inputs['smiles'], solvent=inputs.get('solvent'))
+                result = await asyncio.to_thread(self.local_worker, 'online_api.peak_spectrum', payload, self.args.solution_python)
+            elif task in SOLUTION_TASKS:
                 result = await asyncio.to_thread(self.solution_shifts, task, inputs)
             else:
                 adapter = {'vibrational.forward': self.geometry, 'nmr.solvent_transfer': self.solvent_transfer,
@@ -447,6 +458,7 @@ def main():
     parser.add_argument('--ms-weights', type=Path, default=ROOT.parents[1] / 'mspred')
     parser.add_argument('--nmr-generation', type=Path, default=ROOT.parent / 'runs/bebaecf2bca248f1a47eaa01f403002a/best.pt')
     parser.add_argument('--nmr-alignment', type=Path, default=ROOT.parent / 'runs/f90bd7f743574d18a7f72ae72ce95e59/best.pt')
+    parser.add_argument('--peak-model-root', type=Path, default=ROOT.parent/'runs/peak-models-selected')
     parser.add_argument('--solution-model-root', type=Path, default=ROOT.parent/'runs/solution-shifts-selected')
     parser.add_argument('--phosphorus-model', type=Path, default=ROOT.parent/'runs/solution-shifts-selected/31P')
     parser.add_argument('--solution-python', default=os.environ.get('OPENMOLSPEC_SOLUTION_PYTHON', sys.executable))

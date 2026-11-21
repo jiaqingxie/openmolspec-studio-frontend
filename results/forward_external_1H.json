@@ -1,0 +1,262 @@
+{
+  "nucleus": "1H",
+  "selection_corpus": "patent_test_10k",
+  "evaluation_corpora": [
+    "nmrspec_test",
+    "nmrexp_exp_10k",
+    "nmrgym_test"
+  ],
+  "selection_metric": "penalized minimum-cost matching per molecule",
+  "unmatched_cost_ppm": 1.0,
+  "merge_gap_ppm": 0.03,
+  "selected_predictor": "assigned",
+  "grid": {
+    "0.0": {
+      "matched_peak_mae_ppm": 0.4597709698571928,
+      "matched_peak_rmse_ppm": 1.2357138242236072,
+      "peak_count_mae": 1.9948506694129764,
+      "matched_fraction": 0.8218944503434024,
+      "examples": 971,
+      "scored_examples": 971,
+      "aggregation": "equal_weight_per_molecule",
+      "assignment": "minimum_absolute_error_without_atom_labels",
+      "count_penalized_error_ppm": 0.5001175053362675
+    },
+    "0.03": {
+      "matched_peak_mae_ppm": 0.46421063067545915,
+      "matched_peak_rmse_ppm": 1.2277772128432896,
+      "peak_count_mae": 1.5736354273944386,
+      "matched_fraction": 0.8345105113822975,
+      "examples": 971,
+      "scored_examples": 971,
+      "aggregation": "equal_weight_per_molecule",
+      "assignment": "minimum_absolute_error_without_atom_labels",
+      "count_penalized_error_ppm": 0.4948820933261399
+    },
+    "0.07": {
+      "matched_peak_mae_ppm": 0.46271042164924125,
+      "matched_peak_rmse_ppm": 1.226312459233787,
+      "peak_count_mae": 1.533470648815654,
+      "matched_fraction": 0.82883217757657,
+      "examples": 971,
+      "scored_examples": 971,
+      "aggregation": "equal_weight_per_molecule",
+      "assignment": "minimum_absolute_error_without_atom_labels",
+      "count_penalized_error_ppm": 0.4983279573020658
+    },
+    "0.12": {
+      "matched_peak_mae_ppm": 0.4576086673540961,
+      "matched_peak_rmse_ppm": 1.1114407913848658,
+      "peak_count_mae": 1.596292481977343,
+      "matched_fraction": 0.8172690691828506,
+      "examples": 971,
+      "scored_examples": 971,
+      "aggregation": "equal_weight_per_molecule",
+      "assignment": "minimum_absolute_error_without_atom_labels",
+      "count_penalized_error_ppm": 0.5051900669673465
+    }
+  },
+  "datasets": {
+    "patent_test_10k": {
+      "paired_molecules": 971,
+      "predictors": {
+        "nmrnet": {
+          "matched_peak_mae_ppm": 0.2901435369790985,
+          "matched_peak_rmse_ppm": 1.0472578770986938,
+          "peak_count_mae": 11.274974253347064,
+          "matched_fraction": 0.4871765315589348,
+          "examples": 971,
+          "scored_examples": 971,
+          "aggregation": "equal_weight_per_molecule",
+          "assignment": "minimum_absolute_error_without_atom_labels",
+          "count_penalized_error_ppm": 0.6410073888408792
+        },
+        "nmrnetpp": {
+          "matched_peak_mae_ppm": 0.26074197853642106,
+          "matched_peak_rmse_ppm": 1.0406814895006637,
+          "peak_count_mae": 11.274974253347064,
+          "matched_fraction": 0.4871765315589348,
+          "examples": 971,
+          "scored_examples": 971,
+          "aggregation": "equal_weight_per_molecule",
+          "assignment": "minimum_absolute_error_without_atom_labels",
+          "count_penalized_error_ppm": 0.6231579189684109
+        },
+        "assigned": {
+          "matched_peak_mae_ppm": 0.46421063067545915,
+          "matched_peak_rmse_ppm": 1.2277772128432896,
+          "peak_count_mae": 1.5736354273944386,
+          "matched_fraction": 0.8345105113822975,
+          "examples": 971,
+          "scored_examples": 971,
+          "aggregation": "equal_weight_per_molecule",
+          "assignment": "minimum_absolute_error_without_atom_labels",
+          "count_penalized_error_ppm": 0.4948820933261399
+        }
+      },
+      "selected": {
+        "matched_peak_mae_ppm": 0.46421063067545915,
+        "matched_peak_rmse_ppm": 1.2277772128432896,
+        "peak_count_mae": 1.5736354273944386,
+        "matched_fraction": 0.8345105113822975,
+        "examples": 971,
+        "scored_examples": 971,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 0.4948820933261399
+      },
+      "eligible_refs": 9935
+    },
+    "nmrspec_test": {
+      "paired_molecules": 1000,
+      "predictors": {
+        "nmrnet": {
+          "matched_peak_mae_ppm": 0.15461320994653915,
+          "matched_peak_rmse_ppm": 1.0027007568561592,
+          "peak_count_mae": 10.147,
+          "matched_fraction": 0.4960830509183253,
+          "examples": 1000,
+          "scored_examples": 1000,
+          "aggregation": "equal_weight_per_molecule",
+          "assignment": "minimum_absolute_error_without_atom_labels",
+          "count_penalized_error_ppm": 0.5721016439761172
+        },
+        "nmrnetpp": {
+          "matched_peak_mae_ppm": 0.10409409343925262,
+          "matched_peak_rmse_ppm": 0.9584742176374548,
+          "peak_count_mae": 10.147,
+          "matched_fraction": 0.4960830509183253,
+          "examples": 1000,
+          "scored_examples": 1000,
+          "aggregation": "equal_weight_per_molecule",
+          "assignment": "minimum_absolute_error_without_atom_labels",
+          "count_penalized_error_ppm": 0.5461141490867852
+        },
+        "assigned": {
+          "matched_peak_mae_ppm": 0.30048335733874143,
+          "matched_peak_rmse_ppm": 0.9016190281501141,
+          "peak_count_mae": 1.331,
+          "matched_fraction": 0.865834600461458,
+          "examples": 1000,
+          "scored_examples": 1000,
+          "aggregation": "equal_weight_per_molecule",
+          "assignment": "minimum_absolute_error_without_atom_labels",
+          "count_penalized_error_ppm": 0.36217095596147014
+        }
+      },
+      "selected": {
+        "matched_peak_mae_ppm": 0.30048335733874143,
+        "matched_peak_rmse_ppm": 0.9016190281501141,
+        "peak_count_mae": 1.331,
+        "matched_fraction": 0.865834600461458,
+        "examples": 1000,
+        "scored_examples": 1000,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 0.36217095596147014
+      },
+      "eligible_refs": 10000
+    },
+    "nmrexp_exp_10k": {
+      "paired_molecules": 994,
+      "predictors": {
+        "nmrnet": {
+          "matched_peak_mae_ppm": 0.1244661553151696,
+          "matched_peak_rmse_ppm": 0.2795274706115884,
+          "peak_count_mae": 10.63682092555332,
+          "matched_fraction": 0.47699295106021017,
+          "examples": 994,
+          "scored_examples": 994,
+          "aggregation": "equal_weight_per_molecule",
+          "assignment": "minimum_absolute_error_without_atom_labels",
+          "count_penalized_error_ppm": 0.5836596070871339
+        },
+        "nmrnetpp": {
+          "matched_peak_mae_ppm": 0.08580295321271904,
+          "matched_peak_rmse_ppm": 0.27983973931734324,
+          "peak_count_mae": 10.63682092555332,
+          "matched_fraction": 0.47699295106021017,
+          "examples": 994,
+          "scored_examples": 994,
+          "aggregation": "equal_weight_per_molecule",
+          "assignment": "minimum_absolute_error_without_atom_labels",
+          "count_penalized_error_ppm": 0.5624466455259466
+        },
+        "assigned": {
+          "matched_peak_mae_ppm": 0.26428171766090325,
+          "matched_peak_rmse_ppm": 0.604183712158923,
+          "peak_count_mae": 1.3591549295774648,
+          "matched_fraction": 0.8609526886292982,
+          "examples": 994,
+          "scored_examples": 994,
+          "aggregation": "equal_weight_per_molecule",
+          "assignment": "minimum_absolute_error_without_atom_labels",
+          "count_penalized_error_ppm": 0.3485533294342915
+        }
+      },
+      "selected": {
+        "matched_peak_mae_ppm": 0.26428171766090325,
+        "matched_peak_rmse_ppm": 0.604183712158923,
+        "peak_count_mae": 1.3591549295774648,
+        "matched_fraction": 0.8609526886292982,
+        "examples": 994,
+        "scored_examples": 994,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 0.3485533294342915
+      },
+      "eligible_refs": 8982
+    },
+    "nmrgym_test": {
+      "paired_molecules": 993,
+      "predictors": {
+        "nmrnet": {
+          "matched_peak_mae_ppm": 0.619002304717099,
+          "matched_peak_rmse_ppm": 6.355966323421625,
+          "peak_count_mae": 16.396777442094663,
+          "matched_fraction": 0.5739933733821547,
+          "examples": 993,
+          "scored_examples": 993,
+          "aggregation": "equal_weight_per_molecule",
+          "assignment": "minimum_absolute_error_without_atom_labels",
+          "count_penalized_error_ppm": 0.5314855395016306
+        },
+        "nmrnetpp": {
+          "matched_peak_mae_ppm": 0.61877848539596,
+          "matched_peak_rmse_ppm": 6.357001561515565,
+          "peak_count_mae": 16.396777442094663,
+          "matched_fraction": 0.5739933733821547,
+          "examples": 993,
+          "scored_examples": 993,
+          "aggregation": "equal_weight_per_molecule",
+          "assignment": "minimum_absolute_error_without_atom_labels",
+          "count_penalized_error_ppm": 0.5269363824624131
+        },
+        "assigned": {
+          "matched_peak_mae_ppm": 0.7306531506621279,
+          "matched_peak_rmse_ppm": 6.040081833444484,
+          "peak_count_mae": 6.632426988922457,
+          "matched_fraction": 0.7826795669209918,
+          "examples": 993,
+          "scored_examples": 993,
+          "aggregation": "equal_weight_per_molecule",
+          "assignment": "minimum_absolute_error_without_atom_labels",
+          "count_penalized_error_ppm": 0.4397947946454711
+        }
+      },
+      "selected": {
+        "matched_peak_mae_ppm": 0.7306531506621279,
+        "matched_peak_rmse_ppm": 6.040081833444484,
+        "peak_count_mae": 6.632426988922457,
+        "matched_fraction": 0.7826795669209918,
+        "examples": 993,
+        "scored_examples": 993,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 0.4397947946454711
+      },
+      "eligible_refs": 10000
+    }
+  },
+  "model_sha256": "0f31a223fc8501947d88653ea581506c3a032bb0b7b8e57adf46069cdcc13d00"
+}

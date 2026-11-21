@@ -7,6 +7,7 @@ import sys
 
 from ._runtime import invoke
 from .solution_shifts import SolutionShiftPredictor as SolutionShiftPredictor
+from .assigned_shifts import PeakSpectrumPredictor as PeakSpectrumPredictor
 
 
 class _ConfiguredModel:
