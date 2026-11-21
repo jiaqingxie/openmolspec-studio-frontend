@@ -19,6 +19,10 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 def solution_task_page(nucleus, en):
+    comparison = ROOT / 'results' / f'forward_selection_{nucleus}.json'
+    if nucleus == '31P' and comparison.is_file() and json.loads(comparison.read_text()).get('deployment_approved'):
+        from solution_ensemble_card import model_card
+        return model_card(nucleus, en)
     if nucleus == '31P' and (ROOT/'results/phosphorus_gnn_selection.json').is_file():
         from phosphorus_model_card import model_card
         return model_card(en)

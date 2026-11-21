@@ -58,7 +58,7 @@ def package(nucleus, registry, wheel, output):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--nuclei", nargs="+", choices=("11B", "29Si", "19F"), required=True)
+    parser.add_argument("--nuclei", nargs="+", choices=("11B", "29Si", "19F", "31P"), required=True)
     for arg in ("registry", "wheel", "output"):
         parser.add_argument("--" + arg, type=Path, required=True)
     args = parser.parse_args()

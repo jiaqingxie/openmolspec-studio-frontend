@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SAMPLES = {"11B": "OB(O)c1ccccc1", "29Si": "C[Si](C)(C)C", "19F": "Fc1ccccc1"}
+SAMPLES = {"31P": "CCOP(=O)(OCC)OCC", "11B": "OB(O)c1ccccc1", "29Si": "C[Si](C)(C)C", "19F": "Fc1ccccc1"}
 
 
 def model_card(nucleus, en):
@@ -38,6 +38,18 @@ def model_card(nucleus, en):
             f"绝对误差的第 90 百分位为 {test['p90_absolute_ppm']:.2f} ppm。"
             "输出保留输入 SMILES 中从零起算的原子编号。多环境的逐峰归属需另行评测。\n\n"
             f"[在线预测]({tool}) · [下载模型与 SDK]({archive})"
+        )
+    if nucleus == "31P" and r.get("deployment_approved"):
+        first = r["test"]["31P-gnn-r1"]["molecule_macro_mae_ppm"]
+        lo, hi = r["paired_test_differences"]["31P-gnn-r1"]["molecule_bootstrap_ci95"]
+        old = "https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/phosphorus31-v2"
+        text += (
+            f"\n\nAn independently initialized four-layer bond-message network was trained with the same 35,696 structures. "
+            f"The previous deployed GNN scored {first:.2f} ppm per connectivity on the same test. "
+            f"The paired 95% interval for the change is [{lo:.2f}, {hi:.2f}] ppm. [First release]({old})"
+            if en else
+            f"\n\n在同一批 35,696 种训练分子上，对四层图网络独立初始化并再次训练。上一版 GNN 在同一测试集上按分子等权的 MAE 为 {first:.2f} ppm。"
+            f"新旧模型误差差值的配对 95% 区间为 [{lo:.2f}, {hi:.2f}] ppm。[首次发布的模型与对照]({old})"
         )
     install = (
         "Extract the ZIP and run the following commands in its directory."

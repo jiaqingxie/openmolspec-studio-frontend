@@ -37,7 +37,7 @@ python -m openmolspec_bench run \
 
 详情见[任务目录](handbook/tasks.md)、[数据格式](handbook/data.md)、[评测口径](handbook/benchmark.md)、[Studio 操作](handbook/studio.md)及[结果](handbook/results.md)。旧核心项目说明仍位于 [docs/openmolspec_core.md](docs/openmolspec_core.md)。
 
-³¹P 与 ¹⁹F 的 CPU 预测器接收 SMILES 和可选溶剂。当前选出的 ³¹P 模型在 4,248 种留出分子上的观测 MAE 为 4.56 ppm，分子等权 MAE 为 5.95 ppm。[在线预测 ³¹P](https://jiaqingxie.github.io/openmolspec.github.io/#tool-31p) · [同划分模型比较](documentation/tasks/nmr-forward-31P.zh.md)。¹⁹F 的 GNN 与树模型组合在 14,330 种留出结构上的观测 MAE 为 5.92 ppm，分子等权 MAE 为 5.62 ppm。[¹⁹F 模型卡](documentation/tasks/nmr-forward-19F.zh.md)。权重位置、模型调研、按骨架和谱源拆分的误差、历史标签复核及复现命令见[实验报告](docs/SOLUTION_NMR_RESEARCH.zh.md)。
+³¹P 与 ¹⁹F 的 CPU 预测器接收 SMILES 和可选溶剂。当前选出的 ³¹P 模型在 4,248 种留出分子上的观测 MAE 为 4.32 ppm，分子等权 MAE 为 5.60 ppm。[在线预测 ³¹P](https://jiaqingxie.github.io/openmolspec.github.io/#tool-31p) · [同划分模型比较](documentation/tasks/nmr-forward-31P.zh.md)。¹⁹F 的 GNN 与树模型组合在 14,330 种留出结构上的观测 MAE 为 5.92 ppm，分子等权 MAE 为 5.62 ppm。[¹⁹F 模型卡](documentation/tasks/nmr-forward-19F.zh.md)。权重位置、模型调研、按骨架和谱源拆分的误差、历史标签复核及复现命令见[实验报告](docs/SOLUTION_NMR_RESEARCH.zh.md)。
 
 ## 构建使用手册
 

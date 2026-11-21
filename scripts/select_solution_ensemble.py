@@ -139,6 +139,16 @@ def main():
     report["test"] = {
         n: metrics(v - targets, keys) for n, v in {**test, "selected": pred}.items()
     }
+    identities, mapped = np.unique(keys, return_inverse=True)
+    counts = np.bincount(mapped)
+    rng = np.random.default_rng(1893)
+    report["paired_test_differences"] = {}
+    for name, values in test.items():
+        delta = np.bincount(mapped, weights=abs(pred-targets)-abs(values-targets)) / counts
+        draws = np.concatenate([rng.choice(delta, size=(100, len(identities))).mean(axis=1) for _ in range(20)])
+        report["paired_test_differences"][name] = dict(
+            difference_ppm=float(delta.mean()), molecule_bootstrap_ci95=np.percentile(draws,[2.5,97.5]).tolist()
+        )
     args.registry.mkdir(parents=True, exist_ok=True)
     versions = args.registry / "versions"
     versions.mkdir(exist_ok=True)

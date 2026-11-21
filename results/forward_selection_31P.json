@@ -1,0 +1,315 @@
+{
+  "nucleus": "31P",
+  "selection_metric": "validation molecule-weighted MAE in ppm",
+  "validation": [
+    {
+      "models": {
+        "31P-gnn-r1": 0.5,
+        "31P-gnn-r2": 0.5
+      },
+      "macro_mae_ppm": 5.095844221089925
+    },
+    {
+      "models": {
+        "31P-gnn-r1": 0.6,
+        "31P-gnn-r2": 0.4
+      },
+      "macro_mae_ppm": 5.096199653738931
+    },
+    {
+      "models": {
+        "31P-gnn-r1": 0.4,
+        "31P-gnn-r2": 0.6
+      },
+      "macro_mae_ppm": 5.1070261311695475
+    },
+    {
+      "models": {
+        "31P-gnn-r1": 0.7,
+        "31P-gnn-r2": 0.3
+      },
+      "macro_mae_ppm": 5.120199546698019
+    },
+    {
+      "models": {
+        "31P-gnn-r1": 0.30000000000000004,
+        "31P-gnn-r2": 0.7
+      },
+      "macro_mae_ppm": 5.133280617320537
+    },
+    {
+      "models": {
+        "31P-gnn-r1": 0.8,
+        "31P-gnn-r2": 0.2
+      },
+      "macro_mae_ppm": 5.160396407052819
+    },
+    {
+      "models": {
+        "31P-gnn-r1": 0.19999999999999996,
+        "31P-gnn-r2": 0.8
+      },
+      "macro_mae_ppm": 5.171957125401939
+    },
+    {
+      "models": {
+        "31P-gnn-r1": 0.9,
+        "31P-gnn-r2": 0.1
+      },
+      "macro_mae_ppm": 5.214456606300365
+    },
+    {
+      "models": {
+        "31P-gnn-r1": 0.09999999999999998,
+        "31P-gnn-r2": 0.9
+      },
+      "macro_mae_ppm": 5.222770405725858
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.09999999999999998,
+        "31P-gnn-r1": 0.9
+      },
+      "macro_mae_ppm": 5.227280708239596
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.09999999999999998,
+        "31P-gnn-r2": 0.9
+      },
+      "macro_mae_ppm": 5.248585495696515
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.19999999999999996,
+        "31P-gnn-r1": 0.8
+      },
+      "macro_mae_ppm": 5.280269577364737
+    },
+    {
+      "models": {
+        "31P-gnn-r1": 1.0
+      },
+      "macro_mae_ppm": 5.28236743195438
+    },
+    {
+      "models": {
+        "31P-gnn-r2": 1.0
+      },
+      "macro_mae_ppm": 5.286672472438594
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.19999999999999996,
+        "31P-gnn-r2": 0.8
+      },
+      "macro_mae_ppm": 5.299875765802163
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.30000000000000004,
+        "31P-gnn-r1": 0.7
+      },
+      "macro_mae_ppm": 5.395492540959808
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.30000000000000004,
+        "31P-gnn-r2": 0.7
+      },
+      "macro_mae_ppm": 5.414400381453935
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.4,
+        "31P-gnn-r1": 0.6
+      },
+      "macro_mae_ppm": 5.555664830085095
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.4,
+        "31P-gnn-r2": 0.6
+      },
+      "macro_mae_ppm": 5.578692354966869
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.5,
+        "31P-gnn-r1": 0.5
+      },
+      "macro_mae_ppm": 5.764974993463382
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.5,
+        "31P-gnn-r2": 0.5
+      },
+      "macro_mae_ppm": 5.7730354579525125
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.6,
+        "31P-gnn-r2": 0.4
+      },
+      "macro_mae_ppm": 6.006811441746834
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.6,
+        "31P-gnn-r1": 0.4
+      },
+      "macro_mae_ppm": 6.008059916111506
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.7,
+        "31P-gnn-r2": 0.3
+      },
+      "macro_mae_ppm": 6.26600572864292
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.7,
+        "31P-gnn-r1": 0.3
+      },
+      "macro_mae_ppm": 6.272804369817453
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.8,
+        "31P-gnn-r2": 0.2
+      },
+      "macro_mae_ppm": 6.547068374136849
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.8,
+        "31P-gnn-r1": 0.2
+      },
+      "macro_mae_ppm": 6.551015248640417
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.9,
+        "31P-gnn-r2": 0.1
+      },
+      "macro_mae_ppm": 6.847092226526343
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 0.9,
+        "31P-gnn-r1": 0.1
+      },
+      "macro_mae_ppm": 6.850571845820646
+    },
+    {
+      "models": {
+        "solution-shifts-31P-convergence-6000": 1.0
+      },
+      "macro_mae_ppm": 7.170915632739434
+    }
+  ],
+  "selected": {
+    "31P-gnn-r1": 0.5,
+    "31P-gnn-r2": 0.5
+  },
+  "validation_identities": 4372,
+  "validation_observations": 6813,
+  "training_identities": 35696,
+  "graph_runs": {
+    "31P-gnn-r1": {
+      "best": {
+        "epoch": 90,
+        "seconds": 300.7,
+        "pure": 5.4004003859614365,
+        "validation": 5.282367429252985,
+        "weight": 0.75,
+        "lr": 0.0001366875
+      },
+      "seed": 4327,
+      "parameters": 99425,
+      "train_records": 37434
+    },
+    "31P-gnn-r2": {
+      "best": {
+        "epoch": 85,
+        "seconds": 406.9,
+        "pure": 5.426130414670191,
+        "validation": 5.286672468242853,
+        "weight": 0.75,
+        "lr": 2.767921875e-05
+      },
+      "seed": 18847,
+      "parameters": 99425,
+      "train_records": 37434
+    }
+  },
+  "split_sha256": "91cef933976836b691f7fee397f2fe5239760abf764524f35a0ce5de70d81969",
+  "test": {
+    "solution-shifts-31P-convergence-6000": {
+      "observations": 6693,
+      "identities": 4248,
+      "mae_ppm": 5.9351956057164665,
+      "molecule_macro_mae_ppm": 7.76723753328239,
+      "median_absolute_ppm": 1.0799999999999996,
+      "p90_absolute_ppm": 12.456721199956476,
+      "rmse_ppm": 39.49666850447549
+    },
+    "31P-gnn-r1": {
+      "observations": 6693,
+      "identities": 4248,
+      "mae_ppm": 4.5623101938412685,
+      "molecule_macro_mae_ppm": 5.954268052592518,
+      "median_absolute_ppm": 0.9452926826477057,
+      "p90_absolute_ppm": 8.620929565429687,
+      "rmse_ppm": 37.9045324003221
+    },
+    "31P-gnn-r2": {
+      "observations": 6693,
+      "identities": 4248,
+      "mae_ppm": 4.4326242936587885,
+      "molecule_macro_mae_ppm": 5.740349692939625,
+      "median_absolute_ppm": 0.9470729827880824,
+      "p90_absolute_ppm": 8.059275207519532,
+      "rmse_ppm": 37.709768082168495
+    },
+    "selected": {
+      "observations": 6693,
+      "identities": 4248,
+      "mae_ppm": 4.318641612041405,
+      "molecule_macro_mae_ppm": 5.602819294694335,
+      "median_absolute_ppm": 0.9316693782806418,
+      "p90_absolute_ppm": 7.835415710449222,
+      "rmse_ppm": 37.69870478751382
+    }
+  },
+  "paired_test_differences": {
+    "solution-shifts-31P-convergence-6000": {
+      "difference_ppm": -2.164418238588056,
+      "molecule_bootstrap_ci95": [
+        -2.580684377350687,
+        -1.7712532094830462
+      ]
+    },
+    "31P-gnn-r1": {
+      "difference_ppm": -0.3514487578981828,
+      "molecule_bootstrap_ci95": [
+        -0.451077244137034,
+        -0.2547384931803688
+      ]
+    },
+    "31P-gnn-r2": {
+      "difference_ppm": -0.13753039824528943,
+      "molecule_bootstrap_ci95": [
+        -0.23164863058629856,
+        -0.04684536529098268
+      ]
+    }
+  },
+  "model_config_sha256": "e668ff8075ebbd7a8b7fe50e07ed962eb889b80e0a8425cff293890b8b213d6b",
+  "test_predictions_verified_with_sdk": true,
+  "deployment_approved": true,
+  "incumbent": "phosphorus31-v2",
+  "promotion_rule": "lower validation molecule MAE, lower observation MAE on the same test and negative upper 95% bound for paired per-connectivity MAE relative to the incumbent"
+}
