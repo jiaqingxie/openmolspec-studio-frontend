@@ -47,10 +47,10 @@ def model_card(nucleus, en):
         text += (
             f"\n\nOn the same molecules, the previous release scored {prior['mae_ppm']:.2f} ppm per observation and "
             f"{prior['molecule_macro_mae_ppm']:.2f} ppm per molecule. The paired 95% bootstrap interval for the change in molecule-weighted MAE "
-            f"is [{lo:.2f}, {hi:.2f}] ppm. [Previous release]({previous_url})"
+            f"is [{lo:.3f}, {hi:.3f}] ppm. [Previous release]({previous_url})"
             if en else
             f"\n\n在同一批测试分子上，上一版的逐观测 MAE 为 {prior['mae_ppm']:.2f} ppm，分子等权 MAE 为 {prior['molecule_macro_mae_ppm']:.2f} ppm。"
-            f"按分子配对重采样，新版相对上一版的分子等权 MAE 差值的 95% 区间为 [{lo:.2f}, {hi:.2f}] ppm。[上一版模型]({previous_url})"
+            f"按分子配对重采样，新版相对上一版的分子等权 MAE 差值的 95% 区间为 [{lo:.3f}, {hi:.3f}] ppm。[上一版模型]({previous_url})"
         )
     elif nucleus == "31P" and r.get("deployment_approved"):
         first = r["test"]["31P-gnn-r1"]["molecule_macro_mae_ppm"]
@@ -64,6 +64,22 @@ def model_card(nucleus, en):
             f"\n\n在同一批 35,696 种训练分子上，对四层图网络独立初始化并再次训练。上一版 GNN 在同一测试集上按分子等权的 MAE 为 {first:.2f} ppm。"
             f"新旧模型误差差值的配对 95% 区间为 [{lo:.2f}, {hi:.2f}] ppm。[首次发布的模型与对照]({old})"
         )
+    record = ROOT / "results" / "phosphorus_gnn_training_runs.json"
+    if nucleus == "31P" and record.is_file():
+        training = json.loads(record.read_text())
+        if training["model_config_sha256"] == r["model_config_sha256"]:
+            widest = max(training["runs"], key=lambda item: item["hidden_width"])
+            minutes, seconds = divmod(round(widest["optimizer_and_validation_seconds"]), 60)
+            log = "https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/phosphorus_gnn_training_runs.json"
+            text += (
+                f"\n\nSMILES is converted to a 2D graph of atoms and bonds. Four message-passing layers build the phosphorus-site representation, with molecular descriptors and a solvent embedding at readout. Equivalent local environments share computations. "
+                f"The widest network has {widest['parameters']:,} parameters. It reached its lowest validation error at epoch {widest['best_validation_epoch']} and stopped at epoch {widest['stopped_epoch']}. "
+                f"Training and validation took {minutes} min {seconds} s after graph preparation. [Training records for all components]({log})"
+                if en else
+                f"\n\nSMILES 先转成以原子为节点、化学键为边的二维图。模型沿化学键传递四轮信息，再结合分子描述符和溶剂特征预测磷位移。相同的局部原子环境共享计算。"
+                f"最宽的网络有 {widest['parameters']:,} 个参数，在第 {widest['best_validation_epoch']} 轮取得最低验证误差，第 {widest['stopped_epoch']} 轮早停。"
+                f"从图数据准备完毕算起，训练和验证共 {minutes} 分 {seconds} 秒。[三套模型的训练记录]({log})"
+            )
     install = (
         "Extract the ZIP and run the following commands in its directory."
         if en else "解压 ZIP，在解压目录中安装 SDK 并运行预测。"

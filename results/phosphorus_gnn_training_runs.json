@@ -1,0 +1,55 @@
+{
+  "nucleus": "31P",
+  "model_config_sha256": "6f08e5689aa7c6808a3031a6af0a64c82b76308b057688a50a9d49022a5535e6",
+  "training_connectivities": 35696,
+  "training_examples": 37434,
+  "validation_connectivities": 4372,
+  "split_sha256": "91cef933976836b691f7fee397f2fe5239760abf764524f35a0ce5de70d81969",
+  "architecture": "Four rounds of bond-conditioned message passing on a 2D molecular graph, read out at the phosphorus site with molecular descriptors and solvent. Repeated atom neighborhoods share computations. Component predictors use their validation-selected weights for a training-derived environment estimate when available.",
+  "timing": "Training/validation loop through the final epoch, excluding graph construction, held-out evaluation and deployment. Completion time is the write timestamp of the completed training record.",
+  "stopping_rule": "Stop after 18 consecutive epochs without a lower validation molecule MAE. Retain the best validation checkpoint.",
+  "runs": [
+    {
+      "component": "31P-gnn-r1",
+      "mix_weight": 0.3,
+      "hidden_width": 64,
+      "parameters": 99425,
+      "seed": 4327,
+      "best_validation_epoch": 90,
+      "stopped_epoch": 108,
+      "best_validation_molecule_mae_ppm": 5.282367429252985,
+      "first_validation_molecule_mae_ppm": 10.057214092437112,
+      "optimizer_and_validation_seconds": 354.2,
+      "completed_at_utc": "2026-11-21T15:20:01+00:00",
+      "checkpoint_sha256": "ad492944c5159d1b345c673ff52aa0210bf1513bd61e8ea8855dc3c70b9e5488"
+    },
+    {
+      "component": "31P-gnn-r2",
+      "mix_weight": 0.3,
+      "hidden_width": 64,
+      "parameters": 99425,
+      "seed": 18847,
+      "best_validation_epoch": 85,
+      "stopped_epoch": 103,
+      "best_validation_molecule_mae_ppm": 5.286672468242853,
+      "first_validation_molecule_mae_ppm": 10.095038085316995,
+      "optimizer_and_validation_seconds": 501.9,
+      "completed_at_utc": "2026-11-21T15:35:45+00:00",
+      "checkpoint_sha256": "4f1d6bd29bbbd8061b51b736ac88329b8ca9322e2b40fd19bd25ab3f2a8e43c3"
+    },
+    {
+      "component": "31P-gnn-width96",
+      "mix_weight": 0.4,
+      "hidden_width": 96,
+      "parameters": 189025,
+      "seed": 36143,
+      "best_validation_epoch": 69,
+      "stopped_epoch": 87,
+      "best_validation_molecule_mae_ppm": 5.162942841215296,
+      "first_validation_molecule_mae_ppm": 9.647051744646427,
+      "optimizer_and_validation_seconds": 617.6,
+      "completed_at_utc": "2026-11-21T16:39:56+00:00",
+      "checkpoint_sha256": "8ac4536feb11be0a1dd66afd605b348df7bc285a4c42518084fbd0b1e1ae8c5f"
+    }
+  ]
+}

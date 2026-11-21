@@ -72,6 +72,7 @@ def prepare(args):
     ]
     if len(set(r[0] for r in train)) != cfg["training_identities"] or not validation:
         raise ValueError("Graph records differ from the frozen training partition")
+    del training
     return rd.arrays(), train, validation
 
 
@@ -134,6 +135,10 @@ def main():
     )
     batches, train_y, _, _ = pack(train, arrays, 256, rng)
     val_batches, y, local, w = pack(valid, arrays, 512)
+    train_count = len(train)
+    train_identities = len({row[0] for row in train})
+    val_keys = [row[0] for row in valid]
+    del arrays, train, valid
     mean = float(np.median(train_y))
     scale = args.scale
     net = PhosphorusGNN(width=args.width)
@@ -209,7 +214,7 @@ def main():
                 predictions=(1 - WEIGHTS[k]) * pred + WEIGHTS[k] * estimates,
                 targets=y,
                 weights=w,
-                keys=[r[0] for r in valid],
+                keys=val_keys,
             )
         if epoch - best_epoch >= 18:
             break
@@ -224,10 +229,10 @@ def main():
         weight_grid=WEIGHTS,
         initial_weights_sha256=sha256(args.warm_start) if args.warm_start else None,
         seed=args.seed,
-        train_records=len(train),
-        train_identities=len(set(r[0] for r in train)),
-        validation_records=len(valid),
-        validation_identities=len(set(r[0] for r in valid)),
+        train_records=train_count,
+        train_identities=train_identities,
+        validation_records=len(val_keys),
+        validation_identities=len(set(val_keys)),
     )
     (args.output / "training.json").write_text(json.dumps(report, indent=2) + "\n")
 
