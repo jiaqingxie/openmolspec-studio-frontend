@@ -64,6 +64,22 @@ def model_card(nucleus, en):
             f"\n\n在同一批 35,696 种训练分子上，对四层图网络独立初始化并再次训练。上一版 GNN 在同一测试集上按分子等权的 MAE 为 {first:.2f} ppm。"
             f"新旧模型误差差值的配对 95% 区间为 [{lo:.2f}, {hi:.2f}] ppm。[首次发布的模型与对照]({old})"
         )
+    comparison = ROOT / "results" / f"forward_capacity_{nucleus}.json"
+    if comparison.is_file():
+        comparison_data = json.loads(comparison.read_text())
+        if (comparison_data.get("deployment_approved") is False
+                and comparison_data.get("incumbent", {}).get("model_config_sha256") == r["model_config_sha256"]):
+            candidate = comparison_data["test"]["selected"]
+            low, high = comparison_data["paired_test_differences"]["previous_default"]["molecule_bootstrap_ci95"]
+            url = f"https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/results/forward_capacity_{nucleus}.json"
+            text += (
+                f"\n\nA second graph width and a three-component mixture were evaluated on the same split. The candidate scored "
+                f"{candidate['mae_ppm']:.2f} ppm per observation and {candidate['molecule_macro_mae_ppm']:.2f} ppm per molecule. "
+                f"The paired 95% interval for the change in molecule-weighted MAE was [{low:.3f}, {high:.3f}] ppm and included zero. The current model was retained. [Capacity comparison]({url})"
+                if en else
+                f"\n\n在同一划分上追加比较了另一种图网络宽度和三模型组合。候选组合的逐观测 MAE 为 {candidate['mae_ppm']:.2f} ppm，分子等权 MAE 为 {candidate['molecule_macro_mae_ppm']:.2f} ppm。"
+                f"分子等权误差差值的配对 95% 区间为 [{low:.3f}, {high:.3f}] ppm，包含零，因此保留当前模型。[模型宽度比较]({url})"
+            )
     record = ROOT / "results" / "phosphorus_gnn_training_runs.json"
     if nucleus == "31P" and record.is_file():
         training = json.loads(record.read_text())
