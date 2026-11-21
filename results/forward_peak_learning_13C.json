@@ -1,0 +1,56 @@
+{
+  "nucleus": "13C",
+  "training_input_manifest": {
+    "counts": {
+      "val_input": 26230,
+      "val_retained": 16215,
+      "train_input": 212015,
+      "train_retained": 133897
+    },
+    "external_keys": 37375,
+    "assigned_holdout_keys": 8267,
+    "excluded_validation_keys": 16560,
+    "inputs": {
+      ".runtime/forward-tuning/hc-assigned.jsonl.gz": "99419bc56b4c1282c656cbdc3cb1922b0beea31f042ebda4af8c2c1d977328eb",
+      "../data/nmrgym_only/val.jsonl": "ca74f0d3c48e812f13e025f54e27818e62986a95adc823d5843b968af3738498",
+      "../data/nmrgym_only/train.jsonl": "ec06ff885d4d5594920bc0904e7107f79881e4285297cad5173bfd8dd1a09401"
+    },
+    "files": {
+      "train": "d10a18242eed66ad742e19c60743f5790f1a0dc09f1f832cfae7f2635c07a1a8",
+      "val": "67725229186400aca6f48b7dbb91a2a03038c9196a1417f669ae3faf83b565bd"
+    }
+  },
+  "seed_training_molecules": 24958,
+  "seed_site_observations": 248619,
+  "validation_molecules": 15898,
+  "history": [
+    {
+      "epoch": 1,
+      "validation": 3.1954105056478115,
+      "baseline": 3.5116016963358057,
+      "weight": 1.0,
+      "min_support": 3,
+      "weak_train_molecules": 127224,
+      "matched_train_sites": 2029646
+    },
+    {
+      "epoch": 2,
+      "validation": 3.1542898786350384,
+      "baseline": 3.5116016963358057,
+      "weight": 1.0,
+      "min_support": 3,
+      "weak_train_molecules": 127231,
+      "matched_train_sites": 2062364
+    }
+  ],
+  "selected": {
+    "epoch": 2,
+    "validation": 3.1542898786350384,
+    "baseline": 3.5116016963358057,
+    "weight": 1.0,
+    "min_support": 3,
+    "weak_train_molecules": 127231,
+    "matched_train_sites": 2062364
+  },
+  "model_sha256": "75a3748fd23fdc7b39de99ba4d64c3b959593b7f9502c3445c75a40966ed943b"
+}

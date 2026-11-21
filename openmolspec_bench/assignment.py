@@ -74,7 +74,7 @@ def assign_peaks(smiles, symbol, predictions, peaks, tolerance):
             'accuracy_note': 'Predicted assignments; experimental atom labels are not supplied.'}
 
 
-def predict_atoms(smiles_list, symbol, models_root, directory):
+def predict_atoms(smiles_list, symbol, models_root, directory, *, backend="nmrnet", fold=0):
     """Run the author's inference program with the saved H/C checkpoint/scaler."""
     from rdkit import Chem
     from rdkit.Chem import AllChem
@@ -83,15 +83,28 @@ def predict_atoms(smiles_list, symbol, models_root, directory):
 
     if symbol not in ('H', 'C'):
         raise ValueError('This atom-assignment model supports H/C only')
-    source = Path(models_root)/'nmrnet/nmrnet-orig'
-    weight_root = Path(models_root)/'nmrnet/weights/finetune/liquid'
-    runs = sorted(weight_root.glob(f'{symbol}_*'))
+    models_root = Path(models_root).resolve()
+    if backend == "nmrnet":
+        source = models_root / "nmrnet/nmrnet-orig"
+        weights = models_root / "nmrnet/weights/finetune/liquid"
+        runs = sorted(weights.glob(f"{symbol}_*"))
+        filename = "checkpoint_best.pt"
+        dictionary = weights / "mol_dict.txt"
+        label = "NMRNet"
+    elif backend == "nmrnetpp":
+        source = models_root / "nmrnetpp/NMRNetplusplus"
+        weights = models_root / "nmrnetpp/checkpoints"
+        runs = sorted(weights.glob(f"scratch_{symbol}_*"))
+        filename = "checkpoint_last.pt"
+        dictionary = models_root / "nmrnetpp/weight/dict.txt"
+        label = "NMRNet++"
+    else:
+        raise ValueError("Unknown atom prediction backend")
     if len(runs) != 1:
-        raise FileNotFoundError(f'Expected one frozen {symbol} checkpoint directory under {weight_root}')
+        raise FileNotFoundError(f"Expected one frozen {symbol} checkpoint directory under {weights}")
     run = runs[0]
-    checkpoint = run/'cv_seed_42_fold_0/checkpoint_best.pt'
-    scaler = run/'target_scaler.ss'
-    dictionary = weight_root/'mol_dict.txt'
+    checkpoint = run / f"cv_seed_42_fold_{int(fold)}" / filename
+    scaler = run / "target_scaler.ss"
     for path in (source/'uninmr/infer.py', checkpoint, scaler, dictionary):
         if not path.is_file():
             raise FileNotFoundError(path)
@@ -116,6 +129,8 @@ def predict_atoms(smiles_list, symbol, models_root, directory):
         records.append({'smiles': smiles, 'atoms': atoms, 'coordinates': xyz,
                         'atoms_target_mask': np.array([a == symbol for a in atoms], dtype=np.int32),
                         'atoms_target': np.zeros(len(atoms), dtype=np.float32)})
+        if backend == 'nmrnetpp':
+            records[-1].update(nmr_frequency=0.0, nmr_solvent='')
         geometry.append({'smiles': smiles, 'atoms': atoms, 'coordinates_angstrom': xyz.tolist(),
                          'mmff_converged': optimized})
     with tempfile.TemporaryDirectory(prefix='openmolspec-atoms-') as temporary:
@@ -148,7 +163,7 @@ runpy.run_path(entry,run_name='__main__')
                    '--arch', 'unimol_large', '--dict-name', str(dictionary), '--path', str(checkpoint),
                    '--selected-atom', symbol, '--gaussian-kernel', '--atom-descriptor', '0',
                    '--split-mode', 'infer', '--cpu', '--required-batch-size-multiple', '1', '--no-progress-bar']
-        provenance = {'model': f'NMRNet liquid {symbol} fold 0', 'checkpoint': str(checkpoint),
+        provenance = {'model': f'{label} liquid {symbol} fold {fold}', 'checkpoint': str(checkpoint),
                       'checkpoint_sha256': sha256(checkpoint), 'scaler_sha256': sha256(scaler),
                       'dictionary_sha256': sha256(dictionary), 'input_sha256': sha256(local/'valid.lmdb'),
                       'geometry': geometry, 'training_performed': False, 'command': command}

@@ -163,6 +163,8 @@ class Runner:
             env.close()
             folds = read_prediction_folds(files)
             predicted, expected, identities, covered = [], [], [], set()
+            grouped = []
+            carbon = backend == "nmrnetpp" and symbol == "C" and [f.parent.name for f in files] == [f"cv_seed_42_fold_{i}" for i in range(5)]
             for index in sorted(set.intersection(*(set(fold) for fold in folds))):
                 if not 0 <= index < len(smis):
                     raise ValueError("Prediction matid outside metadata index")
@@ -174,6 +176,9 @@ class Runner:
                 if len({value.shape for value in values}) != 1:
                     raise ValueError("Fold predictions have inconsistent atom shapes")
                 predicted.append(np.mean(np.stack(values), axis=0))
+                if carbon:
+                    from .carbon import group_carbon_shifts
+                    grouped.append([p["shift_ppm"] for p in group_carbon_shifts(molecule, predicted[-1])])
                 expected.append(reference[identity])
                 identities.append(identity)
                 covered.add(identity)
@@ -187,6 +192,14 @@ class Runner:
                                              for identity, ref, pred in list(zip(identities, expected, predicted))[:3]],
                                 "prediction_files": [self.artifact(file) for file in files],
                                 "metadata": self.artifact(meta)})
+            if grouped:
+                from .peak_evaluation import matching_errors
+                metrics = peak_metrics(grouped, expected)
+                metrics["count_penalized_error_ppm"] = float(matching_errors(grouped, expected, 10.).mean())
+                results.insert(0, {**results[-1], "model": "nmrnetpp_symmetry", "metrics": metrics,
+                                   "unmatched_peak_penalty_ppm": 10.,
+                                   "examples": [dict(smiles=s, reference_ppm=list(r), prediction_ppm=p)
+                                                for s, r, p in list(zip(identities, expected, grouped))[:3]]})
         peak_root = getattr(self.args, "peak_model_root", None) or self.args.workspace / "runs/peak-models-selected"
         selected = peak_root / task.modalities[0]
         if (selected / "model.json").is_file():

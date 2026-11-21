@@ -1,0 +1,685 @@
+{
+  "nucleus": "13C",
+  "selection_dataset": "patent_test_10k",
+  "audit_datasets": [
+    "nmrspec_test",
+    "nmrexp_exp_10k",
+    "nmrgym_test"
+  ],
+  "experimental_site_weight": 0.25,
+  "source_sha256": "9b45b7227e1967cfe464e53d4b2073ec752b055c345eed4e59e777d276ab3961",
+  "penalty_ppm": 10.0,
+  "datasets": {
+    "patent_test_10k": {
+      "molecules": 108,
+      "raw": {
+        "matched_peak_mae_ppm": 4.989811803740526,
+        "matched_peak_rmse_ppm": 15.906840858616484,
+        "peak_count_mae": 7.361111111111111,
+        "matched_fraction": 0.6797529351899624,
+        "examples": 108,
+        "scored_examples": 108,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 4.9726467450038125
+      },
+      "candidate": {
+        "matched_peak_mae_ppm": 5.435648765208513,
+        "matched_peak_rmse_ppm": 14.956529411817153,
+        "peak_count_mae": 3.111111111111111,
+        "matched_fraction": 0.8545876767388094,
+        "examples": 108,
+        "scored_examples": 108,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 4.0153938170030745
+      }
+    },
+    "nmrspec_test": {
+      "molecules": 1000,
+      "raw": {
+        "matched_peak_mae_ppm": 1.029394644079166,
+        "matched_peak_rmse_ppm": 5.024458278364145,
+        "peak_count_mae": 3.253,
+        "matched_fraction": 0.8351755771823587,
+        "examples": 1000,
+        "scored_examples": 1000,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 2.309902577828617
+      },
+      "candidate": {
+        "matched_peak_mae_ppm": 1.1033602146173715,
+        "matched_peak_rmse_ppm": 4.614270974944717,
+        "peak_count_mae": 0.798,
+        "matched_fraction": 0.9580005305126699,
+        "examples": 1000,
+        "scored_examples": 1000,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 1.2166401102832674
+      }
+    },
+    "nmrexp_exp_10k": {
+      "molecules": 748,
+      "raw": {
+        "matched_peak_mae_ppm": 0.8781452186433517,
+        "matched_peak_rmse_ppm": 3.64387696973301,
+        "peak_count_mae": 3.514705882352941,
+        "matched_fraction": 0.8157673415506651,
+        "examples": 748,
+        "scored_examples": 748,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 2.4453223910051194
+      },
+      "candidate": {
+        "matched_peak_mae_ppm": 0.9508130828615147,
+        "matched_peak_rmse_ppm": 3.405020247240405,
+        "peak_count_mae": 0.5855614973262032,
+        "matched_fraction": 0.9646203879877979,
+        "examples": 748,
+        "scored_examples": 748,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 1.143182243434084
+      }
+    },
+    "nmrgym_test": {
+      "molecules": 980,
+      "raw": {
+        "matched_peak_mae_ppm": 2.3327289228345798,
+        "matched_peak_rmse_ppm": 4.980799611437971,
+        "peak_count_mae": 3.4744897959183674,
+        "matched_fraction": 0.867892135080319,
+        "examples": 980,
+        "scored_examples": 980,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 3.1966426693952643
+      },
+      "candidate": {
+        "matched_peak_mae_ppm": 2.508046358298615,
+        "matched_peak_rmse_ppm": 5.646594841793992,
+        "peak_count_mae": 1.786734693877551,
+        "matched_fraction": 0.9290696515926488,
+        "examples": 980,
+        "scored_examples": 980,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 2.771536800048897
+      }
+    }
+  },
+  "selected_setting": [
+    5,
+    0.0,
+    0.0
+  ],
+  "validation_grid": [
+    {
+      "setting": [
+        5,
+        0.0,
+        0.0
+      ],
+      "error": 4.0153938170030745
+    },
+    {
+      "setting": [
+        3,
+        0.0,
+        0.0
+      ],
+      "error": 4.043960854417268
+    },
+    {
+      "setting": [
+        1,
+        0.0,
+        0.0
+      ],
+      "error": 4.059896060870542
+    },
+    {
+      "setting": [
+        5,
+        0.15,
+        0.0
+      ],
+      "error": 4.12200583302963
+    },
+    {
+      "setting": [
+        3,
+        0.15,
+        0.0
+      ],
+      "error": 4.126144503399357
+    },
+    {
+      "setting": [
+        1,
+        0.15,
+        0.0
+      ],
+      "error": 4.144501448143262
+    },
+    {
+      "setting": [
+        5,
+        0.0,
+        0.2
+      ],
+      "error": 4.150172173332897
+    },
+    {
+      "setting": [
+        3,
+        0.0,
+        0.2
+      ],
+      "error": 4.197856919714412
+    },
+    {
+      "setting": [
+        1,
+        0.0,
+        0.2
+      ],
+      "error": 4.197866621486361
+    },
+    {
+      "setting": [
+        5,
+        0.15,
+        0.2
+      ],
+      "error": 4.219222346467704
+    },
+    {
+      "setting": [
+        1,
+        0.15,
+        0.2
+      ],
+      "error": 4.263157690341906
+    },
+    {
+      "setting": [
+        3,
+        0.15,
+        0.2
+      ],
+      "error": 4.2684114200183005
+    },
+    {
+      "setting": [
+        1,
+        0.0,
+        0.5
+      ],
+      "error": 4.312807663912973
+    },
+    {
+      "setting": [
+        5,
+        0.0,
+        0.5
+      ],
+      "error": 4.331349157614915
+    },
+    {
+      "setting": [
+        5,
+        0.15,
+        0.5
+      ],
+      "error": 4.342577496653143
+    },
+    {
+      "setting": [
+        3,
+        0.3,
+        0.0
+      ],
+      "error": 4.3541972795408315
+    },
+    {
+      "setting": [
+        5,
+        0.3,
+        0.0
+      ],
+      "error": 4.3545244523476585
+    },
+    {
+      "setting": [
+        3,
+        0.0,
+        0.5
+      ],
+      "error": 4.357574200648184
+    },
+    {
+      "setting": [
+        1,
+        0.3,
+        0.0
+      ],
+      "error": 4.367419515556434
+    },
+    {
+      "setting": [
+        3,
+        0.15,
+        0.5
+      ],
+      "error": 4.388534310267862
+    },
+    {
+      "setting": [
+        1,
+        0.15,
+        0.5
+      ],
+      "error": 4.4010647095684945
+    },
+    {
+      "setting": [
+        3,
+        0.3,
+        0.2
+      ],
+      "error": 4.445347359294237
+    },
+    {
+      "setting": [
+        5,
+        0.3,
+        0.2
+      ],
+      "error": 4.466260663425426
+    },
+    {
+      "setting": [
+        3,
+        0.0,
+        0.8
+      ],
+      "error": 4.467784927558991
+    },
+    {
+      "setting": [
+        1,
+        0.3,
+        0.2
+      ],
+      "error": 4.470972124381084
+    },
+    {
+      "setting": [
+        1,
+        0.0,
+        0.8
+      ],
+      "error": 4.487152297663283
+    },
+    {
+      "setting": [
+        5,
+        0.0,
+        0.8
+      ],
+      "error": 4.5012961254332025
+    },
+    {
+      "setting": [
+        5,
+        0.15,
+        0.8
+      ],
+      "error": 4.543991958015507
+    },
+    {
+      "setting": [
+        5,
+        0.3,
+        0.5
+      ],
+      "error": 4.563131990097361
+    },
+    {
+      "setting": [
+        1,
+        0.15,
+        0.8
+      ],
+      "error": 4.567095893491805
+    },
+    {
+      "setting": [
+        1,
+        0.3,
+        0.5
+      ],
+      "error": 4.57231377349956
+    },
+    {
+      "setting": [
+        3,
+        0.15,
+        0.8
+      ],
+      "error": 4.575648678446202
+    },
+    {
+      "setting": [
+        3,
+        0.3,
+        0.5
+      ],
+      "error": 4.576588925474561
+    },
+    {
+      "setting": [
+        3,
+        0.3,
+        0.8
+      ],
+      "error": 4.6507338219118015
+    },
+    {
+      "setting": [
+        5,
+        0.3,
+        0.8
+      ],
+      "error": 4.6641921123802215
+    },
+    {
+      "setting": [
+        5,
+        0.5,
+        0.0
+      ],
+      "error": 4.68319959716728
+    },
+    {
+      "setting": [
+        3,
+        0.5,
+        0.0
+      ],
+      "error": 4.691997899227293
+    },
+    {
+      "setting": [
+        1,
+        0.5,
+        0.0
+      ],
+      "error": 4.704862058718867
+    },
+    {
+      "setting": [
+        1,
+        0.3,
+        0.8
+      ],
+      "error": 4.711536268594721
+    },
+    {
+      "setting": [
+        3,
+        0.5,
+        0.2
+      ],
+      "error": 4.7750769691108825
+    },
+    {
+      "setting": [
+        5,
+        0.5,
+        0.2
+      ],
+      "error": 4.783418121840049
+    },
+    {
+      "setting": [
+        1,
+        0.5,
+        0.2
+      ],
+      "error": 4.8301755956664545
+    },
+    {
+      "setting": [
+        3,
+        0.5,
+        0.5
+      ],
+      "error": 4.9265036502828305
+    },
+    {
+      "setting": [
+        5,
+        0.5,
+        0.5
+      ],
+      "error": 4.961631962616441
+    },
+    {
+      "setting": [
+        1,
+        0.0,
+        -1.0
+      ],
+      "error": 4.963737012291355
+    },
+    {
+      "setting": [
+        1,
+        0.5,
+        0.5
+      ],
+      "error": 4.96456573755914
+    },
+    {
+      "setting": [
+        5,
+        0.0,
+        -1.0
+      ],
+      "error": 4.9726467450038125
+    },
+    {
+      "setting": [
+        3,
+        0.0,
+        -1.0
+      ],
+      "error": 4.981237750842301
+    },
+    {
+      "setting": [
+        1,
+        0.15,
+        -1.0
+      ],
+      "error": 5.0272222927749235
+    },
+    {
+      "setting": [
+        1,
+        0.5,
+        0.8
+      ],
+      "error": 5.032479651483616
+    },
+    {
+      "setting": [
+        3,
+        0.15,
+        -1.0
+      ],
+      "error": 5.048914056489871
+    },
+    {
+      "setting": [
+        5,
+        0.5,
+        0.8
+      ],
+      "error": 5.0515053537513035
+    },
+    {
+      "setting": [
+        3,
+        0.5,
+        0.8
+      ],
+      "error": 5.054777025956292
+    },
+    {
+      "setting": [
+        5,
+        0.15,
+        -1.0
+      ],
+      "error": 5.0606903843518
+    },
+    {
+      "setting": [
+        1,
+        0.3,
+        -1.0
+      ],
+      "error": 5.187765442142501
+    },
+    {
+      "setting": [
+        3,
+        0.3,
+        -1.0
+      ],
+      "error": 5.21094808493229
+    },
+    {
+      "setting": [
+        5,
+        0.3,
+        -1.0
+      ],
+      "error": 5.232291266515847
+    },
+    {
+      "setting": [
+        1,
+        0.5,
+        -1.0
+      ],
+      "error": 5.473003448760884
+    },
+    {
+      "setting": [
+        3,
+        0.5,
+        -1.0
+      ],
+      "error": 5.487731306393367
+    },
+    {
+      "setting": [
+        5,
+        0.5,
+        -1.0
+      ],
+      "error": 5.499700729052076
+    }
+  ],
+  "heldout_difference_ci95": [
+    -0.9547246891322082,
+    -0.8652992312678267
+  ],
+  "deploy_setting": [
+    5,
+    0.0,
+    0.0
+  ],
+  "fresh_replay": {
+    "checkpoints": 5,
+    "parameters_per_fold": 47593795,
+    "profile_sha256": "5ed10d023793bfa52aca0396741c95c81e6ff538aedb6f44b546d9cea6a4ff9c",
+    "max_difference_recorded_vs_fresh_ppm": 0.01593017578125,
+    "input_smiles": "C=C(CCCCc1ccccc1)c1ccc(C(C)(C)C)cc1",
+    "peak_count": 16,
+    "examples": [
+      {
+        "smiles": "CCO",
+        "nucleus": "13C",
+        "prediction_ppm": [
+          17.642955780029297,
+          59.1414794921875
+        ],
+        "atom_indices": [
+          [
+            0
+          ],
+          [
+            1
+          ]
+        ],
+        "peaks": [
+          {
+            "atom_indices": [
+              0
+            ],
+            "shift_ppm": 17.642955780029297
+          },
+          {
+            "atom_indices": [
+              1
+            ],
+            "shift_ppm": 59.1414794921875
+          }
+        ],
+        "unit": "ppm"
+      },
+      {
+        "smiles": "CC(C)O",
+        "nucleus": "13C",
+        "prediction_ppm": [
+          25.401695251464844,
+          64.43614196777344
+        ],
+        "atom_indices": [
+          [
+            0,
+            2
+          ],
+          [
+            1
+          ]
+        ],
+        "peaks": [
+          {
+            "atom_indices": [
+              0,
+              2
+            ],
+            "shift_ppm": 25.401695251464844
+          },
+          {
+            "atom_indices": [
+              1
+            ],
+            "shift_ppm": 64.43614196777344
+          }
+        ],
+        "unit": "ppm"
+      }
+    ],
+    "upstream_training_overlap": "unverified"
+  }
+}

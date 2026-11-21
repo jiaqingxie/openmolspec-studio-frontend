@@ -1,0 +1,22 @@
+{
+  "nucleus": "13C",
+  "backend": "NMRNet++",
+  "folds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "aggregation": "mean per input carbon, then mean per topological symmetry class including chirality",
+  "checkpoint_sha256": [
+    "888c2fdcdd0379ded4c6de7322414fcf98658f4092adf8687a54329643c0376a",
+    "dec9ca55ce882077e19bc61344381d850dcdf96ddccc8a465711a0ca05677801",
+    "5b2b512217218077ef8904b8080012fd70cb85e703510e8532de8378432841d9",
+    "053cb32060b80622c4828d8b0f6bd431f225dcf2d60e16543069534bcb040750",
+    "33b6e3e853aa250b388ec3ca30fc733ef8de32542b8f84275711b63fa3590803"
+  ],
+  "scaler_sha256": "8d9af306251634c2c064e4a61ba0f71344d8569573c7d517b25b4cf42678a39b",
+  "dictionary_sha256": "f4fafdbc445449c8f8ef613fee36c8ee7610e3c7c2766666635edc8d962ba134",
+  "upstream_assets": "https://zenodo.org/records/18232165"
+}

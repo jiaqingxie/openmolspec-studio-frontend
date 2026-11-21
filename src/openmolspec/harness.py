@@ -180,6 +180,13 @@ def _nmr_execute(task,x,config):
     settings={k:v for k,v in config.items() if k in ('python','device')}
     if task.startswith('nmr.forward.') or task=='nmr.assignment':
         nucleus=task.rsplit('.',1)[-1] if task.startswith('nmr.forward.') else x.get('nucleus','13C')
+        if task == 'nmr.forward.13C':
+            from pathlib import Path
+            from ._runtime import invoke
+            root = Path(config['root']).expanduser().resolve()
+            preset = config.get('backend')
+            if preset == 'nmrnetpp' or (preset is None and (root / 'nmrnetpp/checkpoints').is_dir()):
+                return invoke(dict(backend='carbon_folds', models_root=str(root), smiles=[x['smiles']]), python=config.get('python'))
         model=NMRNet.from_pretrained(config['root'],nucleus=nucleus,**settings)
         return model.assign(x['smiles'],x['peaks_ppm'],tolerance_ppm=x.get('tolerance_ppm')) if task=='nmr.assignment' else model.predict(x['smiles'])
     generation='.generation.' in task;query=dict(x['query']);view=task.split('.')[2]

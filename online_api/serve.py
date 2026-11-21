@@ -224,6 +224,8 @@ class Service:
 
     def settings(self, task):
         if task not in MCP_TASKS: raise ValueError('Choose an available MCP model task')
+        if task == 'nmr.forward.13C' and (self.args.models_root / 'nmrnetpp/checkpoints').is_dir():
+            return {'root': str(self.args.models_root), 'python': self.args.solution_python, 'backend': 'nmrnetpp'}
         if task.startswith('ms.forward.'):
             return {'source': str(self.args.ms_source), 'weights': str(self.args.ms_weights),
                     'python': self.args.model_python, 'device': 'cpu'}

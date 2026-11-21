@@ -152,6 +152,9 @@ def main():
     request = json.loads(source.read_text())
     if request['backend'] == 'nmrnet':
         result = nmrnet(request)
+    elif request['backend'] == 'carbon_folds':
+        from openmolspec_bench.carbon import predict
+        result = predict(request)
     elif request['backend'] == 'nmr_transformer':
         result = nmr_transformer(request)
     elif request['backend'] in ('gap', 'vib2mol'):
