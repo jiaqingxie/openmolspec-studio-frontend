@@ -86,10 +86,9 @@ def main():
     shutil.copytree(ROOT/'website/assets',output/'assets',dirs_exist_ok=True)
     hsqc = json.loads((assets/'examples/nmr-hsqc-transpeaknet.json').read_text())['examples'][0]
     text = text.replace('__HSQC_PEAKS__', json.dumps(hsqc['reference']['peaks_c_h_ppm']))
-    carbon = next(row for event in recording['events']
-                  if event['type'] == 'tool_end' and event['data'].get('name') == 'spectra_predict'
-                  for row in event['data']['result']['result'].get('records', [])
-                  if row.get('nucleus') == '13C' and row.get('smiles') == 'CCO')
+    carbon_report = json.loads((ROOT/'results/forward_carbon_folds.json').read_text())
+    carbon = next(row for row in carbon_report['fresh_replay']['examples']
+                  if row['nucleus'] == '13C' and row['smiles'] == 'CCO')
     text = text.replace('__ETHANOL_CARBON_SHIFTS__', json.dumps(carbon['prediction_ppm']))
     tasks=[task for task in TASKS if task.enabled]
     proof=json.loads((ROOT/'results/doc_notebook_execution.json').read_text())
