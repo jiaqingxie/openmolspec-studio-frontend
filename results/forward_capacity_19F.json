@@ -1,0 +1,629 @@
+{
+  "nucleus": "19F",
+  "selection_metric": "validation molecule-weighted MAE in ppm",
+  "validation": [
+    {
+      "models": {
+        "19F-tree-r2": 0.3,
+        "19F-gnn-refined": 0.4,
+        "19F-gnn-width48": 0.3
+      },
+      "macro_mae_ppm": 5.655035821725568
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.3,
+        "19F-gnn-refined": 0.3,
+        "19F-gnn-width48": 0.4
+      },
+      "macro_mae_ppm": 5.655325404290739
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.4,
+        "19F-gnn-refined": 0.3,
+        "19F-gnn-width48": 0.3
+      },
+      "macro_mae_ppm": 5.656822349095919
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.3,
+        "19F-gnn-refined": 0.5,
+        "19F-gnn-width48": 0.2
+      },
+      "macro_mae_ppm": 5.656865397002853
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.4,
+        "19F-gnn-refined": 0.4,
+        "19F-gnn-width48": 0.2
+      },
+      "macro_mae_ppm": 5.657119736613386
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.2,
+        "19F-gnn-refined": 0.4,
+        "19F-gnn-width48": 0.4
+      },
+      "macro_mae_ppm": 5.657591911510727
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.3,
+        "19F-gnn-refined": 0.2,
+        "19F-gnn-width48": 0.5
+      },
+      "macro_mae_ppm": 5.658063950446598
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.4,
+        "19F-gnn-refined": 0.2,
+        "19F-gnn-width48": 0.4
+      },
+      "macro_mae_ppm": 5.658664090732011
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.2,
+        "19F-gnn-refined": 0.5,
+        "19F-gnn-width48": 0.3
+      },
+      "macro_mae_ppm": 5.658685748933111
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.2,
+        "19F-gnn-refined": 0.3,
+        "19F-gnn-width48": 0.5
+      },
+      "macro_mae_ppm": 5.658777098266835
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.4,
+        "19F-gnn-refined": 0.5,
+        "19F-gnn-width48": 0.1
+      },
+      "macro_mae_ppm": 5.659517613661743
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.3,
+        "19F-gnn-refined": 0.6,
+        "19F-gnn-width48": 0.1
+      },
+      "macro_mae_ppm": 5.660430896402291
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.2,
+        "19F-gnn-refined": 0.6,
+        "19F-gnn-width48": 0.2
+      },
+      "macro_mae_ppm": 5.661627339788585
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.5,
+        "19F-gnn-refined": 0.3,
+        "19F-gnn-width48": 0.2
+      },
+      "macro_mae_ppm": 5.661929403763943
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.2,
+        "19F-gnn-refined": 0.2,
+        "19F-gnn-width48": 0.6
+      },
+      "macro_mae_ppm": 5.662296323512352
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.5,
+        "19F-gnn-refined": 0.4,
+        "19F-gnn-width48": 0.1
+      },
+      "macro_mae_ppm": 5.662887721576935
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.5,
+        "19F-gnn-refined": 0.2,
+        "19F-gnn-width48": 0.3
+      },
+      "macro_mae_ppm": 5.66298815850415
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.3,
+        "19F-gnn-refined": 0.1,
+        "19F-gnn-width48": 0.6
+      },
+      "macro_mae_ppm": 5.663412858267374
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.4,
+        "19F-gnn-refined": 0.1,
+        "19F-gnn-width48": 0.5
+      },
+      "macro_mae_ppm": 5.66359718115039
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.4,
+        "19F-gnn-refined": 0.6
+      },
+      "macro_mae_ppm": 5.663706061392765
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.30000000000000004,
+        "19F-gnn-refined": 0.7
+      },
+      "macro_mae_ppm": 5.6655604767272
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.5,
+        "19F-gnn-refined": 0.5
+      },
+      "macro_mae_ppm": 5.665638021897989
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.2,
+        "19F-gnn-refined": 0.7,
+        "19F-gnn-width48": 0.1
+      },
+      "macro_mae_ppm": 5.6661423318772535
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.5,
+        "19F-gnn-refined": 0.1,
+        "19F-gnn-width48": 0.4
+      },
+      "macro_mae_ppm": 5.667509321909177
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.1,
+        "19F-gnn-refined": 0.4,
+        "19F-gnn-width48": 0.5
+      },
+      "macro_mae_ppm": 5.667840503809045
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.1,
+        "19F-gnn-refined": 0.5,
+        "19F-gnn-width48": 0.4
+      },
+      "macro_mae_ppm": 5.667926961601088
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.2,
+        "19F-gnn-refined": 0.1,
+        "19F-gnn-width48": 0.7
+      },
+      "macro_mae_ppm": 5.668799506562208
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.1,
+        "19F-gnn-refined": 0.6,
+        "19F-gnn-width48": 0.3
+      },
+      "macro_mae_ppm": 5.670076112452447
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.1,
+        "19F-gnn-refined": 0.3,
+        "19F-gnn-width48": 0.6
+      },
+      "macro_mae_ppm": 5.670201877295975
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.6,
+        "19F-gnn-refined": 0.3,
+        "19F-gnn-width48": 0.1
+      },
+      "macro_mae_ppm": 5.6712991795924275
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.4,
+        "19F-gnn-width48": 0.6
+      },
+      "macro_mae_ppm": 5.671543086976817
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.30000000000000004,
+        "19F-gnn-width48": 0.7
+      },
+      "macro_mae_ppm": 5.672345574023602
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.6,
+        "19F-gnn-refined": 0.2,
+        "19F-gnn-width48": 0.2
+      },
+      "macro_mae_ppm": 5.672407853300915
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.19999999999999996,
+        "19F-gnn-refined": 0.8
+      },
+      "macro_mae_ppm": 5.672517709999929
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.6,
+        "19F-gnn-refined": 0.4
+      },
+      "macro_mae_ppm": 5.672638792132628
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.1,
+        "19F-gnn-refined": 0.7,
+        "19F-gnn-width48": 0.2
+      },
+      "macro_mae_ppm": 5.67372369389056
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.5,
+        "19F-gnn-width48": 0.5
+      },
+      "macro_mae_ppm": 5.674504883443688
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.1,
+        "19F-gnn-refined": 0.2,
+        "19F-gnn-width48": 0.7
+      },
+      "macro_mae_ppm": 5.675376630730187
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.6,
+        "19F-gnn-refined": 0.1,
+        "19F-gnn-width48": 0.3
+      },
+      "macro_mae_ppm": 5.675767211307678
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.19999999999999996,
+        "19F-gnn-width48": 0.8
+      },
+      "macro_mae_ppm": 5.678866991966104
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.1,
+        "19F-gnn-refined": 0.8,
+        "19F-gnn-width48": 0.1
+      },
+      "macro_mae_ppm": 5.679220234922576
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.6,
+        "19F-gnn-width48": 0.4
+      },
+      "macro_mae_ppm": 5.6819805973626485
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.1,
+        "19F-gnn-refined": 0.1,
+        "19F-gnn-width48": 0.8
+      },
+      "macro_mae_ppm": 5.683013359817655
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.7,
+        "19F-gnn-refined": 0.3
+      },
+      "macro_mae_ppm": 5.684852335090042
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.7,
+        "19F-gnn-refined": 0.2,
+        "19F-gnn-width48": 0.1
+      },
+      "macro_mae_ppm": 5.685514987388039
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.09999999999999998,
+        "19F-gnn-refined": 0.9
+      },
+      "macro_mae_ppm": 5.6862044675857675
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.7,
+        "19F-gnn-refined": 0.1,
+        "19F-gnn-width48": 0.2
+      },
+      "macro_mae_ppm": 5.687956485031556
+    },
+    {
+      "models": {
+        "19F-gnn-refined": 0.5,
+        "19F-gnn-width48": 0.5
+      },
+      "macro_mae_ppm": 5.688324261938402
+    },
+    {
+      "models": {
+        "19F-gnn-refined": 0.6,
+        "19F-gnn-width48": 0.4
+      },
+      "macro_mae_ppm": 5.68898202260807
+    },
+    {
+      "models": {
+        "19F-gnn-refined": 0.4,
+        "19F-gnn-width48": 0.6
+      },
+      "macro_mae_ppm": 5.689939650478022
+    },
+    {
+      "models": {
+        "19F-gnn-refined": 0.7,
+        "19F-gnn-width48": 0.3
+      },
+      "macro_mae_ppm": 5.691866651798587
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.7,
+        "19F-gnn-width48": 0.3
+      },
+      "macro_mae_ppm": 5.693168838475608
+    },
+    {
+      "models": {
+        "19F-gnn-refined": 0.30000000000000004,
+        "19F-gnn-width48": 0.7
+      },
+      "macro_mae_ppm": 5.693357841626852
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.09999999999999998,
+        "19F-gnn-width48": 0.9
+      },
+      "macro_mae_ppm": 5.694158001756561
+    },
+    {
+      "models": {
+        "19F-gnn-refined": 0.8,
+        "19F-gnn-width48": 0.2
+      },
+      "macro_mae_ppm": 5.6961485241599235
+    },
+    {
+      "models": {
+        "19F-gnn-refined": 0.19999999999999996,
+        "19F-gnn-width48": 0.8
+      },
+      "macro_mae_ppm": 5.699278356536142
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.8,
+        "19F-gnn-refined": 0.2
+      },
+      "macro_mae_ppm": 5.70132658179092
+    },
+    {
+      "models": {
+        "19F-gnn-refined": 0.9,
+        "19F-gnn-width48": 0.1
+      },
+      "macro_mae_ppm": 5.702280672499233
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.8,
+        "19F-gnn-refined": 0.1,
+        "19F-gnn-width48": 0.1
+      },
+      "macro_mae_ppm": 5.702834176520369
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.8,
+        "19F-gnn-width48": 0.2
+      },
+      "macro_mae_ppm": 5.706940426166691
+    },
+    {
+      "models": {
+        "19F-gnn-refined": 0.09999999999999998,
+        "19F-gnn-width48": 0.9
+      },
+      "macro_mae_ppm": 5.7081111633800665
+    },
+    {
+      "models": {
+        "19F-gnn-refined": 1.0
+      },
+      "macro_mae_ppm": 5.710223383003655
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.9,
+        "19F-gnn-refined": 0.1
+      },
+      "macro_mae_ppm": 5.721137706855144
+    },
+    {
+      "models": {
+        "19F-gnn-width48": 1.0
+      },
+      "macro_mae_ppm": 5.721308983603324
+    },
+    {
+      "models": {
+        "19F-tree-r2": 0.9,
+        "19F-gnn-width48": 0.1
+      },
+      "macro_mae_ppm": 5.724208280009079
+    },
+    {
+      "models": {
+        "19F-tree-r2": 1.0
+      },
+      "macro_mae_ppm": 5.743926258866138
+    }
+  ],
+  "selected": {
+    "19F-tree-r2": 0.3,
+    "19F-gnn-refined": 0.4,
+    "19F-gnn-width48": 0.3
+  },
+  "validation_identities": 13962,
+  "validation_observations": 15491,
+  "training_identities": 116126,
+  "graph_runs": {
+    "19F-gnn-refined": {
+      "best": {
+        "epoch": 24,
+        "seconds": 545.8,
+        "pure": 5.99107999311549,
+        "validation": 5.710223378358916,
+        "weight": 0.75,
+        "lr": 2.73375e-05
+      },
+      "seed": 4327,
+      "width": 64,
+      "parameters": 99425,
+      "train_records": 118491
+    },
+    "19F-gnn-width48": {
+      "best": {
+        "epoch": 38,
+        "seconds": 201.7,
+        "pure": 6.08593037402126,
+        "validation": 5.721308985242643,
+        "weight": 1.0,
+        "lr": 8.20125e-05
+      },
+      "seed": 98639,
+      "width": 48,
+      "parameters": 64609,
+      "train_records": 118491
+    }
+  },
+  "split_sha256": "fc29c969d6e44b27cc0d85da00bc2c380767747195dd50152f8a54dd61a92e99",
+  "incumbent": {
+    "models": {
+      "19F-gnn-refined": 0.6,
+      "19F-tree-r2": 0.4
+    },
+    "model_config_sha256": "da9d2c0e7ce41e5e3b070f57916861c9c4cc2e267830df0b856d197a3f0ec100",
+    "validation_molecule_mae_ppm": 5.663706061392765
+  },
+  "test": {
+    "19F-tree-r2": {
+      "observations": 15803,
+      "identities": 14330,
+      "mae_ppm": 6.021772722521693,
+      "molecule_macro_mae_ppm": 5.719981094128363,
+      "median_absolute_ppm": 0.48240546576701604,
+      "p90_absolute_ppm": 5.090280034126353,
+      "rmse_ppm": 70.93708297232057
+    },
+    "19F-gnn-refined": {
+      "observations": 15803,
+      "identities": 14330,
+      "mae_ppm": 5.9680205166469165,
+      "molecule_macro_mae_ppm": 5.665648893632695,
+      "median_absolute_ppm": 0.5262409210205021,
+      "p90_absolute_ppm": 4.827393859863285,
+      "rmse_ppm": 71.03135052256162
+    },
+    "19F-gnn-width48": {
+      "observations": 15803,
+      "identities": 14330,
+      "mae_ppm": 5.959417928265882,
+      "molecule_macro_mae_ppm": 5.650430916156629,
+      "median_absolute_ppm": 0.5,
+      "p90_absolute_ppm": 4.874000000000005,
+      "rmse_ppm": 71.13093962086074
+    },
+    "previous_default": {
+      "observations": 15803,
+      "identities": 14330,
+      "mae_ppm": 5.923589188692947,
+      "molecule_macro_mae_ppm": 5.621859443033962,
+      "median_absolute_ppm": 0.4982256963468217,
+      "p90_absolute_ppm": 4.73139628596851,
+      "rmse_ppm": 70.95647380500561
+    },
+    "selected": {
+      "observations": 15803,
+      "identities": 14330,
+      "mae_ppm": 5.9054316871674635,
+      "molecule_macro_mae_ppm": 5.601489455698258,
+      "median_absolute_ppm": 0.4963604819258265,
+      "p90_absolute_ppm": 4.763538316336968,
+      "rmse_ppm": 70.97091636060368
+    }
+  },
+  "paired_test_differences": {
+    "19F-tree-r2": {
+      "difference_ppm": -0.11849163843010478,
+      "molecule_bootstrap_ci95": [
+        -0.17866852885868093,
+        -0.058114277883643775
+      ]
+    },
+    "19F-gnn-refined": {
+      "difference_ppm": -0.0641594379344381,
+      "molecule_bootstrap_ci95": [
+        -0.08829471263141137,
+        -0.03947717059784292
+      ]
+    },
+    "19F-gnn-width48": {
+      "difference_ppm": -0.04894146045837147,
+      "molecule_bootstrap_ci95": [
+        -0.1036066167152943,
+        0.0037551445199265694
+      ]
+    },
+    "previous_default": {
+      "difference_ppm": -0.02036998733570442,
+      "molecule_bootstrap_ci95": [
+        -0.04354989321328794,
+        0.0008558969302811378
+      ]
+    }
+  },
+  "promotion_rule": "Lower validation molecule MAE, lower test observation MAE and upper paired 95% difference bound below zero versus the previous release.",
+  "deployment_approved": false,
+  "model_config_sha256": "088adfa50ddb3d4cff03bfbfd24073261a1d269f450f760dc14fd6d1116b7654",
+  "test_predictions_verified_with_sdk": true
+}
