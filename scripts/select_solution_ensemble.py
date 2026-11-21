@@ -42,6 +42,10 @@ def materialize_graph(path, tree):
     ):
         shutil.copyfile(source / name, path / name)
     (path / "model.json").write_text(json.dumps(cfg, indent=2) + "\n")
+    if "width" not in history:
+        history["width"] = torch.load(
+            path / "gnn.pt", weights_only=True, map_location="cpu"
+        )["width"]
     return history
 
 
@@ -70,7 +74,7 @@ def model_predictions(role, trees, graphs, roles):
     return order, targets, candidates
 
 
-def choose(rows, targets, candidates):
+def choose(rows, targets, candidates, max_components=2):
     counts = Counter(r[0] for r in rows)
     weights = np.array([1 / counts[r[0]] for r in rows])
     errors = {}
@@ -87,6 +91,12 @@ def choose(rows, targets, candidates):
                 (1 - fraction, fraction),
                 (1 - fraction) * candidates[a] + fraction * candidates[b],
             )
+    if max_components >= 3:
+        for names in itertools.combinations(candidates, 3):
+            for i in range(1, 9):
+                for j in range(1, 10 - i):
+                    mix = (i / 10, j / 10, (10 - i - j) / 10)
+                    add(names, mix, sum(w * candidates[n] for n, w in zip(names, mix)))
     key = min(errors, key=errors.get)
     return dict(zip(*key)), [
         {"models": dict(zip(names, mix)), "macro_mae_ppm": score}
@@ -115,7 +125,7 @@ def main():
     with gzip.open(args.trees[0] / "identity-splits.tsv.gz", "rt") as f:
         roles = dict(line.split() for line in f)
     val_rows, val_y, validation = model_predictions("val", trees, graphs, roles)
-    winner, scores = choose(val_rows, val_y, validation)
+    winner, scores = choose(val_rows, val_y, validation, args.max_components)
     report = dict(
         nucleus=cfg["nucleus"],
         selection_metric="validation molecule-weighted MAE in ppm",
@@ -125,16 +135,36 @@ def main():
         validation_observations=len(val_rows),
         training_identities=cfg["training_identities"],
         graph_runs={
-            n: {k: h[k] for k in ("best", "seed", "parameters", "train_records")}
+            n: {
+                k: h[k]
+                for k in ("best", "seed", "width", "parameters", "train_records")
+            }
             for n, h in histories.items()
         },
         split_sha256=cfg["identity_splits_sha256"],
     )
+    previous = None
+    if args.incumbent:
+        previous = json.loads(args.incumbent.read_text())
+        if previous["split_sha256"] != cfg["identity_splits_sha256"]:
+            raise ValueError("Previous release used different identities")
+        reference = previous["selected"]
+        old = sum(w * validation[n] for n, w in reference.items())
+        ref_metrics = metrics(old - val_y, [r[0] for r in val_rows])
+        report["incumbent"] = dict(
+            models=reference,
+            model_config_sha256=previous["model_config_sha256"],
+            validation_molecule_mae_ppm=ref_metrics["molecule_macro_mae_ppm"],
+        )
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, indent=2) + "\n")
     print("Frozen", cfg["nucleus"], winner, scores[0]["macro_mae_ppm"], flush=True)
     rows, targets, test = model_predictions("test", trees, graphs, roles)
     pred = sum(w * test[n] for n, w in winner.items())
+    if previous:
+        test["previous_default"] = sum(
+            w * test[n] for n, w in previous["selected"].items()
+        )
     keys = [r[0] for r in rows]
     report["test"] = {
         n: metrics(v - targets, keys) for n, v in {**test, "selected": pred}.items()
@@ -144,10 +174,39 @@ def main():
     rng = np.random.default_rng(1893)
     report["paired_test_differences"] = {}
     for name, values in test.items():
-        delta = np.bincount(mapped, weights=abs(pred-targets)-abs(values-targets)) / counts
-        draws = np.concatenate([rng.choice(delta, size=(100, len(identities))).mean(axis=1) for _ in range(20)])
+        delta = (
+            np.bincount(mapped, weights=abs(pred - targets) - abs(values - targets))
+            / counts
+        )
+        draws = np.concatenate(
+            [
+                rng.choice(delta, size=(100, len(identities))).mean(axis=1)
+                for _ in range(20)
+            ]
+        )
         report["paired_test_differences"][name] = dict(
-            difference_ppm=float(delta.mean()), molecule_bootstrap_ci95=np.percentile(draws,[2.5,97.5]).tolist()
+            difference_ppm=float(delta.mean()),
+            molecule_bootstrap_ci95=np.percentile(draws, [2.5, 97.5]).tolist(),
+        )
+    if previous:
+        prior = report["test"]["previous_default"]
+        np.testing.assert_allclose(
+            prior["molecule_macro_mae_ppm"],
+            previous["test"]["selected"]["molecule_macro_mae_ppm"],
+            atol=0.001,
+            rtol=0,
+        )
+        report["promotion_rule"] = (
+            "Lower validation molecule MAE, lower test observation MAE and upper paired 95% difference bound below zero versus the previous release."
+        )
+        report["deployment_approved"] = bool(
+            scores[0]["macro_mae_ppm"]
+            < report["incumbent"]["validation_molecule_mae_ppm"]
+            and report["test"]["selected"]["mae_ppm"] < prior["mae_ppm"]
+            and report["paired_test_differences"]["previous_default"][
+                "molecule_bootstrap_ci95"
+            ][1]
+            < 0
         )
     args.registry.mkdir(parents=True, exist_ok=True)
     versions = args.registry / "versions"
@@ -197,5 +256,11 @@ if __name__ == "__main__":
         p.add_argument("--" + name, type=Path, required=True)
     p.add_argument("--trees", nargs="+", type=Path, required=True)
     p.add_argument("--graphs", nargs="+", type=Path, required=True)
+    p.add_argument("--max-components", type=int, choices=(2, 3), default=2)
+    p.add_argument(
+        "--incumbent",
+        type=Path,
+        help="Existing selection report used for a paired promotion decision",
+    )
     args = p.parse_args()
     main()

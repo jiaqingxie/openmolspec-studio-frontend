@@ -13,7 +13,8 @@ def model_card(nucleus, en):
     val = r["validation"][0]["macro_mae_ppm"]
     mix = ", ".join(f"{v:.0%} {name}" for name, v in r["selected"].items())
     tool = "https://jiaqingxie.github.io/openmolspec.github.io/#tool-" + nucleus.lower()
-    archive = f"https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/download/solution-nmr-v2/openmolspec-{nucleus}.zip"
+    tag = r.get("release_tag", "solution-nmr-v2")
+    archive = f"https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/download/{tag}/openmolspec-{nucleus}.zip"
     if en:
         title = f"{nucleus} solution chemical shifts"
         text = (
@@ -39,7 +40,19 @@ def model_card(nucleus, en):
             "输出保留输入 SMILES 中从零起算的原子编号。多环境的逐峰归属需另行评测。\n\n"
             f"[在线预测]({tool}) · [下载模型与 SDK]({archive})"
         )
-    if nucleus == "31P" and r.get("deployment_approved"):
+    if "previous_default" in r["test"] and r.get("deployment_approved"):
+        prior = r["test"]["previous_default"]
+        lo, hi = r["paired_test_differences"]["previous_default"]["molecule_bootstrap_ci95"]
+        previous_url = f"https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/{r.get('previous_release_tag', 'solution-nmr-v2')}"
+        text += (
+            f"\n\nOn the same molecules, the previous release scored {prior['mae_ppm']:.2f} ppm per observation and "
+            f"{prior['molecule_macro_mae_ppm']:.2f} ppm per molecule. The paired 95% bootstrap interval for the change in molecule-weighted MAE "
+            f"is [{lo:.2f}, {hi:.2f}] ppm. [Previous release]({previous_url})"
+            if en else
+            f"\n\n在同一批测试分子上，上一版的逐观测 MAE 为 {prior['mae_ppm']:.2f} ppm，分子等权 MAE 为 {prior['molecule_macro_mae_ppm']:.2f} ppm。"
+            f"按分子配对重采样，新版相对上一版的分子等权 MAE 差值的 95% 区间为 [{lo:.2f}, {hi:.2f}] ppm。[上一版模型]({previous_url})"
+        )
+    elif nucleus == "31P" and r.get("deployment_approved"):
         first = r["test"]["31P-gnn-r1"]["molecule_macro_mae_ppm"]
         lo, hi = r["paired_test_differences"]["31P-gnn-r1"]["molecule_bootstrap_ci95"]
         old = "https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/tag/phosphorus31-v2"

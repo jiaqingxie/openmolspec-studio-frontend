@@ -113,7 +113,10 @@ def main():
     p.add_argument("--learning-rate", type=float, default=.0015)
     p.add_argument("--scale", type=float, default=40.0)
     p.add_argument("--threads", type=int, default=2)
+    p.add_argument("--width", type=int, default=64, help="Atom embedding and message width")
     args = p.parse_args()
+    if args.width <= 0:
+        p.error("--width must be positive")
     RDLogger.DisableLog("rdApp.*")
     args.output.mkdir(parents=True, exist_ok=True)
     torch.set_num_threads(args.threads)
@@ -133,7 +136,7 @@ def main():
     val_batches, y, local, w = pack(valid, arrays, 512)
     mean = float(np.median(train_y))
     scale = args.scale
-    net = PhosphorusGNN()
+    net = PhosphorusGNN(width=args.width)
     if args.warm_start is not None:
         initial = torch.load(args.warm_start, weights_only=True, map_location="cpu")
         if initial["center"] != mean or initial["scale"] != scale:
@@ -213,6 +216,7 @@ def main():
     report = dict(
         history=history,
         best=history[best_epoch - 1],
+        width=net.width,
         parameters=sum(p.numel() for p in net.parameters()),
         features_sha256=sha256(args.features),
         split_sha256=sha256(args.tree / "identity-splits.tsv.gz"),
