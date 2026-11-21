@@ -45,7 +45,7 @@ TASKS.append(Task("vibrational.gap.ir_raman_hc", "IR + Raman + H/C NMR → HOMO�
                   "按 checkpoint 的 ir-raman-nmr 完整输入运行；同时报告训练均值常量基线。"))
 for id_, title, modalities, backend, metrics, note in (
     ("vibrational.forward", "构象 → IR / Raman", ("IR", "Raman"), "studio_vibrational_forward", ("ir_cosine_similarity", "raman_cosine_similarity", "ir_mae", "raman_mae"),
-     "已有 Hessian/response 模型在原始 Gaussian 日志的同一几何上预测；默认两个真实日志示例，仅作配对流程检查。"),
+     "在相同的核坐标上预测 IR 和 Raman。安装 QM9S 验证包后默认使用预留结构；也支持指定 Gaussian 日志复核原始 openSpec 协议。"),
     ("vibrational.retrieval", "IR / Raman → 结构检索", ("IR", "Raman"), "vib2mol_retrieval", ("recall_at_1", "recall_at_5", "recall_at_10", "mrr"),
      "已有 Vib2Mol checkpoint 直接编码本次选中样本；提供 IR+Raman，不提供 H/C。"),
     ("vibrational.generation", "IR / Raman → SMILES", ("IR", "Raman"), "vib2mol_generation", ("exact_rate", "valid_rate"),

@@ -118,6 +118,7 @@ def reconstruct_spectra(
     atomic_numbers: np.ndarray,
     dedipole: np.ndarray,
     depolar: np.ndarray,
+    *, qm9s_modes: bool = False,
 ) -> dict[str, Any]:
     """Rebuild OpenMolSpec-style theoretical IR/Raman spectra from tensors."""
     from ase.data import atomic_masses
@@ -165,7 +166,7 @@ def reconstruct_spectra(
             SPECTRUM_PARAMETERS["raman_excitation_wavelength_nm"]
         ),
     )
-    return {
+    result = {
         "wavenumber": grid.astype(np.float32),
         "ir": _minmax(ir),
         "raman": _minmax(raman),
@@ -174,3 +175,15 @@ def reconstruct_spectra(
         "raman_activities": raman_activity.astype(np.float32),
         "rigid_rank": modes.rigid_rank,
     }
+
+    if qm9s_modes:
+        from rdkit import Chem
+
+        periodic_table = Chem.GetPeriodicTable()
+        masses = np.array([periodic_table.GetMostCommonIsotopeMass(int(z)) for z in numbers])
+        normal_modes = harmonic_modes(hessian, positions, masses)
+        mode_ir, mode_raman = mode_activities(normal_modes.cartesian_modes, dedipole, depolar)
+        result["qm9s_mode_frequencies"] = normal_modes.frequencies_cm1 * float(SPECTRUM_PARAMETERS["frequency_scaling_factor"])
+        result["qm9s_ir_activities"] = mode_ir
+        result["qm9s_raman_activities"] = mode_raman
+    return result

@@ -48,6 +48,7 @@ class OpenMolSpecService:
         self.device = resolve_device(device)
         self._gap_bundle: tuple[Any, dict[str, Any]] | None = None
         self._tensor_bundles: dict[str, Any] = {}
+        self._qm9s_profile = None
         self._nmr_bundle: tuple[Any, dict[str, Any]] | None = None
         self._dataset: _DatasetIndex | None = None
         self._vib2mol_bundles: dict[int, tuple[Any, Any, str]] = {}
@@ -213,10 +214,25 @@ class OpenMolSpecService:
             raise ValueError("该构象在 5 Å 截断内没有原子邻接边。")
         return data
 
-    def predict_spectra(self, molecule: MoleculeInput) -> dict[str, Any]:
+    def predict_spectra(self, molecule: MoleculeInput, *, include_nmr: bool = True, reference_profile: str = "openspec",
+                        include_qm9s_modes: bool = False) -> dict[str, Any]:
         import torch
         from torch_geometric.data import Batch
 
+        if reference_profile not in ("openspec", "qm9s"):
+            raise ValueError("Unknown IR/Raman reference profile")
+        if reference_profile == "qm9s":
+            from importlib.resources import files
+            from openmolspec_bench.vibrational_profile import apply_profile, checkpoint_hashes
+            if (molecule.mol.GetNumHeavyAtoms() > 9 or
+                    any(a.GetSymbol() not in {"H", "C", "N", "O", "F"} for a in molecule.mol.GetAtoms())):
+                raise ValueError("The QM9S convention covers H/C/N/O/F molecules with up to nine heavy atoms")
+            if self._qm9s_profile is None:
+                with files("openmolspec").joinpath("assets/qm9s-profile.json").open() as f:
+                    profile = json.load(f)
+                if checkpoint_hashes(self.assets) != profile["checkpoints"]:
+                    raise ValueError("QM9S profile and tensor checkpoints differ")
+                self._qm9s_profile = profile
         models = self._load_theoretical_models()
         from benchmarks.engines.hessian_physics import assemble
 
@@ -237,8 +253,13 @@ class OpenMolSpecService:
             atomic_numbers,
             tensors["dedipole"],
             tensors["depolar"],
+            qm9s_modes=include_qm9s_modes or reference_profile == "qm9s",
         )
-        result.update(self.predict_nmr(molecule))
+        if reference_profile == "qm9s":
+            result.update(apply_profile(result, self._qm9s_profile["profile"], self._qm9s_profile.get("sources")))
+            result["reference_profile"] = "qm9s"
+        if include_nmr:
+            result.update(self.predict_nmr(molecule))
         return result
 
     def _load_nmr(self):

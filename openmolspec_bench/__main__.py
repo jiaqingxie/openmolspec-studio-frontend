@@ -47,6 +47,8 @@ def main():
     run.add_argument("--fp-inference-root", type=Path, help="Exact prepared F.lmdb/P.lmdb and frozen prediction folders")
     run.add_argument("--allow-cross-domain-diagnostic", action="store_true", help="Report unverified solid-to-solution F/P diagnostic errors separately")
     run.add_argument("--gap-lmdb", type=Path)
+    run.add_argument("--qm9s-bundle", type=Path, help="Frozen QM9S profile and paired test archive")
+    run.add_argument("--qm9s-fresh", action="store_true", help="Recompute model output on the archived QM9S geometries")
     run.add_argument("--forward-logs", nargs="+", type=Path, help="Paired Gaussian geometry/spectrum logs for frozen forward evaluation")
     run.add_argument("--gap-unit", choices=("auto", "hartree", "eV"), default="auto")
     run.add_argument("--ms-python", default=sys.executable, help="Interpreter containing authors' MS dependencies")
@@ -94,8 +96,12 @@ def main():
     selected = [task for task in TASKS if task.enabled] if "all" in args.tasks else [BY_ID[key] for key in args.tasks]
     solution_only = (all(t.backend == "solution_chemical_shift" for t in selected)
                      and not args.allow_cross_domain_diagnostic and not args.fp_inference_root)
+    frozen_qm9s = (
+        [task.id for task in selected] == ["vibrational.forward"]
+        and args.qm9s_bundle is not None and not args.qm9s_fresh and not args.forward_logs
+    )
     torch_version = None
-    if not solution_only or args.device.startswith("cuda"):
+    if not (solution_only or frozen_qm9s) or args.device.startswith("cuda"):
         import torch
         torch.set_num_threads(args.threads)
         torch_version = torch.__version__
@@ -105,7 +111,8 @@ def main():
     runner = Runner(args)
     started = time.monotonic()
     result = {"schema_version": 1, "release": "1.0.0", "started_at": datetime.now(timezone.utc).isoformat(),
-              "purpose": ("solution_shift_checkpoint_evaluation" if solution_only else
+              "purpose": ("paired_qm9s_spectrum_evaluation" if frozen_qm9s else
+                          "solution_shift_checkpoint_evaluation" if solution_only else
                           "hsqc_checkpoint_evaluation" if [t.backend for t in selected] == ["transpeaknet"]
                           else "pipeline_smoke_evaluation"), "limit": args.limit,
               "device": args.device, "python": platform.python_version(), "torch": torch_version,

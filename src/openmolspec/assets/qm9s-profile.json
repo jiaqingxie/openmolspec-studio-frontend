@@ -1,0 +1,25 @@
+{
+  "profile": {
+    "ir": [
+      0.9975,
+      2.0
+    ],
+    "raman": [
+      0.9975,
+      2.0
+    ]
+  },
+  "reference": "QM9S optimized coordinates and same-record Hessian, dipole and polarizability derivatives on OpenMolSpec-reserved connectivities; harmonic factor 0.965, Lorentzian HWHM 10 cm^-1, Raman 532 nm and 298 K",
+  "checkpoints": {
+    "Hi": "6ab36626e9fcdd1c4d475f570f38ed416d96e897656314bf8940af2cf6a0aa76",
+    "Hij": "7f2a32d96cc51da0e7741b8b1fe95924debc53f3bc55d87a64b044ac65a50589",
+    "dedipole": "f9b7c5dfcecc55b04e15d2ed905da86a08bd5a6f3bc0a54693437b938fb3f26d",
+    "depolar": "e288edafaf5b20a646187cbc85052fd7883eff34f1a662304f5576049f8a2b48"
+  },
+  "sources": {
+    "ir": "modes",
+    "raman": "modes"
+  },
+  "validation_identities": 337,
+  "test_identities": 303
+}

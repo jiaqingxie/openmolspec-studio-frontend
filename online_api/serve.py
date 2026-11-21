@@ -64,7 +64,7 @@ def public_inputs(inputs):
     if not isinstance(inputs, dict): raise ValueError('Model inputs must be an object')
     fields = {'smiles', 'nucleus', 'peaks_ppm', 'ir', 'raman', 'nmr_h', 'nmr_c', 'candidates',
               'adduct', 'collision_energy', 'instrument', 'precursor_mz', 'query',
-              'source_solvent', 'target_solvent', 'source_ppm', 'solvent', 'hsqc_peaks'}
+              'source_solvent', 'target_solvent', 'source_ppm', 'solvent', 'hsqc_peaks', 'reference_profile'}
     result = {key: value for key, value in inputs.items() if key in fields}
     if 'smiles' in result and (not isinstance(result['smiles'], str) or len(result['smiles']) > 256):
         raise ValueError('SMILES may contain at most 256 characters')
@@ -79,6 +79,8 @@ def public_inputs(inputs):
     for key in ('adduct', 'instrument', 'source_solvent', 'target_solvent', 'solvent'):
         if key in result and (not isinstance(result[key], str) or len(result[key]) > 64):
             raise ValueError(key + ' must be a short acquisition condition')
+    if 'reference_profile' in result and result['reference_profile'] not in ('openspec', 'qm9s'):
+        raise ValueError('Choose the openSpec or QM9S spectral convention')
     if 'source_ppm' in result and not finite_number(result['source_ppm']):
         raise ValueError('Source shift must be finite')
     if 'query' in result:
@@ -354,7 +356,8 @@ class Service:
         return await self.call(session, run_id, 'spectra_predict', {'task': task, 'inputs': inputs})
 
     def geometry(self, inputs):
-        return self.local_worker('online_api.geometry', {'smiles': inputs['smiles'], 'root': str(self.args.portable_root)})
+        return self.local_worker('online_api.geometry', {'smiles': inputs['smiles'], 'root': str(self.args.portable_root),
+            'reference_profile': inputs.get('reference_profile', 'openspec')})
 
     def solvent_transfer(self, inputs):
         from openmolspec_bench.solvent_transfer import ReferenceTransfer

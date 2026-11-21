@@ -452,6 +452,14 @@ class Runner:
                 "reverse_metrics": retrieval_metrics(scores.T, ids, ids)}
 
     def vibrational_forward(self):
+        bundle = getattr(self.args, "qm9s_bundle", None)
+        if (bundle or getattr(self.args, "qm9s_fresh", False)) and self.args.forward_logs:
+            raise ValueError("Choose the Gaussian log or QM9S reference protocol")
+        if not self.args.forward_logs:
+            registry = self.args.workspace / "runs/forward-tuning/qm9s-evaluation"
+            if bundle or getattr(self.args, "qm9s_fresh", False) or (registry / "model.json").is_file():
+                from .qm9s_evaluation import evaluate
+                return evaluate(self, bundle or registry, fresh=getattr(self.args, "qm9s_fresh", False))
         from openmolspec_ui.config import discover_assets
         from openmolspec_ui.inference import OpenMolSpecService
         from openmolspec_ui.chemistry import molecule_from_xyz

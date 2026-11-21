@@ -11,9 +11,12 @@ def main():
     from openmolspec_ui.inference import OpenMolSpecService
     molecule = molecule_from_smiles(payload['smiles'])
     if molecule.atoms > 80: raise ValueError('The public geometry tool supports up to 80 atoms')
-    result = OpenMolSpecService(discover_assets(Path(payload['root'])), device='cpu').predict_spectra(molecule)
-    output = {key: result[key].tolist() for key in ['wavenumber', 'ir', 'raman', 'nmr_h', 'nmr_c']}
+    convention = payload.get('reference_profile', 'openspec')
+    result = OpenMolSpecService(discover_assets(Path(payload['root'])), device='cpu').predict_spectra(
+        molecule, reference_profile=convention, include_nmr=convention == 'openspec')
+    output = {key: result[key].tolist() for key in ['wavenumber', 'ir', 'raman', 'nmr_h', 'nmr_c'] if key in result}
     output['smiles'] = payload['smiles']; output['coordinate_method'] = molecule.source
+    output['reference_profile'] = convention
     output['model'] = 'openSpec Equiformer-v3'; output['unit'] = 'cm-1'
     print('OMS_RESULT_V1:' + json.dumps(output), flush=True)
 
