@@ -1,0 +1,51 @@
+{
+  "selection_metric": "validation molecule-weighted carbon and proton MAE, ppm",
+  "baseline_validation": [
+    1.5653991672919034,
+    0.20457920874003876
+  ],
+  "selected_validation": [
+    1.540860727833522,
+    0.20262711307001305
+  ],
+  "silver_train_identities": 16311,
+  "silver_validation_identities": 3968,
+  "silver_archive_sha256": "0ab682f5ba9042be93d3375a767d7d1e24377e4bdd156cd5d3a9b66a5dfa5b61",
+  "frozen_base_training_overlap": "silver split may include structures seen in author training; gold identities excluded from all calibration",
+  "settings": {
+    "depths": [
+      3,
+      3
+    ],
+    "strengths": [
+      0.85,
+      0.85
+    ]
+  },
+  "gold_spectra": 479,
+  "gold_sha256": "614be38c96f4bd1b8faad55a13c80423fe39136258bf234c4b0956d38fda0368",
+  "config_sha256": "d6deafd1d0859e809347a918e0384e1e45b7f1f8311260d7052d72af0bb1468a",
+  "baseline_expert_test": [
+    2.027531035988665,
+    0.1658911708228296
+  ],
+  "selected_expert_test": [
+    2.005156499630574,
+    0.16415643707451738
+  ],
+  "paired_difference_ci95": {
+    "carbon_mae_ppm": [
+      -0.030682397551127887,
+      -0.01380345359976099
+    ],
+    "proton_mae_ppm": [
+      -0.0027027702737107482,
+      -0.0007432441866945665
+    ]
+  },
+  "observed_crosspeaks": 7926,
+  "correct_website_assignments": [
+    5141,
+    5214
+  ]
+}

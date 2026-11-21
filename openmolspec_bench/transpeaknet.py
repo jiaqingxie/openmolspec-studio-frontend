@@ -16,6 +16,15 @@ SOLVENT_CLASS = {'CDCl3': 0, 'DMSO-d6': 1, 'acetone-d6': 2, 'acid': 3,
 CHECKPOINT_SHA256 = 'ff72d33b422dee68b8f359536079b25bf165e81d363652308da65ecd89ed2523'
 
 
+def default_calibration():
+    """Return the fitted shift correction shipped with the SDK."""
+    from importlib.resources import files
+    asset = Path(str(files("openmolspec").joinpath("assets", "hsqc-shift-calibration.json")))
+    if sha256(asset) != "d6deafd1d0859e809347a918e0384e1e45b7f1f8311260d7052d72af0bb1468a":
+        raise ValueError("Bundled HSQC calibration checksum mismatch")
+    return asset
+
+
 def graph(molecule, solvent):
     # Match the atom and directed bond indices used by the released checkpoint.
     chirality = (Chem.ChiralType.CHI_UNSPECIFIED, Chem.ChiralType.CHI_TETRAHEDRAL_CW,
@@ -73,6 +82,34 @@ def predict_sites(model, molecule, solvent):
     if not np.isfinite(c).all() or not np.isfinite(h).all():
         raise ValueError("TransPeakNet returned nonfinite shifts")
     return indices, c, h
+
+
+def correction_keys(carbon, proton, solvent, hydrogens):
+    """Index the fitted silver-training residuals using observable model inputs."""
+    return ("all", f"s{solvent}/h{hydrogens}",
+            f"s{solvent}/h{hydrogens}/c{int(carbon//25)}/p{int(proton//2)}",
+            f"s{solvent}/h{hydrogens}/c{int(carbon//10)}/p{int(proton)}")
+
+
+def calibrated_prediction(prediction, molecule, solvent, config):
+    """Apply independently selected carbon and proton corrections to a raw prediction."""
+    indices, carbon, proton = prediction
+    carbon, proton = carbon.copy(), proton.copy()
+    for j, idx in enumerate(indices):
+        atom = molecule.GetAtomWithIdx(idx)
+        hydrogen_count = atom.GetTotalNumHs(includeNeighbors=True)
+        keys = correction_keys(float(carbon[j]), float(proton[j].mean()), SOLVENT_CLASS[solvent], hydrogen_count)
+        for channel in range(2):
+            depth = config["depths"][channel]
+            for key in reversed(keys[:depth+1]):
+                if key in config["tables"]:
+                    delta = np.asarray(config["tables"][key]) * config["strengths"][channel]
+                    if channel == 0:
+                        carbon[j] += delta[0]
+                    else:
+                        proton[j] += delta[1:]
+                    break
+    return indices, carbon, proton
 
 
 def peak_list(molecule, indices, carbon, proton):

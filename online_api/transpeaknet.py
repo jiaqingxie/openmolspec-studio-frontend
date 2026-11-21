@@ -8,8 +8,9 @@ import numpy as np
 from rdkit import Chem
 import torch
 
+from openmolspec_bench.data import sha256
 from openmolspec_bench.transpeaknet import (
-    CHECKPOINT_SHA256, SOLVENT_CLASS, assign_peaks, load_model, peak_list, predict_sites,
+    CHECKPOINT_SHA256, SOLVENT_CLASS, assign_peaks, load_model, peak_list, predict_sites, calibrated_prediction, default_calibration,
 )
 
 
@@ -31,7 +32,11 @@ def evaluate(payload):
 
     torch.set_num_threads(2)
     model = load_model(source)
-    expected, atom_ids = peak_list(molecule, *predict_sites(model, molecule, solvent))
+    prediction = predict_sites(model, molecule, solvent)
+    calibration = default_calibration()
+    prediction = calibrated_prediction(prediction, molecule, solvent, json.loads(calibration.read_text()))
+    calibration_sha = sha256(calibration)
+    expected, atom_ids = peak_list(molecule, *prediction)
     measured = np.empty((0, 2))
     matches, unmatched = [], []
     if 'hsqc_peaks' in payload:
@@ -41,7 +46,7 @@ def evaluate(payload):
         matches, unmatched = assign_peaks(measured, expected, atom_ids)
     for index, atom in enumerate(molecule.GetAtoms()):
         atom.SetAtomMapNum(index + 1)
-    return {'model': 'TransPeakNet', 'checkpoint_sha256': CHECKPOINT_SHA256, 'solvent': solvent, 'smiles': smiles,
+    return {'model': 'TransPeakNet', 'calibration_sha256': calibration_sha, 'checkpoint_sha256': CHECKPOINT_SHA256, 'solvent': solvent, 'smiles': smiles,
             'mapped_smiles': Chem.MolToSmiles(molecule, canonical=False),
             'atom_index_basis': 'RDKit AddHs on input SMILES, zero based. SMILES map labels are index + 1.',
             'matcher': 'One-to-one minimum scaled H/C deviation with unmatched slots (8 ppm C, 0.65 ppm H).',

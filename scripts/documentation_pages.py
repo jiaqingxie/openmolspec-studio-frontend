@@ -215,7 +215,8 @@ def build_pages(tasks,profile,profile_zh):
                 page+=reference_list(reference_keys(task),en)
             if task.id in ('nmr.forward.19F', 'nmr.forward.31P') or (task.id in ('nmr.forward.11B', 'nmr.forward.29Si') and (ROOT/'results'/f'forward_selection_{task.modalities[0]}.json').is_file()):
                 page = solution_task_page(task.modalities[0], en)
-            files[f'tasks/{slug}{suffix}.md']=page
+            from forward_calibration_cards import updated_page
+            files[f'tasks/{slug}{suffix}.md']=updated_page(page, task.id, en)
             files[f'notebooks/{slug}{suffix}.ipynb']=json.dumps(notebook(task,language),ensure_ascii=False,indent=2)+'\n'
         # Retain protocol/publication details; these pages are maintained below.
         files[f'protocols{suffix}.md']=('# Evaluation protocols\n\n' if en else '# 评测协议\n\n')+('All published figures use actual recorded results. Each evidence JSON carries source report hashes. Execution success is separate from scientific validity. Small candidate-pool results, prepared-data split labels and matched-peak errors must not be described as independent generalization or atom-assignment accuracy.\n\nComplete IR/Raman/H/C input and missing-channel ablations are reported separately. Gap units are converted once from Hartree to eV. MS scores compare with all observed peaks under explicit acquisition conditions. The frozen-model figures contain no fitted calibration. A separate two-record-per-split SDK training integration check completed one encoder and one generator step with save/reload verification; it is not a performance benchmark.\n\n' if en else '所有公开结果图来自实际记录。证据 JSON 保留来源报告哈希。执行成功与科学有效性分开判断；小候选池、准备数据的 split 标签、峰匹配误差，不能宣传成独立泛化或实验原子指认准确率。\n\n完整 IR/Raman/H/C 输入与缺通道消融分别报告。Gap 从 Hartree 到 eV 仅转换一次。MS 在明确采集条件下与全部实测峰比较。冻结模型图没有拟合校准。另有独立的 SDK 训练接口检查：每个原始划分取两个记录，编码器与生成器各训练一步并验证保存重载；这不是性能基准。\n\n')+'[Dataset definitions](datasets.md) · [Model-by-model audit](model-audit.md)\n'

@@ -1,0 +1,115 @@
+{
+  "model": "iceberg",
+  "selection_metric": "molecule-weighted validation cosine, top 100 predicted bins",
+  "checkpoints": [
+    "77d78adf7b60e2fdf68b45db39346c7bde2a1a2dbf57c5e7fc2b05223d43f16a",
+    "d2785ff38beb52a1a22200832ed07b9817709470aa03d45bf6af75905bdaa7fa"
+  ],
+  "grid_size": 189,
+  "selected": [
+    1.2,
+    0.5,
+    100
+  ],
+  "validation_counts": {
+    "passed": 280,
+    "skipped": 104
+  },
+  "validation_cosine": 0.5255570064251565,
+  "baseline_validation_cosine": 0.5166745073707666,
+  "crossvalidated_selection_cosine": 0.5231039609219412,
+  "validation_top": [
+    {
+      "setting": [
+        1.2,
+        0.5,
+        100
+      ],
+      "cosine": 0.5255570064251565
+    },
+    {
+      "setting": [
+        1.2,
+        0.5,
+        50
+      ],
+      "cosine": 0.5247511950512974
+    },
+    {
+      "setting": [
+        1.45,
+        0.5,
+        100
+      ],
+      "cosine": 0.523816295172701
+    },
+    {
+      "setting": [
+        1.2,
+        0.75,
+        100
+      ],
+      "cosine": 0.5238000647772897
+    },
+    {
+      "setting": [
+        1.45,
+        0.5,
+        50
+      ],
+      "cosine": 0.5231795195728399
+    },
+    {
+      "setting": [
+        1.2,
+        0.75,
+        50
+      ],
+      "cosine": 0.5229846932971883
+    },
+    {
+      "setting": [
+        1.2,
+        0.5,
+        20
+      ],
+      "cosine": 0.522272305376791
+    },
+    {
+      "setting": [
+        1.45,
+        0.5,
+        20
+      ],
+      "cosine": 0.5211477253827372
+    }
+  ],
+  "test_counts": {
+    "passed": 327,
+    "skipped": 57
+  },
+  "baseline_test": {
+    "cosine_similarity": 0.5050452894394987,
+    "entropy_similarity": 0.43698569991655234,
+    "predicted_nonzero_bins": 100.0,
+    "reference_nonzero_bins": 29.941896024464832
+  },
+  "selected_test": {
+    "cosine_similarity": 0.5111925696619435,
+    "entropy_similarity": 0.46335243909444584,
+    "predicted_nonzero_bins": 100.0,
+    "reference_nonzero_bins": 29.941896024464832
+  },
+  "test_cosine_difference_ci95": [
+    -0.00042250172260736775,
+    0.012662917843050467
+  ],
+  "validation_test_overlap": 0,
+  "validation_cache_sha256": "a196b0a94424dc4ab57f366f6607aafebbc8f9a86659f6dbffe4259650537ecf",
+  "test_cache_sha256": "08bd92ad6e8b7fc9d83df75bf12ba85a487ab946e11e0f76963358e5b5d86b13",
+  "deployment_setting": [
+    1.0,
+    1.0,
+    100
+  ]
+}

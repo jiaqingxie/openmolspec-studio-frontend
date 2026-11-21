@@ -1,0 +1,114 @@
+{
+  "model": "glacier",
+  "selection_metric": "molecule-weighted validation cosine, top 100 predicted bins",
+  "checkpoints": [
+    "5a47cecca707d3abd5a49c7dbac99d100aa2a586d5d4f848f1e8e35140d7db11"
+  ],
+  "grid_size": 189,
+  "selected": [
+    1.2,
+    1.5,
+    100
+  ],
+  "validation_counts": {
+    "passed": 280,
+    "skipped": 104
+  },
+  "validation_cosine": 0.5893360609821789,
+  "baseline_validation_cosine": 0.5858391506707309,
+  "crossvalidated_selection_cosine": 0.5870410923822571,
+  "validation_top": [
+    {
+      "setting": [
+        1.2,
+        1.5,
+        100
+      ],
+      "cosine": 0.5893360609821789
+    },
+    {
+      "setting": [
+        1.2,
+        1.0,
+        100
+      ],
+      "cosine": 0.5891150403017392
+    },
+    {
+      "setting": [
+        1.2,
+        1.5,
+        50
+      ],
+      "cosine": 0.5890858307155253
+    },
+    {
+      "setting": [
+        1.2,
+        1.0,
+        50
+      ],
+      "cosine": 0.588861129032685
+    },
+    {
+      "setting": [
+        1.45,
+        1.5,
+        100
+      ],
+      "cosine": 0.5883285762197065
+    },
+    {
+      "setting": [
+        1.45,
+        1.5,
+        50
+      ],
+      "cosine": 0.5882029998261542
+    },
+    {
+      "setting": [
+        1.2,
+        1.5,
+        20
+      ],
+      "cosine": 0.58790147940518
+    },
+    {
+      "setting": [
+        1.45,
+        1.0,
+        100
+      ],
+      "cosine": 0.5877626447399328
+    }
+  ],
+  "test_counts": {
+    "passed": 327,
+    "skipped": 57
+  },
+  "baseline_test": {
+    "cosine_similarity": 0.5827906103388171,
+    "entropy_similarity": 0.5249892855133103,
+    "predicted_nonzero_bins": 100.0,
+    "reference_nonzero_bins": 29.941896024464832
+  },
+  "selected_test": {
+    "cosine_similarity": 0.5831022614481415,
+    "entropy_similarity": 0.5562565578396508,
+    "predicted_nonzero_bins": 100.0,
+    "reference_nonzero_bins": 29.941896024464832
+  },
+  "test_cosine_difference_ci95": [
+    -0.004409754467537633,
+    0.0050714225230426985
+  ],
+  "validation_test_overlap": 0,
+  "validation_cache_sha256": "b456c8c12cdfc4e159514c5180f502737d72a71df66b19ece398b22f2eb28423",
+  "test_cache_sha256": "bf8a3ca1fadb9e79d5ea82e391905496aaddcda74921e71a61fa3ffb39aac7f4",
+  "deployment_setting": [
+    1.0,
+    1.0,
+    100
+  ]
+}

@@ -100,6 +100,26 @@ def spectrum_metrics(predicted, reference, num_bins=150000, upper_limit=1500., m
             "predicted_nonzero_bins": int(np.count_nonzero(filtered)), "reference_nonzero_bins": int(np.count_nonzero(target))}
 
 
+def calibrated_peaks(peaks, precursor_mz, power, precursor_weight, keep):
+    """Transform predicted relative intensities and retain the strongest distinct mass bins."""
+    peaks = np.asarray(peaks, dtype=float).reshape(-1, 2)
+    if (power, precursor_weight, keep) == (1, 1, 100):
+        return peaks
+    bins = np.floor(peaks[:, 0] * (149999 / 1500.)).astype(int) + 1
+    valid = (bins >= 0) & (bins < 150000) & (peaks[:, 1] > 0)
+    bins, peaks = bins[valid], peaks[valid]
+    # Choose one original m/z per bin without inventing a fragment mass.
+    order = np.lexsort((-peaks[:, 1], bins))
+    _, first = np.unique(bins[order], return_index=True)
+    idx = order[first]
+    chosen = peaks[idx].copy()
+    chosen[:, 1] **= power
+    parent = abs((bins[idx] - .5) * 1500 / 149999 - precursor_mz) <= .02
+    chosen[parent, 1] *= precursor_weight
+    top = np.argsort(-chosen[:, 1], kind="stable")[:keep]
+    return chosen[top][chosen[top, 1] > 0]
+
+
 def load_frozen_model(args):
     import torch
     torch.set_num_threads(args.threads)

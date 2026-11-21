@@ -1,5 +1,6 @@
 """Score raw TransPeakNet site predictions against the authors' HSQC annotations."""
 import csv
+import json
 import random
 from collections import Counter, defaultdict
 
@@ -8,7 +9,7 @@ from rdkit import Chem, rdBase
 import torch_geometric
 
 from openmolspec.dataset import molspectra
-from .transpeaknet import SOLVENT_CLASS, assign_peaks, load_model, peak_list, predict_sites
+from .transpeaknet import SOLVENT_CLASS, assign_peaks, load_model, peak_list, predict_sites, calibrated_prediction, default_calibration
 
 
 def site_mae(prediction, annotations):
@@ -62,6 +63,10 @@ def run(runner):
 
     model = load_model(source, args.device)
     solvent_name = {code: name for name, code in SOLVENT_CLASS.items()}
+    calibration = getattr(args, "hsqc_calibration", None)
+    if calibration is None and not getattr(args, "hsqc_author_baseline", False):
+        calibration = default_calibration()
+    correction = json.loads(calibration.read_text()) if calibration else None
     spectra, notebook_rows = [], []
     example = None
     for record in records:
@@ -76,9 +81,12 @@ def run(runner):
         molecule = Chem.AddHs(Chem.MolFromSmiles(record['smiles']))
         annotations = record['hsqc_assignments']
         prediction = predict_sites(model, molecule, solvent)
+        raw_prediction = prediction
+        if correction:
+            prediction = calibrated_prediction(prediction, molecule, solvent, correction)
         scores = site_mae(prediction, annotations)
         # Keep every matching metadata row, including repeated classes, in the notebook mean.
-        by_solvent = {solvent: scores}
+        by_solvent = {solvent: site_mae(raw_prediction, annotations)}
         for code in classes:
             name = solvent_name[code]
             if name not in by_solvent:
@@ -101,7 +109,7 @@ def run(runner):
     for r in spectra:
         counts.update(r['web_matches'])
     return {'dataset_name': 'transpeaknet_hsqc_test', 'dataset': runner.artifact(archive),
-            'checkpoint': runner.artifact(checkpoint), 'model_source': runner.artifact(definition),
+            'checkpoint': runner.artifact(checkpoint), 'calibration': runner.artifact(calibration) if calibration else None, 'model_source': runner.artifact(definition),
             'solvent_metadata': runner.artifact(metadata), 'rdkit': rdBase.rdkitVersion,
             'torch_geometric': torch_geometric.__version__, 'seed': args.seed, 'sampling': args.sampling,
             'protocol': 'One vote per spectrum. Unambiguous metadata class, otherwise unknown. '
