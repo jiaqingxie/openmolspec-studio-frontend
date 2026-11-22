@@ -1,0 +1,197 @@
+{
+  "control_model_sha256": "e9eac0817ab97e1b2fff8a41325dcab77729ccb1fb28da2687d6d0d58827e398",
+  "candidate_model_sha256": "68efb1f6be0f505f01620eb5b6c80fcc36f3aba1e68a30ef75c47eaa59fc18a8",
+  "comparison": "All original test molecules and peak entries. Equal weight per molecule. Paired bootstrap (3000 samples) is conditional on this fit.",
+  "cosine_fwhm_ppm": 0.05,
+  "unmatched_peak_penalty_ppm": 1.0,
+  "train_validation_test_connectivity_check": "Both panels are disjoint from the training cache, validation cache and each other.",
+  "cleaning": {
+    "policy": {
+      "cross_nucleus_copy": "Identical sorted H and C lists including multiplicities, with at least one absolute shift >25 ppm.",
+      "extreme_organic": "At least one absolute H shift >50 ppm in a neutral single-fragment structure made of H/B/C/N/O/F/Si/P/S/Cl/Br/I with no RDKit radical electrons.",
+      "action": "Quarantine whole training records. Preserve repeated shifts and the original peak count of every retained spectrum. Flag other H shifts outside +/-25 ppm for review."
+    },
+    "before": 136626,
+    "after": 135657,
+    "quarantined": 969,
+    "rule_counts": {
+      "extreme_organic": 966,
+      "cross_nucleus_copy": 26
+    },
+    "mutually_exclusive_counts": {
+      "extreme_organic": 943,
+      "cross_nucleus_copy+extreme_organic": 23,
+      "cross_nucleus_copy": 3
+    },
+    "retained_for_review": 379,
+    "retained_spectra_with_repeats": 49077,
+    "retained_shift_entries": 2202072,
+    "quarantined_shift_entries": 6559,
+    "raw_training_sha256": "ec06ff885d4d5594920bc0904e7107f79881e4285297cad5173bfd8dd1a09401",
+    "cleaned_train_sha256": "fb540278c345bb64407bffec51f7271c2b3fa067a8d082866d7684253930bb64",
+    "audit_sha256": "ed2e21197a547d04b7be584a14bb3c13909405b5b41ed91a2ede8b4050912ed8"
+  },
+  "optimizer_epochs": {
+    "initial": 22,
+    "cosine": 8,
+    "positions": 10
+  },
+  "test": {
+    "published_980": {
+      "molecules": 980,
+      "reference_peaks": 18598,
+      "source_sha256": "9857404f9049f50eb96e9f29bc46e138f49a59a3917793f5161a8306fecb03b5",
+      "replay_sha256": "511dfa132c283a2944d4ae145f6b27efa471a5ed1cd16f6075917092cbc7fc97",
+      "v2": {
+        "matched_peak_r2": 0.15876634438995318,
+        "matched_peaks": 15129,
+        "reference_peaks": 18598,
+        "predicted_peaks": 16387,
+        "matched_peak_mae_ppm": 0.68264993710682,
+        "matched_peak_rmse_ppm": 6.011066247564065,
+        "peak_count_mae": 4.823469387755102,
+        "matched_fraction": 0.8711787537499341,
+        "examples": 980,
+        "scored_examples": 980,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 0.33178919373056626,
+        "cosine": 0.5021381307210403
+      },
+      "clean": {
+        "matched_peak_r2": 0.1704674933697521,
+        "matched_peaks": 15108,
+        "reference_peaks": 18598,
+        "predicted_peaks": 16374,
+        "matched_peak_mae_ppm": 0.6798588408442588,
+        "matched_peak_rmse_ppm": 5.904841462765686,
+        "peak_count_mae": 4.853061224489796,
+        "matched_fraction": 0.8707719156000343,
+        "examples": 980,
+        "scored_examples": 980,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 0.3354052648803067,
+        "cosine": 0.4975453049625993
+      },
+      "paired_clean_minus_v2": {
+        "count_penalized_error_ppm": {
+          "mean": 0.0036160711497405123,
+          "ci95": [
+            -0.0004176476559421033,
+            0.0076814396410855145
+          ]
+        },
+        "matched_peak_mae_ppm": {
+          "mean": -0.002791096262561236,
+          "ci95": [
+            -0.017169664752763294,
+            0.007318660381005196
+          ]
+        },
+        "matched_fraction": {
+          "mean": -0.00040683814989993586,
+          "ci95": [
+            -0.005078732525217003,
+            0.004259612654392751
+          ]
+        },
+        "cosine": {
+          "mean": -0.0045928257584410695,
+          "ci95": [
+            -0.009527790833000002,
+            0.0002474229326098978
+          ]
+        }
+      },
+      "reference_shift_influence": {
+        "definition": "Whole test spectra containing a reference proton shift with absolute value >50 ppm, irrespective of chemistry. All are included in the reported scores.",
+        "molecules": 5,
+        "v2": {
+          "fraction_of_total_molecule_weighted_absolute_error": 0.5099339454700822
+        },
+        "clean": {
+          "fraction_of_total_molecule_weighted_absolute_error": 0.5039480582920878
+        }
+      }
+    },
+    "additional_1000": {
+      "molecules": 1000,
+      "reference_peaks": 18253,
+      "source_sha256": "770db89df77aa2b66d842fd3244b4d27f95c715b40f9a15b790161186d770bdc",
+      "replay_sha256": "604ffafb65808bf53c81aa19073fb2d6599a65508d083bd11eaee365e1c4fae2",
+      "v2": {
+        "matched_peak_r2": 0.1035710470567689,
+        "matched_peaks": 16273,
+        "reference_peaks": 18253,
+        "predicted_peaks": 18155,
+        "matched_peak_mae_ppm": 0.8302785675621471,
+        "matched_peak_rmse_ppm": 8.575988233992852,
+        "peak_count_mae": 3.862,
+        "matched_fraction": 0.8488012520787641,
+        "examples": 1000,
+        "scored_examples": 1000,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 0.36949365308501236,
+        "cosine": 0.4946355928639804
+      },
+      "clean": {
+        "matched_peak_r2": 0.10715771585845135,
+        "matched_peaks": 16174,
+        "reference_peaks": 18253,
+        "predicted_peaks": 17943,
+        "matched_peak_mae_ppm": 0.8252073534577664,
+        "matched_peak_rmse_ppm": 8.560256768989039,
+        "peak_count_mae": 3.848,
+        "matched_fraction": 0.8466879747718975,
+        "examples": 1000,
+        "scored_examples": 1000,
+        "aggregation": "equal_weight_per_molecule",
+        "assignment": "minimum_absolute_error_without_atom_labels",
+        "count_penalized_error_ppm": 0.3691379784546559,
+        "cosine": 0.492997538165568
+      },
+      "paired_clean_minus_v2": {
+        "count_penalized_error_ppm": {
+          "mean": -0.00035567463035644065,
+          "ci95": [
+            -0.004207663666855118,
+            0.0035831978559442705
+          ]
+        },
+        "matched_peak_mae_ppm": {
+          "mean": -0.005071214104380754,
+          "ci95": [
+            -0.01131820707812785,
+            0.0012722410566485133
+          ]
+        },
+        "matched_fraction": {
+          "mean": -0.00211327730686662,
+          "ci95": [
+            -0.0071024734815512,
+            0.002690937090667082
+          ]
+        },
+        "cosine": {
+          "mean": -0.0016380546984123465,
+          "ci95": [
+            -0.006293864465897269,
+            0.003319071396546894
+          ]
+        }
+      },
+      "reference_shift_influence": {
+        "definition": "Whole test spectra containing a reference proton shift with absolute value >50 ppm, irrespective of chemistry. All are included in the reported scores.",
+        "molecules": 9,
+        "v2": {
+          "fraction_of_total_molecule_weighted_absolute_error": 0.6267437066387859
+        },
+        "clean": {
+          "fraction_of_total_molecule_weighted_absolute_error": 0.6291866607005044
+        }
+      }
+    }
+  }
+}
