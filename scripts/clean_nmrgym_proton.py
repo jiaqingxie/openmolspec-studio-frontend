@@ -51,7 +51,31 @@ def shift_list(row, field):
     ]
 
 
-def prepare(cache, raw, out):
+def paired_training_rows(cache, raw, expected, all_rows):
+    required = {}
+    with (cache / "train.jsonl").open() as stream:
+        for line in stream:
+            key, smi, h = json.loads(line)
+            if key in expected and (all_rows or max(map(abs, h)) > 25):
+                if smi in required:
+                    raise ValueError("Ambiguous specialist training structure")
+                required[smi] = h
+    pairs = {}
+    with raw.open() as stream:
+        for line in stream:
+            row = json.loads(line)
+            smi = row["smiles"]
+            if smi in required and shift_list(row, "h_nmr") == required[smi]:
+                pair = required[smi], shift_list(row, "c_nmr")
+                if smi in pairs and pair != pairs[smi]:
+                    raise ValueError("Ambiguous original H/C pair")
+                pairs[smi] = pair
+    if required.keys() != pairs.keys():
+        raise ValueError("Missing original H/C pair")
+    return pairs
+
+
+def prepare(cache, raw, out, bank=None, sdf=None):
     split = json.loads((cache / "split.json").read_text())
     if (
         sha256(raw) != split["sources"]["train"]
@@ -60,18 +84,17 @@ def prepare(cache, raw, out):
         raise ValueError("Training inputs differ from the v2 split")
     keys = np.load(cache / "train-keys.npy").astype(str)
     expected = set(keys)
-    # Match the original H/C pair by the exact SMILES and proton list, including token order.
-    suspicious = {}
-    with raw.open() as stream:
-        for line in stream:
-            row = json.loads(line)
-            h = shift_list(row, "h_nmr")
-            if h and max(map(abs, h)) > 25:
-                signature = (row["smiles"], tuple(h))
-                carbon = shift_list(row, "c_nmr")
-                if signature in suspicious and suspicious[signature] != carbon:
-                    raise ValueError("Ambiguous carbon list for suspected spectrum")
-                suspicious[signature] = carbon
+    if bool(bank) != bool(sdf):
+        raise ValueError(
+            "Supply both --nmrbank and --shiftdb to reconcile source spectra"
+        )
+    pairs = paired_training_rows(cache, raw, expected, bool(bank))
+    decisions = {}
+    if bank:
+        from openmolspec_bench.nmrgym_source_labels import source_decisions
+
+        decisions = source_decisions(pairs, bank, sdf)
+    repaired, repair_counts = {}, Counter()
     removed = set()
     seen = set()
     totals, overlap = Counter(), Counter()
@@ -88,9 +111,19 @@ def prepare(cache, raw, out):
             if key in seen:
                 raise ValueError("Duplicate training connectivity")
             seen.add(key)
-            if max(map(abs, h)) > 25:
-                carbon = suspicious[(smiles, tuple(h))]
-                flags = reasons(smiles, h, carbon)
+            decision = decisions.get(smiles)
+            if decision or max(map(abs, h)) > 25:
+                carbon = pairs[smiles][1]
+                new = decision["replacement"] if decision else None
+                if decision and not new:
+                    flags = [decision["reason"]]
+                else:
+                    flags = reasons(smiles, new or h, carbon)
+                action = (
+                    "quarantine"
+                    if flags
+                    else ("repair" if new else "retain_for_review")
+                )
                 audit.write(
                     json.dumps(
                         dict(
@@ -99,7 +132,8 @@ def prepare(cache, raw, out):
                             h_shift=h,
                             c_shift=carbon,
                             reasons=flags,
-                            action="quarantine" if flags else "retain_for_review",
+                            action=action,
+                            **({"source_decision": decision} if decision else {}),
                         )
                     )
                     + "\n"
@@ -110,17 +144,32 @@ def prepare(cache, raw, out):
                     removed.add(key)
                     excluded_peaks += len(h)
                     continue
-                review += 1
+                if new:
+                    h = repaired[key] = new
+                    repair_counts[decision["reason"]] += 1
+                    line = json.dumps([key, smiles, h]) + "\n"
+                else:
+                    review += 1
             retained.write(line)
             written_peaks += len(h)
             repeated_retained += len(h) != len(set(h))
     if seen != expected:
         raise ValueError("Training records missing for cached features")
     keep = np.array([k not in removed for k in keys])
+    if repaired:
+        from openmolspec.nmrgym_proton import GRID, resample
+
+        repaired_ix = [(i, repaired[k]) for i, k in enumerate(keys) if k in repaired]
     for name in ("x", "ref", "counts", "keys"):
         arr = np.load(cache / f"train-{name}.npy")
         if len(arr) != len(keep):
             raise ValueError(f"Wrong length in cached {name}")
+        if repaired and name in ("ref", "counts"):
+            for i, shifts in repaired_ix:
+                if name == "ref":
+                    arr[i] = resample(shifts, len(GRID))
+                else:
+                    arr[i, 1] = len(shifts)
         np.save(out / f"train-{name}.npy", arr[keep], allow_pickle=False)
     for name in (
         "val.jsonl",
@@ -151,6 +200,17 @@ def prepare(cache, raw, out):
         cleaned_train_sha256=sha256(out / "train.jsonl"),
         audit_sha256=sha256(out / "audit.jsonl"),
     )
+    if bank:
+        qc["policy"] = {
+            **POLICY,
+            "action": "Correct labels corroborated by identified source records. Quarantine carbon-only records, conflicting proposals, and unresolved spectra meeting the original exclusion rules. Other retained training labels are copied verbatim.",
+        }
+        qc.update(
+            source_repaired=len(repaired),
+            repairs_by_reason=dict(repair_counts),
+            sources_sha256={"NMRBank": sha256(bank), "nmrshiftdb2": sha256(sdf)},
+            source_policy="Only cached training identities. Match nucleus-labelled spectra to the original H and C lists. Report one center per multiplet, preserve repeated signals, and quarantine conflicting or carbon-only matches.",
+        )
     (out / "cleaning.json").write_text(json.dumps(qc, indent=2) + "\n")
     split["parent_split_digests"] = dict(split["split_digests"])
     split["split_digests"]["train"] = qc["cleaned_train_sha256"]
@@ -165,6 +225,14 @@ if __name__ == "__main__":
     p.add_argument("--cache", type=Path, required=True)
     p.add_argument("--raw", type=Path, required=True)
     p.add_argument("--out", type=Path, required=True)
+    p.add_argument(
+        "--nmrbank",
+        type=Path,
+        help="NMRBank CSV ZIP for source-based repairs (use with --shiftdb)",
+    )
+    p.add_argument(
+        "--shiftdb", type=Path, help="Assigned nmrshiftdb2 SDF for source-based repairs"
+    )
     args = p.parse_args()
     RDLogger.DisableLog("rdApp.*")
     if args.out.exists():
@@ -173,5 +241,5 @@ if __name__ == "__main__":
     with tempfile.TemporaryDirectory(dir=args.out.parent) as tmp:
         stage = Path(tmp) / "data"
         stage.mkdir()
-        prepare(args.cache, args.raw, stage)
+        prepare(args.cache, args.raw, stage, args.nmrbank, args.shiftdb)
         stage.rename(args.out)

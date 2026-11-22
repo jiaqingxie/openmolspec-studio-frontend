@@ -17,6 +17,10 @@ from openmolspec_bench.data import sha256
 
 def export_archive(official, cache, clean, archive):
     qc = json.loads((clean / "cleaning.json").read_text())
+    if "sources_sha256" in qc:
+        raise ValueError(
+            "Source reconciliation covers specialist training identities. Use --specialist-only for this cache."
+        )
     expected = {}
     with (cache / "train.jsonl").open() as f:
         for line in f:
@@ -118,14 +122,49 @@ def export_archive(official, cache, clean, archive):
 if __name__ == "__main__":
     p = argparse.ArgumentParser(description=__doc__)
     for option in ("official", "cache", "clean", "archive"):
-        p.add_argument("--" + option, type=Path, required=True)
+        p.add_argument(
+            "--" + option, type=Path, required=option in ("clean", "archive")
+        )
+    p.add_argument(
+        "--specialist-only",
+        action="store_true",
+        help="Bundle the complete specialist training cache and its decision log",
+    )
     a = p.parse_args()
+    if not a.specialist_only and (not a.official or not a.cache):
+        p.error("The official training export requires --official and --cache")
     RDLogger.DisableLog("rdApp.*")
     if a.archive.exists():
         raise FileExistsError(a.archive)
     with tempfile.TemporaryDirectory(dir=a.archive.parent) as tmp:
         output = Path(tmp) / a.archive.name
-        export_archive(a.official, a.cache, a.clean, output)
+        if a.specialist_only:
+            qc = json.loads((a.clean / "cleaning.json").read_text())
+            for name, field in (
+                ("train.jsonl", "cleaned_train_sha256"),
+                ("audit.jsonl", "audit_sha256"),
+            ):
+                if sha256(a.clean / name) != qc[field]:
+                    raise ValueError(f"Unexpected {name} checksum")
+            with zipfile.ZipFile(
+                output, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=4
+            ) as z:
+                files = [
+                    "cleaning.json",
+                    "audit.jsonl",
+                    "split.json",
+                    "val-baseline.jsonl",
+                    "val-baseline.sha256",
+                ]
+                for split in ("train", "val"):
+                    files += [split + ".jsonl", split + "-cache.json"]
+                    files += [
+                        f"{split}-{name}.npy" for name in ("keys", "counts", "x", "ref")
+                    ]
+                for name in files:
+                    z.write(a.clean / name, "data/" + name)
+        else:
+            export_archive(a.official, a.cache, a.clean, output)
         with zipfile.ZipFile(output) as z:
             if z.testzip() is not None:
                 raise ValueError("Damaged output archive")

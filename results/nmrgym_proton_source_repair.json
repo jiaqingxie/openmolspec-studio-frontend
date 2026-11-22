@@ -1,0 +1,58 @@
+{
+  "training": {
+    "policy": {
+      "cross_nucleus_copy": "Identical sorted H and C lists including multiplicities, with at least one absolute shift >25 ppm.",
+      "extreme_organic": "At least one absolute H shift >50 ppm in a neutral single-fragment structure made of H/B/C/N/O/F/Si/P/S/Cl/Br/I with no RDKit radical electrons.",
+      "action": "Correct labels corroborated by identified source records. Quarantine carbon-only records, conflicting proposals, and unresolved spectra meeting the original exclusion rules. Other retained training labels are copied verbatim."
+    },
+    "before": 136626,
+    "after": 135973,
+    "quarantined": 653,
+    "rule_counts": {
+      "extreme_organic": 401,
+      "carbon_only_record": 249,
+      "cross_nucleus_copy": 25
+    },
+    "mutually_exclusive_counts": {
+      "extreme_organic": 379,
+      "carbon_only_record": 249,
+      "cross_nucleus_copy+extreme_organic": 22,
+      "cross_nucleus_copy": 3
+    },
+    "retained_for_review": 148,
+    "retained_spectra_with_repeats": 48469,
+    "retained_shift_entries": 2196756,
+    "quarantined_shift_entries": 3845,
+    "raw_training_sha256": "ec06ff885d4d5594920bc0904e7107f79881e4285297cad5173bfd8dd1a09401",
+    "cleaned_train_sha256": "64e9fb70f06fcd72b798e77a9b445b6fe569b76c0a22dcc61882ba266b85eb72",
+    "audit_sha256": "56377ed7911e8d48e2b2ab115b9fe4b71183fef5bd6f581b26678a995e2c4267",
+    "source_repaired": 1581,
+    "repairs_by_reason": {
+      "range_endpoints": 92,
+      "coupling_in_shift_list": 952,
+      "assigned_carbon_in_proton_list": 536,
+      "copied_carbon_list": 1
+    },
+    "sources_sha256": {
+      "NMRBank": "53ad410204d04751c580dde8ad1cb0fa28569c40ce343360363e55aad16e955a",
+      "nmrshiftdb2": "0e86688360e23c88ccf0eb82a1251315fa57ec6f5b376dc8886f3311793a0afe"
+    },
+    "source_policy": "Only cached training identities. Match nucleus-labelled spectra to the original H and C lists. Report one center per multiplet, preserve repeated signals, and quarantine conflicting or carbon-only matches."
+  },
+  "previous_retained": 135657,
+  "restored_from_previous_quarantine": 435,
+  "newly_quarantined": 119,
+  "repaired_with_all_original_abs_shifts_at_most_25": 1034,
+  "verification": {
+    "training_features_checked": 135973,
+    "training_peak_counts_and_curves_checked": 135973,
+    "previously_audited_papers_reparsed": [
+      "PMC5854701",
+      "PMC6017869"
+    ],
+    "validation_files_identical": true,
+    "frozen_test_molecules_checked": 1980,
+    "training_test_connectivity_overlap": 0,
+    "bundle_sha256": "abc3be4b1e670e82a556c6acc546312c14b1665b2088c9fb0207ed7f749d003e"
+  }
+}
