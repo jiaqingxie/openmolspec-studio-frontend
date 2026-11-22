@@ -82,6 +82,21 @@ class NMRGymProtonPredictor:
             raise ValueError("NMRGym proton model components do not match the profile")
         with np.load(root / "adapter.npz", allow_pickle=False) as weights:
             self.weights = dict(weights)
+        self.position_weights = None
+        if "position_sha256" in self.config:
+            path = root / "positions.npz"
+            if sha256(path) != self.config["position_sha256"]:
+                raise ValueError("NMRGym peak-position weights checksum mismatch")
+            with np.load(path, allow_pickle=False) as weights:
+                self.position_weights = dict(weights)
+        self.library = None
+        if "training_analogs" in self.config:
+            from .nmrgym_analogs import ProtonSpectrumLibrary
+
+            path = root / "library.npz"
+            if sha256(path) != self.config["training_analogs"]["sha256"]:
+                raise ValueError("NMRGym training spectrum library checksum mismatch")
+            self.library = ProtonSpectrumLibrary(path)
         self.base = None
         if self.config["released_peak_weight"] or self.config["snap_radius_ppm"]:
             from .assigned_shifts import PeakSpectrumPredictor
@@ -102,6 +117,10 @@ class NMRGymProtonPredictor:
         if features is not None:
             x, site_count = features
             curve, count = adapter_outputs(x[None, :], [site_count], self.weights)
+            if self.position_weights is not None:
+                curve, _ = adapter_outputs(
+                    x[None, :], [site_count], self.position_weights
+                )
             base = (
                 self.base.predict(smiles, solvent)["prediction_ppm"]
                 if self.base
@@ -113,7 +132,12 @@ class NMRGymProtonPredictor:
                 base,
                 self.config["released_peak_weight"],
                 self.config["snap_radius_ppm"],
-            ).tolist()
+            )
+            if self.library is not None:
+                peaks = self.library.adjust(
+                    peaks, x[:FP_SIZE], self.config["training_analogs"]
+                )
+            peaks = peaks.tolist()
         return dict(smiles=smiles, nucleus="1H", unit="ppm", prediction_ppm=peaks)
 
 
