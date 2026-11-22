@@ -1,0 +1,132 @@
+{
+  "model": "NMRGym 1H specialist v1",
+  "model_sha256": "e5a79f2ea11e5ac9ebf64c83ef682867095fc513b23a5cae7237283a81f987d8",
+  "adapter_sha256": "d7cad7c4d47f7155b88409c56af6cbba78e9721c0cd853409f6a812f330dd9bb",
+  "validation": {
+    "released": {
+      "error": 0.45167304107828676,
+      "cosine": 0.4320597321420854
+    },
+    "specialist": {
+      "epoch": 8,
+      "training_width_ppm": 0.05,
+      "error": 0.3631850797134429,
+      "cosine": 0.4633522749244718
+    }
+  },
+  "evaluated_split": "complete nmrgym_test paired benchmark, all reference peaks retained",
+  "test_molecules": 980,
+  "training_molecules": 136626,
+  "validation_molecules": 3072,
+  "train_test_connectivity_overlap": 0,
+  "validation_panel_test_connectivity_overlap": 0,
+  "benchmark_reference_sha256": "bf8cb0cdcaf19884349e15230206c6110a29b479b1a04bec7ec0b9e5bff3ff9b",
+  "benchmark_predictions_sha256": "3e7a362303fdb567acad6f9140cc44b7ed5207310be9bb5f25b8233b77557da6",
+  "bootstrap": "3000 paired molecule resamples, seed 713",
+  "cosine_fwhm_ppm": 0.05,
+  "released": {
+    "matched_peak_r2": 0.153655709082539,
+    "matched_peaks": 13351,
+    "reference_peaks": 18598,
+    "predicted_peaks": 14582,
+    "matched_peak_mae_ppm": 0.7313731208507821,
+    "matched_peak_rmse_ppm": 6.084980944970573,
+    "peak_count_mae": 6.610204081632653,
+    "matched_fraction": 0.7859101253481303,
+    "examples": 980,
+    "scored_examples": 980,
+    "aggregation": "equal_weight_per_molecule",
+    "assignment": "minimum_absolute_error_without_atom_labels",
+    "count_penalized_error_ppm": 0.4173902886958736,
+    "cosine": 0.4372724116446288
+  },
+  "specialist": {
+    "matched_peak_r2": 0.165196862464151,
+    "matched_peaks": 15129,
+    "reference_peaks": 18598,
+    "predicted_peaks": 16387,
+    "matched_peak_mae_ppm": 0.6992860305185616,
+    "matched_peak_rmse_ppm": 5.987572954041569,
+    "peak_count_mae": 4.823469387755102,
+    "matched_fraction": 0.8711787537499341,
+    "examples": 980,
+    "scored_examples": 980,
+    "aggregation": "equal_weight_per_molecule",
+    "assignment": "minimum_absolute_error_without_atom_labels",
+    "count_penalized_error_ppm": 0.3478028720218269,
+    "cosine": 0.4651870407067768
+  },
+  "change": {
+    "count_penalized_error_ppm": {
+      "specialist_minus_released": -0.06958741667404661,
+      "paired_bootstrap_ci95": [
+        -0.07805165992417679,
+        -0.061126500389121624
+      ]
+    },
+    "cosine": {
+      "specialist_minus_released": 0.027914629062147926,
+      "paired_bootstrap_ci95": [
+        0.020069616031664253,
+        0.03555440913549365
+      ]
+    },
+    "matched_peak_mae_ppm": {
+      "specialist_minus_released": -0.03208709033222064,
+      "paired_bootstrap_ci95": [
+        -0.049398254253006466,
+        -0.014875146451292919
+      ]
+    },
+    "matched_fraction": {
+      "specialist_minus_released": 0.08526862840180399,
+      "paired_bootstrap_ci95": [
+        0.07323148846327235,
+        0.09697992490251925
+      ]
+    }
+  },
+  "structural_subset": {
+    "definition": "RDKit ring count >= 3 and at least two assigned chiral centers",
+    "molecules": 349,
+    "released": {
+      "matched_peak_r2": 0.9329828227714639,
+      "matched_peaks": 5283,
+      "reference_peaks": 5784,
+      "predicted_peaks": 5859,
+      "matched_peak_mae_ppm": 0.2627407376927425,
+      "matched_peak_rmse_ppm": 0.5472966665316168,
+      "peak_count_mae": 3.0859598853868193,
+      "matched_fraction": 0.8457778208007543,
+      "examples": 349,
+      "scored_examples": 349,
+      "aggregation": "equal_weight_per_molecule",
+      "assignment": "minimum_absolute_error_without_atom_labels",
+      "count_penalized_error_ppm": 0.34994548244197615,
+      "cosine": 0.4769369261908847
+    },
+    "specialist": {
+      "matched_peak_r2": 0.9596435410826393,
+      "matched_peaks": 5358,
+      "reference_peaks": 5784,
+      "predicted_peaks": 5698,
+      "matched_peak_mae_ppm": 0.2276360870689545,
+      "matched_peak_rmse_ppm": 0.4241666143054557,
+      "peak_count_mae": 2.194842406876791,
+      "matched_fraction": 0.8904451580466172,
+      "examples": 349,
+      "scored_examples": 349,
+      "aggregation": "equal_weight_per_molecule",
+      "assignment": "minimum_absolute_error_without_atom_labels",
+      "count_penalized_error_ppm": 0.3031718132072151,
+      "cosine": 0.4962793552929037
+    }
+  },
+  "largest_specialist_squared_residual": {
+    "connectivity": "SMUKNIYCTSOICZ",
+    "matched_peaks": 1,
+    "predicted_ppm": 6.181570529937744,
+    "reference_ppm": 135.5,
+    "fraction_of_weighted_squared_error": 0.47598485177707306
+  }
+}
