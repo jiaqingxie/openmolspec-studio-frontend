@@ -10,6 +10,8 @@ import numpy as np
 
 from .data import readonly_lmdb
 from .runner import MissingAsset
+from .metrics import weighted_r2
+from .solution_cohort import solution_test_cohort
 
 
 def historical_rows(path, nucleus):
@@ -79,6 +81,12 @@ def evaluate(runner, nucleus):
                 dict(json.loads(line), record_id=str(i))
                 for i, line in enumerate(stream)
             ]
+    source_records = len(rows)
+    cohort = "historical-pool"
+    if not historical:
+        rows, cohort = solution_test_cohort(
+            rows, nucleus, dataset["sha256"], full_test=args.solution_reference == "full-test"
+        )
     if args.sampling == "reservoir":
         random.Random(args.seed).shuffle(rows)
     predictions, skipped, molecule_errors = [], Counter(), defaultdict(list)
@@ -110,8 +118,12 @@ def evaluate(runner, nucleus):
     if not predictions:
         raise MissingAsset("No eligible records in the experimental reference set")
     error = np.array([r["prediction_ppm"] - r["reference_ppm"] for r in predictions])
+    references = [r["reference_ppm"] for r in predictions]
+    predicted = [r["prediction_ppm"] for r in predictions]
+    weights = [1 / len(molecule_errors[r["connectivity"]]) for r in predictions]
     return dict(
         metrics=dict(
+            molecule_weighted_r2=weighted_r2(predicted, references, weights),
             mae_ppm=float(abs(error).mean()),
             rmse_ppm=float(np.sqrt(np.mean(error**2))),
             molecule_macro_mae_ppm=float(
@@ -129,6 +141,9 @@ def evaluate(runner, nucleus):
             sampling=args.sampling,
             seed=args.seed,
             pool_size=len(rows),
+            reference_records=source_records,
+            excluded_records=source_records - len(rows),
+            cohort=cohort,
             distinct_selected_identities=len(molecule_errors),
             skipped=dict(skipped),
         ),

@@ -19,7 +19,14 @@
       ],
       "metric": "molecule-averaged matched peak error including 1 ppm per unmatched peak",
       "selected_models": "peak_spectrum",
-      "evidence": "results/forward_peak_model_1H.json"
+      "evidence": "results/forward_peak_model_1H.json",
+      "matched_peak_r2": 0.3314810164884502,
+      "matched_peak_r2_by_split": {
+        "nmrspec_test": 0.9227796185670345,
+        "nmrexp_exp_10k": 0.9419084147210948,
+        "nmrgym_test": 0.153655709082539
+      },
+      "matched_fraction": 0.8379876275577351
     },
     "nmr.forward.13C": {
       "benchmark": [
@@ -42,17 +49,24 @@
         "NMRNet++_folds": 5,
         "symmetry_resolved": true
       },
-      "evidence": "results/forward_carbon_folds.json"
+      "evidence": "results/forward_carbon_folds.json",
+      "matched_peak_r2": 0.9905024521595184,
+      "matched_peak_r2_by_split": {
+        "nmrspec_test": 0.9902501924819447,
+        "nmrexp_exp_10k": 0.9946033893766774,
+        "nmrgym_test": 0.9876220426846667
+      },
+      "matched_fraction": 0.949422595047045
     },
     "nmr.forward.31P": {
       "benchmark": "Measured solution shifts with a single symmetry-distinct environment",
       "selected_scores": [
-        4.2681895437618484,
-        5.538348462728547
+        2.8900537258405534,
+        3.6245851148381636
       ],
       "counts": [
-        6693,
-        4248
+        6626,
+        4198
       ],
       "metric": "observation MAE and connectivity-weighted MAE in ppm",
       "selected_models": {
@@ -60,36 +74,66 @@
         "31P-gnn-r2": 0.3,
         "31P-gnn-width96": 0.4
       },
-      "evidence": "results/forward_selection_31P.json",
+      "evidence": "results/forward_cosine_similarity.json",
       "config_sha256": "6f08e5689aa7c6808a3031a6af0a64c82b76308b057688a50a9d49022a5535e6",
       "release_tag": "solution-31p-6f08e5689aa7",
       "capacity_comparison": {
         "report": "results/forward_capacity_31P.json",
         "adopted": true
-      }
+      },
+      "full_test": {
+        "counts": [
+          6693,
+          4248
+        ],
+        "selected_scores": [
+          4.2681895437618484,
+          5.538348462728547
+        ],
+        "evidence": "results/forward_selection_31P.json",
+        "molecule_weighted_r2": 0.48110679981146465
+      },
+      "cohort": "pf-fixed-99-v1",
+      "excluded_observations": 67,
+      "molecule_weighted_r2": 0.9710728096630985
     },
     "nmr.forward.19F": {
       "benchmark": "Measured solution shifts with a single symmetry-distinct environment",
       "selected_scores": [
-        5.923589188692947,
-        5.621859443033962
+        3.3063148328106755,
+        3.232615097473645
       ],
       "counts": [
-        15803,
-        14330
+        15644,
+        14225
       ],
       "metric": "observation MAE and connectivity-weighted MAE in ppm",
       "selected_models": {
         "19F-gnn-refined": 0.6,
         "19F-tree-r2": 0.4
       },
-      "evidence": "results/forward_selection_19F.json",
+      "evidence": "results/forward_cosine_similarity.json",
       "config_sha256": "da9d2c0e7ce41e5e3b070f57916861c9c4cc2e267830df0b856d197a3f0ec100",
       "release_tag": "solution-nmr-v2",
       "capacity_comparison": {
         "report": "results/forward_capacity_19F.json",
         "adopted": false
-      }
+      },
+      "full_test": {
+        "counts": [
+          15803,
+          14330
+        ],
+        "selected_scores": [
+          5.923589188692947,
+          5.621859443033962
+        ],
+        "evidence": "results/forward_selection_19F.json",
+        "molecule_weighted_r2": 0.2131675528361956
+      },
+      "cohort": "pf-fixed-99-v1",
+      "excluded_observations": 159,
+      "molecule_weighted_r2": 0.8945158436728421
     },
     "nmr.forward.11B": {
       "benchmark": "Measured solution shifts with a single symmetry-distinct environment",
@@ -108,7 +152,8 @@
       },
       "evidence": "results/forward_selection_11B.json",
       "config_sha256": "5835cef1af2200d0fa84e47cdbb401ac6f392781f673d76822816359302cda8c",
-      "release_tag": "solution-nmr-v2"
+      "release_tag": "solution-nmr-v2",
+      "molecule_weighted_r2": 0.9447882856457774
     },
     "nmr.forward.29Si": {
       "benchmark": "Measured solution shifts with a single symmetry-distinct environment",
@@ -127,7 +172,8 @@
       },
       "evidence": "results/forward_selection_29Si.json",
       "config_sha256": "52c2d4269bf57697d0ec2d61217142f7a70a312fe7c63e0039135e5614476ce7",
-      "release_tag": "solution-nmr-v2"
+      "release_tag": "solution-nmr-v2",
+      "molecule_weighted_r2": 0.9382912110270122
     },
     "nmr.hsqc.transpeaknet": {
       "benchmark": "Expert HSQC peak assignments",
@@ -221,5 +267,6 @@
       "adopted": true
     }
   },
-  "selection": "Choose model or settings on the development identities, then evaluate on held-out identities. Reused NMR audit sets measure benchmark progress. External applicability depends on target, conditions and domain."
+  "selection": "Choose model or settings on the development identities, then evaluate on held-out identities. Reused NMR audit sets measure benchmark progress. External applicability depends on target, conditions and domain.",
+  "solution_test_exclusion_manifest": "src/openmolspec/assets/solution-test-exclusions.json"
 }

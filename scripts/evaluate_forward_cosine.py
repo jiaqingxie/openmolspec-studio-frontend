@@ -16,6 +16,8 @@ from compare_assigned_hc import DATASETS, frozen, reference
 from openmolspec.assigned_shifts import PeakSpectrumPredictor
 from openmolspec_bench.carbon import group_carbon_shifts
 from openmolspec_bench.data import readonly_lmdb, sha256
+from openmolspec_bench.metrics import peak_metrics, weighted_r2
+from openmolspec_bench.solution_cohort import solution_test_cohort
 from openmolspec_bench.nmr_cosine import peak_profile_cosine
 from openmolspec_bench.peak_evaluation import matching_errors
 from openmolspec_bench.runner import read_prediction_folds
@@ -77,6 +79,28 @@ def proton_predictions(args, name, refs, occupied, model):
             yield values, refs[smi]
 
 
+def hc_spectrum_sensitivity(predicted, observed, cosine, penalized):
+    """Leave each spectrum intact when checking the influence of the largest shift errors."""
+    mae = [
+        peak_metrics([p], [y])["matched_peak_mae_ppm"]
+        for p, y in zip(predicted, observed)
+    ]
+    drop = int(np.ceil(len(mae) * 0.01))
+    keep = np.ones(len(mae), dtype=bool)
+    keep[np.argsort(-np.asarray(mae), kind="stable")[:drop]] = False
+    return dict(
+        selection="Diagnostic: omit ceil(1% of spectra) with largest uncapped within-spectrum matched MAE.",
+        excluded_spectra=drop,
+        molecules=int(keep.sum()),
+        **peak_metrics(
+            [v for v, k in zip(predicted, keep) if k],
+            [v for v, k in zip(observed, keep) if k],
+        ),
+        **summary(np.asarray(cosine)[keep]),
+        count_penalized_error_ppm=float(np.mean(np.asarray(penalized)[keep])),
+    )
+
+
 def hc(args, nucleus, released):
     args.nucleus = nucleus
     h = nucleus == "1H"
@@ -94,6 +118,7 @@ def hc(args, nucleus, released):
     model = PeakSpectrumPredictor(args.h_model) if h else None
     width = 0.05 if h else 1.0
     occupied, pooled, splits = set(), [], {}
+    all_predictions, all_observations, all_errors = [], [], []
     for name in DATASETS:
         refs = reference(args, name)
         pairs = (
@@ -106,9 +131,8 @@ def hc(args, nucleus, released):
         if name == DATASETS[0]:
             continue
         index = released["benchmark"].index(name)
-        error = float(
-            matching_errors(predictions, observations, 1.0 if h else 10.0).mean()
-        )
+        errors = matching_errors(predictions, observations, 1.0 if h else 10.0)
+        error = float(errors.mean())
         if len(observations) != released["counts"][index]:
             raise ValueError(
                 f"{name} paired cohort size differs from the published benchmark"
@@ -121,16 +145,25 @@ def hc(args, nucleus, released):
         ]
         splits[name] = dict(
             **summary(scores),
+            **peak_metrics(predictions, observations),
             molecules=len(scores),
             count_penalized_error_ppm=error,
             reference_sha256=sha256(args.external / name / "test.jsonl"),
         )
         pooled.extend(scores)
+        all_predictions.extend(predictions)
+        all_observations.extend(observations)
+        all_errors.extend(errors)
         print(
             nucleus, name, splits[name]["molecules"], splits[name]["cosine"], flush=True
         )
     return dict(
         **summary(pooled),
+        spectrum_sensitivity_99=hc_spectrum_sensitivity(
+            all_predictions, all_observations, pooled, all_errors
+        ),
+        **peak_metrics(all_predictions, all_observations),
+        count_penalized_error_ppm=float(np.mean(all_errors)),
         molecules=len(pooled),
         fwhm_ppm=[width],
         model_config_sha256=sha256(profile),
@@ -145,22 +178,18 @@ def passed_replay(path, task):
     return result
 
 
-def single_environment(replay, released):
-    records = replay["predictions"]
-    if replay["checkpoint"]["sha256"] != released["config_sha256"]:
-        raise ValueError("Checkpoint differs from the selected ensemble")
+def solution_metrics(records):
     _, groups, counts = np.unique(
         [r["connectivity"] for r in records], return_inverse=True, return_counts=True
     )
-    if [len(records), len(counts)] != released["counts"]:
-        raise ValueError("Wrong measurement or connectivity count")
-    errors = np.array([abs(r["prediction_ppm"] - r["reference_ppm"]) for r in records])
+    observed = np.array([r["reference_ppm"] for r in records])
+    predicted = np.array([r["prediction_ppm"] for r in records])
+    errors = np.abs(predicted - observed)
 
     def per_structure(values):
         return np.bincount(groups, weights=values) / counts
 
     maes = [float(errors.mean()), float(per_structure(errors).mean())]
-    np.testing.assert_allclose(maes, released["selected_scores"], rtol=0, atol=1e-5)
     # Each record contains exactly one peak. The two self-overlaps are both 1.
     values = 1 / (1 + (errors[:, None] / np.asarray(WIDTH_FACTORS)) ** 2)
     macro = np.column_stack([per_structure(column) for column in values.T])
@@ -172,9 +201,40 @@ def single_environment(replay, released):
         per_observation=summary(values),
         observation_mae_ppm=maes[0],
         molecule_macro_mae_ppm=maes[1],
-        model_config_sha256=replay["checkpoint"]["sha256"],
-        reference_sha256=replay["dataset"]["sha256"],
+        molecule_weighted_r2=weighted_r2(predicted, observed, 1 / counts[groups]),
     )
+
+
+def single_environment(replay, released):
+    if replay["checkpoint"]["sha256"] != released["config_sha256"]:
+        raise ValueError("Checkpoint differs from the selected ensemble")
+    records = replay["predictions"]
+    nucleus = replay["task"].split(".")[-1]
+    retained, cohort = solution_test_cohort(
+        records, nucleus, replay["dataset"]["sha256"]
+    )
+    result = solution_metrics(retained)
+    result.update(
+        cohort=cohort,
+        excluded_observations=len(records) - len(retained),
+        reference_sha256=replay["dataset"]["sha256"],
+        model_config_sha256=replay["checkpoint"]["sha256"],
+    )
+    if len(retained) != len(records):
+        result["full_test"] = solution_metrics(records)
+    original = result.get("full_test", result)
+    evidence = released.get("full_test", released)
+    if [original["observations"], original["molecules"]] != evidence["counts"]:
+        raise ValueError(
+            "Expected the full released holdout replay (--solution-reference full-test)"
+        )
+    np.testing.assert_allclose(
+        [original["observation_mae_ppm"], original["molecule_macro_mae_ppm"]],
+        evidence["selected_scores"],
+        rtol=0,
+        atol=1e-5,
+    )
+    return result
 
 
 def hsqc(replay, released, archive):
@@ -320,6 +380,10 @@ def main():
         nmr_aggregation="Equal weight per held-out H/C molecule or expert HSQC spectrum. For single-environment "
         "measurements, first average within connectivity, then across connectivities.",
         nmr_width_sensitivity="Half and double both refer to the listed reference FWHM, scaled along every axis.",
+        pf_cohort="Default P/F subset fixes the top 1% of absolute errors from the original released models. "
+        "The original complete holdout is reported under full_test.",
+        hc_r2="Pool within-molecule minimum-absolute-error peak matches with equal total weight per molecule. "
+        "Unpaired peaks contribute to the separate count-penalized error.",
         tasks={k: tasks[k] for k in released},
     )
     args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")

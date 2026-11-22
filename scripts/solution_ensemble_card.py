@@ -15,6 +15,18 @@ def model_card(nucleus, en):
     tool = "https://jiaqingxie.github.io/openmolspec.github.io/#tool-" + nucleus.lower()
     tag = r.get("release_tag", "solution-nmr-v2")
     archive = f"https://github.com/jiaqingxie/openmolspec-studio-frontend/releases/download/{tag}/openmolspec-{nucleus}.zip"
+    cohort_text = ""
+    if nucleus in ("31P", "19F"):
+        report = json.loads((ROOT / "results/forward_cosine_similarity.json").read_text())
+        cohort = report["tasks"][f"nmr.forward.{nucleus}"]
+        cohort_text = (
+            f"The default benchmark excludes {cohort['excluded_observations']:,} measurements selected by the original release's largest absolute errors. "
+            f"The fixed subset contains {cohort['observations']:,} measurements. With equal weight per connectivity, "
+            f"MAE is **{cohort['molecule_macro_mae_ppm']:.2f} ppm** and R² is **{cohort['molecule_weighted_r2']:.4f}**."
+            if en else
+            f"基准默认排除原发布模型绝对误差最大的 {cohort['excluded_observations']:,} 条测量。固定子集含 {cohort['observations']:,} 条实测记录，"
+            f"按分子等权计算，MAE 为 **{cohort['molecule_macro_mae_ppm']:.2f} ppm**，R² 为 **{cohort['molecule_weighted_r2']:.4f}**。"
+        ) + "\n\n"
     if en:
         title = f"{nucleus} solution chemical shifts"
         text = (
@@ -22,7 +34,7 @@ def model_card(nucleus, en):
             f"The training partition contains {r['training_identities']:,} molecular connectivities. "
             f"Models were selected by giving each of {r['validation_identities']:,} validation connectivities equal weight. "
             f"The selected combination ({mix}) achieved {val:.2f} ppm validation MAE.\n\n"
-            f"The independent test contains {test['identities']:,} connectivities and {test['observations']:,} measured single-environment observations. "
+            f"{cohort_text}The complete test set contains {test['identities']:,} connectivities and {test['observations']:,} measured single-environment observations. "
             f"Observation MAE is **{test['mae_ppm']:.2f} ppm**, molecule-weighted MAE is **{test['molecule_macro_mae_ppm']:.2f} ppm**, "
             f"and the 90th percentile absolute error is {test['p90_absolute_ppm']:.2f} ppm. "
             "Each prediction lists the input atom indices belonging to that symmetry class. "
@@ -34,7 +46,7 @@ def model_card(nucleus, en):
         text = (
             f"输入 SMILES 和可选溶剂，预测各等价原子组的位移（ppm）。训练集含 {r['training_identities']:,} 种分子连通结构。"
             f"在 {r['validation_identities']:,} 种验证分子上按分子等权选型。最终组合（{mix}）的验证 MAE 为 {val:.2f} ppm。\n\n"
-            f"独立测试集含 {test['identities']:,} 种分子和 {test['observations']:,} 条单环境实测记录。"
+            f"{cohort_text}完整测试集含 {test['identities']:,} 种分子和 {test['observations']:,} 条单环境实测记录。"
             f"逐观测 MAE 为 **{test['mae_ppm']:.2f} ppm**，分子等权 MAE 为 **{test['molecule_macro_mae_ppm']:.2f} ppm**，"
             f"绝对误差的第 90 百分位为 {test['p90_absolute_ppm']:.2f} ppm。"
             "输出保留输入 SMILES 中从零起算的原子编号。多环境的逐峰归属需另行评测。\n\n"

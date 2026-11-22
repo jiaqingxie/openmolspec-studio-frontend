@@ -24,12 +24,25 @@ def retrieval_metrics(scores, query_ids, candidate_ids):
             "tie_policy": "stable_candidate_order"}
 
 
+def weighted_r2(predicted, reference, weights):
+    """Pooled coefficient of determination; undefined for constant reference shifts."""
+    reference = np.asarray(reference, dtype=float)
+    predicted = np.asarray(predicted, dtype=float)
+    weights = np.asarray(weights, dtype=float)
+    center = np.average(reference, weights=weights)
+    total = np.dot(weights, (reference - center) ** 2)
+    if reference.min() == reference.max() or total == 0:
+        return None
+    return float(1 - np.dot(weights, (predicted - reference) ** 2) / total)
+
+
 def peak_metrics(predictions, references):
     from scipy.optimize import linear_sum_assignment
 
     if len(predictions) != len(references) or not len(predictions):
         raise ValueError("Need nonempty paired peak lists")
     absolute, squared, fractions, count_errors = [], [], [], []
+    matched_pred, matched_ref, weights = [], [], []
     used = 0
     for predicted, reference in zip(predictions, references):
         predicted, reference = np.asarray(predicted, dtype=float), np.asarray(reference, dtype=float)
@@ -43,13 +56,19 @@ def peak_metrics(predictions, references):
             continue
         costs = np.abs(predicted[:, None] - reference[None, :])
         rows, columns = linear_sum_assignment(costs)
+        matched_pred.extend(predicted[rows])
+        matched_ref.extend(reference[columns])
+        weights.extend(np.full(len(rows), 1.0 / len(rows)))
         errors = costs[rows, columns]
         absolute.append(float(errors.mean()))
         squared.append(float(np.mean(errors ** 2)))
         used += 1
     if not used:
         raise ValueError("No nonempty peak pairs")
-    return {"matched_peak_mae_ppm": float(np.mean(absolute)),
+    return {"matched_peak_r2": weighted_r2(matched_pred, matched_ref, weights),
+            "matched_peaks": len(matched_ref),
+            "reference_peaks": sum(map(len, references)), "predicted_peaks": sum(map(len, predictions)),
+            "matched_peak_mae_ppm": float(np.mean(absolute)),
             "matched_peak_rmse_ppm": float(np.sqrt(np.mean(squared))),
             "peak_count_mae": float(np.mean(count_errors)),
             "matched_fraction": float(np.mean(fractions)), "examples": len(predictions),

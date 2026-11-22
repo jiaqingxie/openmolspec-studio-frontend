@@ -42,7 +42,7 @@ def main():
     run.add_argument("--datasets", nargs="+", default=["nmrspec_test", "patent_test_10k", "nmrexp_exp_10k", "nmrgym_test"])
     run.add_argument("--alignment-checkpoint", type=Path)
     run.add_argument("--generation-checkpoint", type=Path)
-    run.add_argument("--solution-reference", choices=("test", "historical-pool"), default="test", help="Measured structure-disjoint test set or original uncorrected LMDB pool")
+    run.add_argument("--solution-reference", choices=("test", "full-test", "historical-pool"), default="test", help="Measured test set with frozen P/F exclusions, original full test, or historical LMDB pool")
     run.add_argument("--solution-shift-root", type=Path, help="Directory with fitted solution models (defaults to the selected checkpoint per nucleus, then WORKSPACE/runs/solution-shifts-v1)")
     run.add_argument("--fp-inference-root", type=Path, help="Exact prepared F.lmdb/P.lmdb and frozen prediction folders")
     run.add_argument("--allow-cross-domain-diagnostic", action="store_true", help="Report unverified solid-to-solution F/P diagnostic errors separately")

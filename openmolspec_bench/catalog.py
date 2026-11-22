@@ -21,8 +21,8 @@ for nucleus in ("1H", "13C", "19F", "31P", "11B", "29Si"):
     TASKS.append(Task(
         f"nmr.forward.{nucleus}", f"结构 → {nucleus} 峰列表", "forward", (nucleus,),
         "experimental", ("nmrnet_predictions" if nucleus in ("1H", "13C") else "solution_chemical_shift"),
-        (("mae_ppm", "molecule_macro_mae_ppm", "rmse_ppm") if nucleus in ("19F", "31P", "11B", "29Si") else
-         ("count_penalized_error_ppm", "matched_peak_mae_ppm", "matched_peak_rmse_ppm", "peak_count_mae", "matched_fraction")),
+        (("mae_ppm", "molecule_macro_mae_ppm", "molecule_weighted_r2", "rmse_ppm") if nucleus in ("19F", "31P", "11B", "29Si") else
+         ("count_penalized_error_ppm", "matched_peak_r2", "matched_peak_mae_ppm", "matched_peak_rmse_ppm", "peak_count_mae", "matched_fraction")),
         "用训练后的氢谱模型或五折 NMRNet++ 碳谱预测与实测峰列表配对，对漏峰和多报峰计入惩罚；同时提供原始逐原子基线。"
         if nucleus in ("1H", "13C") else
         "使用实验溶液谱训练的模型预测化学位移，以按分子连通性留出的实测单环境谱评分。可显式选择旧模型进行冻结诊断。"))
