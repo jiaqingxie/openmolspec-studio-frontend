@@ -1,0 +1,1066 @@
+{
+  "official_test_sha256": "04504b08800baf5fab57836e51b9314cc600eff237da6222c4567eec03379ac3",
+  "sdf_sha256": "0e86688360e23c88ccf0eb82a1251315fa57ec6f5b376dc8886f3311793a0afe",
+  "sdf_source": "https://sourceforge.net/projects/nmrshiftdb2/files/data/nmrshiftdb2withsignals.sd/",
+  "bank_source": "https://huggingface.co/datasets/sweetssweets/NMRBank",
+  "test_policy": "Post-hoc sensitivity using frozen predictions. The official benchmark uses the original labels. Selection: one or more reference proton shifts with |ppm| > 50. No prediction-based selection.",
+  "source_matching": "Identical official SMILES and reference multiset. Database search by first InChIKey block. Some database records specify stereo omitted by NMRGym. Cross-check is not an unambiguous accession mapping from NMRGym, which has no such field.",
+  "normalization": "One group per reported multiplet, with each range kept in proton_groups_ppm and its midpoint used for point-based sensitivity scores. No expansion by integration. Preserve repeated entries in database spectra.",
+  "audit": [
+    {
+      "official_index_zero_based": 1238,
+      "panel": "additional_1000",
+      "connectivity": "HAXFWIACAGNFHA",
+      "smiles": "c1ccc(SSc2ccccn2)nc1",
+      "official_h_ppm": [
+        149.0,
+        7.64,
+        8.462,
+        7.59,
+        7.112
+      ],
+      "official_c_ppm": [
+        158.9,
+        161.15,
+        121.1,
+        120.91499999999999,
+        137.3,
+        136.695,
+        119.95,
+        120.525,
+        149.5
+      ],
+      "kind": "extra_unsupported_proton",
+      "note": "数据库氢谱完整覆盖另外四个值，额外的 149.0 ppm 缺乏氢谱支持。碳谱中有 149.52 ppm，149.0 的确切来历未证实。",
+      "source": "nmrshiftdb2 20201421",
+      "url": "https://nmrshiftdb.nmr.uni-koeln.de/molecule/20201421",
+      "source_inchikey": "HAXFWIACAGNFHA-UHFFFAOYSA-N",
+      "cited_paper": null,
+      "source_carbon_field": "Spectrum 13C 0",
+      "source_carbon_ppm": [
+        119.69,
+        121.1,
+        137.34,
+        149.52,
+        158.9
+      ],
+      "source_proton_field": "Spectrum 1H 3",
+      "proton_groups_ppm": [
+        7.112,
+        7.59,
+        7.64,
+        8.462
+      ],
+      "sensitivity_reference_ppm": [
+        7.112,
+        7.59,
+        7.64,
+        8.462
+      ]
+    },
+    {
+      "official_index_zero_based": 1680,
+      "panel": "additional_1000",
+      "connectivity": "IDLLXOURUDOUML",
+      "smiles": "Cc1ccc(S(=O)(=O)Cn2nnnc2C(c2ccsc2)N2CCC(n3c(=O)[nH]c4ccccc43)CC2)cc1",
+      "official_h_ppm": [
+        10.79,
+        7.73,
+        7.62,
+        7.58,
+        5.0,
+        2.9,
+        7.55,
+        7.42,
+        7.25,
+        7.14,
+        7.04,
+        6.86,
+        6.72,
+        6.5,
+        5.47,
+        4.04,
+        3.87,
+        2.92,
+        53.6,
+        11.2,
+        2.42,
+        2.39,
+        2.14,
+        2.03,
+        1.84,
+        1.62,
+        31.7,
+        11.8
+      ],
+      "official_c_ppm": [
+        154.84,
+        153.64,
+        146.08,
+        133.76,
+        133.12,
+        130.24,
+        129.19,
+        128.72,
+        128.27,
+        125.8,
+        125.77,
+        120.5,
+        120.28,
+        108.74,
+        108.61,
+        64.73,
+        57.23,
+        49.82,
+        49.71,
+        47.81,
+        28.86,
+        28.56,
+        21.22
+      ],
+      "kind": "coupling_hz_in_shift_field",
+      "note": "原文有 14 组氢信号。NMRGym 将峰区间两端分别计数，也将原文标为 J 的 6 个数值按 ppm 收入。53.6 和 31.7 的单位都是 Hz。",
+      "source": "PMC5854701 · compound 9r",
+      "url": "https://doi.org/10.1038/s41598-018-22875-9",
+      "proton_groups_ppm": [
+        10.79,
+        [
+          7.62,
+          7.73
+        ],
+        7.58,
+        [
+          7.42,
+          7.55
+        ],
+        [
+          7.14,
+          7.25
+        ],
+        [
+          6.86,
+          7.04
+        ],
+        [
+          6.5,
+          6.72
+        ],
+        5.47,
+        [
+          3.87,
+          4.04
+        ],
+        2.92,
+        2.42,
+        [
+          2.14,
+          2.39
+        ],
+        [
+          1.84,
+          2.03
+        ],
+        1.62
+      ],
+      "source_carbon_ppm": null,
+      "source_couplings_hz": [
+        5.0,
+        2.9,
+        53.6,
+        11.2,
+        31.7,
+        11.8
+      ],
+      "sensitivity_reference_ppm": [
+        10.79,
+        7.675000000000001,
+        7.58,
+        7.484999999999999,
+        7.195,
+        6.95,
+        6.609999999999999,
+        5.47,
+        3.955,
+        2.92,
+        2.42,
+        2.265,
+        1.935,
+        1.62
+      ]
+    },
+    {
+      "official_index_zero_based": 6098,
+      "panel": "published_980",
+      "connectivity": "WVKHAFXROTZVLY",
+      "smiles": "C=CC1(C)CC2OC(=O)C(CO)=C2CC1C(=C)CCC(C)C1=CC2C(CC1(C)CC)OC(=O)C2(O)CO",
+      "official_h_ppm": [
+        53.2,
+        78.6,
+        44.9,
+        77.9
+      ],
+      "official_c_ppm": [
+        112.2,
+        114.3,
+        144.7,
+        146.4,
+        40.8,
+        28.5,
+        45.8,
+        165.0,
+        123.0,
+        16.9,
+        32.9,
+        38.5,
+        152.8,
+        23.0,
+        33.0,
+        42.2,
+        174.1,
+        76.8,
+        42.6,
+        17.2
+      ],
+      "kind": "carbon_exact",
+      "note": "同连通结构的碳谱同时覆盖氢栏和碳栏所有数值，含重复次数。匹配的数据库记录仅给出碳谱，氢谱留缺。",
+      "source": "nmrshiftdb2 2333",
+      "url": "https://nmrshiftdb.nmr.uni-koeln.de/molecule/2333",
+      "source_inchikey": "WVKHAFXROTZVLY-WBOSLINVSA-N",
+      "cited_paper": "https://doi.org/10.1016/S0031-9422(01)00334-X",
+      "source_carbon_field": "Spectrum 13C 0",
+      "source_carbon_ppm": [
+        16.9,
+        17.2,
+        23.0,
+        24.8,
+        28.5,
+        28.7,
+        32.9,
+        33.0,
+        38.5,
+        40.8,
+        42.2,
+        42.6,
+        44.9,
+        45.8,
+        53.2,
+        54.8,
+        64.1,
+        76.8,
+        77.9,
+        78.6,
+        112.2,
+        112.7,
+        114.3,
+        123.0,
+        144.7,
+        146.4,
+        152.8,
+        165.0,
+        174.1,
+        177.8
+      ],
+      "source_proton_field": null,
+      "proton_groups_ppm": null,
+      "sensitivity_reference_ppm": null
+    },
+    {
+      "official_index_zero_based": 7357,
+      "panel": "additional_1000",
+      "connectivity": "CFZXDJWFRVEWSR",
+      "smiles": "O=C1C(=C2Nc3ccc(S(=O)(=O)[O-])cc3C2=O)Nc2ccc(S(=O)(=O)[O-])cc21",
+      "official_h_ppm": [
+        133.39,
+        10.7,
+        7.28,
+        7.827
+      ],
+      "official_c_ppm": [
+        121.11,
+        117.77,
+        152.43,
+        187.56,
+        120.36,
+        112.48,
+        140.43
+      ],
+      "kind": "carbon_exact",
+      "note": "异常值在同连通结构的 ¹³C 谱中精确出现。数据库氢谱比原氢栏多出 7.779 ppm 的条目，重复位移按原记录计数。",
+      "source": "nmrshiftdb2 20208634",
+      "url": "https://nmrshiftdb.nmr.uni-koeln.de/molecule/20208634",
+      "source_inchikey": "CFZXDJWFRVEWSR-BUHFOSPRSA-L",
+      "cited_paper": null,
+      "source_carbon_field": "Spectrum 13C 0",
+      "source_carbon_ppm": [
+        112.48,
+        117.77,
+        120.36,
+        121.11,
+        133.39,
+        140.43,
+        152.43,
+        187.56
+      ],
+      "source_proton_field": "Spectrum 1H 1",
+      "proton_groups_ppm": [
+        7.28,
+        7.779,
+        7.827,
+        10.7
+      ],
+      "sensitivity_reference_ppm": [
+        7.28,
+        7.779,
+        7.827,
+        10.7
+      ]
+    },
+    {
+      "official_index_zero_based": 9674,
+      "panel": "additional_1000",
+      "connectivity": "FFZVILRAPIUNAA",
+      "smiles": "C[N+](C)(Cc1ccccc1)c1ccccc1",
+      "official_h_ppm": [
+        128.5,
+        5.573,
+        3.93,
+        7.863,
+        7.075,
+        7.526,
+        7.114,
+        7.459
+      ],
+      "official_c_ppm": [
+        72.85,
+        144.42,
+        53.52,
+        127.97,
+        121.74,
+        132.77,
+        130.29,
+        130.29,
+        128.5
+      ],
+      "kind": "carbon_exact",
+      "note": "异常值在同连通结构的 ¹³C 谱中精确出现。数据库氢谱比原氢栏多出 7.251 ppm 的条目，重复位移按原记录计数。",
+      "source": "nmrshiftdb2 20200215",
+      "url": "https://nmrshiftdb.nmr.uni-koeln.de/molecule/20200215",
+      "source_inchikey": "FFZVILRAPIUNAA-UHFFFAOYSA-N",
+      "cited_paper": null,
+      "source_carbon_field": "Spectrum 13C 0",
+      "source_carbon_ppm": [
+        53.52,
+        72.85,
+        121.74,
+        127.97,
+        128.5,
+        128.5,
+        130.29,
+        130.29,
+        132.77,
+        144.42
+      ],
+      "source_proton_field": "Spectrum 1H 1",
+      "proton_groups_ppm": [
+        3.93,
+        5.573,
+        7.075,
+        7.114,
+        7.251,
+        7.459,
+        7.526,
+        7.863
+      ],
+      "sensitivity_reference_ppm": [
+        3.93,
+        5.573,
+        7.075,
+        7.114,
+        7.251,
+        7.459,
+        7.526,
+        7.863
+      ]
+    },
+    {
+      "official_index_zero_based": 9863,
+      "panel": "additional_1000",
+      "connectivity": "QMCRQTBBRJHOLJ",
+      "smiles": "COC(=O)C(c1ccccc1)C(O)c1ccco1",
+      "official_h_ppm": [
+        142.2
+      ],
+      "official_c_ppm": [
+        153.3,
+        69.8,
+        56.8,
+        173.5,
+        52.4,
+        128.6,
+        128.3,
+        127.8,
+        128.3,
+        128.6,
+        110.1,
+        108.1
+      ],
+      "kind": "carbon_exact",
+      "note": "同连通结构的碳谱同时覆盖氢栏和碳栏所有数值，含重复次数。匹配的数据库记录仅给出碳谱，氢谱留缺。",
+      "source": "nmrshiftdb2 10017891",
+      "url": "https://nmrshiftdb.nmr.uni-koeln.de/molecule/10017891",
+      "source_inchikey": "QMCRQTBBRJHOLJ-UHFFFAOYSA-N",
+      "cited_paper": null,
+      "source_carbon_field": "Spectrum 13C 0",
+      "source_carbon_ppm": [
+        52.4,
+        56.8,
+        69.8,
+        108.1,
+        110.1,
+        127.8,
+        128.3,
+        128.3,
+        128.6,
+        128.6,
+        134.9,
+        142.2,
+        153.3,
+        173.5
+      ],
+      "source_proton_field": null,
+      "proton_groups_ppm": null,
+      "sensitivity_reference_ppm": null
+    },
+    {
+      "official_index_zero_based": 11074,
+      "panel": "published_980",
+      "connectivity": "SMUKNIYCTSOICZ",
+      "smiles": "C1=CC2NCCC12",
+      "official_h_ppm": [
+        135.5
+      ],
+      "official_c_ppm": [
+        44.0,
+        27.0,
+        47.8,
+        137.8
+      ],
+      "kind": "carbon_exact",
+      "note": "同连通结构的碳谱同时覆盖氢栏和碳栏所有数值，含重复次数。匹配的数据库记录仅给出碳谱，氢谱留缺。",
+      "source": "nmrshiftdb2 10019045",
+      "url": "https://nmrshiftdb.nmr.uni-koeln.de/molecule/10019045",
+      "source_inchikey": "SMUKNIYCTSOICZ-UHFFFAOYSA-N",
+      "cited_paper": null,
+      "source_carbon_field": "Spectrum 13C 0",
+      "source_carbon_ppm": [
+        27.0,
+        44.0,
+        47.8,
+        64.0,
+        135.5,
+        137.8
+      ],
+      "source_proton_field": null,
+      "proton_groups_ppm": null,
+      "sensitivity_reference_ppm": null
+    },
+    {
+      "official_index_zero_based": 11136,
+      "panel": "additional_1000",
+      "connectivity": "QENCSSQOFHZZCZ",
+      "smiles": "O=C1C=C2C3c4c(cc(O)cc4C4c5c(O)cc6c(c5C5C(c7ccc(O)cc7)C1C(=O)C25C4c1ccc(O)cc1)C(c1cc(O)cc(O)c1)C(c1ccc(O)cc1)O6)OC3c1ccc(O)cc1",
+      "official_h_ppm": [
+        87.6,
+        51.3,
+        37.9,
+        69.3,
+        39.0,
+        46.2,
+        39.0,
+        54.7,
+        91.2
+      ],
+      "official_c_ppm": [
+        132.3,
+        128.7,
+        128.8,
+        128.7,
+        115.2,
+        157.8,
+        158.8,
+        115.1,
+        139.6,
+        109.0,
+        158.5,
+        115.2,
+        128.5,
+        131.2,
+        128.5,
+        115.2,
+        132.9,
+        124.5,
+        153.8,
+        96.5,
+        115.6,
+        169.5,
+        124.9,
+        195.5,
+        202.6,
+        128.3,
+        128.7,
+        115.2,
+        156.1,
+        115.2,
+        126.1,
+        114.7,
+        156.5,
+        114.7,
+        126.1,
+        104.7,
+        158.8,
+        101.0,
+        158.8
+      ],
+      "kind": "carbon_exact",
+      "note": "同连通结构的碳谱同时覆盖氢栏和碳栏所有数值，含重复次数。匹配的数据库记录仅给出碳谱，氢谱留缺。",
+      "source": "nmrshiftdb2 5339",
+      "url": "https://nmrshiftdb.nmr.uni-koeln.de/molecule/5339",
+      "source_inchikey": "QENCSSQOFHZZCZ-PSGPQVICSA-N",
+      "cited_paper": "https://doi.org/10.1016/S0031-9422(01)00061-9",
+      "source_carbon_field": "Spectrum 13C 0",
+      "source_carbon_ppm": [
+        37.9,
+        39.0,
+        39.0,
+        46.2,
+        51.3,
+        54.7,
+        62.5,
+        69.3,
+        87.6,
+        91.2,
+        95.5,
+        96.5,
+        101.0,
+        104.7,
+        104.7,
+        109.0,
+        114.7,
+        114.7,
+        115.1,
+        115.2,
+        115.2,
+        115.2,
+        115.2,
+        115.2,
+        115.2,
+        115.6,
+        124.5,
+        124.9,
+        126.1,
+        126.1,
+        128.3,
+        128.5,
+        128.5,
+        128.7,
+        128.7,
+        128.7,
+        128.7,
+        128.8,
+        131.2,
+        132.3,
+        132.9,
+        139.6,
+        148.0,
+        153.8,
+        155.8,
+        156.1,
+        156.5,
+        157.8,
+        158.5,
+        158.8,
+        158.8,
+        158.8,
+        160.7,
+        169.5,
+        195.5,
+        202.6
+      ],
+      "source_proton_field": null,
+      "proton_groups_ppm": null,
+      "sensitivity_reference_ppm": null
+    },
+    {
+      "official_index_zero_based": 12653,
+      "panel": "published_980",
+      "connectivity": "ZGIDQOUREGCDLW",
+      "smiles": "COC(=O)C1(C)CCCC2(C)C1CC1OC1(C(=O)OC)C2CCC(=O)C(C)C",
+      "official_h_ppm": [
+        51.8
+      ],
+      "official_c_ppm": [
+        37.3,
+        17.9,
+        36.6,
+        46.3,
+        41.0,
+        34.6,
+        23.5,
+        57.0,
+        58.7,
+        17.9,
+        38.7,
+        40.7,
+        18.0,
+        52.0,
+        14.5,
+        16.8
+      ],
+      "kind": "carbon_exact",
+      "note": "同连通结构的碳谱同时覆盖氢栏和碳栏所有数值，含重复次数。匹配的数据库记录仅给出碳谱，氢谱留缺。",
+      "source": "nmrshiftdb2 10018492",
+      "url": "https://nmrshiftdb.nmr.uni-koeln.de/molecule/10018492",
+      "source_inchikey": "ZGIDQOUREGCDLW-UHFFFAOYSA-N",
+      "cited_paper": null,
+      "source_carbon_field": "Spectrum 13C 0",
+      "source_carbon_ppm": [
+        14.5,
+        16.8,
+        17.9,
+        17.9,
+        18.0,
+        23.5,
+        34.6,
+        36.6,
+        37.3,
+        38.7,
+        40.7,
+        41.0,
+        46.3,
+        51.8,
+        52.0,
+        53.4,
+        57.0,
+        58.7,
+        170.4,
+        177.9,
+        213.4
+      ],
+      "source_proton_field": null,
+      "proton_groups_ppm": null,
+      "sensitivity_reference_ppm": null
+    },
+    {
+      "official_index_zero_based": 13076,
+      "panel": "additional_1000",
+      "connectivity": "OYAHSBDYBOBAAQ",
+      "smiles": "Nc1nc(-c2ccccc2)ns1",
+      "official_h_ppm": [
+        183.07,
+        5.98,
+        8.13,
+        7.43
+      ],
+      "official_c_ppm": [
+        133.04,
+        169.89,
+        127.94,
+        128.56,
+        130.05
+      ],
+      "kind": "carbon_exact",
+      "note": "异常值在同连通结构的 ¹³C 谱中精确出现。数据库氢谱比原氢栏多出 7.43 ppm 的条目，重复位移按原记录计数。",
+      "source": "nmrshiftdb2 20200160",
+      "url": "https://nmrshiftdb.nmr.uni-koeln.de/molecule/20200160",
+      "source_inchikey": "OYAHSBDYBOBAAQ-UHFFFAOYSA-N",
+      "cited_paper": null,
+      "source_carbon_field": "Spectrum 13C 0",
+      "source_carbon_ppm": [
+        127.94,
+        128.56,
+        130.05,
+        133.04,
+        169.89,
+        183.07
+      ],
+      "source_proton_field": "Spectrum 1H 1",
+      "proton_groups_ppm": [
+        5.98,
+        7.43,
+        7.43,
+        8.13
+      ],
+      "sensitivity_reference_ppm": [
+        5.98,
+        7.43,
+        7.43,
+        8.13
+      ]
+    },
+    {
+      "official_index_zero_based": 14644,
+      "panel": "published_980",
+      "connectivity": "PKGDAHNXKNOKIH",
+      "smiles": "COc1c(CO)ccc2c1/C(=C/C(C)C)C=C2C(=O)O",
+      "official_h_ppm": [
+        27.6,
+        58.7,
+        62.4,
+        32.9,
+        143.2,
+        132.3,
+        119.7,
+        133.4,
+        179.8,
+        138.1,
+        139.6,
+        123.9,
+        158.5,
+        129.7,
+        140.1
+      ],
+      "official_c_ppm": [
+        27.6,
+        58.7,
+        62.4,
+        32.9,
+        143.2,
+        132.3,
+        119.7,
+        133.4,
+        179.8,
+        138.1,
+        139.6,
+        123.9,
+        158.5,
+        129.7,
+        140.1
+      ],
+      "kind": "carbon_exact",
+      "note": "氢栏的 15 个值与同一行碳栏、原论文化合物 1 的 ¹³C 峰表逐值相同。原论文另列 8 组氢信号。",
+      "source": "PMC5654143 · compound 1",
+      "url": "https://doi.org/10.1186/s12885-017-3667-9",
+      "proton_groups_ppm": [
+        6.8,
+        7.22,
+        7.46,
+        6.51,
+        3.2,
+        1.26,
+        4.99,
+        3.9
+      ],
+      "source_carbon_ppm": [
+        123.9,
+        138.1,
+        132.3,
+        140.1,
+        139.6,
+        119.7,
+        133.4,
+        129.7,
+        158.5,
+        143.2,
+        32.9,
+        27.6,
+        179.8,
+        62.4,
+        58.7
+      ],
+      "source_couplings_hz": null,
+      "sensitivity_reference_ppm": [
+        6.8,
+        7.22,
+        7.46,
+        6.51,
+        3.2,
+        1.26,
+        4.99,
+        3.9
+      ]
+    },
+    {
+      "official_index_zero_based": 22284,
+      "panel": "published_980",
+      "connectivity": "ANLVCISSEPMBQL",
+      "smiles": "S=c1nc2c3nnc4nnc5c6ccccc6nc-5n4c3ncn2n1CN1CCCCC1",
+      "official_h_ppm": [
+        1.35,
+        2.35,
+        24.03,
+        25.73,
+        50.23,
+        51.43
+      ],
+      "official_c_ppm": [
+        24.03,
+        25.73,
+        50.23,
+        51.43
+      ],
+      "kind": "carbon_exact",
+      "note": "1.35–2.35 是一组 10H 多重峰。后四个数是原论文的 ¹³C 位移，原文还列出 5.50 至 8.62 ppm 的六组氢信号。",
+      "source": "PMC6017869 · compound 19",
+      "url": "https://doi.org/10.3390/molecules23030693",
+      "proton_groups_ppm": [
+        [
+          1.35,
+          2.35
+        ],
+        5.5,
+        6.91,
+        7.03,
+        7.31,
+        7.68,
+        8.62
+      ],
+      "source_carbon_ppm": [
+        24.03,
+        25.73,
+        50.23,
+        51.43,
+        120.1,
+        121.7,
+        122.1,
+        128.9,
+        132.7,
+        138.3,
+        138.9,
+        140.5,
+        141.2,
+        147.6,
+        149.2,
+        150.7,
+        160.0,
+        162.0
+      ],
+      "source_couplings_hz": null,
+      "sensitivity_reference_ppm": [
+        1.85,
+        5.5,
+        6.91,
+        7.03,
+        7.31,
+        7.68,
+        8.62
+      ]
+    },
+    {
+      "official_index_zero_based": 25352,
+      "panel": "additional_1000",
+      "connectivity": "ROJPNLMELFFFPY",
+      "smiles": "O=C1C2CCC1C1C(=O)NC(=O)C21",
+      "official_h_ppm": [
+        176.8
+      ],
+      "official_c_ppm": [
+        22.0,
+        41.5,
+        45.4
+      ],
+      "kind": "carbon_exact",
+      "note": "同连通结构的碳谱同时覆盖氢栏和碳栏所有数值，含重复次数。匹配的数据库记录仅给出碳谱，氢谱留缺。",
+      "source": "nmrshiftdb2 10019056",
+      "url": "https://nmrshiftdb.nmr.uni-koeln.de/molecule/10019056",
+      "source_inchikey": "ROJPNLMELFFFPY-FBXFSONDSA-N",
+      "cited_paper": null,
+      "source_carbon_field": "Spectrum 13C 0",
+      "source_carbon_ppm": [
+        22.0,
+        41.5,
+        45.4,
+        176.8,
+        210.2
+      ],
+      "source_proton_field": null,
+      "proton_groups_ppm": null,
+      "sensitivity_reference_ppm": null
+    },
+    {
+      "official_index_zero_based": 25684,
+      "panel": "additional_1000",
+      "connectivity": "VYNGFCUGSYEOOZ",
+      "smiles": "S=P(c1ccccc1)(c1ccccc1)c1ccccc1",
+      "official_h_ppm": [
+        131.49,
+        7.721,
+        7.441
+      ],
+      "official_c_ppm": [
+        133.06,
+        132.26,
+        128.48
+      ],
+      "kind": "carbon_exact",
+      "note": "异常值在同连通结构的 ¹³C 谱中精确出现。数据库氢谱比原氢栏多出 7.503 ppm 的条目，重复位移按原记录计数。",
+      "source": "nmrshiftdb2 20209727",
+      "url": "https://nmrshiftdb.nmr.uni-koeln.de/molecule/20209727",
+      "source_inchikey": "VYNGFCUGSYEOOZ-UHFFFAOYSA-N",
+      "cited_paper": null,
+      "source_carbon_field": "Spectrum 13C 0",
+      "source_carbon_ppm": [
+        128.48,
+        131.49,
+        132.26,
+        133.06
+      ],
+      "source_proton_field": "Spectrum 1H 1",
+      "proton_groups_ppm": [
+        7.441,
+        7.503,
+        7.721
+      ],
+      "sensitivity_reference_ppm": [
+        7.441,
+        7.503,
+        7.721
+      ]
+    }
+  ],
+  "panels": {
+    "published_980": {
+      "official": {
+        "molecules": 980,
+        "v2": {
+          "matched_peak_mae_ppm": 0.68264993710682,
+          "cosine": 0.5021381307210403,
+          "count_penalized_error_ppm": 0.33178919373056626,
+          "matched_fraction": 0.8711787537499341,
+          "matched_peak_r2": 0.15876634438995318
+        },
+        "clean": {
+          "matched_peak_mae_ppm": 0.6798588408442588,
+          "cosine": 0.4975453049625993,
+          "count_penalized_error_ppm": 0.3354052648803067,
+          "matched_fraction": 0.8707719156000343,
+          "matched_peak_r2": 0.1704674933697521
+        }
+      },
+      "without_flagged": {
+        "molecules": 975,
+        "v2": {
+          "matched_peak_mae_ppm": 0.3362591693097181,
+          "cosine": 0.5045684697392747,
+          "count_penalized_error_ppm": 0.32717711670826705,
+          "matched_fraction": 0.8741941489397835,
+          "matched_peak_r2": 0.6936289418778976
+        },
+        "clean": {
+          "matched_peak_mae_ppm": 0.33897476115520336,
+          "cosine": 0.5000110305892619,
+          "count_penalized_error_ppm": 0.3308951650431212,
+          "matched_fraction": 0.8738883990435715,
+          "matched_peak_r2": 0.6944034950462817
+        }
+      },
+      "same_eligible_original_labels": {
+        "molecules": 977,
+        "v2": {
+          "matched_peak_mae_ppm": 0.4444952868286,
+          "cosine": 0.5036799974852856,
+          "count_penalized_error_ppm": 0.3293116953913083,
+          "matched_fraction": 0.8734281424936428,
+          "matched_peak_r2": 0.3247809055134895
+        },
+        "clean": {
+          "matched_peak_mae_ppm": 0.4416679902332349,
+          "cosine": 0.49907306902963483,
+          "count_penalized_error_ppm": 0.33294800890018683,
+          "matched_fraction": 0.873029193859586,
+          "matched_peak_r2": 0.3590220975975945
+        }
+      },
+      "same_eligible_reviewed_labels": {
+        "molecules": 977,
+        "v2": {
+          "matched_peak_mae_ppm": 0.336399982763965,
+          "cosine": 0.5039273900949315,
+          "count_penalized_error_ppm": 0.32759036137025704,
+          "matched_fraction": 0.8737920683437508,
+          "matched_peak_r2": 0.694008558447698
+        },
+        "clean": {
+          "matched_peak_mae_ppm": 0.33921627070631877,
+          "cosine": 0.4993062705402992,
+          "count_penalized_error_ppm": 0.33145569952793286,
+          "matched_fraction": 0.8735708178786922,
+          "matched_peak_r2": 0.6948077828736894
+        }
+      },
+      "restored": 2,
+      "missing_proton_reference": 3
+    },
+    "additional_1000": {
+      "official": {
+        "molecules": 1000,
+        "v2": {
+          "matched_peak_mae_ppm": 0.8302785675621471,
+          "cosine": 0.4946355928639804,
+          "count_penalized_error_ppm": 0.36949365308501236,
+          "matched_fraction": 0.8488012520787641,
+          "matched_peak_r2": 0.1035710470567689
+        },
+        "clean": {
+          "matched_peak_mae_ppm": 0.8252073534577664,
+          "cosine": 0.492997538165568,
+          "count_penalized_error_ppm": 0.3691379784546559,
+          "matched_fraction": 0.8466879747718975,
+          "matched_peak_r2": 0.10715771585845135
+        }
+      },
+      "without_flagged": {
+        "molecules": 991,
+        "v2": {
+          "matched_peak_mae_ppm": 0.3127211913072708,
+          "cosine": 0.4967551364926006,
+          "count_penalized_error_ppm": 0.36472831520219623,
+          "matched_fraction": 0.8510164366519644,
+          "matched_peak_r2": 0.887719771430985
+        },
+        "clean": {
+          "matched_peak_mae_ppm": 0.30877688632711753,
+          "cosine": 0.49504244750399595,
+          "count_penalized_error_ppm": 0.36438377555428114,
+          "matched_fraction": 0.8490796919998966,
+          "matched_peak_r2": 0.8914734386740134
+        }
+      },
+      "same_eligible_original_labels": {
+        "molecules": 997,
+        "v2": {
+          "matched_peak_mae_ppm": 0.47520688943021605,
+          "cosine": 0.4961239509805172,
+          "count_penalized_error_ppm": 0.36668669562803674,
+          "matched_fraction": 0.8504455712486504,
+          "matched_peak_r2": 0.23835315639496957
+        },
+        "clean": {
+          "matched_peak_mae_ppm": 0.47121697656302464,
+          "cosine": 0.49448096685343784,
+          "count_penalized_error_ppm": 0.36640385669139675,
+          "matched_fraction": 0.8483998409614486,
+          "matched_peak_r2": 0.23926844171877948
+        }
+      },
+      "same_eligible_reviewed_labels": {
+        "molecules": 997,
+        "v2": {
+          "matched_peak_mae_ppm": 0.31205094413691964,
+          "cosine": 0.49651209919898714,
+          "count_penalized_error_ppm": 0.36558872890967653,
+          "matched_fraction": 0.8497607581887812,
+          "matched_peak_r2": 0.8886435302651469
+        },
+        "clean": {
+          "matched_peak_mae_ppm": 0.30813549797816603,
+          "cosine": 0.49502537088102566,
+          "count_penalized_error_ppm": 0.36536086078324503,
+          "matched_fraction": 0.8477604227066843,
+          "matched_peak_r2": 0.8923461921867071
+        }
+      },
+      "restored": 6,
+      "missing_proton_reference": 3
+    }
+  }
+}
