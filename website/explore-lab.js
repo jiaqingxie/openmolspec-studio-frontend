@@ -137,6 +137,7 @@
     if(r.origin==='experimental'){
       const idx=state.recordIndex||0, rec=r.records[idx], pairs=Array.isArray(rec.peaks[0]), pos=pairs?rec.peaks.map(p=>p[0]):rec.peaks;
       output.append(text('strong','explore-result-title',state.static ? t('Saved experimental example · live library unavailable','已保存的实验样本 · 在线库暂不可用') : t('Experimental library match','命中实验谱库')));
+      output.append(text('code','explore-smiles',label(r.modality)+' · '+(r.canonical_smiles||r.smiles)));
       if(r.records.length>1){
         const sel=text('select');sel.setAttribute('aria-label',t('Measurement','实验记录'));
         r.records.forEach((s,i)=>sel.append(new Option((i+1)+' / '+r.match_count+' · '+(s.source_id||s.source),String(i))));
@@ -155,6 +156,7 @@
     }else{
       const result=state.job?.result?.result||state.job?.result;
       output.append(text('strong','explore-result-title',t('Forward-model prediction','正向模型预测')));
+      output.append(text('code','explore-smiles',label(r.modality)+' · '+r.canonical_smiles));
       if(!result){output.append(text('p','explore-note',t('Queued model run','预测任务已提交')+' · '+r.run.id));return;}
       const rec=result.records?.[0];
       const ppm=rec?.prediction_ppm||rec?.environments?.map(e=>e.prediction_ppm)||rec?.peaks?.map(p=>p.shift_ppm);
