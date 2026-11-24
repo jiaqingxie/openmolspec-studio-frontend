@@ -7,3 +7,4 @@
 | [使用 GLACIER 预测 MS/MS](ms-forward-glacier.md) | `ms.forward.glacier` |
 | [使用 ICEBERG 预测 MS/MS](ms-forward-iceberg.md) | `ms.forward.iceberg` |
 | [MS/MS 碎片指认](ms-annotation-magma.md) | `ms.annotation.magma` |
+| [MechFrag-MS 碎片候选指认](ms-annotation-mechfrag.md) | `ms.annotation.mechfrag` |

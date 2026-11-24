@@ -63,7 +63,10 @@ python -m openmolspec_bench run --tasks nmr.hsqc.transpeaknet --transpeaknet-sou
         else:
             cls='GapModel' if gap else 'Vib2Mol';code=f"from openmolspec.model import {cls}\nmodel = {cls}(root='/path/to/portable-models',\n    python='/path/to/vibrational-env/bin/python')\n"
             missing=not id_.endswith(('.hc','_hc'))
-            code+=(f"result = model.predict(inputs, allow_missing_modalities={missing})\n" if gap or generate else f"result = model.retrieve(inputs, candidate_smiles,\n    rerank={'True' if 'reranking' in id_ else 'False'}, allow_missing_modalities={missing})\n")
+            if id_ == 'vibrational.generation':
+                code += "result = model.predict(inputs)\n"
+            else:
+                code+=(f"result = model.predict(inputs, allow_missing_modalities={missing})\n" if gap or generate else f"result = model.retrieve(inputs, candidate_smiles,\n    rerank={'True' if 'reranking' in id_ else 'False'}, allow_missing_modalities={missing})\n")
             text=('Use the [openSpec/Vib2Mol author training workflow](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks) for adaptation. Export aligned spectral/structure LMDBs, retain H/C references and normalization, and keep train/validation groups disjoint. Retrieval combines symmetric contrastive cross-entropy with matching cross-entropy; generation adds autoregressive molecular-token cross-entropy. Property regression uses the target transform and regression criterion from its training configuration. SDK classes expose inference; these training workflows run in the author implementation.' if en else
                   '通过 [openSpec／Vib2Mol 作者训练流程](https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/documentation/assets/benchmarks)进行适配。准备谱—结构对齐的 LMDB，保留 H/C 参考和归一化，确保 train/val 分组独立。检索采用双向对比交叉熵与配对分类交叉熵；生成使用分子 token 自回归交叉熵。性质回归按其训练配置保留目标变换和回归准则。SDK 提供推理，相关训练通过作者实现执行。')
         loss=r'$$L_{\rm retrieval}=L_{\rm contrastive}+L_{\rm matching},\qquad L_{\rm generation}=-\sum_t\log p(y_t\mid y_{<t},s).$$'

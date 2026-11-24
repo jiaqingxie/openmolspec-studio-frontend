@@ -7,3 +7,4 @@ Choose a task to see its purpose, inputs, outputs, model call and examples.
 | [MS/MS prediction with GLACIER](ms-forward-glacier.md) | `ms.forward.glacier` |
 | [MS/MS prediction with ICEBERG](ms-forward-iceberg.md) | `ms.forward.iceberg` |
 | [MS/MS fragment annotation](ms-annotation-magma.md) | `ms.annotation.magma` |
+| [MS/MS fragment candidates with MechFrag-MS](ms-annotation-mechfrag.md) | `ms.annotation.mechfrag` |

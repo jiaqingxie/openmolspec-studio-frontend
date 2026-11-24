@@ -39,6 +39,7 @@
 - [使用 GLACIER 预测 MS/MS](ms-forward-glacier.ipynb)
 - [使用 ICEBERG 预测 MS/MS](ms-forward-iceberg.ipynb)
 - [MS/MS 碎片指认](ms-annotation-magma.ipynb)
+- [MechFrag-MS 碎片候选指认](ms-annotation-mechfrag.ipynb)
 
 ## 红外 / 拉曼 IR / Raman
 
@@ -49,16 +50,18 @@
 - [结构检索：IR + Raman](vibrational-retrieval.ipynb)
 - [结构生成：IR + Raman](vibrational-generation.ipynb)
 - [候选重排：IR + Raman](spectroscopy-reranking.ipynb)
+- [IR 单谱到结构检索](vibrational-retrieval-ir.ipynb)
+- [Raman 单谱到结构检索](vibrational-retrieval-raman.ipynb)
 
 ## 多谱联合
 
 - [由 IR + Raman + NMR 预测 HOMO–LUMO 能隙](vibrational-gap-ir_raman_hc.ipynb)
+- [SpecMol 谱学问答](spectroscopy-qa.ipynb)
 - [结构检索：IR + Raman + NMR](vibrational-retrieval-hc.ipynb)
 - [结构生成：IR + Raman + NMR](vibrational-generation-hc.ipynb)
 - [候选重排：IR + Raman + NMR](spectroscopy-reranking-hc.ipynb)
+- [SpectraLLM 多谱结构生成](multispectral-spectrallm-generation.ipynb)
 
 ## 暂不推进
 
 - [谱图 → 分子式](nmr-formula.ipynb)
-- [谱学问答 / 推理](spectroscopy-qa.ipynb)
-- [多谱 → 结构（SpectraLLM）](multispectral-spectrallm-generation.ipynb)

@@ -32,7 +32,8 @@ class Benchmark:
     def __init__(self, *, workspace, python=None, **assets):
         allowed = {'portable_root', 'models_root', 'alignment_checkpoint', 'generation_checkpoint',
                    'transpeaknet_source', 'nmr_python', 'ms_python', 'solvent_library', 'ms_source', 'ms_weights',
-                   'ms_input_csv', 'ms_metadata_tsv', 'magma_source', 'gap_lmdb', 'fp_inference_root', 'solution_shift_root'}
+                   'ms_input_csv', 'ms_metadata_tsv', 'magma_source', 'gap_lmdb', 'fp_inference_root', 'solution_shift_root',
+                   'language_checkpoint','language_data','mechfrag_root','mechfrag_study'}
         if set(assets) - allowed:
             raise ValueError(f'Unknown asset options: {set(assets) - allowed}')
         self.python = str(python or sys.executable)

@@ -98,10 +98,12 @@ class OpenMolSpecService:
         return loaded
 
     def _add_project_paths(self) -> None:
-        for path in (self.assets.root, self.assets.root / "src"):
+        # Resolve the running SDK first. Portable bundles also contain an SDK
+        # snapshot, alongside the upstream model implementations we need here.
+        for path in (self.assets.root / "src", self.assets.root):
             value = str(path)
             if value not in sys.path:
-                sys.path.insert(0, value)
+                sys.path.append(value)
 
     def _load_gap(self):
         if self._gap_bundle is not None:
@@ -139,6 +141,9 @@ class OpenMolSpecService:
         inputs.require_vibrational_spectrum()
         import torch
 
+        if all(v is None or not len(v) for v in (inputs.nmr_h, inputs.nmr_c)):
+            from .gap_partial import predict
+            return predict(inputs.ir, inputs.raman)
         model, payload = self._load_gap()
         batch: dict[str, Any] = {
             "ir": self._spectrum_tensor(inputs.ir).to(self.device),
@@ -424,9 +429,14 @@ class OpenMolSpecService:
         normalizer = json.loads(self.assets.nmr_normalizer.read_text())
         install_adapters("ir-raman-nmr", normalizer)
         model = build_model("vib2mol", phase=phase)
-        state = torch.load(checkpoint, map_location="cpu", weights_only=True)
+        try:
+            state = torch.load(checkpoint, map_location="cpu", weights_only=True, mmap=True)
+        except (RuntimeError, OSError) as error:
+            if "mmap" not in str(error).lower() and "no such device" not in str(error).lower():
+                raise
+            state = torch.load(checkpoint, map_location="cpu", weights_only=True)
         state = {key.removeprefix("module."): value for key, value in state.items()}
-        model.load_state_dict(state)
+        model.load_state_dict(state, strict=True, assign=True)
         device = self.device
         model.to(device).eval()
         tokenizer = AutoTokenizer.from_pretrained(
@@ -495,18 +505,29 @@ class OpenMolSpecService:
             for index, score in zip(indices.tolist(), values.tolist())
         ]
 
-    def generate(self, inputs: SpectralInput, limit: int = 5) -> dict[str, Any]:
-        return self._generate_vib2mol(inputs, max(int(limit), 1))
+    def generate(self, inputs: SpectralInput, limit: int = 5, *, ranking="beam",
+                 estimate_missing_nmr=True) -> dict[str, Any]:
+        from .vib_shift_adapter import supports, with_estimated_shifts
 
-    def _generate_vib2mol(self, inputs: SpectralInput, limit: int) -> dict[str, Any]:
+        adapted = estimate_missing_nmr and supports(inputs)
+        effective = with_estimated_shifts(inputs) if adapted else inputs
+        result = self._generate_vib2mol(effective, max(int(limit), 1), ranking=ranking)
+        if adapted:
+            result.update(
+                input_modalities=["IR", "Raman"],
+                estimated_shifts_ppm={"1H": effective.nmr_h.tolist(), "13C": effective.nmr_c.tolist()},
+                inference_mode="vibrational_shift_estimation_then_frozen_decoder",
+            )
+        return result
+
+    def _generate_vib2mol(self, inputs: SpectralInput, limit: int, *, ranking="beam") -> dict[str, Any]:
         inputs.require_vibrational_spectrum()
+        if ranking not in ("beam", "itm"):
+            raise ValueError("Expected beam or itm ranking")
         import torch
 
         model, tokenizer, device = self._load_vib2mol(2)
-        from benchmarks.models.vib2mol.evaluate_multimodal import (
-            rerank_candidates,
-            unique_candidates,
-        )
+        from benchmarks.models.vib2mol.evaluate_multimodal import unique_candidates
 
         data = self._vib2mol_input(inputs, device)
         if not 1 <= limit <= 10:
@@ -524,27 +545,24 @@ class OpenMolSpecService:
             tokenizer.decode(item, skip_special_tokens=True).replace(" ", "")
             for item in sequences
         ]
-        candidates = unique_candidates(raw)
-        with torch.inference_mode():
-            order, ranked_scores = rerank_candidates(
-                rank_model, rank_tokenizer, data, candidates[:10], 32
-            )
-        candidates = [candidates[index] for index in order]
-        scores = ranked_scores
+        candidates = unique_candidates(raw)[:beam_size]
+        from .vib_ranking import itm_order, score_generated_candidates
+
+        records = score_generated_candidates(rank_model, rank_tokenizer, data, candidates, 32)
+        if ranking == "itm":
+            records = itm_order(records)
         return {
             "anchor": None,
             "anchor_similarity": None,
             "anchors_used": 0,
             "beam_size": beam_size,
-            "ranking": "itm_positive_probability",
+            "ranking": "canonical_beam_order" if ranking == "beam" else "itm_positive_probability",
+            "score_kind": "itm_positive_probability",
             "input_modalities": [name for name, value in (("IR", inputs.ir), ("Raman", inputs.raman),
                                                           ("1H", inputs.nmr_h), ("13C", inputs.nmr_c))
                                  if value is not None and len(value)],
-            "candidates": [
-                {"rank": rank, "smiles": smiles, "score": scores[rank - 1]}
-                for rank, smiles in enumerate(candidates[:limit], start=1)
-            ],
-            "mode": "Direct Vib2Mol beam=10 with canonical deduplication and ITM reranking",
+            "candidates": [dict(row, rank=rank) for rank, row in enumerate(records[:limit], 1)],
+            "mode": "Canonical beam=10 candidates; score is the ITM positive probability",
         }
 
     def sample_spectrum(self) -> tuple[SpectralInput, dict[str, Any]]:

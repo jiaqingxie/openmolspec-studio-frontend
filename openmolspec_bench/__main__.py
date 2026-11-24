@@ -34,6 +34,7 @@ def main():
     sub = parser.add_subparsers(dest="command", required=True)
     listing = sub.add_parser("list", help="Show all integrated task definitions")
     listing.add_argument("--json", action="store_true")
+    listing.add_argument("--include-deferred", action="store_true", help="Include archived task definitions")
     run = sub.add_parser("run", help="Evaluate existing weights or predictions; never train")
     run.add_argument("--tasks", nargs="+", default=["all"], choices=["all", *BY_ID])
     run.add_argument("--workspace", type=Path, default=Path(__file__).resolve().parents[2])
@@ -66,21 +67,27 @@ def main():
     run.add_argument("--ms-input-csv", type=Path)
     run.add_argument("--ms-metadata-tsv", type=Path)
     run.add_argument("--magma-source", type=Path)
+    run.add_argument("--language-checkpoint", type=Path, help="Merged SpecMol or SpectraLLM checkpoint")
+    run.add_argument("--language-data", type=Path, help="NMR JSONL for SpecMol or author-format SpectraLLM test JSONL")
+    run.add_argument("--mechfrag-root", type=Path, help="Installed MechFrag-MS source")
+    run.add_argument("--mechfrag-study", type=Path, help="Path to a locked MechFrag manifest or its study directory")
     run.add_argument("--limit", type=int, default=64)
     run.add_argument("--sampling", choices=("first", "reservoir"), default="first")
     run.add_argument("--seed", type=int, default=42)
     run.add_argument("--batch-size", type=int, default=16)
     run.add_argument("--beam-size", type=int, default=5)
-    run.add_argument("--vib-beam-size", type=int, default=10, help="Xinyu evaluation default for complete-input Vib2Mol generation")
+    run.add_argument("--vib-beam-size", type=int, default=10, help="Beam width for Vib2Mol structure generation")
     run.add_argument("--device", default="cpu")
     run.add_argument("--threads", type=int, default=2)
     run.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.command == "list":
         if args.json:
-            print(json.dumps(records(), ensure_ascii=False, indent=2))
+            print(json.dumps(records(include_deferred=args.include_deferred), ensure_ascii=False, indent=2))
         else:
             for task in TASKS:
+                if not task.enabled and not args.include_deferred:
+                    continue
                 backend = task.backend if task.enabled else "deferred_by_user"
                 print(f"{task.id:36s} {backend:26s} {task.title}")
         return 0

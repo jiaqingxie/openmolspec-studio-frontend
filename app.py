@@ -500,7 +500,7 @@ def generation_page() -> None:
         unsafe_allow_html=True,
     )
     with st.container(border=True):
-        section_header("STEP 01", "输入多模态理论光谱", "完整输入为理论 IR、Raman 与计算 H/C 位移，按 Xinyu 的 beam=10 协议直接生成并重排。")
+        section_header("STEP 01", "输入多模态理论光谱", "完整输入为理论 IR、Raman 与计算 H/C 位移，生成 10 条 beam，按解码顺序展示去重结构，并附 ITM 匹配分数。")
         inputs = spectrum_input("generation", include_nmr=True)
     limit = st.slider("生成候选数", 1, 10, 8)
     if st.button(

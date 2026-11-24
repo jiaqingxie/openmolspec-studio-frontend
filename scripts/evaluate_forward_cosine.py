@@ -1,11 +1,14 @@
 """Measure spectrum cosine on the released forward benchmarks without selecting models or widths."""
 
 import argparse
+import gzip
 import json
 from pathlib import Path
 import pickle
 import sys
 
+# ruff: noqa: E402
+# Import project packages from the checkout when this file runs as a standalone script.
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / "src"), str(ROOT)]
 
@@ -237,55 +240,69 @@ def single_environment(replay, released):
     return result
 
 
-def hsqc(replay, released, archive):
-    from openmolspec.dataset import molspectra
-    from openmolspec_bench.transpeaknet import CHECKPOINT_SHA256, peak_list
+def hsqc(directory, released, archive=None):
+    from openmolspec_bench.transpeaknet import CHECKPOINT_SHA256, default_calibration
 
-    evidence = read(ROOT / released["evidence"])
+    manifest = directory / "sources.json"
+    sources = read(manifest)
+    metrics = read(directory / "metrics.json")
     if (
-        replay["calibration"]["sha256"] != evidence["config_sha256"]
-        or replay["checkpoint"]["sha256"] != CHECKPOINT_SHA256
+        metrics["checkpoint_sha256"] != CHECKPOINT_SHA256
+        or metrics["calibration_sha256"] != sha256(default_calibration())
+        or metrics["source_manifest_sha256"] != sha256(manifest)
     ):
-        raise ValueError("Wrong HSQC model or shift calibration")
-    if not sha256(archive) == replay["dataset"]["sha256"] == evidence["gold_sha256"]:
-        raise ValueError("Wrong expert reference archive")
-    refs = {
-        record["source_id"]: record
-        for record in molspectra("transpeaknet_hsqc_test", root=archive)["test"]
-    }
-    spectra = replay["predictions"]
-    if len(spectra) != len(refs) or {r["source_id"] for r in spectra} != set(refs):
-        raise ValueError("Expert spectra differ from replay")
+        raise ValueError("Wrong HSQC checkpoint, calibration or source manifest")
+    if archive and sha256(archive) != sources["sources"]["transpeaknet_expert"]:
+        raise ValueError("Wrong upstream atom-order archive")
+    panel = "2dnmrgym"
+    refs = directory / f"{panel}.jsonl.gz"
+    replay = directory / f"{panel}-predictions.jsonl.gz"
+    if (
+        sha256(refs) != sources["panels"][panel]["reference_sha256"]
+        or sha256(replay) != metrics["panels"][panel]["predictions_sha256"]
+    ):
+        raise ValueError("Official reference or predictions changed")
     widths = [1.0, 0.05]
-    scores, n_obs, n_pred = [], 0, 0
-    for row in spectra:
-        ref = refs[row["source_id"]]
-        if row["smiles"] != ref["smiles"]:
-            raise ValueError(
-                "Original atom order or structure differs from expert record"
-            )
-        mol = Chem.AddHs(Chem.MolFromSmiles(row["smiles"]))
-        peaks, _ = peak_list(
-            mol, row["carbon_atom_index"], row["carbon_ppm"], row["proton_ppm"]
-        )
-        observed = ref["hsqc_peaks"]
-        if len(observed) != row["web_matches"]["observed"]:
-            raise ValueError("Incomplete expert cross-peak list")
-        scores.append(scores_at_widths(peaks, observed, widths))
-        n_obs += len(observed)
-        n_pred += len(peaks)
-    if [len(scores), n_obs] != released["counts"]:
-        raise ValueError("Wrong expert test set")
+    identifiers = set()
+    scores = []
+    n_obs = n_pred = 0
+    with gzip.open(refs, "rt") as gold, gzip.open(replay, "rt") as predictions:
+        for ref, row in zip(
+            map(json.loads, gold), map(json.loads, predictions), strict=True
+        ):
+            if (
+                ref["id"] != row["id"]
+                or ref["id"] in identifiers
+                or ref["connectivity"] != row["connectivity"]
+            ):
+                raise ValueError("Official reference and prediction identities differ")
+            identifiers.add(ref["id"])
+            observed = ref["peaks_c_h_ppm"]
+            predicted = row["prediction_c_h_ppm"]
+            scores.append(scores_at_widths(predicted, observed, widths))
+            n_obs += len(observed)
+            n_pred += len(predicted)
+    official = metrics["panels"][panel]["all_records"]
+    if [len(scores), n_obs] != released["counts"] or [len(scores), n_obs, n_pred] != [
+        official[k] for k in ("spectra", "observed", "predicted")
+    ]:
+        raise ValueError("Incomplete 2DNMRGym test set")
+    aggregate = summary(scores)
+    np.testing.assert_allclose(
+        aggregate["cosine"], official["cosine"], atol=1e-10, rtol=0
+    )
     return dict(
-        **summary(scores),
+        **aggregate,
+        benchmark="2DNMRGym official eval",
         spectra=len(scores),
         observed_crosspeaks=n_obs,
         predicted_crosspeaks=n_pred,
         axes=["13C", "1H"],
         fwhm_ppm=widths,
-        checkpoint_sha256=replay["checkpoint"]["sha256"],
-        calibration_sha256=replay["calibration"]["sha256"],
-        reference_sha256=replay["dataset"]["sha256"],
+        checkpoint_sha256=metrics["checkpoint_sha256"],
+        calibration_sha256=metrics["calibration_sha256"],
+        reference_sha256=sha256(refs),
+        replay_sha256=sha256(replay),
     )
 
 
@@ -342,11 +359,11 @@ def main():
         "--h-model", type=Path, default=ROOT / "../runs/peak-models-selected/1H"
     )
     p.add_argument("--replays", type=Path, default=ROOT / ".runtime/forward-tuning")
+    p.add_argument("--hsqc-panels", type=Path, default=ROOT / "results/hsqc_benchmarks")
     p.add_argument(
         "--hsqc-archive",
         type=Path,
-        default=ROOT
-        / ".runtime/transpeaknet-source/data_annotation/HSQC_Annotation_TestData.zip",
+        help="Optional upstream archive for atom-order provenance verification",
     )
     p.add_argument(
         "--output", type=Path, default=ROOT / "results/forward_cosine_similarity.json"
@@ -365,9 +382,7 @@ def main():
         tasks[task] = single_environment(passed_replay(path, task), released[task])
         tasks[task]["replay_sha256"] = sha256(path)
     task = "nmr.hsqc.transpeaknet"
-    path = args.replays / "hsqc-default.json"
-    tasks[task] = hsqc(passed_replay(path, task), released[task], args.hsqc_archive)
-    tasks[task]["replay_sha256"] = sha256(path)
+    tasks[task] = hsqc(args.hsqc_panels, released[task], args.hsqc_archive)
     tasks.update(existing_scores(released, args.replays))
     for nucleus in ("1H", "13C"):
         task = "nmr.forward." + nucleus
@@ -377,7 +392,7 @@ def main():
     result = dict(
         nmr_profile="Unit-area Lorentzians on all real ppm coordinates. HSQC uses the product of both axes. "
         "All listed peaks, no alignment, no clipping, no experimental intensities or multiplet simulation.",
-        nmr_aggregation="Equal weight per held-out H/C molecule or expert HSQC spectrum. For single-environment "
+        nmr_aggregation="Equal weight per held-out H/C molecule or official 2DNMRGym spectrum. For single-environment "
         "measurements, first average within connectivity, then across connectivities.",
         nmr_width_sensitivity="Half and double both refer to the listed reference FWHM, scaled along every axis.",
         pf_cohort="Default P/F subset fixes the top 1% of absolute errors from the original released models. "

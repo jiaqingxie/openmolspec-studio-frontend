@@ -52,12 +52,12 @@ for id_, title, modalities, backend, metrics, note in (
      "直接运行已有 Vib2Mol beam 解码，不使用缓存或近邻回放；原始 beam top-1，不进行分子式重排。"),
     ("nmr.assignment", "H/C 峰 → 原子指认", ("1H", "13C"), "nmrnet_atom_assignment", ("matched_peak_fraction_macro", "matched_residual_mae_ppm", "assignment_accuracy"),
      "直接运行冻结 NMRNet H/C 权重，加对称位点合并与带容差的全局匹配。原子编号随输出保存；缺实验指认参考时准确率为 null。"),
-    ("nmr.solvent_transfer", "H/C 跨溶剂位移 · 参考检索基线", ("1H", "13C"), "nmr_solvent_reference", ("mae_ppm", "unchanged_shift_mae_ppm"),
-     "无训练的实测参考检索迁移，排除查询分子及同连接关系的立体异构体；已跑 32 分子。不是神经网络模型，专用权重仍待接入。"),
+    ("nmr.solvent_transfer", "H/C 跨溶剂位移", ("1H", "13C"), "nmr_solvent_reference", ("mae_ppm", "unchanged_shift_mae_ppm"),
+     "¹³C 默认拟合校正，¹H 默认实验参考检索；模型比较按分子连通性留出。"),
     ("nmr.formula", "谱图 → 分子式", ("1H", "13C"), "unavailable", ("formula_exact_rate",),
      "现有生成器使用给定分子式；不将其计为分子式预测器。"),
-    ("spectroscopy.qa", "谱学问答 / 推理", ("NMR", "IR", "Raman"), "unavailable", ("answer_accuracy",),
-     "需要有参考答案的题集和固定模型接口。"),
+    ("spectroscopy.qa", "谱学问答 · SpecMol", ("NMR", "IR", "Raman"), "specmol_qa", ("exact_rate","format_valid_rate"),
+     "给定谱学文本和问题，使用本地合并版 SpecMol 权重及其聊天模板。"),
     ("spectroscopy.reranking", "谱图 + 候选结构 → 重排", ("IR", "Raman"), "vib2mol_reranking", ("top_1_hit_rate", "mrr"),
      "Vib2Mol ITM 正类概率重排显式候选池；候选池由本次选中的不同参考结构构成。"),
 ):
@@ -74,6 +74,12 @@ for id_, title, backend, metrics in (
                       ("IR", "Raman", "1H", "13C"), "computed", backend, metrics,
                       "使用 Xinyu 保存的四模态 checkpoint、H/C 参考与归一化；生成按原评测脚本去重和 ITM 重排。"))
 
+for channel in ("ir", "raman"):
+    TASKS.append(Task(f"vibrational.retrieval.{channel}", f"{channel.upper()} → 结构检索", "retrieval",
+                      (channel.upper(),), "computed", "vib_reference_retrieval",
+                      ("recall_at_1", "recall_at_5", "recall_at_10", "mrr"),
+                      "以独立的已知参考谱进行单谱检索，候选仅提供 SMILES；另评估了冻结四谱模型的单通道消融。"))
+
 TASKS.append(Task("nmr.hsqc.transpeaknet", "结构与溶剂 → HSQC 交叉峰", "forward", ("HSQC",),
                   "experimental", "transpeaknet", ("carbon_mae_ppm", "proton_mae_ppm"),
                   "使用作者二维谱权重，按专家标注的原子编号计算每张谱的碳、氢位移误差。"))
@@ -85,15 +91,30 @@ for model in ("glacier", "iceberg"):
 TASKS.append(Task("ms.annotation.magma", "MS/MS 峰 → MAGMa 候选碎片标注", "annotation", ("MS/MS",),
                   "experimental", "magma_algorithm", ("matched_peak_fraction", "checked_fragments"),
                   "原算法，无训练；原子索引以 engine_smiles 为准并逐碎片验证，标注不等于实验确认的机制。"))
+TASKS.append(Task("ms.annotation.mechfrag", "MS/MS 峰 → MechFrag-MS 候选碎片", "annotation",
+                  ("MS/MS",), "experimental", "mechfrag_annotation", ("matched_peak_fraction",),
+                  "冻结的碎裂策略生成原子集合，按观测 m/z 匹配候选离子。"))
 TASKS.append(Task("multispectral.spectrallm.generation", "多谱 → 结构（SpectraLLM）", "generation",
-                  ("IR", "Raman", "NMR", "MS/MS"), "mixed", "unavailable", ("exact_rate", "valid_rate"),
-                  "官方新权重为 32B；当前本地仅有旧 7B adapter 且其指定基座缺失。需下载完整官方权重或提供匹配基座，不进行训练。"))
+                  ("IR", "Raman", "NMR", "MS/MS"), "mixed", "spectrallm_generation", ("exact_rate", "format_valid_rate"),
+                  "用官方 32B 合并权重解码谱学文本，按规范化 SMILES 评分。"))
 
-DEFERRED_BY_USER = {"nmr.formula", "spectroscopy.qa", "multispectral.spectrallm.generation"}
+DEFERRED_BY_USER = {"nmr.formula"}
 TASKS = [replace(task, enabled=False, note="用户已明确暂不推进；历史结果仅作归档，不再运行。")
          if task.id in DEFERRED_BY_USER else task for task in TASKS]
 BY_ID = {task.id: task for task in TASKS}
 
 
-def records():
-    return [asdict(task) for task in TASKS]
+def spectroscopy_group(task):
+    """Group active tasks by their input spectroscopy family."""
+    if not task.enabled:
+        return "deferred"
+    family = task.id.partition(".")[0]
+    if family in ("nmr", "ms"):
+        return family
+    if family == "multispectral" or task.id == "spectroscopy.qa" or task.id.endswith((".hc", "_hc")):
+        return "multimodal"
+    return "vibrational"
+
+
+def records(*, include_deferred=False):
+    return [asdict(task) for task in TASKS if task.enabled or include_deferred]

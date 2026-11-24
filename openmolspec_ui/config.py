@@ -72,7 +72,7 @@ class ModelAssets:
             "谱图 → 结构生成": (
                 self.generation_checkpoint is not None
                 and self.nmr_normalizer is not None and self.retrieval_checkpoint is not None,
-                "Vib2Mol · direct beam=10 and ITM reranking",
+                "Vib2Mol · 10 beams, scored by the matching head",
             ),
         }
 

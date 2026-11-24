@@ -31,27 +31,33 @@ Predict experimental 1H and 13C shifts for symmetry-distinct heavy-atom sites.
 
       `Source code <https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/src/openmolspec/assigned_shifts.py#L44>`__
 
+   .. py:method:: assignment_predictions(smiles, solvent=None)
+
+      Map heavy-site estimates to the explicit atom order used by the assignment API.
+
+      `Source code <https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/src/openmolspec/assigned_shifts.py#L68>`__
+
 .. py:function:: merge_peaks(sites, gap)
 
    Group unresolved site predictions within the fitted maximum ppm span.
 
-   `Source code <https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/src/openmolspec/assigned_shifts.py#L68>`__
+   `Source code <https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/src/openmolspec/assigned_shifts.py#L87>`__
 
 .. py:function:: combine_sites(base, weak, weight)
 
 
 
-   `Source code <https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/src/openmolspec/assigned_shifts.py#L88>`__
+   `Source code <https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/src/openmolspec/assigned_shifts.py#L107>`__
 
 .. py:class:: PeakSpectrumPredictor(directory)
 
    Predict a 1H or 13C peak list with contributing heavy-atom indices.
 
-   `Source code <https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/src/openmolspec/assigned_shifts.py#L104>`__
+   `Source code <https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/src/openmolspec/assigned_shifts.py#L123>`__
 
    .. py:method:: predict(smiles, solvent=None)
 
 
 
-      `Source code <https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/src/openmolspec/assigned_shifts.py#L130>`__
+      `Source code <https://github.com/jiaqingxie/openmolspec-studio-frontend/blob/release/openmolspec-v1/src/openmolspec/assigned_shifts.py#L149>`__
 ```

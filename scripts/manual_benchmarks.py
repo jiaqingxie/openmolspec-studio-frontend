@@ -5,6 +5,7 @@ from documentation_content import GROUPS,group,results_table
 from documentation_evidence import load_evidence
 from manual_profiles import profile
 from manual_data import table
+from manual_recent_benchmarks import heldout_sections, render as recent_benchmarks
 from manual_citations import markdown as references
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -15,6 +16,14 @@ def pages(tasks,en):
     configs=json.loads((ROOT/'documentation/assets/benchmarks/catalog.json').read_text())['configured_experiments']
     text='# '+t('Benchmarks','基准评测')+'\n\n'
     text+=t('OpenMolSpec defines benchmark tasks for NMR, MS, vibrational and multimodal spectroscopy. This catalogue includes every active task, its saved evaluation results and the configured training experiments.\n\n','OpenMolSpec 为 NMR、质谱、振动光谱与多谱联合定义了基准任务。本目录列出全部活跃任务、保存的评测结果，以及训练实验配置。\n\n')
+    text += (ROOT / "scripts" / "doc_templates" / f"forward_benchmarks{suffix}.md").read_text() + "\n"
+    new_assets, library, inverse, language, vib_fit = recent_benchmarks(en)
+    out.update(new_assets)
+    measured_assets, measured, evidence_link = heldout_sections(en)
+    out.update(measured_assets)
+    families = {'nmr': ('assignment','solvent','nmr_retrieval','interfaces'), 'ms': ('ms',),
+                'vibrational': ('gap',), 'multimodal': ('generation',)}
+    text += library.format(assets='assets/benchmarks/') + inverse.format(assets='assets/benchmarks/') + language.format(assets='assets/benchmarks/')
     text+='## '+t('Task benchmarks','任务基准')+'\n\n'
     rows=[]
     for family,label,zh in GROUPS:
@@ -23,6 +32,13 @@ def pages(tasks,en):
         rows.append((f'[{label if en else zh}](benchmarks/{family}.md)',len(active),t('Definitions, inputs, metrics and recorded results.','任务定义、输入、指标与运行结果。')))
         child='# '+(label if en else zh)+' benchmarks\n\n'
         child+=t('The sections below give each task definition and the results from its recorded evaluation runs. Open the task guide for model calls and full input/output examples.\n\n','下面按任务列出定义及保存的评测结果。模型调用和完整输入输出示例见相应任务指南。\n\n')
+        if family == 'nmr':
+            child += inverse.format(assets='../assets/benchmarks/')
+        elif family == 'multimodal':
+            child += language.format(assets='../assets/benchmarks/') + library.format(assets='../assets/benchmarks/')
+        elif family == 'vibrational':
+            child += library.format(assets='../assets/benchmarks/') + vib_fit
+        child += ''.join(measured[key] for key in families[family]) + evidence_link.format(assets='../assets/benchmarks/')
         for task in active:
             title,purpose,method,metrics,_,_=profile(task,en);bundle=load_evidence(task.id);slug=task.id.replace('.','-')
             child+=f'## {title}\n\n`{task.id}`\n\n{purpose}\n\n{metrics}\n\n'
@@ -54,7 +70,7 @@ def pages(tasks,en):
     text+='```bash\npython -m openmolspec_bench list\npython -m openmolspec_bench run --workspace /path/to/OpenMolSpec \\\n  --tasks nmr.retrieval.hc.s2m nmr.generation.hc \\\n  --alignment-checkpoint /path/to/alignment.pt \\\n  --generation-checkpoint /path/to/generation.pt \\\n  --limit 64 --sampling reservoir --seed 42 --output results/nmr.json\n```\n\n'
     text+=t('Choose the required model assets using the task guide. The result JSON records predictions, target values, dataset settings, metrics and model fingerprints.\n\n','按任务指南指定所需模型文件。结果 JSON 保存预测、目标值、数据设置、指标与模型指纹。\n\n')
     text+='## '+t('Additional task definitions','其他任务定义')+'\n\n'
-    text+=t('Molecular formula prediction, spectroscopy QA and SpectraLLM generation are listed in the task registry as deferred.\n','分子式预测、谱学 QA 与 SpectraLLM 生成在任务注册表中列为暂缓任务。\n')
+    text+=t('SpecMol accepts a spectroscopy question and spectral text. SpectraLLM scores structure generation against canonical SMILES. Both require their respective local merged checkpoints. Standalone formula prediction is disabled.\n','SpecMol 接收谱学问题和谱文本。SpectraLLM 按规范化 SMILES 评估多谱结构生成。两项均需各自的本地合并权重。独立的分子式预测已停用。\n')
     out[f'benchmarks{suffix}.md']=text+references(['openmolspec','nmrnet','nmrtrans','nmrgym','massspecgym','qme14s','qm9s'],en)
 
     text='# '+t('Training benchmark configurations','训练基准配置')+'\n\n'
@@ -70,6 +86,20 @@ def pages(tasks,en):
             rows.append((f'[{row["config"].split("/")[-1]}](../assets/benchmarks/configs/{row["config"]})',row['modality'],', '.join(row['targets']),row['release'],schedule))
         text+=table(['Configuration','Input','Targets','Data release','Budget'],rows)
     out[f'benchmarks/training{suffix}.md']=text+references(['openmolspec','qme14s','qm9s'],en)
+    out[f'benchmarks/training{suffix}.md'] += t('\n## Spectral language models\n\nInstall the optional language-model dependencies in a separate environment. The packaged command accepts a local merged Qwen2 SpecMol or Qwen3 SpectraLLM checkpoint and UTF-8 JSONL with one supervised example per line. Each row has a user prompt, an assistant response, and an optional system message.\n\n```json\n{"system":"Answer with the requested count.","prompt":"How many distinct 13C shifts are listed at 18.2 and 58.1 ppm?","response":"2"}\n```\n\n```bash\npython -m pip install \'.[spectral-language]\'\nopenmolspec-train-language --checkpoint /path/to/merged-model \\\n  --jsonl train.jsonl --output ./new-adapter --max-steps 1 --device cuda\n```\n\nThe command applies LoRA to the query and value projections and computes loss on the assistant response and end token. Load the saved directory with `PeftModel.from_pretrained(base_model, adapter_directory)`. The package validates this training path by updating and reloading tiny Qwen2 and Qwen3 models with the released tokenizers. The one-step check measures software behavior. The separate evaluation CLI uses merged inference weights.\n\n```bash\nopenmolspec-bench run --tasks spectroscopy.qa --language-checkpoint /path/to/SpecMol/exported_model \\\n  --workspace /path/to/OpenMolSpec --device cuda --limit 32 --output qa.json\n```\n', '\n## SpecMol 和 SpectraLLM 的训练接口\n\n在独立环境安装语言模型依赖，准备本地合并权重和 UTF-8 JSONL。每行包含用户的 `prompt`、作为训练目标的 `response`，以及可选的 `system`。\n\n```json\n{"system":"只回答峰数。","prompt":"¹³C 谱中列出 18.2、58.1 ppm，共有几个峰？","response":"2"}\n```\n\n```bash\npython -m pip install \'.[spectral-language]\'\nopenmolspec-train-language --checkpoint /path/to/merged-model \\\n  --jsonl train.jsonl --output ./new-adapter --max-steps 1 --device cuda\n```\n\n训练对注意力的 Q、V 投影应用 LoRA，只在回答及结束标记上计算损失。输出可用 `PeftModel.from_pretrained(base_model, adapter_directory)` 重载。以正式 tokenizer 和微型 Qwen2、Qwen3 各验证过一次参数更新、保存和重载。评测已合并的 SpecMol 权重可运行以下命令。\n\n```bash\nopenmolspec-bench run --tasks spectroscopy.qa --language-checkpoint /path/to/SpecMol/exported_model \\\n  --workspace /path/to/OpenMolSpec --device cuda --limit 32 --output qa.json\n```\n')
+    fitting=t('## Fit a task model', '## 拟合任务模型')+'\n\n'
+    fitting+=t('These commands run from the source checkout. The assigned-site trainer reads an annotated JSONL gzip and its adjacent checksum manifest. For solvent transfer, use a paired reference library and its matching baseline report. For the gap models, supply the computed spectrum LMDB and the earlier evaluation with sample IDs to reserve. Each command writes weights and an evaluation report.', '在源码目录运行下列命令。位点模型需要带实验原子标注的 JSONL 压缩包及同目录校验清单。跨溶剂模型需要配对参考库和由该库计算的基线报告。能隙模型需要计算谱 LMDB 及包含预留样本编号的先前评测。各命令输出权重和评测报告。')+'\n\n'
+    fitting+="""```bash
+mkdir -p runs/example-training
+python scripts/train_assigned_hc.py --data /path/to/assigned.jsonl.gz --nucleus 13C --output runs/example-training/13C-assigned --report runs/example-training/carbon.json
+python -m openmolspec_bench.solvent_fit --library /path/to/solvent_reference_library.json --baseline results/solvent_transfer_all_reviewed.json --weights runs/example-training/solvent.json --report runs/example-training/solvent-eval.json
+python scripts/train_gap_vibrational.py --lmdb /path/to/openspec_test.lmdb --original results/gap_protocol_random128_20261116.json --weights runs/example-training/gap.npz --report runs/example-training/gap-eval.json
+```
+"""
+    out[f'benchmarks/training{suffix}.md']+='\n'+fitting
+
+    out[f'benchmarks/training{suffix}.md'] += '\n' + inverse.format(assets='../assets/benchmarks/') + language.format(assets='../assets/benchmarks/') + vib_fit.rstrip() + '\n'
+
     report_path=ROOT/'docs/figures/openmolspec_benchmark_overview.json'
     report=json.loads(report_path.read_text())
     import hashlib

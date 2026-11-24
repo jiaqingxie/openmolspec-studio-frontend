@@ -176,16 +176,16 @@
       "molecule_weighted_r2": 0.9382912110270122
     },
     "nmr.hsqc.transpeaknet": {
-      "benchmark": "Expert HSQC peak assignments",
+      "benchmark": "2DNMRGym official eval",
       "selected_scores": [
-        2.005156499630574,
-        0.16415643707451738
+        2.0677357624178714,
+        0.1661190748430316
       ],
       "counts": [
         479,
         7926
       ],
-      "metric": "carbon and proton expert-test MAE in ppm",
+      "metric": "spectrum-averaged carbon and proton site MAE in ppm",
       "selected_models": {
         "TransPeakNet": {
           "depths": [
@@ -198,7 +198,16 @@
           ]
         }
       },
-      "evidence": "results/forward_selection_hsqc.json"
+      "evidence": "results/hsqc_benchmarks/metrics.json",
+      "calibration_selection": "results/forward_selection_hsqc.json",
+      "partial_benchmark": {
+        "benchmark": "WanJuan MolSpectra v1.0.3 reported HSQC coordinates",
+        "spectra": 21,
+        "observed": 95,
+        "in_window": 35,
+        "partial_list_cosine": 0.040469290455692905,
+        "candidate_coverage": 0.7263157894736842
+      }
     },
     "vibrational.forward": {
       "benchmark": "QM9S paired Hessian/response derivatives at reserved native geometries",

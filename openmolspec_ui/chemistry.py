@@ -6,7 +6,6 @@ import os
 from pathlib import Path
 
 import numpy as np
-import py3Dmol
 from rdkit import Chem
 from rdkit.Chem import AllChem, rdDetermineBonds, rdMolDescriptors
 from rdkit.Chem.Draw import rdMolDraw2D
@@ -81,6 +80,7 @@ def molecule_svg(molecule: MoleculeInput, width: int = 640, height: int = 360) -
 def molecule_3d_html(molecule: MoleculeInput, height: int = 420) -> str:
     """Build an interactive 3Dmol.js view of the model-ready conformer."""
     mol_block = Chem.MolToMolBlock(molecule.mol)
+    import py3Dmol
     viewer = py3Dmol.view(width="100%", height=height)
     viewer.addModel(mol_block, "mol")
     viewer.setStyle(

@@ -5,6 +5,12 @@ def quickstart(en):
     t=lambda a,b:a if en else b
     text='# '+t('Quick start','快速开始')+'\n\n'
     text+=t('This tutorial takes you from installation to loading an NMR record, predicting chemical shifts and training a model with your own data. Run the commands from the cloned repository so the example files are available.\n\n','本教程从安装开始，依次介绍如何读取 NMR 记录、预测化学位移，以及用自己的数据训练模型。命令在克隆后的仓库根目录运行，示例文件位于仓库中。\n\n')
+    portal='https://jiaqingxie.github.io/openmolspec.github.io/'
+    text += t(
+        f'## Use the website\n\nOpen the [workspace]({portal}#tool) to choose a task and inspect its inputs and outputs. The [sucrose example]({portal}#tool-sucrose) loads 11 measured (¹³C, ¹H) HSQC pairs from BMRB bmse000119 in D₂O. Its ¹H and ¹³C traces come from the same sample.\n\n'
+        f'In [Explore]({portal}#dataset), choose a spectrum type and enter SMILES. An exact structure match returns experimental records with provenance. An available predictor handles missing NMR, IR or Raman records. For MS/MS prediction, specify acquisition conditions in the workspace. Browse the paired examples for site-based NMR R² and peak matching. The [Harness gallery]({portal}#agent-demo) opens recorded calls without an API key. Live questions require a configured model provider.\n\n',
+        f'## 使用网页\n\n在[工作台]({portal}?lang=zh#tool)中选择任务，查看输入和输出。[蔗糖案例]({portal}?lang=zh#tool-sucrose)可载入 BMRB bmse000119 在重水中的 11 组实测（¹³C，¹H）HSQC 峰对。首页的氢谱和碳谱来自同一样品。\n\n'
+        f'在[数据探索]({portal}?lang=zh#dataset)中选择谱种并输入 SMILES。命中同结构记录时可查看实验谱及来源，缺少对应核磁、红外或拉曼记录时调用已部署的预测器。预测 MS/MS 时请在工作台填写采集条件。配对案例可查看基于独立位点标注的核磁 R² 与峰位匹配。[智能体案例]({portal}?lang=zh#agent-demo)支持免密钥回放，实时提问需要服务端配置模型提供方。\n\n')
     text+='## '+t('1. Install OpenMolSpec','1. 安装 OpenMolSpec')+'\n\n'
     text+=t('Use Python 3.10 or newer. Create an environment and install the package with data-format and plotting dependencies.\n\n','使用 Python 3.10 或更新版本。创建环境后，安装工具包及数据格式、绘图依赖。\n\n')
     text+='```bash\ngit clone --branch release/openmolspec-v1 https://github.com/jiaqingxie/openmolspec-studio-frontend.git\ncd openmolspec-studio-frontend\npython3 -m venv .venv\nsource .venv/bin/activate\npython -m pip install --upgrade pip\npython -m pip install -e ".[data,analysis]"\n```\n\n'

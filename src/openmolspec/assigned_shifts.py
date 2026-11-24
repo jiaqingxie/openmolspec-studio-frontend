@@ -65,6 +65,25 @@ class AssignedShiftPredictor:
         return peaks
 
 
+    def assignment_predictions(self, smiles, solvent=None):
+        """Map heavy-site estimates to the explicit atom order used by the assignment API."""
+        from rdkit import Chem
+
+        sites = self.predict(smiles, solvent)
+        by_atom = {idx: site["shift_ppm"] for site in sites for idx in site["atom_indices"]}
+        molecule = Chem.AddHs(Chem.MolFromSmiles(smiles))
+        if self.nucleus == "13C":
+            return [by_atom[a.GetIdx()] for a in molecule.GetAtoms() if a.GetAtomicNum() == 6]
+        shifts = []
+        for atom in molecule.GetAtoms():
+            if atom.GetAtomicNum() == 1:
+                neighbors = atom.GetNeighbors()
+                if len(neighbors) != 1 or neighbors[0].GetIdx() not in by_atom:
+                    raise ValueError("A hydrogen lacks a supported attached heavy-atom site")
+                shifts.append(by_atom[neighbors[0].GetIdx()])
+        return shifts
+
+
 def merge_peaks(sites, gap):
     """Group unresolved site predictions within the fitted maximum ppm span."""
     groups = []

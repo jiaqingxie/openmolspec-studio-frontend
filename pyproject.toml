@@ -11,6 +11,7 @@ requires-python = ">=3.10"
 dependencies = []
 
 [project.optional-dependencies]
+spectral-language = ["numpy>=1.26", "torch>=2.4", "transformers>=4.51,<5", "peft>=0.14,<1", "accelerate>=1,<2", "rdkit>=2023.9"]
 phosphorus-gnn = ["numpy>=1.26", "rdkit>=2023.9", "torch>=2.4"]
 solution-nmr = ["numpy>=1.26", "scipy>=1.10", "rdkit>=2023.9", "lightgbm>=3.3.5,<5"]
 hsqc = ["numpy>=1.24", "scipy>=1.10", "rdkit>=2023.9", "torch>=2.4", "torch-geometric==2.7.0"]
@@ -33,6 +34,7 @@ production = [
 
 
 [project.scripts]
+openmolspec-train-language = "openmolspec_bench.train_language:main"
 openmolspec-solution-shift = "openmolspec.solution_shifts:main"
 openmolspec = "openmolspec.cli:main"
 openmolspec-bench = "openmolspec_bench.__main__:main"
@@ -44,5 +46,5 @@ where = ["src", "."]
 include = ["openmolspec", "openmolspec.*", "openmolspec_ui", "openmolspec_bench", "spec2struct_fork"]
 
 [tool.setuptools.package-data]
-openmolspec = ["assets/*.json"]
+openmolspec = ["assets/*.json", "assets/*.npz"]
 spec2struct_fork = ["assets/mol_tokenizer/*"]

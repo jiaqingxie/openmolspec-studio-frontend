@@ -25,6 +25,47 @@ def load_evidence(task_id):
     return json.loads((ASSETS/'examples'/f'{task_id.replace(".","-")}.json').read_text())
 
 
+def extension_evidence():
+    """Collect measured ranks, fragments and language responses for the task guides."""
+    bundles = {}
+
+    def add(task, filename, scope, metrics, records):
+        bundle = bundles.setdefault(task, dict(task=task, enabled=True, training_performed=False,
+            source_files=[], source_hashes={}, runs=[], examples=[], status='awaiting_evaluation'))
+        if filename:
+            bundle['source_files'].append(filename)
+            bundle['source_hashes'][filename] = hashlib.sha256((ROOT/'results'/filename).read_bytes()).hexdigest()
+            bundle['runs'].append(dict(dataset=scope, metrics=metrics))
+            bundle['examples'].extend(records[:3])
+            bundle['status'] = 'recorded_results'
+
+    filename = 'vib_reference_library4096.json'
+    data = read(filename)
+    for channel in ('ir', 'raman'):
+        r = data['channels'][channel]
+        add('vibrational.retrieval.' + channel, filename, '4096 candidates / 128 queries', r['metrics'], r['records'])
+
+    filename = 'mechfrag_fragment_annotations.json'
+    data = read(filename)
+    add('ms.annotation.mechfrag', filename, 'MassSpecGym / 10 ppm',
+        {key: data[key] for key in ('variant','peaks','matched_fraction','magma_matched_fraction_same_peaks')},
+        data['records'])
+
+    filename = 'specmol_qa_first_token4.json'
+    data = read(filename)
+    add('spectroscopy.qa', filename, 'First token only / 4 NMR counting questions',
+        {key: data[key] for key in ('examples','unrestricted_first_token_hits','four_choice_hits')},
+        data['records'])
+    for task, filename in [('spectroscopy.qa','specmol_qa32.json'), ('multispectral.spectrallm.generation','spectrallm_qm9s32.json')]:
+        if (ROOT/'results'/filename).is_file():
+            data = read(filename)
+            if data.get('complete'):
+                add(task, filename, 'Full generated responses / 32 examples', data['metrics'], data['records'])
+                continue
+        add(task, None, None, {}, [])
+    return bundles
+
+
 def compact(value, limit=8):
     """Readable previews explicitly label truncated arrays; downloads keep all data."""
     if isinstance(value,dict):return {k:compact(v,limit) for k,v in value.items()}
@@ -204,6 +245,7 @@ def collect():
         elif task.endswith(('11B','29Si','19F','31P')):b['status']='diagnostic_only'
         else:b['status']='recorded_results'
     bundles['nmr.hsqc.transpeaknet'] = hsqc_evidence()
+    bundles.update(extension_evidence())
     return bundles
 
 
@@ -257,8 +299,8 @@ def main():
         slug=task.replace('.','-')
         (directory/(slug+'.json')).write_text(json.dumps(b,ensure_ascii=False,indent=2)+'\n')
         index[task]={'status':b['status'],'sources':b['source_files'],'example_count':len(b['examples'])}
-        if b['enabled']:
-            assert b.get('plot') and b['examples'],task
+        if b['enabled'] and b.get('plot'):
+            assert b['examples'],task
             fig=render(task,b)
             for ext in ('svg','png'):
                 fig.savefig(images/(slug+'.'+ext),dpi=170,metadata={'Date':None} if ext=='svg' else None)

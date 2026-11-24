@@ -5,6 +5,8 @@
 | Task / input → output | Task ID |
 | --- | --- |
 | [由 IR + Raman + NMR 预测 HOMO–LUMO 能隙](vibrational-gap-ir_raman_hc.md) | `vibrational.gap.ir_raman_hc` |
+| [SpecMol 谱学问答](spectroscopy-qa.md) | `spectroscopy.qa` |
 | [结构检索：IR + Raman + NMR](vibrational-retrieval-hc.md) | `vibrational.retrieval.hc` |
 | [结构生成：IR + Raman + NMR](vibrational-generation-hc.md) | `vibrational.generation.hc` |
 | [候选重排：IR + Raman + NMR](spectroscopy-reranking-hc.md) | `spectroscopy.reranking.hc` |
+| [SpectraLLM 多谱结构生成](multispectral-spectrallm-generation.md) | `multispectral.spectrallm.generation` |

@@ -1,0 +1,168 @@
+{
+  "queries": 128,
+  "candidate_pool": 4096,
+  "shortlist": 32,
+  "protocol": "Matched inclusions from the same fixed 128 queries in a shared 4096-structure bank. Each cell counts queries.",
+  "neural": {
+    "four": {
+      "file": "vib_shortlist4096_four.json",
+      "sha256": "d91fdc0e28a736bcc60d3a6985f7babc0c84fe3671e91ea3fb97d38809085e02",
+      "embedding": {
+        "queries": 128,
+        "mrr": 0.9596354166666667,
+        "top1_hits": 118,
+        "top5_hits": 128,
+        "top10_hits": 128
+      },
+      "reranked": {
+        "queries": 128,
+        "mrr": 0.9654947916666667,
+        "top1_hits": 120,
+        "top5_hits": 128,
+        "top10_hits": 128
+      },
+      "paired_top1": {
+        "both_correct": 115,
+        "gained": 5,
+        "lost": 3,
+        "both_missed": 5
+      },
+      "full_library_pilot": {
+        "file": "vib_full4096_two_four.json",
+        "sha256": "4beec57945d843b92cf3dc3119aeca0e189ed806d9144603d308139242636a64",
+        "metrics": {
+          "queries": 2,
+          "mrr": 1.0,
+          "top1_hits": 2,
+          "top5_hits": 2,
+          "top10_hits": 2
+        },
+        "target_ranks": [
+          1,
+          1
+        ]
+      }
+    },
+    "adapted": {
+      "file": "vib_shortlist4096_adapted.json",
+      "sha256": "9066d4680bc9c73dfe9935b932dde1d0c45090b87e98b243ede90b99919d0838",
+      "embedding": {
+        "queries": 128,
+        "mrr": 0.493151398151028,
+        "top1_hits": 41,
+        "top5_hits": 90,
+        "top10_hits": 105
+      },
+      "reranked": {
+        "queries": 128,
+        "mrr": 0.43039411600898025,
+        "top1_hits": 39,
+        "top5_hits": 69,
+        "top10_hits": 86
+      },
+      "paired_top1": {
+        "both_correct": 27,
+        "gained": 12,
+        "lost": 14,
+        "both_missed": 75
+      },
+      "full_library_pilot": {
+        "file": "vib_full4096_two_adapted.json",
+        "sha256": "5bc3246a4a4c0361fb09e1e3e6acf7395ae9697430addc46f22da319b4b10c16",
+        "metrics": {
+          "queries": 2,
+          "mrr": 0.5833333333333334,
+          "top1_hits": 1,
+          "top5_hits": 1,
+          "top10_hits": 2
+        },
+        "target_ranks": [
+          6,
+          1
+        ]
+      }
+    }
+  },
+  "independent_reference": {
+    "ir": {
+      "reference_rank": {
+        "top1_hits": 27,
+        "top5_hits": 64,
+        "mrr": 0.3511007387383326,
+        "queries": 128
+      },
+      "shortlist_rank": {
+        "top1_hits": 23,
+        "top5_hits": 71,
+        "mrr": 0.3319611445613743,
+        "queries": 128
+      },
+      "full_rank": {
+        "top1_hits": 21,
+        "top5_hits": 62,
+        "mrr": 0.3078015779495653,
+        "queries": 128
+      }
+    },
+    "raman": {
+      "reference_rank": {
+        "top1_hits": 28,
+        "top5_hits": 76,
+        "mrr": 0.3830857885834784,
+        "queries": 128
+      },
+      "shortlist_rank": {
+        "top1_hits": 26,
+        "top5_hits": 74,
+        "mrr": 0.3729788599218622,
+        "queries": 128
+      },
+      "full_rank": {
+        "top1_hits": 21,
+        "top5_hits": 66,
+        "mrr": 0.320162356506632,
+        "queries": 128
+      }
+    },
+    "ir_raman": {
+      "reference_rank": {
+        "top1_hits": 31,
+        "top5_hits": 81,
+        "mrr": 0.41118757798486294,
+        "queries": 128
+      },
+      "shortlist_rank": {
+        "top1_hits": 38,
+        "top5_hits": 89,
+        "mrr": 0.45360720126005427,
+        "queries": 128
+      },
+      "full_rank": {
+        "top1_hits": 33,
+        "top5_hits": 83,
+        "mrr": 0.4210860362510536,
+        "queries": 128
+      }
+    },
+    "ir_raman_hc": {
+      "reference_rank": {
+        "top1_hits": 34,
+        "top5_hits": 79,
+        "mrr": 0.41816809674846606,
+        "queries": 128
+      },
+      "shortlist_rank": {
+        "top1_hits": 41,
+        "top5_hits": 83,
+        "mrr": 0.45447206290077774,
+        "queries": 128
+      },
+      "full_rank": {
+        "top1_hits": 37,
+        "top5_hits": 79,
+        "mrr": 0.4268392737061889,
+        "queries": 128
+      }
+    }
+  }
+}

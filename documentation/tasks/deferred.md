@@ -5,5 +5,3 @@ Choose a task to see its purpose, inputs, outputs, model call and examples.
 | Task / input → output | Task ID |
 | --- | --- |
 | [谱图 → 分子式](nmr-formula.md) | `nmr.formula` |
-| [谱学问答 / 推理](spectroscopy-qa.md) | `spectroscopy.qa` |
-| [多谱 → 结构（SpectraLLM）](multispectral-spectrallm-generation.md) | `multispectral.spectrallm.generation` |

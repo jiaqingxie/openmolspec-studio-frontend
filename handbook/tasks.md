@@ -6,12 +6,12 @@
 
 | ID | 任务 | 谱型 | 数据域 | 适配器 | 指标 |
 | --- | --- | --- | --- | --- | --- |
-| `nmr.forward.1H` | 结构 → 1H 峰列表 | 1H | experimental | nmrnet_predictions | count_penalized_error_ppm, matched_peak_mae_ppm, matched_peak_rmse_ppm, peak_count_mae, matched_fraction |
-| `nmr.forward.13C` | 结构 → 13C 峰列表 | 13C | experimental | nmrnet_predictions | count_penalized_error_ppm, matched_peak_mae_ppm, matched_peak_rmse_ppm, peak_count_mae, matched_fraction |
-| `nmr.forward.19F` | 结构 → 19F 峰列表 | 19F | experimental | solution_chemical_shift | mae_ppm, molecule_macro_mae_ppm, rmse_ppm |
-| `nmr.forward.31P` | 结构 → 31P 峰列表 | 31P | experimental | solution_chemical_shift | mae_ppm, molecule_macro_mae_ppm, rmse_ppm |
-| `nmr.forward.11B` | 结构 → 11B 峰列表 | 11B | experimental | solution_chemical_shift | mae_ppm, molecule_macro_mae_ppm, rmse_ppm |
-| `nmr.forward.29Si` | 结构 → 29Si 峰列表 | 29Si | experimental | solution_chemical_shift | mae_ppm, molecule_macro_mae_ppm, rmse_ppm |
+| `nmr.forward.1H` | 结构 → 1H 峰列表 | 1H | experimental | nmrnet_predictions | count_penalized_error_ppm, matched_peak_r2, matched_peak_mae_ppm, matched_peak_rmse_ppm, peak_count_mae, matched_fraction |
+| `nmr.forward.13C` | 结构 → 13C 峰列表 | 13C | experimental | nmrnet_predictions | count_penalized_error_ppm, matched_peak_r2, matched_peak_mae_ppm, matched_peak_rmse_ppm, peak_count_mae, matched_fraction |
+| `nmr.forward.19F` | 结构 → 19F 峰列表 | 19F | experimental | solution_chemical_shift | mae_ppm, molecule_macro_mae_ppm, molecule_weighted_r2, rmse_ppm |
+| `nmr.forward.31P` | 结构 → 31P 峰列表 | 31P | experimental | solution_chemical_shift | mae_ppm, molecule_macro_mae_ppm, molecule_weighted_r2, rmse_ppm |
+| `nmr.forward.11B` | 结构 → 11B 峰列表 | 11B | experimental | solution_chemical_shift | mae_ppm, molecule_macro_mae_ppm, molecule_weighted_r2, rmse_ppm |
+| `nmr.forward.29Si` | 结构 → 29Si 峰列表 | 29Si | experimental | solution_chemical_shift | mae_ppm, molecule_macro_mae_ppm, molecule_weighted_r2, rmse_ppm |
 | `nmr.retrieval.h.s2m` | 谱图 → 结构检索 · H | 1H | experimental | spec2struct_alignment | recall_at_1, recall_at_5, recall_at_10, mrr |
 | `nmr.retrieval.h.m2s` | 结构 → 谱图检索 · H | 1H | experimental | spec2struct_alignment | recall_at_1, recall_at_5, recall_at_10, mrr |
 | `nmr.generation.h` | 谱图 → SMILES · H | 1H | experimental | spec2struct_generation | valid_rate, exact_rate, formula_match_rate |
@@ -29,18 +29,20 @@
 | `vibrational.retrieval` | IR / Raman → 结构检索 | IR, Raman | computed | vib2mol_retrieval | recall_at_1, recall_at_5, recall_at_10, mrr |
 | `vibrational.generation` | IR / Raman → SMILES | IR, Raman | computed | vib2mol_generation | exact_rate, valid_rate |
 | `nmr.assignment` | H/C 峰 → 原子指认 | 1H, 13C | experimental | nmrnet_atom_assignment | matched_peak_fraction_macro, matched_residual_mae_ppm, assignment_accuracy |
-| `nmr.solvent_transfer` | H/C 跨溶剂位移 · 参考检索基线 | 1H, 13C | experimental | nmr_solvent_reference | mae_ppm, unchanged_shift_mae_ppm |
-| `nmr.formula` | 谱图 → 分子式 | 1H, 13C | experimental | 待接入 | formula_exact_rate |
-| `spectroscopy.qa` | 谱学问答 / 推理 | NMR, IR, Raman | experimental | 待接入 | answer_accuracy |
+| `nmr.solvent_transfer` | H/C 跨溶剂位移 | 1H, 13C | experimental | nmr_solvent_reference | mae_ppm, unchanged_shift_mae_ppm |
+| `spectroscopy.qa` | 谱学问答 · SpecMol | NMR, IR, Raman | experimental | specmol_qa | exact_rate, format_valid_rate |
 | `spectroscopy.reranking` | 谱图 + 候选结构 → 重排 | IR, Raman | computed | vib2mol_reranking | top_1_hit_rate, mrr |
 | `vibrational.retrieval.hc` | IR + Raman + H/C → 结构检索 | IR, Raman, 1H, 13C | computed | vib2mol_retrieval | recall_at_1, recall_at_5, recall_at_10, mrr |
 | `vibrational.generation.hc` | IR + Raman + H/C → SMILES（Xinyu 协议） | IR, Raman, 1H, 13C | computed | vib2mol_generation | exact_canonical_top1, exact_canonical_top5, valid_smiles_fraction |
 | `spectroscopy.reranking.hc` | IR + Raman + H/C + 候选 → ITM 重排 | IR, Raman, 1H, 13C | computed | vib2mol_reranking | top_1_hit_rate, mrr |
+| `vibrational.retrieval.ir` | IR → 结构检索 | IR | computed | vib_reference_retrieval | recall_at_1, recall_at_5, recall_at_10, mrr |
+| `vibrational.retrieval.raman` | RAMAN → 结构检索 | RAMAN | computed | vib_reference_retrieval | recall_at_1, recall_at_5, recall_at_10, mrr |
 | `nmr.hsqc.transpeaknet` | 结构与溶剂 → HSQC 交叉峰 | HSQC | experimental | transpeaknet | carbon_mae_ppm, proton_mae_ppm |
 | `ms.forward.glacier` | 分子 → MS/MS（GLACIER） | MS/MS | experimental | ms_pretrained_glacier | cosine_similarity, entropy_similarity |
 | `ms.forward.iceberg` | 分子 → MS/MS（ICEBERG） | MS/MS | experimental | ms_pretrained_iceberg | cosine_similarity, entropy_similarity |
 | `ms.annotation.magma` | MS/MS 峰 → MAGMa 候选碎片标注 | MS/MS | experimental | magma_algorithm | matched_peak_fraction, checked_fragments |
-| `multispectral.spectrallm.generation` | 多谱 → 结构（SpectraLLM） | IR, Raman, NMR, MS/MS | mixed | 待接入 | exact_rate, valid_rate |
+| `ms.annotation.mechfrag` | MS/MS 峰 → MechFrag-MS 候选碎片 | MS/MS | experimental | mechfrag_annotation | matched_peak_fraction |
+| `multispectral.spectrallm.generation` | 多谱 → 结构（SpectraLLM） | IR, Raman, NMR, MS/MS | mixed | spectrallm_generation | exact_rate, format_valid_rate |
 
 ## 任务说明
 
@@ -72,11 +74,9 @@
 
 - **nmr.assignment**：直接运行冻结 NMRNet H/C 权重，加对称位点合并与带容差的全局匹配。原子编号随输出保存；缺实验指认参考时准确率为 null。
 
-- **nmr.solvent_transfer**：无训练的实测参考检索迁移，排除查询分子及同连接关系的立体异构体；已跑 32 分子。不是神经网络模型，专用权重仍待接入。
+- **nmr.solvent_transfer**：¹³C 默认拟合校正，¹H 默认实验参考检索；模型比较按分子连通性留出。
 
-- **nmr.formula**：用户已明确暂不推进；历史结果仅作归档，不再运行。
-
-- **spectroscopy.qa**：用户已明确暂不推进；历史结果仅作归档，不再运行。
+- **spectroscopy.qa**：给定谱学文本和问题，使用本地合并版 SpecMol 权重及其聊天模板。
 
 - **spectroscopy.reranking**：Vib2Mol ITM 正类概率重排显式候选池；候选池由本次选中的不同参考结构构成。
 
@@ -86,6 +86,10 @@
 
 - **spectroscopy.reranking.hc**：使用 Xinyu 保存的四模态 checkpoint、H/C 参考与归一化；生成按原评测脚本去重和 ITM 重排。
 
+- **vibrational.retrieval.ir**：以独立的已知参考谱进行单谱检索，候选仅提供 SMILES；另评估了冻结四谱模型的单通道消融。
+
+- **vibrational.retrieval.raman**：以独立的已知参考谱进行单谱检索，候选仅提供 SMILES；另评估了冻结四谱模型的单通道消融。
+
 - **nmr.hsqc.transpeaknet**：使用作者二维谱权重，按专家标注的原子编号计算每张谱的碳、氢位移误差。
 
 - **ms.forward.glacier**：直接调用作者的冻结 checkpoint；使用我们测试 CSV 的实测谱并核对分子、加合物和采集条件。
@@ -94,4 +98,6 @@
 
 - **ms.annotation.magma**：原算法，无训练；原子索引以 engine_smiles 为准并逐碎片验证，标注不等于实验确认的机制。
 
-- **multispectral.spectrallm.generation**：用户已明确暂不推进；历史结果仅作归档，不再运行。
+- **ms.annotation.mechfrag**：冻结的碎裂策略生成原子集合，按观测 m/z 匹配候选离子。
+
+- **multispectral.spectrallm.generation**：用官方 32B 合并权重解码谱学文本，按规范化 SMILES 评分。

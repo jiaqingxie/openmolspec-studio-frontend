@@ -274,14 +274,23 @@ class Runner:
         if self.service is None:
             self.service = OpenMolSpecService(discover_assets(self.args.portable_root), device=self.args.device)
         path = require(self.args.gap_lmdb or self.service.assets.spectrum_lmdb or Path("missing.lmdb"))
-        if self.service.assets.gap_checkpoint is None:
-            raise MissingAsset("No spectrum-to-gap checkpoint")
         view = task.id.split(".")[-1]
         include_nmr = view == "ir_raman_hc"
+        excluded = None
+        if include_nmr:
+            checkpoint = require(self.service.assets.gap_checkpoint or Path("missing.pt"))
+            _, payload = self.service._load_gap()
+            train_mean = float(payload["normalizer"]["mean"]["gap"])
+        else:
+            from importlib.resources import files
+            from openmolspec_ui.gap_partial import weights
+            checkpoint = files("openmolspec").joinpath("assets", "gap_vibrational.npz")
+            excluded = set(weights()["fit_keys"])
+            train_mean = float(weights()["training_mean_ev"])
         predicted, expected, ids = [], [], []
         env = readonly_lmdb(path)
         try:
-            selected_rows, selection = select_vibrational_rows(env, self.args.limit, self.args.sampling, self.args.seed, require_gap=True)
+            selected_rows, selection = select_vibrational_rows(env, self.args.limit, self.args.sampling, self.args.seed, require_gap=True, exclude_connectivities=excluded)
             for row in selected_rows:
                     target = row["gap"]
                     inputs = SpectralInput(ir=np.asarray(row["ir"], dtype=np.float32) if view != "raman" else None,
@@ -307,10 +316,8 @@ class Runner:
             env.close()
         if not ids:
             raise MissingAsset("LMDB has no gap reference labels; provide --gap-lmdb with gap in eV")
-        _, checkpoint_payload = self.service._load_gap()
-        train_mean = float(checkpoint_payload["normalizer"]["mean"]["gap"])
         return {"metrics": regression_metrics(predicted, expected), "sample_ids": ids,
-                "dataset": self.artifact(path), "checkpoint": self.artifact(self.service.assets.gap_checkpoint),
+                "dataset": self.artifact(path), "checkpoint": self.artifact(checkpoint),
                 "given_nmr": include_nmr, "unit": "eV", "input_gap_unit": unit,
                 "training_mean_baseline": {"constant_ev": train_mean, **regression_metrics([train_mean] * len(expected), expected)},
                 "reference_gap_ev": expected, "predicted_gap_ev": predicted,
@@ -333,10 +340,22 @@ class Runner:
         model, tokenizer, device = self.service._load_vib2mol(phase)
         from benchmarks.models.vib2mol.evaluate_multimodal import encode_spectra, rerank_candidates
         include_nmr = task.id.endswith(".hc")
+        single = task.id.rsplit(".", 1)[-1] if task.id.endswith((".ir", ".raman")) else None
+        estimated_nmr = not include_nmr and single is None
+        excluded = None
+        if estimated_nmr:
+            from importlib.resources import files
+            from openmolspec_ui.vib_shift_adapter import weights_file, with_estimated_shifts
+            index_file = files("openmolspec").joinpath("assets", "vib_shift_fit_connectivities.json")
+            index = json.loads(index_file.read_text())
+            adapter = self.artifact(weights_file())
+            if index["weights_sha256"] != adapter["sha256"]:
+                raise ValueError("Shift estimator and training exclusion index differ")
+            excluded = set(index["train"]) | set(index["val"])
         rows, ids, strings, inputs, seen = [], [], [], [], set()
         env = readonly_lmdb(path)
         try:
-            selected_rows, selection = select_vibrational_rows(env, self.args.limit, self.args.sampling, self.args.seed)
+            selected_rows, selection = select_vibrational_rows(env, self.args.limit, self.args.sampling, self.args.seed, exclude_connectivities=excluded)
             for row in selected_rows:
                     molecule = Chem.MolFromSmiles(row["kekule_smiles"])
                     if molecule is None:
@@ -348,11 +367,14 @@ class Runner:
                     rows.append(row)
                     ids.append(identity)
                     strings.append(Chem.MolToSmiles(molecule, isomericSmiles=True, kekuleSmiles=True))
-                    inputs.append(self.service._vib2mol_input(SpectralInput(
-                        ir=np.asarray(row["ir"], dtype=np.float32),
-                        raman=np.asarray(row["raman"], dtype=np.float32),
+                    spectral = SpectralInput(
+                        ir=None if single == "raman" else np.asarray(row["ir"], dtype=np.float32),
+                        raman=None if single == "ir" else np.asarray(row["raman"], dtype=np.float32),
                         nmr_h=np.asarray(row["nmr_h_shifts_ppm"], dtype=np.float32) if include_nmr else None,
-                        nmr_c=np.asarray(row["nmr_c_shifts_ppm"], dtype=np.float32) if include_nmr else None), device))
+                        nmr_c=np.asarray(row["nmr_c_shifts_ppm"], dtype=np.float32) if include_nmr else None)
+                    if estimated_nmr:
+                        spectral = with_estimated_shifts(spectral)
+                    inputs.append(self.service._vib2mol_input(spectral, device))
                     if include_nmr:
                         expected_ref = json.loads(self.service.assets.nmr_normalizer.read_text())["reference_id"]
                         if row.get("nmr_reference_id") != expected_ref:
@@ -366,64 +388,62 @@ class Runner:
                       "sampling": self.args.sampling, "seed": self.args.seed, "selection": selection,
                       "source_counts": dict(__import__('collections').Counter(row.get('source_dataset','unknown') for row in rows)),
                       "record_ids": [row.get('sample_id',row['_lmdb_key']) for row in rows]}
-        tokens = tokenizer(strings, padding=True, truncation=False, return_tensors="pt")
-        if tokens["input_ids"].shape[1] > tokenizer.model_max_length or (tokens["input_ids"] == tokenizer.unk_token_id).any():
-            raise ValueError("Reference structures exceed tokenizer capacity or contain unknown tokens")
+        if estimated_nmr:
+            provenance.update(inference_mode="vibrational_shift_estimation_then_frozen_decoder" if phase == 2 else "vibrational_shift_estimation_then_library_ranking", shift_estimator=adapter,
+                              excluded_fit_connectivities=len(excluded))
+        if phase == 1:
+            tokens = tokenizer(strings, padding=True, truncation=False, return_tensors="pt")
+            if tokens["input_ids"].shape[1] > tokenizer.model_max_length or (tokens["input_ids"] == tokenizer.unk_token_id).any():
+                raise ValueError("Reference structures exceed tokenizer capacity or contain unknown tokens")
         checkpoint = self.service.assets.generation_checkpoint if phase == 2 else self.service.assets.retrieval_checkpoint
         provenance["checkpoint"] = self.artifact(checkpoint)
         if phase == 2:
-            if include_nmr:
-                from benchmarks.models.vib2mol.evaluate_multimodal import canonical, unique_candidates
-                rank_model, rank_tokenizer, _ = self.service._load_vib2mol(1)
-                for key in ("center", "scale"):
-                    if not torch.equal(getattr(rank_model.spectral_encoding, key), getattr(model.spectral_encoding, key)):
-                        raise ValueError("Generation/reranking checkpoint NMR normalization differs")
-                beam = self.args.vib_beam_size
-                hits, reranked_hits = ({k: 0 for k in (1, 3, 5, 10)} for _ in range(2))
-                valid_beams, total_beams, duplicates, predictions = 0, 0, 0, []
-                with torch.inference_mode():
-                    for row, data in zip(rows, inputs):
-                        sequences = model.beam_infer_lm(data, beam_size=beam, max_len=300)["pred_ids"][0]
-                        raw = [tokenizer.decode(sequence, skip_special_tokens=True).replace(" ", "") for sequence in sequences]
-                        candidates = unique_candidates(raw)
-                        valid_count = sum(canonical(value) is not None for value in raw)
-                        valid_beams += valid_count
-                        total_beams += len(raw)
-                        duplicates += valid_count - len(candidates)
-                        order, probabilities = rerank_candidates(rank_model, rank_tokenizer, data, candidates[:10], self.args.batch_size)
-                        ranked = [candidates[index] for index in order] + candidates[10:]
-                        target = canonical(row["kekule_smiles"])
-                        for k in hits:
-                            hits[k] += int(target in candidates[:k])
-                            reranked_hits[k] += int(target in ranked[:k])
-                        predictions.append({"target": target, "raw_beams": raw, "unique_candidates": candidates,
-                                            "reranked": ranked, "positive_probabilities": probabilities})
-                return {**provenance, "metrics": {**{f"exact_canonical_top{k}": count / len(rows) for k, count in hits.items()},
-                                                  "valid_smiles_fraction": valid_beams / max(total_beams, 1),
-                                                  "duplicate_valid_beams": duplicates, "examples": len(rows)},
-                        "reranked_metrics": {f"exact_canonical_top{k}": count / len(rows) for k, count in reranked_hits.items()},
-                        "ranking": "Xinyu canonical valid unique beams, then ITM positive probability top10 reranking",
-                        "beam_size": beam, "max_length": 300, "rank_checkpoint": self.artifact(self.service.assets.retrieval_checkpoint),
-                        "predictions": predictions}
-            predictions, valid, exact = [], 0, 0
+            from benchmarks.models.vib2mol.evaluate_multimodal import canonical, unique_candidates
+            from openmolspec_ui.vib_ranking import itm_order, score_generated_candidates
+            rank_model, rank_tokenizer, _ = self.service._load_vib2mol(1)
+            for key in ("center", "scale"):
+                if not torch.equal(getattr(rank_model.spectral_encoding, key), getattr(model.spectral_encoding, key)):
+                    raise ValueError("Generation/reranking checkpoint NMR normalization differs")
+            beam = self.args.vib_beam_size
+            hits, reranked_hits = ({k: 0 for k in (1, 3, 5, 10)} for _ in range(2))
+            valid_beams, total_beams, duplicates, predictions = 0, 0, 0, []
             with torch.inference_mode():
-                for identity, data in zip(ids, inputs):
-                    sequences = model.beam_infer_lm(data, beam_size=self.args.beam_size, max_len=300)["pred_ids"][0]
-                    raw = tokenizer.decode(sequences[0], skip_special_tokens=True).replace(" ", "")
-                    molecule = Chem.MolFromSmiles(raw)
-                    canonical = Chem.MolToSmiles(molecule, isomericSmiles=True) if molecule and molecule.GetNumAtoms() else None
-                    valid += int(canonical is not None)
-                    exact += int(canonical == identity)
-                    predictions.append({"reference": identity, "raw_top_1": raw, "canonical_top_1": canonical})
-            return {**provenance, "metrics": {"valid_rate": valid / len(rows), "exact_rate": exact / len(rows),
-                                               "examples": len(rows)}, "beam_size": self.args.beam_size,
-                    "ranking": "raw_beam_top_1_without_reranking", "predictions": predictions}
+                for row, data in zip(rows, inputs):
+                    sequences = model.beam_infer_lm(data, beam_size=beam, max_len=300)["pred_ids"][0]
+                    raw = [tokenizer.decode(sequence, skip_special_tokens=True).replace(" ", "") for sequence in sequences]
+                    candidates = unique_candidates(raw)
+                    valid_count = sum(canonical(value) is not None for value in raw)
+                    valid_beams += valid_count
+                    total_beams += len(raw)
+                    duplicates += valid_count - len(candidates)
+                    scored = score_generated_candidates(rank_model, rank_tokenizer, data, candidates[:10], self.args.batch_size)
+                    ordered = itm_order(scored)
+                    ranked = [item["smiles"] for item in ordered] + candidates[10:]
+                    probabilities = [item["score"] for item in ordered]
+                    target = canonical(row["kekule_smiles"])
+                    for k in hits:
+                        hits[k] += int(target in candidates[:k])
+                        reranked_hits[k] += int(target in ranked[:k])
+                    predictions.append({"reference": row["_canonical_identity"], "target": target,
+                                        "raw_top_1": raw[0] if raw else None,
+                                        "canonical_top_1": candidates[0] if candidates else None,
+                                        "raw_beams": raw, "unique_candidates": candidates,
+                                        "reranked": ranked, "positive_probabilities": probabilities})
+            return {**provenance, "metrics": {**{f"exact_canonical_top{k}": count / len(rows) for k, count in hits.items()},
+                                              "valid_smiles_fraction": valid_beams / max(total_beams, 1),
+                                              "valid_rate": sum(bool(x["unique_candidates"]) for x in predictions) / len(rows),
+                                              "exact_rate": hits[1] / len(rows),
+                                              "duplicate_valid_beams": duplicates, "examples": len(rows)},
+                    "reranked_metrics": {f"exact_canonical_top{k}": count / len(rows) for k, count in reranked_hits.items()},
+                    "ranking": "Default canonical valid beam order; reranked_metrics use the optional upstream ITM ranking",
+                    "beam_size": beam, "max_length": 300, "rank_checkpoint": self.artifact(self.service.assets.retrieval_checkpoint),
+                    "predictions": predictions}
         if len(rows) < 2:
             raise ValueError("Vibrational retrieval/reranking needs at least two candidates")
         def ranked_examples(scores):
             return [{"sample_id": rows[i].get("sample_id", rows[i]["_lmdb_key"]),
-                     "input": {"ir": np.asarray(rows[i]["ir"]).tolist(),
-                               "raman": np.asarray(rows[i]["raman"]).tolist(),
+                     "input": {"ir": None if single == "raman" else np.asarray(rows[i]["ir"]).tolist(),
+                               "raman": None if single == "ir" else np.asarray(rows[i]["raman"]).tolist(),
                                "nmr_h_shifts_ppm": np.asarray(rows[i]["nmr_h_shifts_ppm"]).tolist() if include_nmr else [],
                                "nmr_c_shifts_ppm": np.asarray(rows[i]["nmr_c_shifts_ppm"]).tolist() if include_nmr else []},
                      "reference_smiles": ids[i],
@@ -510,6 +530,28 @@ class Runner:
     def run(self, task, dataset):
         if not task.enabled:
             raise MissingAsset("Deferred by the user's explicit scope change; no inference requested")
+        if task.backend in ("specmol_qa","spectrallm_generation"):
+            from .spectral_language import QA, evaluate
+            checkpoint = self.args.language_checkpoint or (self.args.models_root/"SpecMol-7B/exported_model" if task.id==QA else self.args.workspace/"runs/task-evaluation/SpectraLLM_32B")
+            path = self.args.language_data or (self.args.workspace/"data/align_eval/nmrspec_test/test.jsonl" if task.id==QA else self.args.workspace/"runs/task-evaluation/spectrallm-examples.jsonl")
+            require(checkpoint/"model.safetensors.index.json")
+            return evaluate(task.id,checkpoint,self.args.device,require(path),self.args.limit)
+        if task.backend == "mechfrag_annotation":
+            from .mechfrag import FragmentAnnotator, policy_manifest
+            from .ms import select_ms_records
+            base = self.args.workspace.parent
+            source = self.args.mechfrag_root or base/"MechFrag-MS"
+            study = self.args.mechfrag_study or source/"runs/single_native_target_060_1123"
+            annotator = FragmentAnnotator(source, require(policy_manifest(study)))
+            rows, selection = select_ms_records(self.args.ms_input_csv or base/"MassSpecGym-MAGMA-annotation/data/MassSpecGym_test_full.csv",
+                self.args.ms_metadata_tsv or base/"MassSpecGym-MAGMA-annotation/data/MassSpecGym1.5.tsv",self.args.limit,max_heavy_atoms=24)
+            records = [dict(spec_id=r['spec_id'],**annotator.annotate(dict(r,mz=[p[0] for p in r['reference_peaks']])))
+                       for r in rows if r['collision_energy'] and r['instrument']]
+            if not records: raise MissingAsset("No spectra with acquisition metadata in selection")
+            n=sum(len(r['peaks']) for r in records)
+            return dict(metrics=dict(matched_peak_fraction=sum(r['matched'] for r in records)/n,annotated_spectra=len(records)),
+                        skipped_conditions=len(rows)-len(records),selection=selection,records=records,checkpoint_sha256=annotator.digest,
+                        variant=annotator.variant,lock=annotator.lock_name)
         if task.backend.startswith("spec2struct"):
             return self.nmr(task, dataset)
         if task.backend == "nmrnet_predictions":
@@ -578,6 +620,20 @@ class Runner:
             return self.gap(task)
         if task.backend == "studio_vibrational_forward":
             return self.vibrational_forward()
+        if task.backend == "vib_reference_retrieval":
+            from importlib.resources import files
+            from .vib_reference_library import evaluate
+            channel = task.id.rsplit(".", 1)[-1]
+            index = files("openmolspec").joinpath("assets","vib_shift_fit_connectivities.json")
+            panel = evaluate(self.args.portable_root, index, self.args.limit, self.args.limit, self.args.seed, channel)
+            rows = panel["channels"][channel]["records"]
+            ranks = np.asarray([r["reference_rank"] for r in rows])
+            return {"metrics": {**{f"recall_at_{k}": float(np.mean(ranks <= k)) for k in (1,5,10)},
+                                "mrr": float(np.mean(1/ranks))},
+                    "dataset_sha256": panel["dataset_sha256"], "fit_index_sha256": panel["fit_index_sha256"],
+                    "sampling": "seeded connectivity-disjoint panel", "seed": panel["seed"],
+                    "reference_connectivities": panel["reference_connectivities"], "pool": panel["pool"],
+                    "ranking": "nearest_reference", "records": rows}
         if task.backend.startswith("vib2mol_"):
             return self.vibrational(task)
         if task.backend.startswith("ms_pretrained_") or task.backend == "magma_algorithm":

@@ -89,7 +89,11 @@ def notebook(task,language):
          "from documentation_content import results_table\n"
          f'evidence = load_evidence({id_!r})\n'
          "print('Task:', evidence['task'])\nprint('Examples:', len(evidence['examples']))")
-    if task.enabled:
+    if task.enabled and not load_evidence(id_).get('plot'):
+        markdown(method+'\n\n'+metrics)
+        code("display(Markdown(results_table(evidence, "+repr(en)+")))\nprint(evidence['status'])\nfor row in evidence['examples'][:3]:\n    print(json.dumps(compact(row), ensure_ascii=False, indent=2))")
+        markdown(f'[Task guide](../tasks/{slug}.md)')
+    elif task.enabled:
         inputs,outputs=io_contract(task,en)
         markdown('## '+('Inputs and outputs' if en else '输入与输出')+'\n\n'+inputs+'\n'+outputs+'\n'+('Inspect the example records below. Long arrays show their length and first values; the downloadable JSON contains the complete arrays.' if en else '查看下面的示例记录。长数组显示长度与前几个数值，下载 JSON 可获取完整数组。'))
         code("for example in evidence['examples'][:3]:\n    print(json.dumps(compact(example), indent=2, ensure_ascii=False))")
@@ -112,6 +116,8 @@ def dataset_notebook(en):
 
 
 def build_pages(tasks,profile,profile_zh):
+    updates_path = Path(__file__).parent / "doc_templates" / "inverse_benchmark_updates.json"
+    inverse_updates = json.loads(updates_path.read_text())
     files={};bundles={t.id:load_evidence(t.id) for t in tasks}
     files['assets/evaluation_index.json']=json.dumps({k:v['runs'] for k,v in bundles.items()},ensure_ascii=False,indent=2)+'\n'
     for en in (True,False):
@@ -161,7 +167,7 @@ def build_pages(tasks,profile,profile_zh):
                 slug=task.id.replace('.','-');title=profile(task,en)[0]
                 category+=f'| [{title}]({slug}.md) | `{task.id}` |\n'
                 notebook_index+=f'- [{title}]({slug}.ipynb)\n'
-                if task.enabled:
+                if task.enabled and bundles[task.id].get('plot'):
                     gallery+=f'<figure><a href="tasks/{slug}.html"><img src="assets/gallery/{slug}.png" alt="{task.id}: actual model results" loading="lazy" width="2176" height="1088"></a><figcaption><strong><a href="tasks/{slug}.html">{title}</a></strong><span class="oms-caption-note">{caption(task,bundles[task.id],en)}</span><span class="oms-downloads"><a href="notebooks/{slug}.html">Notebook</a> · <a href="assets/gallery/{slug}.svg">SVG</a> · <a href="assets/gallery/{slug}.png">PNG</a> · <a href="assets/examples/{slug}.json">Data / 数据</a></span></figcaption></figure>\n'
             if key!='deferred':gallery+='</div>\n\n'
             notebook_index+='\n'
@@ -180,10 +186,27 @@ def build_pages(tasks,profile,profile_zh):
                 from manual_profiles import profile as localized_profile
                 title,purpose,method,metrics,limits,source=localized_profile(task,False)
             page=f'# {title}\n\n{purpose}\n\n'
+            page += inverse_updates.get(slug, {}).get('en' if en else 'zh', '')
             if task.id.startswith(('nmr.retrieval.', 'nmr.generation.')):
                 page+=overlap_notice(en, '../')
             if not task.enabled:
                 page+=('Deferred at the user’s request. No new model result is claimed.\n' if en else '按用户要求暂不推进，本轮不展示新的模型结果。\n')
+            elif not b.get('plot'):
+                ins, outs = io_contract(task,en)
+                page += method+'\n\n'+metrics+'\n\n'+ins+'\n'+outs+'\n'
+                if b['runs']:
+                    page += results_table(b,en)+'\n'
+                else:
+                    page += ('Full-model evaluation is pending.' if en else '完整模型评测结果待回收。')+'\n\n'
+                page += f'[Evidence / 运行记录](../assets/examples/{slug}.json) · [MCP](../harness/mcp.md)\n\n'
+                options = {
+                    'spectroscopy.qa': ' --language-checkpoint /path/to/SpecMol-7B --language-data /path/to/test.jsonl --device cuda',
+                    'multispectral.spectrallm.generation': ' --language-checkpoint /path/to/SpectraLLM_32B --language-data /path/to/QM9S.jsonl --device cuda',
+                    'ms.annotation.mechfrag': ' --mechfrag-root /path/to/MechFrag-MS --mechfrag-study /path/to/locked-study',
+                }.get(task.id, ' --portable-root /path/to/openmolspec-studio-portable')
+                page += f'```bash\npython -m openmolspec_bench run --workspace /path/to/OpenMolSpec --tasks {task.id}{options} --limit 8 --output results/{slug}.json\n```\n'
+                if source:
+                    page += f'\n[Model / 模型]({source})\n'
             else:
                 inputs,outputs=io_contract(task,en)
                 page+='## '+('What goes in' if en else '输入是什么')+'\n\n'+inputs+'\n'
@@ -225,11 +248,39 @@ def build_pages(tasks,profile,profile_zh):
                     from peak_model_card import model_card as peak_card
                     page = peak_card(task.modalities[0], en)
             from forward_calibration_cards import updated_page
-            files[f'tasks/{slug}{suffix}.md']=updated_page(page, task.id, en)
+            old_heading = '## Actual evaluation results' if en else '## 实际评测结果'
+            if task.id in ('vibrational.gap.ir', 'vibrational.gap.raman', 'vibrational.gap.ir_raman'):
+                label = '## Earlier evaluation of the four-channel model with missing spectra' if en else '## 较早的四通道模型缺谱评测'
+                page = page.replace(old_heading, label)
+            elif task.id == 'nmr.assignment':
+                label = '## Earlier evaluation without atom labels' if en else '## 较早的无原子标签评测'
+                page = page.replace(old_heading, label)
+            page = updated_page(page, task.id, en)
+            if task.id.startswith(('vibrational.retrieval', 'spectroscopy.reranking')):
+                latest = ('The [4,096-candidate comparison](../benchmarks/vibrational.md) reports embedding search, top-32 reranking and exhaustive matching, with separate query counts.' if en else '查看[4,096 候选结构评测](../benchmarks/vibrational.md)，比较嵌入检索、前 32 名重排和全库匹配的结果及各自查询数。')
+            elif task.id.startswith('nmr.generation.'):
+                latest = ('The [NMRGym NMRTrans comparison](../benchmarks/nmr.md) reports H-only, C-only and H+C models with and without supplied formula on a fixed 10,000-record test protocol.' if en else '[NMRGym 的 NMRTrans 对照](../benchmarks/nmr.md)为 H 单谱、C 单谱、H+C 各设有式和无式模型，共用固定 10,000 条测试协议。')
+            elif task.id == 'nmr.assignment' or task.id == 'nmr.solvent_transfer' or task.id.startswith('nmr.retrieval.'):
+                latest = ('[Expanded NMR evaluations](../benchmarks/nmr.md) include all held-out experimental sites, all eligible cross-solvent pairs, and 2,048-candidate retrieval.' if en else '[扩展 NMR 评测](../benchmarks/nmr.md)收录了全部留出实验位点指认、全部符合条件的跨溶剂配对，以及 2,048 候选检索。')
+            elif task.id.startswith('ms.annotation.'):
+                latest = ('[Mass coverage on identical observed peaks](../benchmarks/ms.md) compares MechFrag-MS and MAGMa at 10 ppm.' if en else '[同批实测峰的质量覆盖率](../benchmarks/ms.md)在 10 ppm 容差下比较 MechFrag-MS 和 MAGMa。')
+            elif task.id.startswith('vibrational.gap.'):
+                latest = ('[Gap benchmark](../benchmarks/vibrational.md) with 1,024 four-spectrum examples and 3,381 examples for the partial-input models.' if en else '[能隙评测](../benchmarks/vibrational.md)收录了 1,024 条四谱输入和 3,381 条缺通道模型的结果。')
+            elif task.id == 'spectroscopy.qa':
+                latest = ('The base model answered 4/32 NMRSpec counting questions correctly and returned a valid choice on 29/32. [Full responses and adapter protocol](../benchmarks/multimodal.md).' if en else '基础模型在 32 道 NMRSpec 峰数题中答对 4 道，29 道返回有效选项。[查看完整回答与微调协议](../benchmarks/multimodal.md)。')
+            elif task.id == 'multispectral.spectrallm.generation':
+                latest = ('The SpectraLLM evaluation was paused in the 24 November snapshot. The optional local checkpoint interface is available.' if en else '11 月 24 日快照中，SpectraLLM 评测已暂停。仍可通过本地权重接口调用。')
+                page = page.replace('Full-model evaluation is pending.', '').replace('完整模型评测结果待回收。', '')
+            else:
+                latest = ''
+            if latest:
+                heading, rest = page.split('\n', 1)
+                page = heading + '\n\n' + latest + '\n' + rest
+            files[f'tasks/{slug}{suffix}.md'] = page
             files[f'notebooks/{slug}{suffix}.ipynb']=json.dumps(notebook(task,language),ensure_ascii=False,indent=2)+'\n'
         # Retain protocol/publication details; these pages are maintained below.
         files[f'protocols{suffix}.md']=('# Evaluation protocols\n\n' if en else '# 评测协议\n\n')+('All published figures use actual recorded results. Each evidence JSON carries source report hashes. Execution success is separate from scientific validity. Small candidate-pool results, prepared-data split labels and matched-peak errors must not be described as independent generalization or atom-assignment accuracy.\n\nComplete IR/Raman/H/C input and missing-channel ablations are reported separately. Gap units are converted once from Hartree to eV. MS scores compare with all observed peaks under explicit acquisition conditions. The frozen-model figures contain no fitted calibration. A separate two-record-per-split SDK training integration check completed one encoder and one generator step with save/reload verification; it is not a performance benchmark.\n\n' if en else '所有公开结果图来自实际记录。证据 JSON 保留来源报告哈希。执行成功与科学有效性分开判断；小候选池、准备数据的 split 标签、峰匹配误差，不能宣传成独立泛化或实验原子指认准确率。\n\n完整 IR/Raman/H/C 输入与缺通道消融分别报告。Gap 从 Hartree 到 eV 仅转换一次。MS 在明确采集条件下与全部实测峰比较。冻结模型图没有拟合校准。另有独立的 SDK 训练接口检查：每个原始划分取两个记录，编码器与生成器各训练一步并验证保存重载；这不是性能基准。\n\n')+'[Dataset definitions](datasets.md) · [Model-by-model audit](model-audit.md)\n'
-        files[f'publication{suffix}.md']=('# Publication status\n\n' if en else '# 发布状态\n\n')+('[English](https://openmolspec.readthedocs.io/en/latest/) · [简体中文](https://openmolspec.readthedocs.io/en/latest/zh/index.html)\n\n')+('Read the Docs builds `release/openmolspec-v1` with the root `.readthedocs.yaml`, Sphinx and the classic RTD theme. The site includes categorized tasks, a real-results gallery, dataset distributions, model review and 82 tutorials, including SDK inference, training preparation and theory simulations. Notebook publication never executes model code.\n\n' if en else 'Read the Docs 使用根目录 `.readthedocs.yaml` 构建 `release/openmolspec-v1` 分支，采用 Sphinx 与经典 RTD 主题。站点包括分类任务、真实结果图册、数据分布、模型与训练说明及 82 份教程（含暂停任务说明和数据分布 notebook）。发布构建不执行模型代码。\n\n')+'```bash\npython scripts/build_bilingual_docs.py --check\npython scripts/build_readthedocs.py --output site --strict\npython scripts/publish_readthedocs.py --apply --project openmolspec --wait 600\n```\n\n'+('Publish only after pushing the corresponding Git commit. The publication script verifies the exact remote commit and finished RTD build; public pages are checked separately.\n' if en else '先推送对应 Git 提交，再发布。发布脚本检查远端精确提交与完成的 RTD 构建，公开页面另行验证。\n')
+        files[f'publication{suffix}.md']=('# Publication status\n\n' if en else '# 发布状态\n\n')+('[English](https://openmolspec.readthedocs.io/en/latest/) · [简体中文](https://openmolspec.readthedocs.io/en/latest/zh/index.html)\n\n')+('Read the Docs builds `release/openmolspec-v1` with the root `.readthedocs.yaml`, Sphinx and the classic RTD theme. The site includes categorized tasks, a real-results gallery, dataset distributions, model review and 90 bilingual notebook previews, including SDK inference, training preparation and theory simulations. Notebook publication never executes model code.\n\n' if en else 'Read the Docs 使用根目录 `.readthedocs.yaml` 构建 `release/openmolspec-v1` 分支，采用 Sphinx 与经典 RTD 主题。站点包括分类任务、真实结果图册、数据分布、模型与训练说明及 90 份双语教程预览（含暂停任务说明和数据分布 notebook）。发布构建不执行模型代码。\n\n')+'```bash\npython scripts/build_bilingual_docs.py --check\npython scripts/build_readthedocs.py --output site --strict\npython scripts/publish_readthedocs.py --apply --project openmolspec --wait 600\n```\n\n'+('Publish only after pushing the corresponding Git commit. The publication script verifies the exact remote commit and finished RTD build; public pages are checked separately.\n' if en else '先推送对应 Git 提交，再发布。发布脚本检查远端精确提交与完成的 RTD 构建，公开页面另行验证。\n')
     for suffix,en in [('',True),('.zh',False)]:
         files[f'protocols{suffix}.md']+='\n'+overlap_notice(en)
     return {name:(content.rstrip()+'\n' if name.endswith('.md') else content) for name,content in files.items()}

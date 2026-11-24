@@ -1,0 +1,25 @@
+{
+  "queries": 64,
+  "protocol": "Previously inspected panel, replay from stored unique beams and ITM rankings",
+  "source": "vib2mol_xinyu_random64_20261116.json",
+  "totals": {
+    "beam": {
+      "top1_hits": 48,
+      "top3_hits": 57,
+      "top5_hits": 57,
+      "top10_hits": 57
+    },
+    "itm": {
+      "top1_hits": 44,
+      "top3_hits": 54,
+      "top5_hits": 57,
+      "top10_hits": 57
+    },
+    "beam_first_itm_tail": {
+      "top1_hits": 48,
+      "top3_hits": 54,
+      "top5_hits": 57,
+      "top10_hits": 57
+    }
+  }
+}

@@ -1,594 +1,636 @@
 {
-  "executed_notebooks": 84,
-  "evaluation_index_sha256": "9e6e757d145143791db0d1a97b2677e88f3b30b31606b9904cb4c479a028b057",
+  "executed_notebooks": 90,
+  "evaluation_index_sha256": "250e5f79ad07913c972f05b004161fc200b29763e8acc108508a0e92a4ce27b5",
   "engine": "jupyter",
   "scope": "saved_result_analysis_and_explicit_sdk_frozen_inference_no_training",
   "notebooks": [
     {
       "notebook": "documentation/notebooks/datasets-overview.ipynb",
       "executed_file": "documentation/notebooks/datasets-overview.ipynb",
-      "sha256": "df2576f2b8f5a9231d88fba13a5b4c106477ef2cd0ef260cf01428bab1f72ebe",
+      "sha256": "a259a60a983859e6ddc2d5ecf83b8e88466ddecac94d290aae089acf3fefb79e",
       "model_execution_enabled": false,
       "rich_outputs": 5
     },
     {
       "notebook": "documentation/notebooks/datasets-overview.zh.ipynb",
       "executed_file": "documentation/notebooks/datasets-overview.zh.ipynb",
-      "sha256": "d0c5f0b99488bd5c86365e1827f25be05419dc7135789f042cdcab6e8112bceb",
+      "sha256": "1c328b28b212ef3e1b909882745d66a3a9c897cdafd88e5a9fc293bc4ea3d507",
       "model_execution_enabled": false,
       "rich_outputs": 5
     },
     {
       "notebook": "documentation/notebooks/ms-annotation-magma.ipynb",
       "executed_file": "documentation/notebooks/ms-annotation-magma.ipynb",
-      "sha256": "96dec1aede79fa5f8a50f64b6a8b3509824fe0977dc695a89675a42b45934994",
+      "sha256": "c90dae6b70c3b5204f95b17a01b0f6835f549ba097b0c1e890b8be956c7e72b9",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/ms-annotation-magma.zh.ipynb",
       "executed_file": "documentation/notebooks/ms-annotation-magma.zh.ipynb",
-      "sha256": "37dbaea79a0b32249152bf52c82b9bfae296ddeea441765a5bbb0b095ea32200",
+      "sha256": "048d5e5295a9c86812d9dc653a74206f557711b3e9090caa561a3accd4c98c43",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
+      "notebook": "documentation/notebooks/ms-annotation-mechfrag.ipynb",
+      "executed_file": "documentation/notebooks/ms-annotation-mechfrag.ipynb",
+      "sha256": "5bb122abf3b93689e0b3d71b39f4ab5d0db1ed8c324fc805193e6f7d6e816fbd",
+      "model_execution_enabled": false,
+      "rich_outputs": 1
+    },
+    {
+      "notebook": "documentation/notebooks/ms-annotation-mechfrag.zh.ipynb",
+      "executed_file": "documentation/notebooks/ms-annotation-mechfrag.zh.ipynb",
+      "sha256": "c667e6bd000262e3a8a7421e131907cd90e87370f90ef394af563ecc5581a6c8",
+      "model_execution_enabled": false,
+      "rich_outputs": 1
+    },
+    {
       "notebook": "documentation/notebooks/ms-forward-glacier.ipynb",
       "executed_file": "documentation/notebooks/ms-forward-glacier.ipynb",
-      "sha256": "7469aed12e1ac18cea5bf4b521619a2f0bd2923ad9edacb682e9ba112d15dfcd",
+      "sha256": "153babd0cbeaa70e706776ecbc6bda64e4b5e349400ab5197e65edaf041f084d",
       "model_execution_enabled": false,
       "rich_outputs": 4
     },
     {
       "notebook": "documentation/notebooks/ms-forward-glacier.zh.ipynb",
       "executed_file": "documentation/notebooks/ms-forward-glacier.zh.ipynb",
-      "sha256": "773e0cc8630d4e1a32c087a6bacfebb9087fe3f8942f4e4e3eb9ff1f5e0867fe",
+      "sha256": "efcab4985566f3f686ddebfead604d02d806258a6f10a5e1a841945dcf3febcb",
       "model_execution_enabled": false,
       "rich_outputs": 4
     },
     {
       "notebook": "documentation/notebooks/ms-forward-iceberg.ipynb",
       "executed_file": "documentation/notebooks/ms-forward-iceberg.ipynb",
-      "sha256": "2849819b838814e1a1e0aa5438a1379b918b8461f9715f2052af122bf8346d52",
+      "sha256": "1515a693ab9f6ff6430d415aaf3f95cfca62856676ce21808cad362dd2863b95",
       "model_execution_enabled": false,
       "rich_outputs": 4
     },
     {
       "notebook": "documentation/notebooks/ms-forward-iceberg.zh.ipynb",
       "executed_file": "documentation/notebooks/ms-forward-iceberg.zh.ipynb",
-      "sha256": "5392f2df93a68f7cc4741ab0e96d6f2f6fa409d6e5ec2b8e7e644a0a719fa509",
+      "sha256": "9f4d24e134fa0886a01637edae220f3aa06f1dd28a2e384f1950b8a5d20560fb",
       "model_execution_enabled": false,
       "rich_outputs": 4
     },
     {
       "notebook": "documentation/notebooks/multispectral-spectrallm-generation.ipynb",
       "executed_file": "documentation/notebooks/multispectral-spectrallm-generation.ipynb",
-      "sha256": "82c9820e3ae904489d860c449f1fa85db7b8e8d4de939ab3eac41ab0ae7615a3",
+      "sha256": "27bec8049c12f76be408232f8f98265a545343e1d73e84756b8dfc08a2732164",
       "model_execution_enabled": false,
-      "rich_outputs": 0
+      "rich_outputs": 1
     },
     {
       "notebook": "documentation/notebooks/multispectral-spectrallm-generation.zh.ipynb",
       "executed_file": "documentation/notebooks/multispectral-spectrallm-generation.zh.ipynb",
-      "sha256": "18e8c2ff8498971ace1e3f7f08036bc65db4d5d96b6bf6fe7250102d70620927",
+      "sha256": "c327dea6cc0603c1da83ba0ec0d6fac2e3432f8569216ed927b688e84099dc38",
       "model_execution_enabled": false,
-      "rich_outputs": 0
+      "rich_outputs": 1
     },
     {
       "notebook": "documentation/notebooks/nmr-assignment.ipynb",
       "executed_file": "documentation/notebooks/nmr-assignment.ipynb",
-      "sha256": "b987d48190676456eee839666ff01f6ec3e2122facc43e79b9af3039fbdc419d",
+      "sha256": "ab7c4b320ef18d996cc9360c906cf68133a9369a7bfb9d13cce3a3dd7e839647",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-assignment.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-assignment.zh.ipynb",
-      "sha256": "cb76f0f7dca489b24947d41457608f76f941f1afbdece69ae48bfc30591f204c",
+      "sha256": "6ae44c406dc8dbf87f0df1d359aa61348a0161fe679bf9ffb5d06f8ba45e4575",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-formula.ipynb",
       "executed_file": "documentation/notebooks/nmr-formula.ipynb",
-      "sha256": "e2885439d372a64a632e5c1349e815b0b633031ef798ecbbfe73ad89b57734f3",
+      "sha256": "47a1bec07e31636360f50c209af48c9e2bccd26ed13a9d747e15812845fcb956",
       "model_execution_enabled": false,
       "rich_outputs": 0
     },
     {
       "notebook": "documentation/notebooks/nmr-formula.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-formula.zh.ipynb",
-      "sha256": "33e1778de084f1d462f629ae63b998d7a8ef2aec97c2dc4a5f58e64f5a3ecd7a",
+      "sha256": "f369452c117fa0bc348da45f75c82676ea563ef6f62363f8b28a72e560f54c35",
       "model_execution_enabled": false,
       "rich_outputs": 0
     },
     {
       "notebook": "documentation/notebooks/nmr-forward-11B.ipynb",
       "executed_file": "documentation/notebooks/nmr-forward-11B.ipynb",
-      "sha256": "b39b23b22b46e47b5f0610658d0e1f609b133f0f68486a90baf71a8528adefcb",
+      "sha256": "7f322e649b673fe08d20d0473bd4f96a74e88a4947ad8270d3ee0e79c15dca5a",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-forward-11B.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-forward-11B.zh.ipynb",
-      "sha256": "1bac764038194ead61c62f5bf248de3df7e0a199cf643c7c64dfab296ba2e754",
+      "sha256": "cd274812a53d7b7a90bcac96f50ed18729414204e29ed75c2fc7e62c5988ff97",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-forward-13C.ipynb",
       "executed_file": "documentation/notebooks/nmr-forward-13C.ipynb",
-      "sha256": "3a134ba508acf92f160ec06205243b57fec7298a06f3375c6ee859dc6b34bf5d",
+      "sha256": "bf438c37976eed65a0fe0a308db5633ab61be3b33017ce67b65d863015019ce3",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-forward-13C.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-forward-13C.zh.ipynb",
-      "sha256": "c9308a6504884416e6c1d5a5f17ff8f1f02a8e7ee260b6129d0722d01ba45eed",
+      "sha256": "4a57aceff305548865ed254abb17f328923216da6f34758cf5bda66ce4ec7ed9",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-forward-19F.ipynb",
       "executed_file": "documentation/notebooks/nmr-forward-19F.ipynb",
-      "sha256": "35250097217feab593d7a4939ce78e05a08587197d5a67c17c9052d6bbe87313",
+      "sha256": "bc3412be806ef9acba9e68c1fea5abcf0901e1793ad8b6d0b5ca74930960bf02",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-forward-19F.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-forward-19F.zh.ipynb",
-      "sha256": "90478f02af7720b0d4c89cf70750dd6d691b9eef4474279c81f99f706c8bde33",
+      "sha256": "baa5d7ea3b2a695976132afcc2cf9440d1ac91c7bbd10357d8046ef59fbcf55e",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-forward-1H.ipynb",
       "executed_file": "documentation/notebooks/nmr-forward-1H.ipynb",
-      "sha256": "1efcd9048461139f7a298e654682da3e1d74ca7f684b52de65d64453ff03cdb3",
+      "sha256": "3eb0221e84f94d47403516afeb3c1d30b852fb91d18c9b0ee84413bc916fb77b",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-forward-1H.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-forward-1H.zh.ipynb",
-      "sha256": "f42e2bd98a4dded52446c29309e111c7a7be4bacb8b1bb35d39f3dc4e6b6f467",
+      "sha256": "91abc619850cd9752916c5616bd96072cbfce0e7fb6d6a9274d19cebc3d58520",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-forward-29Si.ipynb",
       "executed_file": "documentation/notebooks/nmr-forward-29Si.ipynb",
-      "sha256": "0e33539d654c744286e07d7c451f19c2a54870f5e45e39975b41bd88ce146863",
+      "sha256": "0a38da1367e4ed9a00ade95365be1a7569fd5fb964aeeb4a82050b3e381db9b3",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-forward-29Si.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-forward-29Si.zh.ipynb",
-      "sha256": "dd8b43cb009eb402c2fe5562577985521695ab34e144ff945a32e573d995bbb7",
+      "sha256": "090aa5706eff71c7ebf1a5dd6c5ff4336d682afeb3ff701fa9240c0f9529c317",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-forward-31P.ipynb",
       "executed_file": "documentation/notebooks/nmr-forward-31P.ipynb",
-      "sha256": "352c307856ccc13a682cb443c3911a497a058f7c13417c9c0f905427e4a73a06",
+      "sha256": "5a762a96c00f328301b846d150985dd84372c328978d50e1de263317e284bc12",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-forward-31P.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-forward-31P.zh.ipynb",
-      "sha256": "2992e044b47aa78aef6c319322c40462e26e8e2104f5fdd6987f9918cf5a0326",
+      "sha256": "5c66a61447892110b817c37035abb686b7e5f66ed2307e220dbecda9c5759f08",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-generation-c.ipynb",
       "executed_file": "documentation/notebooks/nmr-generation-c.ipynb",
-      "sha256": "f6862ea6970744be0b43e21b4b5c8c285792f3499a98b6ec63912766d1816340",
+      "sha256": "95d7c7625757e905767c668a3c19de25c8ff6b08883e1237349a4e437ddb5313",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-generation-c.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-generation-c.zh.ipynb",
-      "sha256": "46b8d75ab4d06000945159b84c14b3cf812fb97f91a887b10a626c409ece53bc",
+      "sha256": "5d1a2d1ab80e95fbc5bfc26a27e78a5c5b9066f69bee82dc78b10eb0a260b1b1",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-generation-h.ipynb",
       "executed_file": "documentation/notebooks/nmr-generation-h.ipynb",
-      "sha256": "eaadd9f93c67b3eedb07a46d0da588d9fa0ecaf4185f5bbca095f25dcc489ffd",
+      "sha256": "351e81405691f354b5a658fdbb31178752dd63b3b391b1035cdeb21d08c07413",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-generation-h.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-generation-h.zh.ipynb",
-      "sha256": "3d1b0ad2113d0ccbb9f6f15b1493d72da49c87d688c2e8999548df2d92d69f5e",
+      "sha256": "d1ad597c46b8470c03d1150830ad2bc5b7fa156172d00925ca831d5620bb79fe",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-generation-hc.ipynb",
       "executed_file": "documentation/notebooks/nmr-generation-hc.ipynb",
-      "sha256": "50a4cdfc344d88ae717b2c5b7622e7a2d5ae19697984cb723f9119818b42e2ec",
+      "sha256": "eca3723b58f99a8b87cc6d376ee9fda66256ee1e27d1b742d7ab2ede8f3908dc",
       "model_execution_enabled": false,
       "rich_outputs": 4
     },
     {
       "notebook": "documentation/notebooks/nmr-generation-hc.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-generation-hc.zh.ipynb",
-      "sha256": "3ef5ee49be1f5058609f0a4b913a684388406992bc7faf014f5503b245b63566",
+      "sha256": "9ab2f54fbc024aadb89682c4726d7e259c7b1127f03ba4a6e3063d573dde708a",
       "model_execution_enabled": false,
       "rich_outputs": 4
     },
     {
       "notebook": "documentation/notebooks/nmr-hsqc-transpeaknet.ipynb",
       "executed_file": "documentation/notebooks/nmr-hsqc-transpeaknet.ipynb",
-      "sha256": "12f0cb26e315d9bdbecbf85244a27b69dd6c4813b5b2c0a7dd1498a1bc1e3021",
+      "sha256": "4bc5ea6d481a0fa1c748c67e91965159f95b6d19ad8f60a0a47342f114444152",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-hsqc-transpeaknet.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-hsqc-transpeaknet.zh.ipynb",
-      "sha256": "71226e5490bb29e731bd0e4d7720d93b5fd3009d0985bdf99e8ab14b509d6e78",
+      "sha256": "756959341a706f221363398295302f89ffd41e59d685ae43fa395ebab1af6dff",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-retrieval-c-m2s.ipynb",
       "executed_file": "documentation/notebooks/nmr-retrieval-c-m2s.ipynb",
-      "sha256": "239c10bd7cb74c98bda6a701166475f7a8e0864006da73601ab96092014d8abf",
+      "sha256": "edcbc7d05252f9f2c5c8175e252d3192ae732cfd02ef0228db5b07270011cda5",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-retrieval-c-m2s.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-retrieval-c-m2s.zh.ipynb",
-      "sha256": "794de091950502e6f521cdc7f32ad664ced9c6ecbd7e0ff37bcb903d5f22fce8",
+      "sha256": "732c0bd54c7f72b8ad19750370c98ca16ac92f7aef6bdae0a097167da6353b4e",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-retrieval-c-s2m.ipynb",
       "executed_file": "documentation/notebooks/nmr-retrieval-c-s2m.ipynb",
-      "sha256": "884e56a5255e3687b96f98b24a6868e2f6c9de43227ec161958552756099cf46",
+      "sha256": "c0a1d89a4b67ba546ae3cc7015a8711ff386055adebfda3ce1a03c3a0176a7c8",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-retrieval-c-s2m.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-retrieval-c-s2m.zh.ipynb",
-      "sha256": "b15b15c23d064385f3a248e6d7b05c8f9b7202bca2aa377b70398083fc02e0ce",
+      "sha256": "69c4d89d5e996d989f9297aa2b91288b24de225df8380f398152723025c753cb",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-retrieval-h-m2s.ipynb",
       "executed_file": "documentation/notebooks/nmr-retrieval-h-m2s.ipynb",
-      "sha256": "0e5df4990b86899b9a0ee00c37d15a41ded75edd9e2340f3277088ee56debdeb",
+      "sha256": "1def5bb32e8b46abcfb701151056c69406274564534878fb5871723bd38d2599",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-retrieval-h-m2s.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-retrieval-h-m2s.zh.ipynb",
-      "sha256": "3c4ea00afee960b663dc1623c884fb21cb353ece62c855367f2e3ee4bb12202e",
+      "sha256": "aef0ca4836502be0ec97b78d55071bea208c2d22734db1234d0f13972dc7d3fd",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-retrieval-h-s2m.ipynb",
       "executed_file": "documentation/notebooks/nmr-retrieval-h-s2m.ipynb",
-      "sha256": "8d8a7567a8874c974434fc009168d2d9b719bc834b0619ddd2e6ef39266c36f0",
+      "sha256": "3bb8fae0dd67397ed603bbbb1d8887690c472e27acda5f7cd5ae79ed3dfa1bbd",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-retrieval-h-s2m.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-retrieval-h-s2m.zh.ipynb",
-      "sha256": "8e85a432b5796d8b6915f60647946b23466bdea4582d7aa60c9d2199fffcdc73",
+      "sha256": "c8b010596e2bdbe7bbbbbef34cebcf2e4c8087269081aca464a6cc4010d71e43",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-retrieval-hc-m2s.ipynb",
       "executed_file": "documentation/notebooks/nmr-retrieval-hc-m2s.ipynb",
-      "sha256": "f380cbaf2d2947561eaa1d2987ca9d6696e119a63656b3e16793963ddf985562",
+      "sha256": "1acb5e34660c7bf3f46536f1e265c6b08d56bf8dd1b167cfe1b4e68928795650",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-retrieval-hc-m2s.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-retrieval-hc-m2s.zh.ipynb",
-      "sha256": "6fd37546db01361dce39ee55c88655eba610bf89bc5104fbc79efd4ad03141c0",
+      "sha256": "057e57859da25cacbfb6b9329f4052692f2c9379a7777b1fa841bcf36c04b331",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-retrieval-hc-s2m.ipynb",
       "executed_file": "documentation/notebooks/nmr-retrieval-hc-s2m.ipynb",
-      "sha256": "0859454f65540b218bd07a0f19b696716a9d69cdd542fe7f105d4780f8879293",
+      "sha256": "abe2f1519f419ea1cebddb0ba8b2d4032aa6c84a9a81f8b89f319b8d5dc97c62",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-retrieval-hc-s2m.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-retrieval-hc-s2m.zh.ipynb",
-      "sha256": "2badcd7ebdb528a529c9d5022dd327ff630a66c5b09cd8599801057ac0522ec2",
+      "sha256": "064ffba9a6795a2d82ced1f6f18849a7cff162c0dbdd5f7d64436d9dff64e7c4",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-solvent_transfer.ipynb",
       "executed_file": "documentation/notebooks/nmr-solvent_transfer.ipynb",
-      "sha256": "7fe05cc5095582addba0437ded6bb1bc61c69ad03fb6a0a55d23e6921337a385",
+      "sha256": "90b34766e7b2a5b8e511b3bf3ba14c92b4bc30e85c01772765a9b56acbaae45e",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/nmr-solvent_transfer.zh.ipynb",
       "executed_file": "documentation/notebooks/nmr-solvent_transfer.zh.ipynb",
-      "sha256": "82c01dd3a3b786ef3b5cd2202f17527e96bba2d486597135da9bd7b8c42e36ed",
+      "sha256": "83385c068aba23469b2bf1f537f9a8651b3af5fa6d465723acbef59976b5879a",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/sdk-inference.ipynb",
       "executed_file": "documentation/notebooks/sdk-inference.ipynb",
-      "sha256": "9f0052b8a0b529231f489ebc57a1a1ae28914b98d789b4e3f7a909d1ec380798",
+      "sha256": "14453d5c2c1d1a509f2ef52b103f22e07d79035cbb680aba68fe9c6f9408c445",
       "model_execution_enabled": true,
       "rich_outputs": 1
     },
     {
       "notebook": "documentation/notebooks/sdk-inference.zh.ipynb",
       "executed_file": "documentation/notebooks/sdk-inference.zh.ipynb",
-      "sha256": "fff840bc51df64523876d079f5931df36e424280bccf757e8ff274966d30d1d8",
+      "sha256": "459f9fbe9375f8c728c1b0e5e4a13d4c231c1896499eaa3fdbb664c8c82ee80c",
       "model_execution_enabled": true,
       "rich_outputs": 1
     },
     {
       "notebook": "documentation/notebooks/sdk-training-preflight.ipynb",
       "executed_file": "documentation/notebooks/sdk-training-preflight.ipynb",
-      "sha256": "440280c53ee767e73a60ce4490c6b038d568e4e0c59d3617ae87b52156459028",
+      "sha256": "9e1c92bb07eb5cda903511b53a8df870b082dee4f30992754984e6a4cff0e8ed",
       "model_execution_enabled": false,
       "rich_outputs": 0
     },
     {
       "notebook": "documentation/notebooks/sdk-training-preflight.zh.ipynb",
       "executed_file": "documentation/notebooks/sdk-training-preflight.zh.ipynb",
-      "sha256": "e9854ba558a24e3dc46741d044a48d60dbcfc3c9fbef1313a3eb52fc5265b533",
+      "sha256": "e75851f7ee545f74bfd38c8eb6339414e1bcd7295705aafc5475e7d0241ba1af",
       "model_execution_enabled": false,
       "rich_outputs": 0
     },
     {
       "notebook": "documentation/notebooks/spectroscopy-qa.ipynb",
       "executed_file": "documentation/notebooks/spectroscopy-qa.ipynb",
-      "sha256": "3f44bded8c1ba8ec0c4f83750579159b6a0c9942e467f95412f02db57fe447f0",
+      "sha256": "5515057959234e1f70a2c808e6c94a5b4b37b6c64d6fc9f90a074acc27c111a1",
       "model_execution_enabled": false,
-      "rich_outputs": 0
+      "rich_outputs": 1
     },
     {
       "notebook": "documentation/notebooks/spectroscopy-qa.zh.ipynb",
       "executed_file": "documentation/notebooks/spectroscopy-qa.zh.ipynb",
-      "sha256": "ec99be52cd1a9da0d4038cf7db9aed173fb5ebdc014b1692a1a1309dbc793817",
+      "sha256": "1b4224aad651bb9f64522acbdf05c3e387276541483a3afc934e6283e46026dc",
       "model_execution_enabled": false,
-      "rich_outputs": 0
+      "rich_outputs": 1
     },
     {
       "notebook": "documentation/notebooks/spectroscopy-reranking-hc.ipynb",
       "executed_file": "documentation/notebooks/spectroscopy-reranking-hc.ipynb",
-      "sha256": "e996b97e8a6e3e3e6d63913212ceffcb5e55c7deb9bc9d1eb6931d445feef656",
+      "sha256": "371c687cdc9c900cb468391198ae4cc9f3204c2dac63fb8e6f27d2aa1a59da92",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/spectroscopy-reranking-hc.zh.ipynb",
       "executed_file": "documentation/notebooks/spectroscopy-reranking-hc.zh.ipynb",
-      "sha256": "9efe64f37ad09f0e5a68c691b67a848a8db739947a63ef0880fa0ed3e8fa522b",
+      "sha256": "12a7bbe6f8e3e2cb1c2d4f62f4b393345e54650ecbe3de3c024c9f07dad98409",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/spectroscopy-reranking.ipynb",
       "executed_file": "documentation/notebooks/spectroscopy-reranking.ipynb",
-      "sha256": "b71c9d4d1f99bb3a13fce5191c536686413c819e7d4365b440448a6ba63df3a4",
+      "sha256": "478120dd30acd558b0c3f3a66a7df89e268a418eb47e04ecb36b04dd0df49723",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/spectroscopy-reranking.zh.ipynb",
       "executed_file": "documentation/notebooks/spectroscopy-reranking.zh.ipynb",
-      "sha256": "ad78e351e5acce80409e5ffcb796d3a5c717ff75335ac051540ca58d1bc73184",
+      "sha256": "7db72630c37738d554a0470ced538918e33d72cd028b6891a8e85934d7ab7190",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/theory-ms-isotopes.ipynb",
       "executed_file": "documentation/notebooks/theory-ms-isotopes.ipynb",
-      "sha256": "abb3918680823bb7edb7e4f0aa814dd30e8093709645b0080571f8511bb137cb",
+      "sha256": "11cc339e4e3d8c450fb88951c2aac52ccd7bc743c9b0811171f60b96884350f7",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/theory-ms-isotopes.zh.ipynb",
       "executed_file": "documentation/notebooks/theory-ms-isotopes.zh.ipynb",
-      "sha256": "6ab07ec21e23e2323ea8db83472cb115f372355e42f0e1c82c9ab9c1c7f6ace7",
+      "sha256": "e1e310ac9b51cf7ff973e7743f6b856aceb4db4ea468135263e636daff3162f5",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/theory-nmr-fourier.ipynb",
       "executed_file": "documentation/notebooks/theory-nmr-fourier.ipynb",
-      "sha256": "0797606fa5ed9e05ccf8c76dac0d721273ee0d5c04ddd39c1d7e308e1b3481e0",
+      "sha256": "02d9d30ea8bd60d2b113ddbca88416a0c8488f7dc7c6ef1cf6387b808352970b",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/theory-nmr-fourier.zh.ipynb",
       "executed_file": "documentation/notebooks/theory-nmr-fourier.zh.ipynb",
-      "sha256": "be3c82994c7d06a5bc027a0cafac0262fa7f92de7814d64deeb483d775fbf217",
+      "sha256": "29a27a99ad78414554617e9bdd810427a1593a518d312fe167a2337f1fa6913e",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/theory-nmr-inversion.ipynb",
       "executed_file": "documentation/notebooks/theory-nmr-inversion.ipynb",
-      "sha256": "fa406f789e7a8b259022d1fd3e6a6beafbb720da7c349605e04dd4bd761b9a81",
+      "sha256": "e061106d196005c602f46e0ceb25c4e3f8e176371415e932779b8f49cf86708f",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/theory-nmr-inversion.zh.ipynb",
       "executed_file": "documentation/notebooks/theory-nmr-inversion.zh.ipynb",
-      "sha256": "9b1a50bec273cf150fbe3e4579b3df8c118dce7738c43fad9cb67165a6ab7263",
+      "sha256": "47414833619fb7b737087fc82b73a60cd7f9482c90255592fd846c0e4935029e",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/theory-vibrational-broadening.ipynb",
       "executed_file": "documentation/notebooks/theory-vibrational-broadening.ipynb",
-      "sha256": "235546d8443ac896efb92dd7d86eac1642c59ce748b5993cfeb968c859899a7f",
+      "sha256": "8500e5791fc37c3abf0a53795b02acc6848a6168a7be00526d39c9089ae6e7ea",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/theory-vibrational-broadening.zh.ipynb",
       "executed_file": "documentation/notebooks/theory-vibrational-broadening.zh.ipynb",
-      "sha256": "a56e92c6b6df3862b1f07a2c4725b8231ccb810069f9e113195700a86b88a34d",
+      "sha256": "5a251d72a981983e7010b1d940558c6998ae601ffb8a3377d602bd35bb08de90",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-forward.ipynb",
       "executed_file": "documentation/notebooks/vibrational-forward.ipynb",
-      "sha256": "2d3b78b8760e588a19834086710df48bcc40d0aa4bb23811530d7aabe105cb66",
+      "sha256": "9c23c0ceddc25aae42de7b521f8d43aeef6c9454f06a1a2c751ae5aa0dfd58df",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-forward.zh.ipynb",
       "executed_file": "documentation/notebooks/vibrational-forward.zh.ipynb",
-      "sha256": "781e0c0086208d02a94d23b6119d9cf4537b9f04e90940673b2a06e98dcd3527",
+      "sha256": "094419468910efc441e980563c44e2a8eaf097b6c1e966257754d4a6887b1777",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-gap-ir.ipynb",
       "executed_file": "documentation/notebooks/vibrational-gap-ir.ipynb",
-      "sha256": "1b99e88d14d351a322ef0c72b45abe507a1e1fda9c6e72a94f4e736253988f9c",
+      "sha256": "68aa591bc79af132082c65079b9e5c9c371fb69358144e8696ce2dbd0082f30a",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-gap-ir.zh.ipynb",
       "executed_file": "documentation/notebooks/vibrational-gap-ir.zh.ipynb",
-      "sha256": "f2b97fb34107c2c4738badc07a353f7ebb2b4eb9c5a4e8b03f8ac0c1d29e92b1",
+      "sha256": "ca0b0080bed455bf5910ab34411f6af66783bf6dd81980e00012ba1f4f041177",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-gap-ir_raman.ipynb",
       "executed_file": "documentation/notebooks/vibrational-gap-ir_raman.ipynb",
-      "sha256": "37d9cfdb554e8f3a35ef3771c851baac98b87c849a8a15101310a662833f30fd",
+      "sha256": "f890555c44c34d91ccf7a88112bb96fbf65db1131ed6548773e51cfef3e8e573",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-gap-ir_raman.zh.ipynb",
       "executed_file": "documentation/notebooks/vibrational-gap-ir_raman.zh.ipynb",
-      "sha256": "75f5747b8a3d9d421195bf2b27ea51b246fd72382023bbfa8308262dad42ca32",
+      "sha256": "34833eacd40c107cd415d229025f8f825e6acad40e333ff6f8fd20c9bbdc5602",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-gap-ir_raman_hc.ipynb",
       "executed_file": "documentation/notebooks/vibrational-gap-ir_raman_hc.ipynb",
-      "sha256": "c35a805340282a6f0196f0265e46855527b155c9ea9cb7121a5209ba14d555bc",
+      "sha256": "5daccc00aa9b59928c25930bbc073aeeaee35685e4ff3e799c6c3f6fdb62afcc",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-gap-ir_raman_hc.zh.ipynb",
       "executed_file": "documentation/notebooks/vibrational-gap-ir_raman_hc.zh.ipynb",
-      "sha256": "5f36af1db9afa66da834acc346ad81914a721dd5ecb744c79f454bac6109fe8a",
+      "sha256": "2abd4311957aed44861c4e5a352cc823330d6f0c912f3b475ec3bacbe78e17d5",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-gap-raman.ipynb",
       "executed_file": "documentation/notebooks/vibrational-gap-raman.ipynb",
-      "sha256": "a69abe3b539dbe1e6a5799764c7a0264915f35167d9a9c1a4fd93d03aaa04dcd",
+      "sha256": "22172cc3287a596b1ae3082ae5e1dfe3d02e1c3a8e46d3c1f14fd6ce95e76762",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-gap-raman.zh.ipynb",
       "executed_file": "documentation/notebooks/vibrational-gap-raman.zh.ipynb",
-      "sha256": "1b832b3460043c8cac3eef08d9bbf82addb6479e4a0de647f60c5306bf26b2c1",
+      "sha256": "68e55866dc902d241c18b8d66a9ad3047be788391c4795fc8233104d0bc82334",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-generation-hc.ipynb",
       "executed_file": "documentation/notebooks/vibrational-generation-hc.ipynb",
-      "sha256": "68613b0751dee31777d29df7dbd38eda15396b0181176566f20748e9b7772d1e",
+      "sha256": "af716f99f253920a9572817ccdc9ea042cbd0a03748be9542e07acbaad962e8b",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-generation-hc.zh.ipynb",
       "executed_file": "documentation/notebooks/vibrational-generation-hc.zh.ipynb",
-      "sha256": "28c65846488482a94063492e40f826f20a9a55771c04d3aa58258bdfe8801148",
+      "sha256": "baee66efa599fe4cbcf2fb19e979b7c82f54dcea7bb051c38200071442e881ab",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-generation.ipynb",
       "executed_file": "documentation/notebooks/vibrational-generation.ipynb",
-      "sha256": "3ef026c2802ad1b0198513e99a6d73873f3c2106e769c6ec91063d40072af237",
+      "sha256": "c87b7d52c62f740f550b648416c6cda956488efa088e3ec70eb1ebcae6f141cc",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-generation.zh.ipynb",
       "executed_file": "documentation/notebooks/vibrational-generation.zh.ipynb",
-      "sha256": "730b77819644954f755fb07c7e6fe5bc7bcba49bf5a6642a84a7f8aaac5a32f9",
+      "sha256": "8c9ead6f1cfa9a4e71fdaaa318def58d7994542d25523ec7119c569d33f86bae",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-retrieval-hc.ipynb",
       "executed_file": "documentation/notebooks/vibrational-retrieval-hc.ipynb",
-      "sha256": "d09053f5386fe2d003b1bb26a6843ca99862e4c2405da03a471375755e8ff971",
+      "sha256": "841bd1be41c6e032739dcabc18cbaead0cea7ed49b6f9674d0d1a931e22e347c",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-retrieval-hc.zh.ipynb",
       "executed_file": "documentation/notebooks/vibrational-retrieval-hc.zh.ipynb",
-      "sha256": "6bdc1a98de496bdd53a94e45a4b6493a684ba1e327b219d13d852bc499e03259",
+      "sha256": "361d860e4000e084107552e8ca5e0c804de3b82f8f01c54e137c7143f2daaec5",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
+      "notebook": "documentation/notebooks/vibrational-retrieval-ir.ipynb",
+      "executed_file": "documentation/notebooks/vibrational-retrieval-ir.ipynb",
+      "sha256": "3ecf65d118cf043fe135804d53e2d565f8d5d5896960ab8e61c063875b308772",
+      "model_execution_enabled": false,
+      "rich_outputs": 1
+    },
+    {
+      "notebook": "documentation/notebooks/vibrational-retrieval-ir.zh.ipynb",
+      "executed_file": "documentation/notebooks/vibrational-retrieval-ir.zh.ipynb",
+      "sha256": "dafae0380ff8543cd4582b81b3adedfe8b52e1b05724904780abf23fa68d0b91",
+      "model_execution_enabled": false,
+      "rich_outputs": 1
+    },
+    {
+      "notebook": "documentation/notebooks/vibrational-retrieval-raman.ipynb",
+      "executed_file": "documentation/notebooks/vibrational-retrieval-raman.ipynb",
+      "sha256": "b04bb645ff01a0915f51f5cd60a7426f79d6f737c2e8c7fbf05dab29a7343916",
+      "model_execution_enabled": false,
+      "rich_outputs": 1
+    },
+    {
+      "notebook": "documentation/notebooks/vibrational-retrieval-raman.zh.ipynb",
+      "executed_file": "documentation/notebooks/vibrational-retrieval-raman.zh.ipynb",
+      "sha256": "a94fac9251617297c6654ec68c8d5929b41a1f4ed8576e043578719845433e7c",
+      "model_execution_enabled": false,
+      "rich_outputs": 1
+    },
+    {
       "notebook": "documentation/notebooks/vibrational-retrieval.ipynb",
       "executed_file": "documentation/notebooks/vibrational-retrieval.ipynb",
-      "sha256": "919dc112900492ca45cfb8e7bc6f705737243c5b1312e3d62504f74e3f451876",
+      "sha256": "04cf03b42cb78ee32ac086a35261283310f732f3a6d71be9c79ba826cd72e014",
       "model_execution_enabled": false,
       "rich_outputs": 2
     },
     {
       "notebook": "documentation/notebooks/vibrational-retrieval.zh.ipynb",
       "executed_file": "documentation/notebooks/vibrational-retrieval.zh.ipynb",
-      "sha256": "8b8a2bca4e9728d0ae1ea00b8ebe69a87592b8409140aab3b75f0cddd6910961",
+      "sha256": "99451922209b02fb31fcf6ca1ad692b7beb6bcaefbcdfcabfb48309958261695",
       "model_execution_enabled": false,
       "rich_outputs": 2
     }

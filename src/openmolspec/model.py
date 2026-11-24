@@ -326,7 +326,8 @@ class GapModel(_ConfiguredModel):
             ``ir`` and ``raman`` are 1024-point intensity arrays on the
             400–4000 cm⁻¹ grid; ``nmr_h`` and ``nmr_c`` contain shifts in ppm.
         allow_missing_modalities : bool, default False
-            Set to ``True`` to evaluate a selected subset of channels.
+            IR alone, Raman alone or both use their dedicated vibrational regressor.
+            Set this flag for ablations that include a partial NMR input.
 
         Returns
         -------
@@ -351,7 +352,8 @@ class Vib2Mol(GapModel):
     """
     capabilities = {'predict': True, 'retrieve': True, 'fit': False, 'domain': 'computed spectra'}
 
-    def predict(self, inputs, *, top_k=10, allow_missing_modalities=False):
+    def predict(self, inputs, *, top_k=10, allow_missing_modalities=False, ranking="beam",
+                estimate_missing_nmr=True):
         """Generate molecular structures from IR, Raman and NMR spectra.
 
         Parameters
@@ -362,20 +364,38 @@ class Vib2Mol(GapModel):
         top_k : int, default 10
             Number of candidates to return, between 1 and 10.
         allow_missing_modalities : bool, default False
-            Enable inference on a subset of spectral channels.
+            Permit additional missing-channel ablations.
+        estimate_missing_nmr : bool, default True
+            With only IR and Raman, estimate chemical shifts from the two spectra
+            before decoding. The result includes the estimated shifts in ppm.
+            Combine False with allow_missing_modalities=True for the unadapted decoder.
 
         Returns
         -------
         dict
             Canonical candidate structures, decoding/matching scores and
-            checkpoint metadata, using beam size 10 and ITM reranking.
+            checkpoint metadata. The decoder ranks canonical valid beams by default.
+            Pass ranking="itm" to rank by the matching model instead.
         """
         if not 1 <= top_k <= 10:
             raise ValueError('The beam=10 protocol supports top_k between 1 and 10')
-        return self._call(backend='vib2mol', inputs=inputs, top_k=top_k,
-                          allow_missing_modalities=allow_missing_modalities)
+        return self._call(backend='vib2mol', inputs=inputs, top_k=top_k, ranking=ranking,
+                          allow_missing_modalities=allow_missing_modalities,
+                          estimate_missing_nmr=estimate_missing_nmr)
 
-    def retrieve(self, inputs, candidates, *, top_k=10, rerank=False, allow_missing_modalities=False):
+    def predict_native(self, inputs, *, formula, checkout, top_k=10):
+        """Generate with Xinyu Lu's VB-Mols IR+Raman checkpoint and a supplied formula.
+
+        The checkout must contain the author's model code, tokenizers and released
+        MMM generation weights under checkpoints/mols. Supply 1024 points per
+        channel on the 400–4000 cm⁻¹ grid. Results include decoded order and
+        formula agreement for each valid candidate.
+        """
+        return self._call(backend="vib2mol_native", inputs=inputs, formula=formula,
+                          checkout=str(Path(checkout).resolve()), top_k=top_k)
+
+    def retrieve(self, inputs, candidates, *, top_k=10, rerank=False, allow_missing_modalities=False,
+                 estimate_missing_nmr=False, shortlist=None):
         """Rank a supplied molecular library against a spectral query.
 
         Parameters
@@ -391,6 +411,10 @@ class Vib2Mol(GapModel):
             cosine similarity.
         allow_missing_modalities : bool, default False
             Enable inference with selected channels omitted.
+        estimate_missing_nmr : bool, default False
+            Estimate H/C shifts from measured IR and Raman with the fitted adapter.
+        shortlist : int or None
+            Apply ITM to this many embedding-ranked candidates. With None, score the full supplied library.
 
         Returns
         -------
@@ -400,8 +424,11 @@ class Vib2Mol(GapModel):
         """
         if top_k < 1 or isinstance(candidates, str):
             raise ValueError('Supply positive top_k and a list of candidate structures')
+        if shortlist is not None and (type(shortlist) is not int or shortlist < top_k or not rerank):
+            raise ValueError('A reranking shortlist must cover top_k')
         return self._call(backend='vib2mol', inputs=inputs, candidates=list(candidates), top_k=top_k,
-                          rerank=rerank, allow_missing_modalities=allow_missing_modalities)
+                          rerank=rerank, allow_missing_modalities=allow_missing_modalities,
+                          estimate_missing_nmr=estimate_missing_nmr, shortlist=shortlist)
 
 
 class MSPredictor(_ConfiguredModel):

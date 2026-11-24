@@ -71,6 +71,7 @@ def pages(en):
     out[f'harness/cli{suffix}.md']=cli
     mcp='# MCP tools\n\n'+('Connect Spectra Harness to an MCP-compatible agent with the stdio server. Install the MCP extra in the environment used to start the server.\n\n' if en else
         '通过 stdio 服务，可以把 Spectra Harness 接入支持 MCP 的 Agent。先在启动服务的环境中安装 MCP 扩展。\n\n')+code('python -m pip install ".[mcp]"\npython -m openmolspec.mcp','bash')
+    mcp+=('![Agent tool execution through MCP](../assets/harness/mcp-workflow.svg)\n\n' if en else '![Agent 通过 MCP 调用谱学工具](../assets/harness/mcp-workflow.svg)\n\n')
     mcp+=code(json.dumps({'mcpServers':{'openmolspec':{'command':'/path/to/environment/bin/python','args':['-m','openmolspec.mcp']}}},indent=2),'json')
     mcp+='## Tools\n\n| Tool | Purpose | Arguments |\n| --- | --- | --- |\n| `spectra_tasks` | Discover model tasks and spectral channels. | None |\n| `spectra_datasets` | Read dataset cards. | Optional `name` |\n| `spectra_validate` | Check input fields and shapes. | `task`, `inputs`, `model_settings` |\n| `spectra_predict` | Run a model and return its prediction. | `task`, `inputs`, `model_settings`, `repeats` |\n\n'
     mcp+='## '+('Example tool call' if en else '工具调用示例')+'\n\n'
@@ -88,6 +89,8 @@ def pages(en):
         text=f'# {title}\n\n{desc if en else desc_zh}\n\n'
         text+=f'[Download the complete request / 下载完整请求](../assets/harness/{fixture}.json)\n\n'
         text+=code(f"import json\nfrom pathlib import Path\nfrom openmolspec.harness import SpectraHarness\n\nrequest = json.loads(Path('{fixture}.json').read_text())\nharness = SpectraHarness()\nharness.validate(request['task'], request['inputs'], request['model_config'])\nreport = harness.run(request['task'], request['inputs'],\n                     request['model_config'], repeats=request['repeats'])\nresult = report['result']")
+        if family == 'nmr':
+            text += '\n' + (ROOT / 'scripts' / 'doc_templates' / f'nmr-harness{suffix}.md').read_text() + '\n'
         observed=runs[task]['result']
         if family=='nmr':shown={'records':observed['records'],'unit':observed['unit']}
         elif family=='ms':
@@ -106,4 +109,6 @@ def pages(en):
         elif family=='vibrational':text+=code(json.dumps({'gap_ev':row['result']['gap_ev'],'unit':'eV'},indent=2),'json')
         else:text+='![GLACIER spectrum prediction](../assets/gallery/ms-forward-glacier.png)\n\n'
     out[f'harness/examples{suffix}.md']=text
+    if not en:
+        out['harness/vibrational.zh.md'] += '\n\n## 显式候选库\n\n给定 IR 和 Raman 时，`vibrational.retrieval` 默认从两种实测输入估计 H/C 位移。`spectroscopy.reranking` 可通过 `shortlist` 指定先用嵌入选多少候选，再用 ITM 排序。`vibrational.retrieval.ir` 和 `vibrational.retrieval.raman` 分别接收单一通道。以下离线命令可复现跨候选全库的参考谱方法。它从安装包读取拟合集索引。\n\n```bash\npython -m openmolspec_bench.vib_reference_library --portable /path/to/vib-assets   --pool 4096 --queries 128 --seed 1123 --output reference4096.json\n```\n'
     return out

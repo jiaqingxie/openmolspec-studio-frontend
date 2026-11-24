@@ -1,0 +1,67 @@
+{
+  "UltraNMR": {
+    "source": "https://github.com/wuycM/UltraNMR",
+    "status": "formula and peak encoder checked against the upstream example and upstream element vector",
+    "given_formula": "C20H30O3",
+    "proton_peaks": 32,
+    "carbon_peaks": 20,
+    "vocab_size": 50,
+    "model_inference": false
+  },
+  "NMRAgent": {
+    "source": "https://github.com/Meaw0415/NMRAgent",
+    "cli": "passed",
+    "loopback_calls": [
+      "planner",
+      "verifier"
+    ],
+    "chemistry_tools": "dry-run",
+    "llm": "fixed local protocol fixture",
+    "model_inference": false
+  },
+  "ChefNMR": {
+    "source": "https://github.com/ml-struct-bio/chefnmr",
+    "status": "Hydra sampling configuration composed with upstream release defaults",
+    "preset": "SB-H10kC80-S128",
+    "model_inference": false,
+    "config_sha256": "28e5af395adc2e7d2189d1b9a2cc6165cd63ae3b3a4077344d76aed2e6f646e7",
+    "upstream_input_transform": {
+      "archive": "https://zenodo.org/records/17766755",
+      "file": "real-specteach.tar.gz",
+      "md5": "md5:934c4fd52eb0bd5bc528895e9acd5ca7",
+      "dataset": "Real-SpecTeach",
+      "inputs": [
+        "atom_mask",
+        "atom_one_hot",
+        "condition"
+      ],
+      "shape": [
+        10000,
+        80
+      ],
+      "records": 238,
+      "nonempty_both": 238,
+      "examples": [
+        {
+          "record": "0006225",
+          "condition_sha256": "ebfc308c8a35dc624d478237ce121a25bb11e2ab6b030fd0efc707d70fe82b47",
+          "proton_signal_bins": 9173,
+          "carbon_signal_bins": 6
+        },
+        {
+          "record": "0007006",
+          "condition_sha256": "ce440d7aa04de383ad349a91f3fdba3a5033c17b0431c75dd8ab4ec2719c4a9e",
+          "proton_signal_bins": 9181,
+          "carbon_signal_bins": 6
+        },
+        {
+          "record": "0007142",
+          "condition_sha256": "007336b529189f5a156f4dbc5168f0253401269eab214816bca136876d134e84",
+          "proton_signal_bins": 9172,
+          "carbon_signal_bins": 8
+        }
+      ],
+      "model_inference": false
+    }
+  }
+}

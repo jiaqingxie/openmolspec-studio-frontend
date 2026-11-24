@@ -11,3 +11,5 @@
 | [结构检索：IR + Raman](vibrational-retrieval.md) | `vibrational.retrieval` |
 | [结构生成：IR + Raman](vibrational-generation.md) | `vibrational.generation` |
 | [候选重排：IR + Raman](spectroscopy-reranking.md) | `spectroscopy.reranking` |
+| [IR 单谱到结构检索](vibrational-retrieval-ir.md) | `vibrational.retrieval.ir` |
+| [Raman 单谱到结构检索](vibrational-retrieval-raman.md) | `vibrational.retrieval.raman` |

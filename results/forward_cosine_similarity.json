@@ -1,6 +1,6 @@
 {
   "nmr_profile": "Unit-area Lorentzians on all real ppm coordinates. HSQC uses the product of both axes. All listed peaks, no alignment, no clipping, no experimental intensities or multiplet simulation.",
-  "nmr_aggregation": "Equal weight per held-out H/C molecule or expert HSQC spectrum. For single-environment measurements, first average within connectivity, then across connectivities.",
+  "nmr_aggregation": "Equal weight per held-out H/C molecule or official 2DNMRGym spectrum. For single-environment measurements, first average within connectivity, then across connectivities.",
   "nmr_width_sensitivity": "Half and double both refer to the listed reference FWHM, scaled along every axis.",
   "pf_cohort": "Default P/F subset fixes the top 1% of absolute errors from the original released models. The original complete holdout is reported under full_test.",
   "hc_r2": "Pool within-molecule minimum-absolute-error peak matches with equal total weight per molecule. Unpaired peaks contribute to the separate count-penalized error.",
@@ -346,12 +346,13 @@
       "replay_sha256": "a7d23d0b8c064c19b66f96383ae57c9a537b12ff453bc885669be92c4b6caa14"
     },
     "nmr.hsqc.transpeaknet": {
-      "cosine": 0.21149151020436904,
-      "half_width_cosine": 0.08222484373551411,
-      "double_width_cosine": 0.43473543193865116,
+      "cosine": 0.21175448174744307,
+      "half_width_cosine": 0.08173182319720974,
+      "double_width_cosine": 0.4360656704790224,
+      "benchmark": "2DNMRGym official eval",
       "spectra": 479,
       "observed_crosspeaks": 7926,
-      "predicted_crosspeaks": 7613,
+      "predicted_crosspeaks": 7626,
       "axes": [
         "13C",
         "1H"
@@ -362,8 +363,8 @@
       ],
       "checkpoint_sha256": "ff72d33b422dee68b8f359536079b25bf165e81d363652308da65ecd89ed2523",
       "calibration_sha256": "d6deafd1d0859e809347a918e0384e1e45b7f1f8311260d7052d72af0bb1468a",
-      "reference_sha256": "614be38c96f4bd1b8faad55a13c80423fe39136258bf234c4b0956d38fda0368",
-      "replay_sha256": "281d69ed588eeb99d50dca217c410776e0f6e9c2be1bc65f0bfd93dde69a3a44"
+      "reference_sha256": "df918b3228bb54295b297592e1162370e171ebd907ffb993015e969357657b13",
+      "replay_sha256": "6bd47c3be01d272c6673ff1ac924c9318f46e5a99632d54b80bc690f7cf58f65"
     },
     "vibrational.forward": {
       "ir_cosine": 0.98345124371437,

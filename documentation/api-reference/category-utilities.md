@@ -20,8 +20,11 @@
 | [openmolspec.legacy.extract_spectra](module-legacy-extract_spectra.md) | Extract structures, quantum properties, IR and Raman data from Gaussian logs. |
 | [openmolspec.legacy.function](module-legacy-function.md) |  |
 | [openmolspec.maintenance.parse_zinc_v2_nmr](module-maintenance-parse_zinc_v2_nmr.md) | Parse only the ZINCV2 NMR Gaussian logs. |
+| [openmolspec.nmrgym_analogs](module-nmrgym_analogs.md) | Adjust proton peak positions using aligned spectra from similar training structures. |
+| [openmolspec.nmrgym_proton](module-nmrgym_proton.md) | NMRGym-specific transfer model for unassigned 1H peak lists. |
 | [openmolspec.peak_learning](module-peak_learning.md) | Estimate H/C site shifts using observed spectra matched to atom environments. |
 | [openmolspec.phosphorus_gnn](module-phosphorus_gnn.md) | Bond-conditioned message passing from a molecular graph to a solution NMR chemical shift. |
 | [openmolspec.plotting](module-plotting.md) | Shared Arial typography for scientific figures and molecular drawings. |
 | [openmolspec.solution_shifts](module-solution_shifts.md) | Atom-centred chemical-shift prediction for experimental solution NMR. |
+| [openmolspec.ultranmr_input](module-ultranmr_input.md) | Prepare the inputs to UltraNMR's formula-conditioned NMRGym decoder. |
 | [openmolspec](module-openmolspec.md) | OpenMolSpec spectroscopy datasets, model interfaces and learning workflows. |

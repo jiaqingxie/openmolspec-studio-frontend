@@ -13,11 +13,11 @@ def render():
     lines = ["# 任务目录", "", "此表由 `openmolspec_bench/catalog.py` 自动生成，与命令行和 Studio 使用同一份定义。",
              "", "已接入表示存在评测适配器，仍需对应权重与数据；待接入不会产生占位分数。", "",
              "| ID | 任务 | 谱型 | 数据域 | 适配器 | 指标 |", "| --- | --- | --- | --- | --- | --- |"]
-    for task in TASKS:
+    for task in (t for t in TASKS if t.enabled):
         backend = "待接入" if task.backend == "unavailable" else task.backend
         lines.append(f"| `{task.id}` | {task.title} | {', '.join(task.modalities)} | {task.domain} | {backend} | {', '.join(task.metrics)} |")
     lines.extend(["", "## 任务说明", ""])
-    for task in TASKS:
+    for task in (t for t in TASKS if t.enabled):
         if task.note:
             lines.extend([f"- **{task.id}**：{task.note}", ""])
     return "\n".join(lines)

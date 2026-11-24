@@ -1,0 +1,38 @@
+{
+  "task": "spectroscopy.qa",
+  "dataset_sha256": "256ca2d733db0103e99aad5855bc66b73e3a0bd2117ce2bd3204b63eff0f67a2",
+  "checkpoint_index_sha256": "f00d17cbf433746c391ad43948613e373aa51222dbee3b0db61ffff59a74bb1a",
+  "device": "CPU BF16, streamed exact weights",
+  "software_parity_max_abs": 0.0009765625,
+  "full_generated_response": false,
+  "examples": 4,
+  "unrestricted_first_token_hits": 0,
+  "four_choice_hits": 0,
+  "elapsed_seconds": 416.37453508377075,
+  "records": [
+    {
+      "target": "D",
+      "first_token": "A",
+      "forced_choice": "A",
+      "prompt_sha256": "516228008a5fa802263c63ec9844e18f7f5a1e53e89d3ebe97f8973433d8dbfc"
+    },
+    {
+      "target": "B",
+      "first_token": "<",
+      "forced_choice": "D",
+      "prompt_sha256": "dfeb0eb0d39689fc5960e77bd8ee3910141657f05e9e9d88203c88f1ce8c1265"
+    },
+    {
+      "target": "B",
+      "first_token": "A",
+      "forced_choice": "A",
+      "prompt_sha256": "350d27704be9911354ef9b451cdeb6b6580afe15e79576a311eb3837b0df2776"
+    },
+    {
+      "target": "D",
+      "first_token": "A",
+      "forced_choice": "A",
+      "prompt_sha256": "23005c642dead4dc153027950cbacc9540d2768cb6e6d2f34a1fd088735c3960"
+    }
+  ]
+}

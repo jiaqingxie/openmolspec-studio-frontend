@@ -39,6 +39,7 @@ Follow the tutorials to learn how to load spectra, call models, interpret their 
 - [MS/MS prediction with GLACIER](ms-forward-glacier.ipynb)
 - [MS/MS prediction with ICEBERG](ms-forward-iceberg.ipynb)
 - [MS/MS fragment annotation](ms-annotation-magma.ipynb)
+- [MS/MS fragment candidates with MechFrag-MS](ms-annotation-mechfrag.ipynb)
 
 ## IR / Raman
 
@@ -49,16 +50,18 @@ Follow the tutorials to learn how to load spectra, call models, interpret their 
 - [Structure retrieval: IR + Raman](vibrational-retrieval.ipynb)
 - [Structure generation: IR + Raman](vibrational-generation.ipynb)
 - [Candidate reranking: IR + Raman](spectroscopy-reranking.ipynb)
+- [IR spectrum-to-structure retrieval](vibrational-retrieval-ir.ipynb)
+- [Raman spectrum-to-structure retrieval](vibrational-retrieval-raman.ipynb)
 
 ## Multimodal spectroscopy
 
 - [HOMO–LUMO gap from IR + Raman + NMR](vibrational-gap-ir_raman_hc.ipynb)
+- [Spectral question answering with SpecMol](spectroscopy-qa.ipynb)
 - [Structure retrieval: IR + Raman + NMR](vibrational-retrieval-hc.ipynb)
 - [Structure generation: IR + Raman + NMR](vibrational-generation-hc.ipynb)
 - [Candidate reranking: IR + Raman + NMR](spectroscopy-reranking-hc.ipynb)
+- [Structure generation with SpectraLLM](multispectral-spectrallm-generation.ipynb)
 
 ## Deferred tasks
 
 - [谱图 → 分子式](nmr-formula.ipynb)
-- [谱学问答 / 推理](spectroscopy-qa.ipynb)
-- [多谱 → 结构（SpectraLLM）](multispectral-spectrallm-generation.ipynb)

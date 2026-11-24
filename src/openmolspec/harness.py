@@ -184,6 +184,10 @@ def _nmr_execute(task,x,config):
         from pathlib import Path
         from ._runtime import invoke
         root = Path(config['root']).expanduser().resolve()
+        if task == 'nmr.assignment' and config.get('backend') == 'assigned':
+            return invoke(dict(backend='assigned_sites', model_dir=str(root), nucleus=nucleus, smiles=x['smiles'],
+                               solvent=x.get('solvent'), peaks=x['peaks_ppm'], tolerance=x.get('tolerance_ppm')),
+                          python=config.get('python'))
         if task.startswith('nmr.forward.') and config.get('backend') not in ('nmrnet', 'nmrnetpp'):
             directory = root if (root / 'model.json').is_file() else root / nucleus
             if nucleus not in ('1H', '13C') or (directory / 'model.json').is_file():
@@ -220,22 +224,97 @@ def _ms_execute(task,x,config):
 def _vibrational_validate(task,x,config):
     if not config.get('root'):raise ValueError('Supply the vibrational checkpoint root')
     allow=x.get('allow_missing_modalities',False)
+    expected = {'ir','raman','nmr_h','nmr_c'} if task.endswith(('.hc','_hc')) else (
+        {task.rsplit('.',1)[1]} if task.endswith(('.ir','.raman')) else {'ir','raman'})
     for key,size in [('ir',1024),('raman',1024),('nmr_h',None),('nmr_c',None)]:
+        if key not in expected:
+            if x.get(key) is not None: raise ValueError('Unexpected channel for '+task+': '+key)
+            continue
         if x.get(key) is None and allow:continue
         _finite_vector(x.get(key),key,size)
     if '.retrieval' in task or '.reranking' in task:
         if not isinstance(x.get('candidates'),list) or len(x['candidates'])<2:raise ValueError('Supply at least two candidate structures')
+        if 'estimate_missing_nmr' in x and type(x['estimate_missing_nmr']) is not bool:
+            raise ValueError('estimate_missing_nmr must be true or false')
+        if 'shortlist' in x and ('reranking' not in task or type(x['shortlist']) is not int or x['shortlist'] < x.get('top_k',10)):
+            raise ValueError('A reranking shortlist must cover top_k')
 
 
 def _vibrational_execute(task,x,config):
     from .model import GapModel,Vib2Mol
     values={k:x[k] for k in ('ir','raman','nmr_h','nmr_c') if x.get(k) is not None}
-    allow=x.get('allow_missing_modalities',False)
+    allow=x.get('allow_missing_modalities',not task.endswith(('.hc','_hc')))
     if '.gap.' in task:return GapModel(**config).predict(values,allow_missing_modalities=allow)
-    model=Vib2Mol(**config)
+    backend = config.get('backend', 'reference' if task in ('vibrational.retrieval.ir','vibrational.retrieval.raman') else 'vib2mol')
+    if backend == 'reference' and ('.retrieval' in task or '.reranking' in task):
+        from ._runtime import invoke
+        if x.get('shortlist') not in (None,32):
+            raise ValueError('Reference reranking uses a fixed shortlist of 32')
+        if x.get('nmr_reference_id'):
+            values['nmr_reference_id'] = x['nmr_reference_id']
+        return invoke(dict(backend='vib_reference', inputs=values, candidates=x['candidates'],
+                           root=str(config['root']), top_k=x.get('top_k',10),
+                           rerank='reranking' in task, shortlist=x.get('shortlist') == 32),
+                      python=config.get('python'))
+    model=Vib2Mol(**{k:v for k,v in config.items() if k != "backend"})
     if '.retrieval' in task or '.reranking' in task:
-        return model.retrieve(values,x['candidates'],top_k=x.get('top_k',10),rerank='reranking' in task,allow_missing_modalities=allow)
+        return model.retrieve(values,x['candidates'],top_k=x.get('top_k',10),rerank='reranking' in task,allow_missing_modalities=allow,
+                              estimate_missing_nmr=x.get('estimate_missing_nmr',task in ('vibrational.retrieval','spectroscopy.reranking')),
+                              shortlist=x.get('shortlist'))
     return model.predict(values,top_k=x.get('top_k',10),allow_missing_modalities=allow)
+
+
+def _language_validate(task, x, config):
+    from openmolspec_bench.spectral_language import validate
+    validate(task, x, config)
+
+
+def _language_execute(task, x, config):
+    import os
+    from ._runtime import invoke
+    return invoke(dict(backend='spectral_language',task=task,inputs=x,checkpoint=config['checkpoint'],
+                       adapter=config.get('adapter'),device=config.get('device','cuda')),python=os.getenv('OPENMOLSPEC_LM_PYTHON'))
+
+
+def _solvent_validate(task, x, config):
+    if x.get('nucleus') not in ('1H','13C'): raise ValueError('Supply nucleus 1H or 13C')
+    _finite_vector([x.get('source_ppm')],'source_ppm')
+    method = x.get('method', 'reference' if x['nucleus'] == '1H' else 'ridge')
+    if method not in ('ridge', 'reference'):
+        raise ValueError('Choose ridge or reference')
+    if method == 'reference' and not (x.get('smiles') and config.get('library')):
+        raise ValueError('Reference transfer needs query SMILES and a configured paired-reference library')
+    for k in ('source_solvent','target_solvent'):
+        if not isinstance(x.get(k),str) or not x[k].strip(): raise ValueError('Supply '+k)
+
+
+def _solvent_execute(task, x, config):
+    import json
+    from importlib.resources import files
+    from openmolspec_bench.solvent_fit import predict
+    method = x.get('method', 'reference' if x['nucleus'] == '1H' else 'ridge')
+    if method == 'reference':
+        from pathlib import Path
+        from openmolspec_bench.solvent_transfer import ReferenceTransfer
+        library = ReferenceTransfer(json.loads(Path(config['library']).read_text()))
+        return library.predict(x['smiles'], x['nucleus'], x['source_solvent'], x['target_solvent'], x['source_ppm'])
+    model = json.loads(files('openmolspec').joinpath('assets','solvent_shift_fit.json').read_text())
+    result = predict(model, x['nucleus'],x['source_solvent'],x['target_solvent'],x['source_ppm'])
+    return {**result, 'method': model['method']}
+
+
+def _fragment_validate(task, x, config):
+    for key in ('smiles','adduct','instrument'):
+        if not isinstance(x.get(key),str) or not x[key].strip(): raise ValueError('Supply '+key)
+    _finite_vector([x.get('collision_energy')],'collision_energy')
+    _finite_vector(x.get('mz'),'mz')
+    if x['collision_energy'] < 0 or min(x['mz']) <= 0: raise ValueError('Invalid collision energy or m/z')
+
+
+def _fragment_execute(task, x, config):
+    import os
+    from ._runtime import invoke
+    return invoke(dict(backend='mechfrag_annotation',inputs=x),python=os.getenv('OPENMOLSPEC_MS_PYTHON'))
 
 
 def default_plugins():
@@ -252,7 +331,10 @@ def default_plugins():
     vib=tuple(t.id for t in TASKS if t.enabled and (t.id.startswith('vibrational.') and t.id!='vibrational.forward' or t.id.startswith('spectroscopy.reranking')))
     return [HarnessPlugin('NMR Spectra Harness',nmr,_nmr_validate,_nmr_execute),
             HarnessPlugin('MS Spectra Harness',ms,_ms_validate,_ms_execute),
-            HarnessPlugin('Vibrational Spectra Harness',vib,_vibrational_validate,_vibrational_execute)]
+            HarnessPlugin('Vibrational Spectra Harness',vib,_vibrational_validate,_vibrational_execute),
+            HarnessPlugin('Spectral language models',('spectroscopy.qa','multispectral.spectrallm.generation'),_language_validate,_language_execute),
+            HarnessPlugin('Solvent shift fit',('nmr.solvent_transfer',),_solvent_validate,_solvent_execute),
+            HarnessPlugin('MechFrag-MS',('ms.annotation.mechfrag',),_fragment_validate,_fragment_execute)]
 
 
 def main():

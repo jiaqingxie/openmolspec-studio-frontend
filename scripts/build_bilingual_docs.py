@@ -93,7 +93,7 @@ def profile(task):
         kind = "generation" if "generation" in id_ else "candidate reranking" if "reranking" in id_ else "bidirectional retrieval"
         return ("Vib2Mol " + kind + (" with H/C" if id_.endswith(".hc") else " with IR/Raman only"),
                 "Use Xinyu's saved Vib2Mol models for spectral structure elucidation. The complete input is IR + Raman + H/C; the IR/Raman-only route is a missing-NMR ablation.",
-                "Reuse the authors' encode_spectra, canonical/unique_candidates and rerank_candidates utilities. Generation defaults to beam 10 and maximum length 300, removes invalid/duplicate canonical structures, and reranks up to 10 candidates by ITM positive-class probability. No molecular formula is supplied and no nearest-neighbor cache is used.",
+                "Reuse the authors' encode_spectra, canonical/unique_candidates and rerank_candidates utilities. Generation defaults to beam 10 and maximum length 300, removes invalid/duplicate canonical structures, and displays the decoder order with an ITM matching probability for each candidate. No molecular formula is supplied and no nearest-neighbor cache is used.",
                 "Retrieval reports both directions with the candidate-pool size and deterministic tie policy. Generation reports canonical top-1/3/5/10, validity across raw beams and reranked top-k separately. Reranking uses an explicit candidate list.",
                 "Checkpoint pairs must share their H/C reference and normalization buffers. Small candidate pools can inflate retrieval numbers; publish the sample IDs, seed and source composition with every score.",
                 "https://github.com/X1nyuLu/openSpec-alpha")
@@ -177,7 +177,7 @@ def profile_zh(task):
                 "默认两个真实 Gaussian 日志仅用于配对运行检查，未审计其独立测试身份。不能用新生成的 RDKit 构象代替原参考几何后宣称是严格配对精度。")
     if id_.startswith("vibrational.") or id_.startswith("spectroscopy.reranking"):
         return ("使用 Xinyu 保存的 Vib2Mol 模型完成结构检索、SMILES 生成或候选重排。完整输入为 IR+Raman+H/C；仅 IR/Raman 的路径作为缺核消融。",
-                "复用原实现的 encode_spectra、canonical/unique_candidates 与 rerank_candidates。生成默认 beam=10、最大长度 300；先移除无效和重复规范结构，再对前 10 个候选用 ITM 正类概率重排。不提供分子式，也不使用近邻缓存回放。",
+                "复用原实现的 encode_spectra、canonical/unique_candidates 与 rerank_candidates。生成默认 beam=10、最大长度 300；先移除无效和重复规范结构，默认保留有效候选的解码顺序，另附 ITM 匹配概率，支持按该概率重排。不提供分子式，也不使用近邻缓存回放。",
                 "检索报告双向 Recall@1/5/10、MRR 和候选池大小。生成同时报告原始 beam 的有效率、规范去重后的 top-1/3/5/10 及重排后的 top-k；重排始终使用明确的候选列表。",
                 "生成与重排 checkpoint 的 H/C 参考和归一化缓冲必须一致。小候选池可能让检索分数偏高，必须公布样本 ID、种子和来源组成。")
     if id_.startswith("nmr.retrieval."):

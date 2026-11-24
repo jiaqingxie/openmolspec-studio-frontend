@@ -11,3 +11,5 @@ Choose a task to see its purpose, inputs, outputs, model call and examples.
 | [Structure retrieval: IR + Raman](vibrational-retrieval.md) | `vibrational.retrieval` |
 | [Structure generation: IR + Raman](vibrational-generation.md) | `vibrational.generation` |
 | [Candidate reranking: IR + Raman](spectroscopy-reranking.md) | `spectroscopy.reranking` |
+| [IR spectrum-to-structure retrieval](vibrational-retrieval-ir.md) | `vibrational.retrieval.ir` |
+| [Raman spectrum-to-structure retrieval](vibrational-retrieval-raman.md) | `vibrational.retrieval.raman` |

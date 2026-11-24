@@ -5,6 +5,27 @@ def profile(task,en=True):
     name=task.id;source='https://github.com/jiaqingxie/openmolspec-studio-frontend'
     if not task.enabled:
         return task.title,('Additional spectroscopy task.' if en else '其他谱学任务。'),'','','',source
+    if name == 'spectroscopy.qa':
+        return ('Spectral question answering with SpecMol' if en else 'SpecMol 谱学问答',
+                'Ask a question about a supplied spectrum.' if en else '针对输入谱图文本提问。',
+                'The released SpecMol-7B chat model receives the question and spectrum as text.' if en else '将问题与谱图文本交给发布的 SpecMol-7B 聊天模型。',
+                'Score the complete choice and report response format validity. The separately labeled pilot scores only the first token.' if en else '统计完整回答的选项正确率和格式有效率，首个 token 的诊断单列。','','https://github.com/Eurekashen/SpecMol')
+    if name == 'multispectral.spectrallm.generation':
+        return ('Structure generation with SpectraLLM' if en else 'SpectraLLM 多谱结构生成',
+                'Generate a structure from a multispectral text prompt.' if en else '根据多谱文本生成分子结构。',
+                'The released 32B model reads the author system message and spectrum prompt. The reference SMILES is used only during scoring.' if en else '32B 权重读取作者提供的系统消息与谱图问题，参考 SMILES 仅用于评分。',
+                'Report valid output format and canonical SMILES exact match.' if en else '统计格式有效率及规范 SMILES 完全匹配率。','','https://github.com/OPilgrim/SpectraLLM')
+    if name == 'ms.annotation.mechfrag':
+        return ('MS/MS fragment candidates with MechFrag-MS' if en else 'MechFrag-MS 碎片候选指认',
+                'Find atom-indexed fragments consistent with observed product ion masses.' if en else '寻找质量与实测子离子一致的候选碎片及原子编号。',
+                'The locked policy proposes fragment ions for the known molecule and acquisition conditions.' if en else '锁定的策略模型根据分子结构与采集条件提出碎片离子。',
+                'Report observed-peak mass coverage at 10 ppm. Experimental atom masks would be needed to measure structural accuracy.' if en else '报告 10 ppm 窗口内实测峰的质量匹配覆盖率，结构正确率需要实验碎片原子标注。','','')
+    if name in ('vibrational.retrieval.ir','vibrational.retrieval.raman'):
+        channel='IR' if name.endswith('.ir') else 'Raman'
+        return (f'{channel} spectrum-to-structure retrieval' if en else f'{channel} 单谱到结构检索',
+                'Rank a SMILES library using one vibrational spectrum.' if en else '用一条振动谱在 SMILES 候选库中检索结构。',
+                'Retrieve independent reference spectra and rank candidate fingerprint similarity. The native four-channel model is also evaluated with the other channels masked.' if en else '检索独立的参考谱，再按参考分子与候选的指纹相似度排序。同时对原四谱模型进行了通道屏蔽消融。',
+                'Report query count, library size, Top-1/5 hits and mean reciprocal rank.' if en else '报告查询数、库规模、Top-1/5 命中数与平均倒数排名。','','')
     if name.startswith('nmr.forward.'):
         isotope=name.rsplit('.',1)[-1]
         title=f'{isotope} chemical shift prediction' if en else f'{isotope} 化学位移预测'
@@ -30,12 +51,12 @@ def profile(task,en=True):
                 'Assign measured NMR peaks to atoms in a known molecular structure.' if en else '将实测 NMR 峰与已知分子结构中的原子对应起来。',
                 'NMRNet first predicts atomwise shifts. Symmetry-related sites are grouped, then a minimum-cost matching step pairs the measured peaks with the predicted sites. The output includes atom indices, predicted shifts, residuals and alternative assignments.' if en else
                 '先用 NMRNet 预测逐原子化学位移，再合并对称相关位点，通过最小代价匹配把实测峰与预测位点对应。输出包含原子编号、预测位移、匹配残差和备选指认。',
-                'Peak coverage and matched-peak MAE summarize the assignment.' if en else '用峰覆盖率和匹配峰 MAE 汇总指认结果。','','https://github.com/Colin-Jay/NMRNet')
+                'Evaluate correct experimental peak-to-site assignments, counting unmatched peaks as incorrect. The assigned-site backend accepts symmetry-equivalent sites.' if en else '用实验峰到位点的真值计算正确率，未指认峰计错。自有位点模型接受对称等价位点。','','https://github.com/Colin-Jay/NMRNet')
     if name=='nmr.solvent_transfer':
         return ('Cross-solvent chemical shift transfer' if en else '跨溶剂化学位移迁移',
                 'Estimate a spectrum in a target solvent from measurements in a source solvent.' if en else '从源溶剂下的实测位移估计目标溶剂中的谱。',
-                'The experimental-reference model retrieves a similar molecular environment with paired measurements in both solvents. It adds the reference solvent difference to the query shift and returns the reference molecule and atom IDs alongside the estimate.' if en else
-                '实验参考模型检索具有两种溶剂配对测量的相似分子环境，把参考中的溶剂位移差加到查询位移上，同时返回参考分子和原子编号。',
+                'Carbon defaults to the fitted ridge correction. For hydrogen, the experimental-reference model retrieves a similar molecular environment with paired measurements in both solvents. It adds the reference solvent difference to the query shift and returns the reference molecule and atom IDs alongside the estimate.' if en else
+                '碳默认使用拟合的岭回归校正，氢默认使用实验参考模型。参考模型检索具有两种溶剂配对测量的相似分子环境，把参考中的溶剂位移差加到查询位移上，同时返回参考分子和原子编号。',
                 'Evaluate H and C shifts separately using MAE in ppm.' if en else '分别使用 ppm 单位的 MAE 评估 H 与 C 位移。','','https://nmrshiftdb.nmr.uni-koeln.de/')
     if name.startswith(('nmr.retrieval.','nmr.generation.')):
         view=name.split('.')[2];channels={'h':'¹H','c':'¹³C','hc':'¹H + ¹³C'}[view]
@@ -70,7 +91,7 @@ def profile(task,en=True):
         channels={'ir':'IR','raman':'Raman','ir_raman':'IR + Raman','ir_raman_hc':'IR + Raman + NMR'}[name.rsplit('.',1)[-1]]
         return (f'HOMO–LUMO gap from {channels}' if en else f'由 {channels} 预测 HOMO–LUMO 能隙',
                 'Estimate the molecular HOMO–LUMO energy gap from spectra.' if en else '根据谱图估计分子的 HOMO–LUMO 能隙。',
-                'The openSpec spectral Transformer encodes the selected channels and its regression head predicts the energy gap. The prediction is returned in eV.' if en else 'openSpec 谱 Transformer 编码所选通道，由回归头预测能隙，输出单位为 eV。',
+                ('The openSpec spectral Transformer encodes the selected channels and its regression head predicts the energy gap. The prediction is returned in eV.' if en else 'openSpec 谱 Transformer 编码所选通道，由回归头预测能隙，输出单位为 eV。') if complete else ('A ridge regressor fits pooled vibrational intensities and similarities to reference spectra. The model for the observed channels predicts the energy gap in eV.' if en else '岭回归模型使用合并频段后的振动谱强度及与参考谱的相似度。软件根据输入通道选择模型，输出单位为 eV。'),
                 'Report MAE and RMSE in eV.' if en else '报告以 eV 为单位的 MAE 与 RMSE。','',source)
     generation='.generation' in name;rerank='reranking' in name
     title=('Structure generation' if generation else 'Candidate reranking' if rerank else 'Structure retrieval')+': '+channels

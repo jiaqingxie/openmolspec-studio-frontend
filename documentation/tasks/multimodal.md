@@ -5,6 +5,8 @@ Choose a task to see its purpose, inputs, outputs, model call and examples.
 | Task / input → output | Task ID |
 | --- | --- |
 | [HOMO–LUMO gap from IR + Raman + NMR](vibrational-gap-ir_raman_hc.md) | `vibrational.gap.ir_raman_hc` |
+| [Spectral question answering with SpecMol](spectroscopy-qa.md) | `spectroscopy.qa` |
 | [Structure retrieval: IR + Raman + NMR](vibrational-retrieval-hc.md) | `vibrational.retrieval.hc` |
 | [Structure generation: IR + Raman + NMR](vibrational-generation-hc.md) | `vibrational.generation.hc` |
 | [Candidate reranking: IR + Raman + NMR](spectroscopy-reranking-hc.md) | `spectroscopy.reranking.hc` |
+| [Structure generation with SpectraLLM](multispectral-spectrallm-generation.md) | `multispectral.spectrallm.generation` |

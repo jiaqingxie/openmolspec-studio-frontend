@@ -1,0 +1,110 @@
+{
+  "runtime": {
+    "python": "3.10.18",
+    "torch": "2.6.0+cu124",
+    "pyg": "2.7.0",
+    "rdkit": "2025.03.6",
+    "numpy": "2.2.5",
+    "scipy": "1.15.3",
+    "cpu_threads": 1
+  },
+  "checkpoint_sha256": "ff72d33b422dee68b8f359536079b25bf165e81d363652308da65ecd89ed2523",
+  "calibration_sha256": "d6deafd1d0859e809347a918e0384e1e45b7f1f8311260d7052d72af0bb1468a",
+  "source_manifest_sha256": "da547f301f5e6eaaf9ba89c333366c58e5d6ba4e7f84065d6ed27647f9db60c4",
+  "hit_rule": "Maximum number of one-to-one pairs with absolute errors <=2 ppm (13C) and <=0.2 ppm (1H). All recorded peaks form the recall denominator.",
+  "cosine": "Equal spectrum weights, unit-area 2D Lorentzians with FWHM 1.0 ppm (13C) and 0.05 ppm (1H). partial_list_cosine compares a full prediction to the explicitly reported subset and is not a whole-spectrum metric.",
+  "atom_metrics": "MAE at known C sites, per spectrum then mean. Website atom assignment uses the released 8 ppm/0.65 ppm ellipse and accepts any expert carbon sharing the coordinate.",
+  "views": "All screened references are retained in all_records. Secondary views remove known fitting-pool connectivities. The published 1D inventory includes potential pretraining structures; membership does not prove use in fitting.",
+  "panels": {
+    "wanjuan": {
+      "all_records": {
+        "spectra": 21,
+        "connectivities": 21,
+        "observed": 95,
+        "predicted": 276,
+        "in_window": 35,
+        "observed_hit_fraction_micro": 0.3684210526315789,
+        "observed_hit_fraction_macro": 0.21734026944110976,
+        "partial_list_cosine": 0.040469290455692905,
+        "with_candidate_carbon": 69,
+        "candidate_coverage": 0.7263157894736842
+      },
+      "outside_2d_fitting_pools": {
+        "spectra": 21,
+        "connectivities": 21,
+        "observed": 95,
+        "predicted": 276,
+        "in_window": 35,
+        "observed_hit_fraction_micro": 0.3684210526315789,
+        "observed_hit_fraction_macro": 0.21734026944110976,
+        "partial_list_cosine": 0.040469290455692905,
+        "with_candidate_carbon": 69,
+        "candidate_coverage": 0.7263157894736842
+      },
+      "outside_all_listed_pools": {
+        "spectra": 21,
+        "connectivities": 21,
+        "observed": 95,
+        "predicted": 276,
+        "in_window": 35,
+        "observed_hit_fraction_micro": 0.3684210526315789,
+        "observed_hit_fraction_macro": 0.21734026944110976,
+        "partial_list_cosine": 0.040469290455692905,
+        "with_candidate_carbon": 69,
+        "candidate_coverage": 0.7263157894736842
+      },
+      "predictions_sha256": "58135c3edc61499760d8ad6a964063e971db81667ed0d9ef85a8bb31ad4512c6"
+    },
+    "2dnmrgym": {
+      "all_records": {
+        "spectra": 479,
+        "connectivities": 477,
+        "observed": 7926,
+        "predicted": 7626,
+        "in_window": 4050,
+        "observed_hit_fraction_micro": 0.5109765329295988,
+        "observed_hit_fraction_macro": 0.5205514896375218,
+        "cosine": 0.211754481747443,
+        "carbon_mae_ppm": 2.0677357624178714,
+        "proton_mae_ppm": 0.1661190748430316,
+        "correct_atom": 5262,
+        "correct_atom_fraction_of_observed": 0.663890991672975
+      },
+      "outside_2d_fitting_pools": {
+        "spectra": 405,
+        "connectivities": 403,
+        "observed": 6654,
+        "predicted": 6529,
+        "in_window": 3391,
+        "observed_hit_fraction_micro": 0.5096182747219717,
+        "observed_hit_fraction_macro": 0.522060307883921,
+        "cosine": 0.21244709852793323,
+        "carbon_mae_ppm": 2.091261910828032,
+        "proton_mae_ppm": 0.1676415779276187,
+        "correct_atom": 4424,
+        "correct_atom_fraction_of_observed": 0.6648632401562969
+      },
+      "outside_all_listed_pools": {
+        "spectra": 361,
+        "connectivities": 359,
+        "observed": 6371,
+        "predicted": 6247,
+        "in_window": 3242,
+        "observed_hit_fraction_micro": 0.5088683095275467,
+        "observed_hit_fraction_macro": 0.5165354826949379,
+        "cosine": 0.21303068113640994,
+        "carbon_mae_ppm": 2.104294344914934,
+        "proton_mae_ppm": 0.1709760061192437,
+        "correct_atom": 4200,
+        "correct_atom_fraction_of_observed": 0.6592371684194004
+      },
+      "predictions_sha256": "6bd47c3be01d272c6673ff1ac924c9318f46e5a99632d54b80bc690f7cf58f65"
+    }
+  },
+  "publication_overlap": {
+    "same_source_id_and_structure": 479,
+    "same_site_labels_within_0.001_ppm": 452,
+    "same_solvent_input": 434,
+    "same_unassigned_peak_set_within_0.001_ppm": 479
+  }
+}

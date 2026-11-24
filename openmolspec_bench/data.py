@@ -54,7 +54,7 @@ def readonly_lmdb(path):
         return lmdb.open(str(destination), **options)
 
 
-def select_vibrational_rows(environment, limit, sampling="first", seed=42, require_gap=False):
+def select_vibrational_rows(environment, limit, sampling="first", seed=42, require_gap=False, exclude_connectivities=None):
     """Select distinct real structures; optional seeded reservoir spans the entire test pool."""
     from rdkit import Chem
     from collections import Counter
@@ -72,6 +72,9 @@ def select_vibrational_rows(environment, limit, sampling="first", seed=42, requi
             molecule = Chem.MolFromSmiles(row["kekule_smiles"])
             if molecule is None:
                 raise ValueError(f"Invalid vibrational reference at {key!r}")
+            if exclude_connectivities and Chem.MolToInchiKey(molecule).split("-")[0] in exclude_connectivities:
+                counts["excluded_training_or_validation_connectivity"] += 1
+                continue
             identity = Chem.MolToSmiles(molecule, isomericSmiles=True)
             if identity in seen:
                 counts["duplicate_structure"] += 1

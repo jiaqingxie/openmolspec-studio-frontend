@@ -12,7 +12,7 @@ def group(task):
     if not task.enabled:return 'deferred'
     if task.id.startswith('nmr.'):return 'nmr'
     if task.id.startswith('ms.'):return 'ms'
-    if task.id.endswith(('.hc','_hc')):return 'multimodal'
+    if task.id in ('spectroscopy.qa','multispectral.spectrallm.generation') or task.id.endswith(('.hc','_hc')):return 'multimodal'
     return 'vibrational'
 
 
@@ -47,6 +47,14 @@ def io_contract(task,en):
     elif id_.startswith('ms.forward.'):
         fields=[('smiles / adduct','Molecular structure and ion/adduct, e.g. the actual [M+H]+ or [M+Na]+ in the record.','分子结构与记录中的离子/加合物类型，例如 [M+H]+ 或 [M+Na]+。'),('collision_energy / instrument','Collision energy and instrument settings supported by the model.','模型支持的碰撞能与仪器条件。'),('precursor_mz','Recorded precursor m/z; input conventions follow the author interface.','记录中的前体 m/z；按作者接口解释输入条件。')]
         outputs=[('predicted_peaks','Pairs of m/z and relative intensity; figures retain the top 100 predicted peaks.','m/z 与相对强度对；图中显示预测强度最高的 100 个峰。'),('similarity','Cosine/entropy similarity to all observed reference peaks, with skipped records counted.','与全部实测参考峰比较的余弦/熵相似度，同时统计跳过记录。')]
+    elif id_ in ('spectroscopy.qa','multispectral.spectrallm.generation'):
+        fields=[('spectrum', 'Spectrum in the released text format.', '按作者格式提供的谱图文本。'),('model_config.checkpoint','Local merged model directory.', '本地合并权重目录。')]
+        if id_=='spectroscopy.qa':fields.append(('question','Question and optional answer choices.', '问题与可选答案。'))
+        else:fields.append(('system','Optional system message from the upstream example.', '作者题例中的可选系统消息。'))
+        outputs=[('answer','Decoded model response.', '模型解码得到的完整回答。'),('prompt_sha256 / provenance', 'Exact prompt fingerprint and model information.', '提示文本指纹及模型信息。')]
+    elif id_=='ms.annotation.mechfrag':
+        fields=[('smiles / mz','Molecule and observed product ion masses.', '分子结构及实测子离子质荷比。'),('adduct / collision_energy / instrument','Acquisition conditions from the spectrum record.', '谱图记录中的加合物、碰撞能与仪器。')]
+        outputs=[('peaks','Observed mass and candidate atom indices, ion mass and mass error.', '实测质荷比与候选碎片原子编号、离子质量和质量误差。')]
     elif id_=='ms.annotation.magma':
         fields=[('smiles / peaks','Known structure, measured MS/MS peaks [m/z, relative intensity], and adduct.','已知结构、实测 MS/MS 峰 [m/z, 相对强度] 及加合物。'),('ppm_tolerance','Mass tolerance, default 10 ppm; not an NMR chemical-shift tolerance.','质量误差容限，默认 10 ppm；不是 NMR 化学位移容限。')]
         outputs=[('peak_annotations','Candidate fragments, formulas, mass errors and atom/bond indices on engine_smiles.','候选碎片、分子式、质量误差及 engine_smiles 上的原子/键编号。'),('interpretation','Candidate fragment structures and matching mass errors.','候选碎片结构及匹配质量误差。')]
@@ -57,9 +65,12 @@ def io_contract(task,en):
         complete=id_.endswith(('.hc','_hc'))
         fields=[('IR / Raman','1024 intensity samples per visible channel, ordered 400→4000 cm⁻¹, using the checkpoint normalization.','每个可见通道 1024 个强度点，按 400→4000 cm⁻¹ 排列，并采用 checkpoint 的归一化。')]
         if complete:fields.append(('1H / 13C','Per-atom shift arrays in ppm with the checkpoint-compatible reference ID and normalization.','逐原子位移数组（ppm），参考 ID 和归一化必须与 checkpoint 一致。'))
+        elif '.gap.' in id_:fields.append(('model selection','The observed vibrational channels select the corresponding fitted gap regressor.','根据提供的振动谱通道选择相应的能隙回归模型。'))
+        elif id_=='vibrational.generation':fields.append(('estimated shifts','With IR and Raman alone, the software estimates H and C shifts and then decodes candidate structures. The native VB-Mols decoder requires a known molecular formula.','只给 IR 和 Raman 时，软件先估计氢、碳位移，再解码候选结构。调用原作者 VB-Mols 解码器时另需提供已知分子式。'))
+        elif id_ in ('vibrational.retrieval.ir','vibrational.retrieval.raman'):fields.append(('reference library','Known paired spectra and structures, separate from the supplied candidates.', '使用已知谱与结构成对的参考库，参考分子与候选分开。'))
         else:fields.append(('missing channels','The input mask selects visible channels from the shared four-modal checkpoint.','输入掩码选择共享四模态权重的可见通道。'))
         if '.gap.' in id_:outputs=[('gap_ev','One predicted HOMO–LUMO gap in eV; source Hartree labels are converted once.','一个 HOMO–LUMO gap 预测值（eV）；原始 Hartree 标签仅转换一次。'),('MAE / baseline','Error against reference and the frozen training-mean constant on the same records.','与参考值的误差，以及相同样本上固定训练均值基线的误差。')]
-        elif '.generation' in id_:outputs=[('SMILES candidates','Decoded valid, canonical unique candidates; full-input route uses beam 10 and ITM reranking.','解码后有效、规范化且去重的结构；完整输入路径使用 beam 10 和 ITM 重排。'),('top-k','Generation and reranking scores are separate. No molecular formula is supplied.','分别报告生成与重排后的 top-k；不提供分子式。')]
+        elif '.generation' in id_:outputs=[('SMILES candidates','The decoder keeps the first occurrence of each valid canonical structure from 10 beams. The SDK returns beam order by default and also exposes the ITM rank.','从 10 条 beam 中取有效规范结构并按首次出现去重。SDK 默认保留该顺序，同时返回 ITM 排名。'),('top-k','Generation and reranking scores are separate. No molecular formula is supplied.','分别报告生成与重排后的 top-k；不提供分子式。')]
         else:
             fields.append(('candidate structures','The molecular candidate library to rank.','用于排序的分子候选库。'))
             outputs=[('ranking','Candidate identities with similarity or ITM positive-class scores.','候选结构 ID，以及相似度或 ITM 正类分数。'),('recall / MRR','Ranking metrics plus candidate-pool size and source composition.','排序指标、候选池大小及样本来源构成。')]
@@ -238,18 +249,20 @@ def assessment(task,en):
     if id_.endswith('11B'):return ('Diagnostic only: 8.68 ppm MAE, correlation 0.217. Weak discrimination and unaudited coverage; nucleus-specific adaptation is a candidate after data repair.' if en else '仅作诊断：MAE 8.68 ppm，相关系数 0.217。区分能力弱、覆盖未核验；数据修复后可考虑 B 专项适配。')
     if id_.endswith(('19F','31P')):return ('Current solid-state weights are not validated for solution shifts. Resolve domain/reference compatibility before any fine-tuning decision.' if en else '当前固相权重没有验证为溶液位移模型。优先解决数据域与参考兼容，不能直接归因于需要微调。')
     if id_=='nmr.hsqc.transpeaknet':return ('The frozen model reproduces the two MAEs saved in the author notebook.' if en else '冻结权重复现了作者笔记本保存的两项 MAE。')
-    if id_=='nmr.solvent_transfer':return ('Executable reference baseline; H does not improve on unchanged shifts. A solvent-conditioned model and independent paired data are still needed.' if en else '参考检索基线可执行，但 H 没有优于位移不变基线。仍需溶剂条件模型及独立配对数据。')
-    if id_=='nmr.assignment':return ('Reasonable candidate pipeline for a known structure; no experimental assignment accuracy yet. Validate atom labels and symmetry before proposing fine-tuning.' if en else '作为已知结构的候选指认流程合理，但尚无实验指认准确率。先验证原子标签和对称性，再决定微调。')
+    if id_=='nmr.solvent_transfer':return ('Across 46 molecules, the paired experimental reference baseline achieved 0.151 ppm proton and 1.144 ppm carbon MAE. Carrying the original shift forward gave 0.159 and 1.238 ppm.' if en else '在 46 个分子上，实验参考检索的氢、碳 MAE 分别为 0.151 和 1.144 ppm，沿用原位移分别为 0.159 和 1.238 ppm。')
+    if id_=='nmr.assignment':return ('On 256 held-out connectivities per nucleus, site assignment recovered 1,289/2,009 proton peaks and 2,131/2,576 carbon peaks. Proton sites use the attached heavy atom.' if en else '每种核留出 256 个连通结构，氢按所连重原子计算，真值指认命中 1,289/2,009 个氢峰、2,131/2,576 个碳峰。')
     if id_.startswith('nmr.generation.'):return ('Strong dataset dependence: zero exact matches on the 32-example patent and NMRGym checks. Prioritize a clean external test and parsing/token coverage audit; then consider domain fine-tuning.' if en else '存在明显数据域差异：专利和 NMRGym 的 32 样本检查均为零精确匹配。先检查独立测试、解析及词表覆盖，再考虑领域微调。')
     if id_.startswith('nmr.retrieval.'):return ('Input/output pairing is appropriate; the 32-candidate smoke pool is small. Validate a larger independent library before judging generalization or fine-tuning.' if en else '输入输出对应合理，但目前主要是 32 候选的小池检查。先评更大的独立候选库，再判断泛化和微调需求。')
     if id_.startswith('nmr.forward.'):return ('Reasonable H/C frozen-model baseline; reported errors use peak matching, not experimental atom assignments. Verify data overlap and solvent coverage.' if en else '可作为 H/C 冻结模型基线；误差来自峰匹配，不代表实验原子指认。仍要检查训练重叠和溶剂覆盖。')
     if id_.startswith('ms.forward.'):return ('Appropriate author model interface and explicit conditions; 31 scored spectra are insufficient for a broad accuracy claim. Protocol/overlap audit precedes fine-tuning.' if en else '采用作者接口并显式提供采集条件，方法适配合理；31 条评分不足以证明广泛精度。先核查协议与训练重叠，再决定微调。')
-    if id_=='ms.annotation.magma':return ('Algorithmic annotation, not a trainable neural model. Improve matching and validation rather than propose fine-tuning.' if en else '这是算法标注，不是可微调神经模型；应改进匹配和验证。')
+    if id_=='ms.annotation.magma':return ('Across 64 MassSpecGym spectra, 49.8% of observed peaks had a candidate fragment mass within 10 ppm. The run checked 70,498 fragment mappings.' if en else '在 64 张 MassSpecGym 谱上核对 70,498 个候选碎片映射，49.8% 的观测峰在 10 ppm 内有候选碎片质量匹配。')
     if id_=='vibrational.forward':return ('Correct Xinyu Hessian/response route and paired geometry. Two examples demonstrate execution only; evaluate a held-out geometry set before adaptation.' if en else '使用正确的 Xinyu Hessian/response 路径及成对几何。两例只证明流程执行；先做独立构象集评测。')
-    if not id_.endswith(('.hc','_hc')):return ('Missing-channel ablation of a four-modal checkpoint. Poor scores do not validate a stand-alone IR/Raman model; use compatible unimodal weights or plan separate adaptation.' if en else '这是四模态权重的缺通道消融。不能当作独立 IR/Raman 专用模型；需相容权重或另行规划适配。')
+    if '.gap.' in id_ and not id_.endswith('_hc'):return ('Dedicated IR, Raman and dual-spectrum regressors achieved 0.382, 0.318 and 0.288 eV MAE on 3,381 reserved connectivities. The training-mean baseline gave 0.749 eV.' if en else 'IR、Raman 和双谱专用回归模型在 3,381 个留出连通结构上的 MAE 为 0.382、0.318 和 0.288 eV，训练均值基线为 0.749 eV。')
+    if id_ in ('vibrational.retrieval','spectroscopy.reranking'):return ('Among 1,024 candidates with the reference included, the released dual-spectrum checkpoint ranked 1/64 first and the project checkpoint ranked 0/64 first. Rescoring the top 16 preserved both counts.' if en else '1,024 个候选含真结构，原作者双谱权重和项目权重仅给 IR+Raman 时分别命中 1/64、0/64。对前 16 名做 ITM 重排后命中数相同。')
+    if id_=='vibrational.generation':return ('With a supplied formula, Xinyu Lu’s dual-spectrum decoder recovered 24/24 VB-Mols structures and 0/24 OpenMolSpec structures. See the task page for formula-free adaptation and disjoint test panels.' if en else '给定分子式时，Xinyu 的双谱模型在 VB-Mols 命中 24/24，在 OpenMolSpec 命中 0/24。任务页另列无分子式适配和独立评测。')
     if '.gap.' in id_:return ('Complete inputs and units are aligned; 0.131446 eV MAE beats the 0.899940 eV mean baseline on 128 samples. Broader independent evaluation is the next step, not immediate fine-tuning.' if en else '完整输入和单位已对齐；128 样本 MAE 0.131446 eV，优于均值基线 0.899940 eV。下一步是更大独立评测，无证据要求立即微调。')
-    if '.generation' in id_:return ('Author generation protocol is implemented. ITM reranking lowers top-1 from 0.75 to 0.6875 on the same 64 examples; validate this regression before adapting the ranker.' if en else '已遵循作者生成协议，但同一 64 样本上 ITM 重排使 top-1 从 0.75 降到 0.6875；应先复查这项退化，再考虑重排器适配。')
-    return ('Complete four-modal protocol is appropriate. Candidate-pool retrieval and explicit-pool ITM are not open-world generation; validate larger held-out pools.' if en else '完整四模态协议适配合理。候选池检索／ITM 不等于开放结构生成；需扩大独立候选库验证。')
+    if '.generation' in id_:return ('On the initial 64-query panel, preserving decoded order gave 48 first-place hits and ITM gave 44. Both orders achieved 14/24 on a second panel.' if en else '原 64 个查询保留解码顺序命中 48 个第一名，ITM 命中 44 个。另 24 个独立查询上两种排序都命中 14 个第一名。')
+    return ('In the 1,024-candidate library, all four spectral inputs ranked 63/64 references first and ITM rescoring of the top 16 ranked 64/64 first. All queries had their reference in the library.' if en else '在 1,024 个候选中给四个谱通道时，嵌入检索第一名命中 63/64，前 16 名 ITM 重排命中 64/64。每个查询的真结构都在库内。')
 
 
 def model_audit_page(tasks,en):
@@ -270,10 +283,10 @@ def model_audit_page(tasks,en):
     rows=[('1','29Si / 11B','Compatible nucleus-specific weights first; repair structure leakage, recover solvent/reference metadata and verify raw labels. If no suitable released weights exist, nucleus-specific adaptation is justified.','先找相容核种专用权重，修复结构泄漏、补回溶剂/参考条件、核验原标签。若没有合适发布权重，再考虑核种专项适配。'),
           ('2','NMR → SMILES (H / C / H+C)','Strong cross-dataset failures justify an adaptation study after formula parsing, tokenizer coverage and independent scaffold tests are verified.','跨数据集失败明显；验证分子式解析、词表覆盖及独立 scaffold 测试后，可优先做领域适配研究。'),
           ('3','Cross-solvent transfer','First obtain a solvent-conditioned model and clean paired, atom-mapped data. Current nearest-reference baseline is not a neural checkpoint that can be fine-tuned.','先获得溶剂条件模型和干净、原子对应的配对数据。当前近邻参考基线没有可供微调的神经权重。'),
-          ('4','IR/Raman-only gap / generation / retrieval','If missing-NMR use is a product requirement, acquire a checkpoint trained for that input or plan missing-modality adaptation. Current results are ablations.','若必须支持缺 NMR 输入，应找对应输入训练的权重，或规划缺模态适配；当前分数属于消融。'),
-          ('5','Vib2Mol ITM reranker','Investigate the observed same-sample top-1 regression; calibrating or retraining on the test set is prohibited. Use a separate development set for any later adaptation.','先调查同样本 top-1 退化；不得在测试集上拟合校准或重训。后续适配必须使用独立开发集。')]
+          ('4','IR/Raman structure generation and retrieval','The dedicated gap regressors beat the training mean. For structure prediction, report results separately by source and whether a formula is supplied.','专用能隙模型在留出集优于均值基线。结构任务按谱图来源和是否给定分子式分别报告。'),
+          ('5','Vib2Mol ITM reranker','Canonical beam order restored 48/64 first-place hits. ITM remains available for candidate library ranking.','保留规范化后的解码顺序使生成第一名恢复到 48/64。候选库排序仍可调用 ITM。')]
     text+='| Priority | Task family | Prerequisite / reason |\n| --- | --- | --- |\n'
     for p,t,a,z in rows:text+=f'| {p} | {t} | {a if en else z} |\n'
-    text+=('\n**Not yet a fine-tuning conclusion:** F/P need compatible solution/reference definitions first; assignment needs experimental ground truth; MS and conformer→IR/Raman need larger independent evaluations. MAGMa is an algorithm. Full-input gap has a useful current baseline. SpectraLLM, formula prediction and QA remain deferred.\n' if en else '\n**暂不能直接下“需要微调”的结论：**F/P 先解决溶液域和参考约定；指认先补实验真值；MS、构象→IR/Raman 先扩大独立评测。MAGMa 是算法。完整输入 gap 现有基线有用。SpectraLLM、分子式预测、谱学 QA 继续暂缓。\n')
+    text+=('\n**Not yet a fine-tuning conclusion:** F/P need compatible solution/reference definitions first; MS and conformer→IR/Raman need larger independent evaluations. MAGMa is an algorithm. Full-input gap has a useful current baseline. SpectraLLM, formula prediction and QA remain deferred.\n' if en else '\n**暂不能直接下“需要微调”的结论：**F/P 先解决溶液域和参考约定；MS、构象→IR/Raman 先扩大独立评测。MAGMa 是算法。完整输入 gap 现有基线有用。SpectraLLM、分子式预测、谱学 QA 继续暂缓。\n')
     text+='\n[Download B/Si audit](assets/reports/bsi_model_review_20261117.json) · [Official archive inventory](assets/reports/nmrnetpp_release_inventory_20261117.json)\n'
     return text
