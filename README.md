@@ -1,6 +1,6 @@
 # OpenMolSpec
 
-项目网页：[OpenMolSpec v1.0](https://jiaqingxie.github.io/openmolspec.github.io/)。提供 Introduction、在线 Tool、实验 Dataset 预览和 Documentation 跳转。Agent Harness 接入模型 API，通过真实 MCP 工具完成能力发现、输入校验和模型调用，提供可展开的调用记录、实际运行回放与过程截图。网站构建见 [website/README.md](website/README.md)，推理服务部署见 [online_api/README.md](online_api/README.md)。
+项目网页：[OpenMolSpec v1.0](https://jiaqingxie.github.io/openmolspec.github.io/)。可直接打开[中文版](https://jiaqingxie.github.io/openmolspec.github.io/?lang=zh)。工作台列出各任务的输入与输出，数据探索支持按 SMILES 查实验谱、调用预测、对照计算谱与实测峰。首页使用同一份蔗糖样品的氢谱、碳谱及 HSQC；智能体工作流图与三个真实案例可直接回放。网站构建见 [website/README.md](website/README.md)，推理服务部署见 [online_api/README.md](online_api/README.md)。
 
 面向化学谱学的数据集与深度学习平台。v1.0 通过 Python 包 `openmolspec` 提供数据加载、模型调用、训练准备、自主训练与评测。NMRTransformer 已完成编码器和生成器的微型真实训练、保存、重载与重复推理检查；模型效果按各任务的实际评测范围报告。用法见 [Python SDK](documentation/api.zh.md)，功能入口见 [文档目录](documentation/index.zh.md)。
 
@@ -33,7 +33,7 @@ python -m openmolspec_bench run \
   --output results/my_smoke.json
 ```
 
-统一目录保留 35 个任务配置，其中 32 项继续推进、3 项按用户要求停用（SpectraLLM、分子式预测、谱学 QA）。32 个活跃任务均有运行入口；³¹P 和 ¹⁹F 使用现有实验数据训练的溶液位移模型，¹¹B 和 ²⁹Si 使用按分子留出的实测数据评估，跨溶剂目前为实验参考检索基线。覆盖 H/C NMR、TransPeakNet HSQC、Xinyu 四模态 Vib2Mol、gap、构象到 IR/Raman、GLACIER/ICEBERG 和 MAGMa。接口存在不代表精度已验证。结果记录数据与权重 SHA-256、样本、候选池和状态。流程入口只进行推理或已有预测评分。
+任务目录包含 37 个活跃配置，覆盖单谱与多谱检索、库内重排、位点指认、跨溶剂位移、能隙、碎片候选标注、SpecMol 问答和 SpectraLLM 结构生成。可通过 Python、命令行和 MCP 调用已配置的模型。独立的分子式预测已停用。各项实测规模和适用范围见[评测结果](handbook/results.md)，工具调用见[Harness 图和示例](documentation/harness/mcp.zh.md)。
 
 详情见[任务目录](handbook/tasks.md)、[数据格式](handbook/data.md)、[评测口径](handbook/benchmark.md)、[Studio 操作](handbook/studio.md)及[结果](handbook/results.md)。旧核心项目说明仍位于 [docs/openmolspec_core.md](docs/openmolspec_core.md)。
 
@@ -59,7 +59,9 @@ Read the Docs 使用 `.readthedocs.yaml` 构建 `release/openmolspec-v1` 分支�
 
 当前模型来源和接入条件见 [后续模型核查](docs/ACTIVE_MODEL_FOLLOWUP.md)。
 
-二维 HSQC 可用 TransPeakNet 从 SMILES 和溶剂预测交叉峰。用冻结权重重算作者笔记本的 511 行溶剂记录，¹³C / ¹H MAE 为 2.024874 / 0.165062 ppm。对公开的 479 张谱等权平均，结果为 2.027531 / 0.165891 ppm。网页的峰匹配规则另行评测，7,926 个不同观测峰中有 5,141 个命中专家给出的碳位点，未匹配峰计入分母。[中文任务指南](documentation/tasks/nmr-hsqc-transpeaknet.zh.md) · [完整预测](results/transpeaknet_hsqc_479.json)
+二维 HSQC 从 SMILES 和溶剂预测交叉峰，使用 TransPeakNet 作者权重和 OpenMolSpec 位移校准。2DNMRGym 官方 eval 的 479 张谱中，双轴命中率为 51.1%，碳指认正确率为 66.4%。万卷 21 份局部峰表的 95 个已报告峰中命中 35 个。TransPeakNet 专家档案和 2DNMRGym 共用这 479 张谱，按一个基准计数。[两组基准、逐谱预测与复现命令](results/hsqc_benchmarks/README.md) · [模型与原作者权重复现](documentation/tasks/nmr-hsqc-transpeaknet.zh.md)
+
+正向预测涵盖六种一维核、二维 HSQC、IR / Raman 和两个 MS/MS 后端。各项完整测试集规模、参考类型、指标与脚本入口见[正向预测汇总](documentation/benchmarks.zh.md)与[论文结果整理](docs/manuscript/forward_prediction_results.md)。 [同一万卷分子的 ¹H、³¹P 和 HSQC 脚本](scripts/example_forward_wanjuan.py) · [实测与预测对照图](docs/figures/forward_wanjuan_example.pdf)
 
 原子指认使用冻结 NMRNet H/C 权重，可在 Prediction (Online) 中直接运行。跨溶剂页面明确标注参考检索基线；源数据准备和部署变量见 [接入与发布说明](docs/REMAINING_TASKS_DELIVERY.md)。
 

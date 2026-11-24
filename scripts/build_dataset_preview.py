@@ -112,7 +112,7 @@ def draw_structure(molecule, destination):
     destination.write_text(drawer.GetDrawingText())
 
 
-def build(data_root, output, limit=4):
+def build(data_root, output, limit=18):
     """Export the first valid test records and versioned collection counts."""
     from rdkit import RDLogger
     RDLogger.DisableLog('rdApp.*')
@@ -123,8 +123,8 @@ def build(data_root, output, limit=4):
     molecules = output / 'molecules'
     molecules.mkdir(exist_ok=True)
     payload = {
-        'version': 1,
-        'selection': f'First {limit} valid test records in source order for each view; H/C previews require both nuclei.',
+        'version': 2,
+        'selection': f'Up to {limit} valid, distinct test records in source order for each view. H/C previews require both nuclei. Small views include all qualifying records.',
         'summary': {
             'nmr': {'spectra': cleaned['nmr']['counts']['h_spectra'] + cleaned['nmr']['counts']['c_spectra'],
                     'molecules': cleaned['nmr']['molecular_identities'],
@@ -138,18 +138,19 @@ def build(data_root, output, limit=4):
     for dataset, title, modality, units in VIEWS:
         is_hc = dataset == 'opendatalab_nmr'
         path = data_root / 'opendatalab_nmr/test.jsonl' if is_hc else data_root / 'experimental' / (modality + '-test.jsonl')
-        selected = []
+        selected, seen = [], set()
         with path.open() as stream:
             for line in stream:
                 sample, molecule = sample_record(json.loads(line), dataset, modality, units)
-                if sample is None:
+                if sample is None or sample['id'] in seen:
                     continue
+                seen.add(sample['id'])
                 selected.append(sample)
                 draw_structure(molecule, molecules / (sample['id'] + '.svg'))
                 if len(selected) == limit:
                     break
-        if len(selected) != limit:
-            raise ValueError('Not enough valid records for ' + dataset)
+        if not selected:
+            raise ValueError('No valid records for ' + dataset)
         view = payload['summary']['nmr'] if is_hc else cleaned['experimental']['views'][modality]
         payload['datasets'].append({'id': dataset, 'name': title, 'modality': modality,
             'units': units, 'spectra': view['spectra'], 'molecules': view['molecules'],
@@ -172,7 +173,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--data-root', type=Path, default=ROOT / '.runtime/manual-data-v1')
     parser.add_argument('--output', type=Path, default=ROOT / 'website/assets')
-    parser.add_argument('--limit', type=int, default=4)
+    parser.add_argument('--limit', type=int, default=18)
     args = parser.parse_args()
     if args.limit < 1:
         parser.error('--limit must be positive')

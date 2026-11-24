@@ -39,9 +39,12 @@ def contract(task):
         return ('Molecular structure; candidate spectra','Ranked spectra') if name.endswith('.m2s') else ('NMR peaks; candidate structures','Ranked molecular structures')
     if name.startswith('nmr.generation.'):return 'NMR peaks; supplied molecular formula','SMILES candidates'
     if name.startswith('ms.forward.'):return 'Structure; adduct; collision energy; instrument','MS/MS m/z–intensity peaks'
-    if name=='ms.annotation.magma':return 'Structure; MS/MS peaks; precursor conditions','Candidate fragment annotations'
+    if name=='spectroscopy.qa':return 'Spectrum text and a question','Model answer'
+    if name=='multispectral.spectrallm.generation':return 'Multispectral text prompt','SMILES candidates'
+    if name.startswith('ms.annotation.'):return 'Structure; MS/MS peaks; precursor conditions','Candidate fragment annotations'
     if name=='vibrational.forward':return 'Elements and 3D Cartesian coordinates','IR and Raman spectra'
     modalities=', '.join(task.modalities)
+    if name.startswith('spectroscopy.reranking'):return modalities+'; candidate structures','Reranked molecular structures'
     if '.gap.' in name:return modalities,'HOMO–LUMO gap (eV)'
     if '.generation' in name:return modalities,'SMILES candidates'
     return modalities+'; candidate structures','Ranked molecular structures'
@@ -78,14 +81,13 @@ def main():
     for path in gallery.iterdir():
         if path.stem in allowed and path.suffix in ['.png','.svg','.pdf']:shutil.copyfile(path,output/'assets/gallery'/path.name)
     text=(ROOT/'website/portal.html').read_text()
-    for name in ['site.css','site.js','portal.css','portal.js','launch.css','molecule-playground.js','hsqc-figure.js']:
+    for name in ['site.css','site.js','portal.css','portal.js','launch.css','molecule-playground.js','hsqc-figure.js','atlas.css','language.js',
+                 'explore-lab.js','explore-lab.css','harness-showcase.js','harness-showcase.css']:
         asset = ROOT/'website'/name
         shutil.copyfile(asset,output/name)
         version = hashlib.sha256(asset.read_bytes()).hexdigest()[:12]
         text = text.replace(f'"{name}"', f'"{name}?v={version}"')
     shutil.copytree(ROOT/'website/assets',output/'assets',dirs_exist_ok=True)
-    hsqc = json.loads((assets/'examples/nmr-hsqc-transpeaknet.json').read_text())['examples'][0]
-    text = text.replace('__HSQC_PEAKS__', json.dumps(hsqc['reference']['peaks_c_h_ppm']))
     carbon_report = json.loads((ROOT/'results/forward_carbon_folds.json').read_text())
     carbon = next(row for row in carbon_report['fresh_replay']['examples']
                   if row['nucleus'] == '13C' and row['smiles'] == 'CCO')
@@ -96,9 +98,41 @@ def main():
     cleaned=summary['nmr']
     metrics=[(f'{(cleaned["counts"]["h_spectra"]+cleaned["counts"]["c_spectra"])/1e6:.2f}M', 'Experimental H/C spectra'),
              (f'{cleaned["molecular_identities"]/1e6:.2f}M', 'Unique H/C molecules'),
-             (str(len(verification['tasks'])), 'Online workflows'),
+             (str(len(tasks)), 'Documented tasks'),
              (str(proof['executed_notebooks']), 'Executed tutorials')]
     text=text.replace('__LAUNCH_METRICS__', ''.join(f'<div><dt>{label}</dt><dd>{value}</dd></div>' for value,label in metrics))
+    views = summary['experimental']['views']
+    dashboards = [
+        ('H/C NMR', [('¹H', 'opendatalab_nmr', cleaned['counts']['h_spectra']),
+                     ('¹³C', 'opendatalab_nmr', cleaned['counts']['c_spectra'])]),
+        ('Other NMR nuclei', [(label, 'opendatalab_'+key.lower(), views[key]['spectra'])
+                              for key, label in [('19F','¹⁹F'), ('31P','³¹P'), ('11B','¹¹B'), ('29Si','²⁹Si')]]),
+        ('IR, Raman & MS', [(key, 'opendatalab_'+key.lower(), views[key]['spectra'])
+                            for key in ('IR','Raman','MS')])]
+    sections = []
+    for title, channels in dashboards:
+        items = ''.join(f'<li><button type="button" data-collection="{dataset}" data-nucleus="{label}">'
+                        f'<span>{label}</span><strong>{number:,}</strong></button></li>'
+                        for label, dataset, number in channels)
+        sections.append(f'<section><h4>{escape(title)}</h4><ul>{items}</ul></section>')
+    text = text.replace('__COVERAGE__', ''.join(sections))
+    def result_file(name):
+        return json.loads((ROOT/'results'/name).read_text())
+    assignment = result_file('assignment_all_heldout_sites.json')['nuclei']
+    gap = result_file('gap_four_channel_1024.json')['results'][0]['metrics']
+    qa = result_file('specmol_qa32.json')['metrics']
+    multi = result_file('vib_library4096_four.json')
+    ranking = multi['shortlist_itm_rank']
+    records = [
+        ('¹H peak-to-atom accuracy', f"{assignment['1H']['accuracy']:.1%}", f"{assignment['1H']['peaks']:,} labeled peaks", 'nmr'),
+        ('¹³C peak-to-atom accuracy', f"{assignment['13C']['accuracy']:.1%}", f"{assignment['13C']['peaks']:,} labeled peaks", 'nmr'),
+        ('Four-channel energy gap', f"{gap['mae_ev']:.3f} eV", f"MAE · {gap['examples']:,} computed molecules", 'vibrational'),
+        ('Four-spectrum retrieval', f"{ranking['top1_hits']} / {ranking['queries']}", f"Top 1 · {len(multi['pool']):,} candidates · top-{multi['shortlist']} reranked", 'vibrational'),
+        ('SpecMol question answering', f"{qa['exact_rate']:.1%}", f"Exact answers · {qa['examples']} held-out questions", 'multimodal')]
+    cards = []
+    for label, value, cohort, family in records:
+        cards.append(f'<a href="docs/benchmarks/{family}.html"><span>{label}</span><strong>{value}</strong><small>{cohort}</small></a>')
+    text = text.replace('__BENCHMARKS__', ''.join(cards))
     if not cleaned['completed']:
         raise ValueError('The project site requires the completed cleaned NMR collection')
     text=text.replace('__INTRO_COUNTS__',f'The cleaned H/C NMR collection contains {cleaned["molecular_identities"]:,} molecular identities. Explore {len(tasks)} tasks and {proof["executed_notebooks"]} tutorials covering prediction, structure elucidation, training and spectroscopy.')
@@ -141,10 +175,14 @@ def main():
         if (gallery/(slug+'.png')).exists():figures.append(f'<figure><a href="assets/gallery/{slug}.png" data-figure data-guide="{DOCS}data/index.html"><img src="assets/gallery/{slug}.png" alt="{label}" loading="lazy"></a><figcaption>{label}</figcaption></figure>')
     text=text.replace('__DATA_FIGURES__',''.join(figures))
     task_rows=[];task_names={};task_families={}
+    titles_zh = {}
     for task in tasks:
         slug=task.id.replace('.','-');title=profile(task)[0];family=group(task);inputs,outputs=contract(task)
+        titles_zh[title] = profile(task,en=False)[0]
         task_names[slug]=title;task_families[slug]=family
-        task_rows.append(f'<tr data-family="{family}"><td><a href="{DOCS}tasks/{slug}.html">{escape(title)}</a><small>{task.id}</small></td><td>{escape(inputs)}</td><td>{escape(outputs)}</td></tr>')
+        purpose=profile(task)[1]
+        titles_zh[purpose]=profile(task,en=False)[1]
+        task_rows.append(f'<tr data-family="{family}"><td><a href="{DOCS}tasks/{slug}.html">{escape(title)}</a><small>{escape(purpose)}</small></td><td>{escape(inputs)}</td><td>{escape(outputs)}</td></tr>')
     text=text.replace('__TASK_ROWS__',''.join(task_rows))
     examples = assets/'examples'
     generation = json.loads((examples/'nmr-generation-hc.json').read_text())['examples'][0]
@@ -164,15 +202,16 @@ def main():
         cards.append(f'<article class="gallery-card" data-family="{family}"><a href="assets/gallery/{slug}.png" data-figure data-guide="{guide}"><img src="assets/gallery/{slug}.png" alt="{escape(title)} — actual recorded results" loading="lazy"></a><div class="gallery-caption"><h3>{escape(title)}</h3><a href="{guide}">Inputs, outputs and source →</a><a class="download" href="assets/gallery/{slug}.svg">SVG ↗</a></div></article>')
     text=text.replace('__GALLERY__',''.join(cards)).replace('__FIGURE_COUNT__',str(len(cards)))
     if '__' in text:raise ValueError('Unfilled site template marker')
+    text = text.replace('</head>', '<script type="application/json" id="task-titles-zh">'+json.dumps(titles_zh,ensure_ascii=False).replace('<','\\u003c')+'</script>\n</head>')
     (output/'index.html').write_text(text)
     (output/'.nojekyll').write_text('')
-    (output/'README.md').write_text('# OpenMolSpec v1.0 project site\n\nhttps://jiaqingxie.github.io/openmolspec.github.io/\n\nIntroduction, online tools, experimental dataset previews and a Documentation entry. GitHub Pages serves the static frontend; model requests execute on the separate Python API.\nSource: https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/website\nDeployment: https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1/online_api\n\nThe full bilingual manual is also bundled at docs/. The public API currently uses a temporary demonstration tunnel; permanent hosting requires a stable HTTPS origin and supervised model processes. No provider key is included in this repository.\n')
+    shutil.copyfile(ROOT/'website/README.md',output/'README.md')
     report={'completed':True,'active_tasks':len(tasks),'scientific_figures':len(cards),'executed_tutorials':proof['executed_notebooks'],
         'cleaned_nmr_molecular_identities':cleaned['molecular_identities'],'interactive_molecular_isomers':2,
         'manual_html_pages':manifest['html_pages'],'manual_languages':manifest['languages'],
         'dataset_preview_records':len(preview['samples']),'dataset_preview_views':len(preview['datasets']),
         'verified_online_workflows':len(verification['tasks']),'agent_demo':'recorded real API and MCP execution',
-        'navigation':['Workspace','Datasets','Documentation','GitHub'],
+        'navigation':['Workspace','Explore','Agent Harness','Benchmarks','Documentation','GitHub'], 'interface_languages':['en','zh-Hans'],
         'cdn_dependencies':False,'online_inference_requires_api':True,
         'target':'https://jiaqingxie.github.io/openmolspec.github.io/'}
     (output/'build-report.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))

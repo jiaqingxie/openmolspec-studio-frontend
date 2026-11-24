@@ -18,7 +18,9 @@ class OnlineGenerationTests(unittest.TestCase):
         self.generation = SimpleNamespace(spectral_encoding=self.encoding,
                                          beam_infer_lm=Mock(return_value={'pred_ids': [['CC', 'CCC']]}))
         self.ranker = SimpleNamespace(spectral_encoding=self.encoding)
-        self.tokenizer = SimpleNamespace(decode=lambda value, **kwargs: value)
+        self.tokenizer = SimpleNamespace(decode=lambda value, **kwargs: value,
+                                         encode=lambda value, **kwargs: [1] + [4] * len(value) + [2],
+                                         model_max_length=512, unk_token_id=0)
         self.service._load_vib2mol = lambda phase: (self.generation if phase == 2 else self.ranker, self.tokenizer, 'cpu')
         self.module = ModuleType('benchmarks.models.vib2mol.evaluate_multimodal')
         self.module.unique_candidates = lambda candidates: candidates
@@ -26,12 +28,24 @@ class OnlineGenerationTests(unittest.TestCase):
         self.inputs = SpectralInput(ir=np.ones(1024), raman=np.ones(1024),
                                     nmr_h=np.array([1.]), nmr_c=np.array([10.]))
 
-    def run_generation(self):
+    def run_generation(self, ranking="beam"):
         with patch.dict(sys.modules, {self.module.__name__: self.module}):
-            return self.service._generate_vib2mol(self.inputs, 2)
+            return self.service._generate_vib2mol(self.inputs, 2, ranking=ranking)
+
+    def test_valid_beam_outside_matcher_vocabulary_keeps_its_beam_rank(self):
+        self.tokenizer.model_max_length = 4
+        self.generation.beam_infer_lm.return_value = {"pred_ids": [["CCC", "CC"]]}
+        self.module.rerank_candidates.return_value = ([0], [.7])
+        beam = self.run_generation()["candidates"]
+        self.assertEqual([r["smiles"] for r in beam], ["CCC", "CC"])
+        self.assertEqual((beam[0]["score"], beam[0]["itm_rank"], beam[0]["itm_status"]),
+                         (None, None, "over_token_limit"))
+        self.assertEqual([r["smiles"] for r in self.run_generation("itm")["candidates"]], ["CC", "CCC"])
 
     def test_scores_stay_attached_to_reranked_candidates(self):
-        result = self.run_generation()
+        default = self.run_generation()
+        self.assertEqual([(r["smiles"], r["score"]) for r in default["candidates"]], [("CC", .2), ("CCC", .9)])
+        result = self.run_generation("itm")
         self.assertEqual([(row['smiles'], row['score']) for row in result['candidates']], [('CCC', .9), ('CC', .2)])
         self.assertEqual(self.generation.beam_infer_lm.call_args.kwargs['beam_size'], 10)
 

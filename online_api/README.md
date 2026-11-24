@@ -41,6 +41,30 @@ The current demonstration uses a Cloudflare Quick Tunnel, which has no uptime
 guarantee and must be replaced for long-term hosting. Its origin is configurable
 without changing the UI. The frontend always checks actual service status.
 
+### Experimental lookup and prediction
+
+Build the byte-offset index once for the cleaned OpenDataLab H/C and experimental
+JSONL splits. Keep the source files accessible to the service and rebuild the
+index after replacing them. The defaults below match the server arguments
+`--spectra-data` and `--spectra-index`.
+
+```bash
+python -m online_api.spectrum_library \
+  --data-root .runtime/manual-data-v1 --index .runtime/spectra-library.sqlite
+curl -sS http://127.0.0.1:8721/api/spectra/resolve \
+  -H 'Origin: http://localhost:8769' -H 'Content-Type: application/json' \
+  -d '{"smiles":"C1CC1C#C","modality":"IR"}'
+```
+
+Supported modalities are `1H`, `13C`, `11B`, `19F`, `29Si`, `31P`, `IR`,
+`Raman` and `MS`. Lookup checks canonical isomeric SMILES after an indexed
+InChIKey search. A matching response contains the split, units, recorded peaks,
+source ID and available acquisition fields, with at most 12 records and a total
+match count. An indexed miss returns an ordinary asynchronous model run for
+supported NMR/IR/Raman requests. Poll `GET /api/runs/{run.id}` for predictions.
+The run uses the usual public model queue and quotas. MS/MS generation requires
+acquisition conditions in Predict. An unavailable or stale index returns HTTP 503.
+
 On hosts whose outbound access requires an HTTP CONNECT proxy, the relay below
 keeps TLS end to end while allowing cloudflared to use that existing proxy:
 
@@ -92,3 +116,13 @@ with actual requests to every exposed workflow, including GLACIER MS/MS with
 explicit adduct, collision energy and instrument fields.
 
 The structure form runs the validation-selected phosphorus model as `nmr.forward.31P`. Supply a phosphorus-containing SMILES and an optional solvent such as `CDCl3`. Configure the inference-only checkpoint directory with `--phosphorus-model` and its Python environment with `--solution-python`. The service advertises the task when `model.json` is available. Each result gives zero-based input atom indices, shifts in ppm and the checkpoint SHA-256. An empty solvent uses the unknown-solvent category.
+
+### Optional language and fragment tools
+
+Configure `--specmol-checkpoint` and `--spectrallm-checkpoint` with the respective merged local checkpoints. The operator can select a model environment with `OPENMOLSPEC_LM_PYTHON`. A SpecMol request supplies `question` and `spectrum`. A SpectraLLM request supplies spectral text in `spectrum`. The public endpoint uses server-controlled model settings.
+
+MechFrag-MS uses `OPENMOLSPEC_MECHFRAG_ROOT` for its checkout and `OPENMOLSPEC_MS_PYTHON` for its environment. Pass a structure, adduct, instrument, collision energy and observed m/z list. A mass match returns candidate ions with atom indices. See the [tool-call diagram](../documentation/assets/harness/mcp-workflow.svg).
+
+For cross-solvent shifts, the packaged carbon ridge model takes a source shift and two solvents. The default proton reference lookup also requires a query SMILES and an operator-configured `--solvent-library`. A library query excludes references with the query's connectivity.
+
+For experimental peak-to-atom assignments with the held-out site model, pass `--assignment-model-root /path/to/OpenMolSpec/runs/forward-tuning` and select the model interpreter with `--solution-python`. The two checkpoint folders are `1H-assigned` and `13C-assigned`. The tool takes measured peaks in ppm, the nucleus and a SMILES string.

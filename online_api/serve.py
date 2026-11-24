@@ -30,7 +30,12 @@ MCP_TASKS = {'nmr.forward.1H', 'nmr.forward.13C', 'nmr.assignment',
              'ms.forward.glacier', 'ms.forward.iceberg', 'nmr.generation.hc', 'nmr.retrieval.hc.s2m'}
 SOLUTION_TASKS = {f'nmr.forward.{n}' for n in ('31P', '19F', '11B', '29Si')}
 MCP_TASKS |= SOLUTION_TASKS
-LOCAL_TASKS = SOLUTION_TASKS | { 'vibrational.forward', 'nmr.solvent_transfer', 'nmr.hsqc.transpeaknet'}
+MCP_TASKS |= {'vibrational.gap.ir','vibrational.gap.raman','vibrational.gap.ir_raman',
+              'vibrational.retrieval','spectroscopy.reranking','spectroscopy.reranking.hc',
+              'nmr.retrieval.h.s2m','nmr.retrieval.c.s2m','ms.annotation.mechfrag',
+              'spectroscopy.qa','multispectral.spectrallm.generation','vibrational.retrieval.ir',
+              'vibrational.retrieval.raman','nmr.solvent_transfer'}
+LOCAL_TASKS = SOLUTION_TASKS | { 'vibrational.forward', 'nmr.hsqc.transpeaknet'}
 TASKS = MCP_TASKS | LOCAL_TASKS
 SYSTEM = """You are the OpenMolSpec spectroscopy assistant. Answer in the user's language.
 Use the MCP tools to discover capabilities, validate a request, and run models.
@@ -64,11 +69,19 @@ def public_inputs(inputs):
     if not isinstance(inputs, dict): raise ValueError('Model inputs must be an object')
     fields = {'smiles', 'nucleus', 'peaks_ppm', 'ir', 'raman', 'nmr_h', 'nmr_c', 'candidates',
               'adduct', 'collision_energy', 'instrument', 'precursor_mz', 'query',
-              'source_solvent', 'target_solvent', 'source_ppm', 'solvent', 'hsqc_peaks', 'reference_profile'}
+              'source_solvent', 'target_solvent', 'source_ppm', 'solvent', 'hsqc_peaks', 'reference_profile',
+              'mz','question','spectrum','method','estimate_missing_nmr'}
     result = {key: value for key, value in inputs.items() if key in fields}
+    if 'estimate_missing_nmr' in result and type(result['estimate_missing_nmr']) is not bool:
+        raise ValueError('estimate_missing_nmr must be a boolean')
+    if 'method' in result and result['method'] not in ('reference','ridge'):
+        raise ValueError('Choose reference or ridge')
     if 'smiles' in result and (not isinstance(result['smiles'], str) or len(result['smiles']) > 256):
         raise ValueError('SMILES may contain at most 256 characters')
-    for key in ('peaks_ppm', 'nmr_h', 'nmr_c'):
+    for key in ('question','spectrum'):
+        if key in result and (not isinstance(result[key],str) or not 0 < len(result[key]) <= 16384):
+            raise ValueError(key + ' requires text of at most 16384 characters')
+    for key in ('peaks_ppm', 'nmr_h', 'nmr_c', 'mz'):
         if key in result and (not isinstance(result[key], list) or len(result[key]) > 256):
             raise ValueError(key + ' supports at most 256 values')
     if 'candidates' in result:
@@ -128,7 +141,7 @@ def model_tool_message(result):
     if len(encoded) <= 20000: return encoded
     value = result.get('result') or result
     shown = {key: value[key] for key in ('model', 'smiles', 'unit', 'adduct', 'instrument',
-        'collision_energy', 'gap_ev', 'input_modalities', 'records', 'candidates') if key in value}
+        'collision_energy', 'gap_ev', 'input_modalities', 'records', 'candidates', 'answer', 'matched') if key in value}
     if 'predicted_peaks' in value:
         peaks = value['predicted_peaks']
         shown['predicted_peak_count'] = len(peaks)
@@ -155,8 +168,19 @@ class Service:
         self.db.commit()
         self.loop = None; self.queue = None; self.tools = []
         self.enabled_tasks = TASKS.copy()
+        self.language_models = {t:getattr(args,k,None) for t,k in
+             [('spectroscopy.qa','specmol_checkpoint'),('multispectral.spectrallm.generation','spectrallm_checkpoint')]}
+        from openmolspec_bench.spectral_language import checkpoint_layout
+        for task, path in self.language_models.items():
+            if path is None:
+                self.enabled_tasks.discard(task)
+                continue
+            try:
+                checkpoint_layout(task, path)
+            except (OSError, ValueError, KeyError):
+                self.enabled_tasks.discard(task)
+        if not os.environ.get('OPENMOLSPEC_MECHFRAG_ROOT'): self.enabled_tasks.discard('ms.annotation.mechfrag')
         if not getattr(args, 'transpeaknet_source', None): self.enabled_tasks.discard('nmr.hsqc.transpeaknet')
-        if not getattr(args, 'solvent_library', None): self.enabled_tasks.discard('nmr.solvent_transfer')
         phosphorus = getattr(args, 'phosphorus_model', None)
         if phosphorus is None or not (phosphorus / 'model.json').is_file():
             self.enabled_tasks.discard('nmr.forward.31P')
@@ -169,7 +193,10 @@ class Service:
             else:
                 self.enabled_tasks.discard(task)
         self.peak_root = getattr(args, 'peak_model_root', None)
-        self.solvent_model = None
+        self.assignment_root = getattr(args, 'assignment_model_root', None)
+        if self.assignment_root and any(not (self.assignment_root / (n + '-assigned') / 'model.json').is_file()
+                                        for n in ('1H', '13C')):
+            raise ValueError('The assignment model root must contain 1H-assigned and 13C-assigned weights')
 
     def status(self):
         return {'service': 'OpenMolSpec tools', 'version': '1.0', 'connected': self.ready,
@@ -227,6 +254,16 @@ class Service:
 
     def settings(self, task):
         if task not in MCP_TASKS: raise ValueError('Choose an available MCP model task')
+        if task in self.language_models:
+            if task not in self.enabled_tasks: raise ValueError('Language-model checkpoint is unavailable')
+            return {'checkpoint':str(self.language_models[task]),'device':'cuda'}
+        if task not in self.enabled_tasks: raise ValueError('The requested model is unavailable')
+        if task == 'nmr.solvent_transfer':
+            path = getattr(self.args,'solvent_library',None)
+            return {'library': str(path)} if path else {}
+        if task == 'nmr.assignment' and self.assignment_root:
+            return {'root': str(self.assignment_root), 'backend': 'assigned', 'python': self.args.solution_python}
+        if task == 'ms.annotation.mechfrag': return {}
         if task in SOLUTION_TASKS:
             if task not in self.enabled_tasks:
                 raise ValueError('The requested solution model is unavailable')
@@ -238,7 +275,7 @@ class Service:
         if task.startswith('ms.forward.'):
             return {'source': str(self.args.ms_source), 'weights': str(self.args.ms_weights),
                     'python': getattr(self.args, 'ms_python', None) or self.args.model_python, 'device': 'cpu'}
-        if task in {'nmr.generation.hc', 'nmr.retrieval.hc.s2m'}:
+        if task == 'nmr.generation.hc' or task.startswith('nmr.retrieval.'):
             checkpoint = self.args.nmr_generation if task == 'nmr.generation.hc' else self.args.nmr_alignment
             return {'checkpoint': str(checkpoint), 'python': self.args.model_python, 'device': 'cpu'}
         return {'root': str(self.args.models_root if task.startswith('nmr.') else self.args.portable_root),
@@ -346,7 +383,7 @@ class Service:
             elif task in SOLUTION_TASKS:
                 result = await asyncio.to_thread(self.solution_shifts, task, inputs)
             else:
-                adapter = {'vibrational.forward': self.geometry, 'nmr.solvent_transfer': self.solvent_transfer,
+                adapter = {'vibrational.forward': self.geometry,
                            'nmr.hsqc.transpeaknet': self.transpeaknet}[task]
                 result = await asyncio.to_thread(adapter, inputs)
             self.event(run_id, 'tool_end', {'id': run_id, 'name': task, 'result': result, 'elapsed_seconds': time.monotonic() - start})
@@ -358,15 +395,6 @@ class Service:
     def geometry(self, inputs):
         return self.local_worker('online_api.geometry', {'smiles': inputs['smiles'], 'root': str(self.args.portable_root),
             'reference_profile': inputs.get('reference_profile', 'openspec')})
-
-    def solvent_transfer(self, inputs):
-        from openmolspec_bench.solvent_transfer import ReferenceTransfer
-        fields = ('smiles', 'nucleus', 'source_solvent', 'target_solvent', 'source_ppm')
-        if any(field not in inputs for field in fields):
-            raise ValueError('Supply a structure, nucleus, both solvents and the observed source shift')
-        if self.solvent_model is None:
-            self.solvent_model = ReferenceTransfer(json.loads(self.args.solvent_library.read_text()))
-        return self.solvent_model.predict(**{field: inputs[field] for field in fields})
 
     def transpeaknet(self, inputs):
         return self.local_worker('online_api.transpeaknet',
@@ -441,15 +469,21 @@ def handler(service):
             self.reply({'error': 'Route not found'}, 404)
 
         def do_POST(self):
-            if self.path != '/api/runs': return self.reply({'error': 'Route not found'}, 404)
+            from online_api.spectrum_library import LibraryUnavailable, resolve
+            if self.path not in ('/api/runs', '/api/spectra/resolve'): return self.reply({'error': 'Route not found'}, 404)
             if self.headers.get('Origin') not in ORIGINS: return self.reply({'error': 'Open this tool from the OpenMolSpec website'}, 403)
             try: length = int(self.headers.get('Content-Length', '0'))
             except ValueError: return self.reply({'error': 'Invalid request length'}, 400)
             if not 0 < length <= 180000: return self.reply({'error': 'Request is too large'}, 413)
             try:
                 payload = json.loads(self.rfile.read(length))
-                result = service.submit(payload, self.headers.get('CF-Connecting-IP') or self.client_address[0])
+                client = self.headers.get('CF-Connecting-IP') or self.client_address[0]
+                if self.path == '/api/spectra/resolve':
+                    result, status = resolve(service, payload, client)
+                    return self.reply(result, status)
+                result = service.submit(payload, client)
                 self.reply(result, 202)
+            except LibraryUnavailable as error: self.reply({'error': str(error)}, 503)
             except (ValueError, TypeError) as error: self.reply({'error': str(error)}, 400)
 
         def log_message(self, format, *args): pass
@@ -460,6 +494,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port', type=int, default=8721)
     parser.add_argument('--database', type=Path, default=ROOT / '.runtime/online-runs.sqlite')
+    parser.add_argument('--spectra-data', type=Path, default=ROOT / '.runtime/manual-data-v1')
+    parser.add_argument('--spectra-index', type=Path, default=ROOT / '.runtime/spectra-library.sqlite')
     parser.add_argument('--base-url', default='https://hapiopen.cc/v1')
     parser.add_argument('--model', default='deepseek-v4.1-flash')
     parser.add_argument('--models-root', type=Path, default=ROOT.parents[1] / 'models')
@@ -475,7 +511,14 @@ def main():
     parser.add_argument('--solution-model-root', type=Path, default=ROOT.parent/'runs/solution-shifts-selected')
     parser.add_argument('--phosphorus-model', type=Path, default=ROOT.parent/'runs/solution-shifts-selected/31P')
     parser.add_argument('--solution-python', default=os.environ.get('OPENMOLSPEC_SOLUTION_PYTHON', sys.executable))
+    assigned_models = ROOT.parent / 'runs/forward-tuning'
+    has_assigned_models = all((assigned_models / (n + '-assigned') / 'model.json').is_file()
+                              for n in ('1H', '13C'))
+    parser.add_argument('--assignment-model-root', type=Path, default=assigned_models if has_assigned_models else None,
+                        help='Directory containing 1H-assigned and 13C-assigned models')
     parser.add_argument('--solvent-library', type=Path)
+    parser.add_argument('--specmol-checkpoint', type=Path, help='Merged checkpoint on the model server')
+    parser.add_argument('--spectrallm-checkpoint', type=Path, help='Merged checkpoint on the model server')
     parser.add_argument('--transpeaknet-source', type=Path)
     parser.add_argument('--tools-only', action='store_true', help='Serve model tools without a language-model provider')
     args = parser.parse_args()

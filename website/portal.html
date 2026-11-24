@@ -11,6 +11,13 @@
   <link rel="preload" href="assets/type/instrument-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="portal.css">
   <link rel="stylesheet" href="launch.css">
+  <link rel="stylesheet" href="atlas.css">
+  <link rel="stylesheet" href="assets/specimen/specimen.css">
+  <link rel="stylesheet" href="explore-lab.css">
+  <link rel="stylesheet" href="harness-showcase.css">
+  <script src="language.js" defer></script>
+  <script src="explore-lab.js" defer></script>
+  <script src="harness-showcase.js" defer></script>
   <script src="site.js" defer></script>
   <script src="portal.js" defer></script>
   <script src="molecule-playground.js" defer></script>
@@ -24,12 +31,15 @@
         <img src="assets/brand/mark.svg" alt="" width="34" height="34">
         <span>OpenMolSpec</span>
       </a>
+      <button id="language-switch" type="button" class="language-switch" lang="zh-Hans" aria-label="切换为中文">中文</button>
       <button class="menu-toggle" type="button" aria-controls="nav" aria-expanded="false" aria-label="Open navigation">
         <span></span><span></span><span></span>
       </button>
       <nav id="nav" aria-label="Main navigation">
         <a href="#tool">Workspace</a>
-        <a href="#dataset">Datasets</a>
+        <a href="#dataset">Explore</a>
+        <a href="#agent-demo">Agent Harness</a>
+        <a href="#benchmarks">Benchmarks</a>
         <a href="docs/index.html" target="_blank" rel="noopener">Documentation <span aria-hidden="true">↗</span></a>
         <a class="nav-repo" href="https://github.com/jiaqingxie/openmolspec-studio-frontend/tree/release/openmolspec-v1">GitHub <span aria-hidden="true">↗</span></a>
       </nav>
@@ -45,20 +55,10 @@
           <p class="hero-description">Predict molecular spectra, assign experimental peaks and explore the data behind each model.</p>
           <div class="hero-actions">
             <a class="portal-button portal-button-mint" href="#tool">Open workspace <span aria-hidden="true">↓</span></a>
-            <a class="hero-text-link" href="#tool-hsqc">Try HSQC example <span aria-hidden="true">↗</span></a>
+            <a class="hero-text-link" href="#tool-sucrose">Assign these HSQC peaks <span aria-hidden="true">↗</span></a>
           </div>
         </div>
-        <figure class="hero-spectrum" aria-labelledby="spectrum-title">
-          <div class="spectrum-bar">
-            <div id="spectrum-title"><span class="plot-key" aria-hidden="true"></span> Butanenitrile <span>¹H–¹³C HSQC</span></div>
-            <div class="spectrum-modes" role="group" aria-label="Spectrum view">
-              <button type="button" data-spectrum-mode="surface" aria-pressed="true">Surface</button>
-              <button type="button" data-spectrum-mode="contours" aria-pressed="false">Contours</button>
-            </div>
-          </div>
-          <canvas id="hero-hsqc" data-peaks='__HSQC_PEAKS__' width="760" height="430" role="img" aria-label="Three measured HSQC cross-peaks of butanenitrile in chloroform-d. Surface height illustrates peak position."></canvas>
-          <figcaption class="spectrum-caption"><span>CDCl₃ · Measured peak positions</span><span id="spectrum-scale">Illustrative height</span></figcaption>
-        </figure>
+        <div id="molecular-specimen"></div>
       </div>
       <div class="portal-wrap hero-bottom">
         <dl class="launch-metrics">__LAUNCH_METRICS__</dl>
@@ -66,17 +66,17 @@
     </section>
 
     <section id="tool" class="portal-section tool-section" aria-labelledby="tool-title">
-      <span id="tool-hsqc" aria-hidden="true"></span>
+      <span id="tool-hsqc" aria-hidden="true"></span><span id="tool-sucrose" aria-hidden="true"></span>
       <div class="portal-wrap">
         <div class="section-heading">
           <div>
             <h2 id="tool-title">Spectroscopy workspace</h2>
           </div>
-          <p>Choose a workflow to run a model with your own data or a worked example.</p>
+          <p>Start with what you have: a structure, measured peaks or a set of spectra. Each workflow lists its inputs and the result you can expect.</p>
         </div>
         <div class="tool-shell">
           <div class="tool-shell-heading">
-            <span class="workspace-label">Model tools</span>
+            <span class="workspace-label">Choose a task</span>
             <span id="service-status" class="service-status" role="status"><span class="status-dot" aria-hidden="true"></span>Checking service…</span>
           </div>
           <div class="tool-tabs" role="tablist" aria-label="Choose a spectroscopy workflow">
@@ -96,6 +96,7 @@
               Agent Harness
             </button>
           </div>
+          <div id="workflow-guide" aria-live="polite"></div>
           <div id="tool-workspace" data-example-shifts='__ETHANOL_CARBON_SHIFTS__' class="tool-workspace" role="tabpanel" aria-label="Scientific tool workspace">
             <div class="workspace-grid workspace-placeholder">
               <div class="workspace-input">
@@ -118,12 +119,13 @@
           <div class="table-scroll"><table class="data-table"><thead><tr><th>Task guide</th><th>Input</th><th>Output</th></tr></thead><tbody>__TASK_ROWS__</tbody></table></div>
         </details>
         <details class="dataset-summary isomer-example">
-          <summary><span>Compare ethanol and dimethyl ether</span><span class="disclosure-arrow" aria-hidden="true">+</span></summary>
+          <summary><span>Why does ethanol have two ¹³C signals and dimethyl ether one?</span><span class="disclosure-arrow" aria-hidden="true">+</span></summary>
         <section id="molecule-playground" class="molecule-playground" aria-labelledby="playground-title">
           <div class="playground-heading">
-            <h3 id="playground-title">Compare isomers</h3>
+            <h3 id="playground-title">Two structures, one formula</h3>
             <span class="playground-formula">C₂H₆O</span>
           </div>
+          <p class="isomer-purpose">Ethanol has two distinct carbon environments. The two methyl groups in dimethyl ether are equivalent. Select an isomer and send its structure to the ¹³C predictor to inspect the shifts.</p>
           <div class="molecule-stage">
             <canvas id="molecule-canvas" width="660" height="390" role="img" aria-label="Interactive ball-and-stick structure. Drag the orange oxygen to reconnect the atoms."></canvas>
             <div class="atom-legend"><span><i class="atom-carbon"></i> Carbon</span><span><i class="atom-oxygen"></i> Oxygen</span><span><i class="atom-hydrogen"></i> Hydrogen</span></div>
@@ -131,9 +133,9 @@
           <div class="playground-controls" aria-label="Choose an isomer">
             <button type="button" data-isomer="ethanol" aria-pressed="true">Ethanol</button>
             <button type="button" data-isomer="ether" aria-pressed="false">Dimethyl ether</button>
-            <button type="button" id="use-hero-structure" class="playground-use">Use SMILES ↗</button>
+            <button type="button" id="use-hero-structure" class="playground-use">Predict this ¹³C spectrum ↗</button>
           </div>
-          <p id="molecule-caption" aria-live="polite">Drag the orange oxygen to the outlined bond position.</p>
+          <p id="molecule-caption" aria-live="polite">Ethanol · CCO · Two distinct carbon environments.</p>
         </section>
         </details>
       </div>
@@ -143,10 +145,16 @@
       <div class="portal-wrap">
         <div class="section-heading">
           <div>
-            <h2 id="dataset-title">Explore experimental spectra</h2>
+            <h2 id="dataset-title">Explore spectra</h2>
           </div>
-          <p>Inspect measured peaks, molecular structures and acquisition conditions from eight dataset views.</p>
+          <p>Browse measured spectra, find a molecule by SMILES and compare experimental peaks with calculated values.</p>
         </div>
+        <section class="coverage" aria-labelledby="coverage-title">
+          <div class="coverage-intro"><h3 id="coverage-title">Experimental coverage</h3><p>Recorded spectra in the cleaned OpenMolSpec collection. Select a channel to inspect sample records.</p></div>
+          <div class="coverage-groups">__COVERAGE__</div>
+        </section>
+        <div id="explore-lab"></div>
+        <div id="measured-records" class="records-heading"><h3>Experimental records</h3><a href="#data-sources">Dataset sizes and sources ↓</a></div>
         <div class="dataset-controls">
           <label class="dataset-filter-label" for="dataset-filter"><span>Dataset</span>
             <select id="dataset-filter"><option value="all">All spectra</option><option value="nmr">NMR</option><option value="ms">Mass spectrometry</option><option value="ir">Infrared</option><option value="raman">Raman</option></select>
@@ -170,7 +178,7 @@
           <dl><div><dt>Test spectra</dt><dd>479</dd></div><div><dt>Distinct molecules</dt><dd>478</dd></div><div><dt>Assigned carbon rows</dt><dd>7,310</dd></div></dl>
           <div class="external-dataset-actions"><a href="https://drive.google.com/drive/folders/1wQxk7mnIwi5aAGaF34_hk7xo6IeEh-IE" target="_blank" rel="noopener">Author test data ↗</a><button type="button" data-open-workflow="hsqc">Assign HSQC peaks ↗</button></div>
         </article>
-        <details class="dataset-summary">
+        <details class="dataset-summary" id="data-sources">
           <summary><span>Dataset sizes and sources</span><span class="summary-note">Spectra and molecules, counted separately</span><span class="disclosure-arrow" aria-hidden="true">+</span></summary>
           <div class="table-scroll"><table class="data-table"><thead><tr><th>Dataset / view</th><th>Category</th><th>Description</th><th>Spectra</th><th>Molecules</th></tr></thead><tbody>__DATA_ROWS__</tbody></table></div>
           <p class="table-note">Counts describe each selected dataset view. See the data guide for source information, fields and train/test splits.</p>
@@ -179,40 +187,13 @@
       </div>
     </section>
 
-    <section id="agent-demo" class="portal-section agent-demo-section" aria-labelledby="agent-demo-title">
-      <div class="portal-wrap">
-        <div class="section-heading">
-          <div>
-            <h2 id="agent-demo-title">Inside the Agent Harness</h2>
-          </div>
-          <p>Replay a recorded ethanol analysis, from the first tool call to the predicted carbon shifts.</p>
-        </div>
-        <div id="agent-demo-player" class="agent-demo-player" aria-label="Replay a real API and MCP demonstration"><p class="preview-loading">Loading the recorded tool sequence…</p></div>
-        <details class="agent-captures">
-          <summary><span>View the captured interface</span><span class="summary-note">The request, intermediate tool calls and final result</span><span class="disclosure-arrow" aria-hidden="true">+</span></summary>
-          <div class="agent-demo-captures" aria-label="Screenshots from the real API and MCP demonstration">
-          <figure class="demo-frame">
-            <div class="demo-frame-heading"><h3>The request</h3></div>
-            <a href="assets/agent-demo/01-plan.png" target="_blank" rel="noopener"><img src="assets/agent-demo/01-plan.png" alt="The user request and initial task plan in the recorded Agent Harness run" loading="lazy" width="1280" height="800"></a>
-            <figcaption>The molecular question and the actions selected for it.</figcaption>
-          </figure>
-          <figure class="demo-frame">
-            <div class="demo-frame-heading"><h3>The tool calls</h3></div>
-            <a href="assets/agent-demo/02-tools.png" target="_blank" rel="noopener"><img src="assets/agent-demo/02-tools.png" alt="MCP tool calls, input parameters and execution status in the recorded run" loading="lazy" width="1280" height="800"></a>
-            <figcaption>The selected tools, their inputs and execution status.</figcaption>
-          </figure>
-          <figure class="demo-frame">
-            <div class="demo-frame-heading"><h3>The result</h3></div>
-            <a href="assets/agent-demo/03-result.png" target="_blank" rel="noopener"><img src="assets/agent-demo/03-result.png" alt="The returned spectroscopy result and final response from the recorded run" loading="lazy" width="1280" height="800"></a>
-            <figcaption>The returned spectroscopy data and the final response.</figcaption>
-          </figure>
-          </div>
-        </details>
-        <p class="section-footnote">Connect the same tools to your own agent with the <a href="docs/harness.html" target="_blank" rel="noopener">Agent Harness guide <span aria-hidden="true">↗</span></a>.</p>
-      </div>
+    <section id="agent-demo" class="portal-section agent-demo-section" aria-label="Agent Harness">
+      <div class="portal-wrap"><div id="harness-showcase"></div></div>
     </section>
 
-    <section class="portal-wrap results-section" aria-label="Scientific examples and figure gallery">
+    <section id="benchmarks" class="portal-wrap results-section" aria-label="Scientific examples and figure gallery">
+      <div class="records-heading"><h2>Benchmark results</h2><a href="docs/benchmarks.html">Browse benchmarks ↗</a></div>
+      <div class="benchmark-cards">__BENCHMARKS__</div>
       <details class="results-disclosure">
         <summary><span>Scientific examples and figures</span><span class="summary-note">__FIGURE_COUNT__ figures from recorded model runs and data summaries</span><span class="disclosure-arrow" aria-hidden="true">+</span></summary>
         <div class="results-content">
@@ -240,7 +221,7 @@
           <a href="docs/harness.html" target="_blank" rel="noopener"><h3>Agent Harness <span aria-hidden="true">↗</span></h3><p>Python, CLI and MCP tools for scientific agents.</p></a>
         </div>
         <a class="portal-button portal-button-dark" href="docs/index.html" target="_blank" rel="noopener">Read the full documentation <span aria-hidden="true">↗</span></a>
-        <p class="section-footnote"><a href="docs/zh/index.html" lang="zh">中文手册</a> · <a href="https://openmolspec.readthedocs.io/" target="_blank" rel="noopener">Read the Docs</a></p>
+        <p class="section-footnote"><a href="docs/index.html" hreflang="en" lang="en">English manual</a> · <a href="docs/zh/index.html" hreflang="zh" lang="zh">中文手册</a></p>
       </div>
     </section>
 
