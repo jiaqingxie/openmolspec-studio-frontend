@@ -137,6 +137,27 @@ def nmr_query(query):
 
 def model_tool_message(result):
     """Summarize large scientific arrays without truncating a JSON document."""
+    if isinstance(result, dict) and result.get('task') == 'nmr.assignment' and result.get('completed'):
+        value = result['result']
+        sites = value['sites']
+        assignments = []
+        for hit in value['assignments']:
+            row = dict(hit)
+            alternatives = row.pop('other_sites_within_tolerance')
+            row['alternative_atom_index_groups'] = [sites[i]['atom_indices'] for i in alternatives]
+            assignments.append(row)
+        shown = {k: value[k] for k in ('atom_index_basis', 'tolerance_ppm', 'unmatched_peak_indices',
+                                         'unmatched_sites', 'matched_fraction', 'accuracy_note')}
+        shown.update(assignments=assignments, observed_peaks=len(assignments) + len(value['unmatched_peak_indices']))
+        message = {'task': result['task'], 'completed': True, 'result': shown}
+        encoded = json.dumps(message, ensure_ascii=False)
+        if len(encoded) <= 20000: return encoded
+        shown['matched_peaks'] = len(assignments)
+        shown['assignments'] = [{k: v for k, v in row.items() if k != 'alternative_atom_index_groups'}
+                                for row in assignments[:20]]
+        shown['unmatched_site_count'] = len(shown.pop('unmatched_sites'))
+        shown['preview_note'] = 'First 20 assignments at most; the complete rows and alternatives are in the tool trace.'
+        return json.dumps(message, ensure_ascii=False)
     encoded = json.dumps(result, ensure_ascii=False)
     if len(encoded) <= 20000: return encoded
     value = result.get('result') or result

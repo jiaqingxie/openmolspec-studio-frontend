@@ -63,7 +63,7 @@ def main():
     assets=ROOT/'documentation/assets';gallery=assets/'gallery'
     public_assets=ROOT/'website/assets'
     preview=json.loads((public_assets/'dataset-preview.json').read_text())
-    recording=json.loads((public_assets/'agent-demo/run.json').read_text())
+    recording=json.loads((public_assets/'harness/quercetin-agent.json').read_text())
     verification=json.loads((public_assets/'online-verification.json').read_text())
     if recording.get('status')!='completed' or not any(e['type']=='tool_end' and e['data']['name']=='spectra_predict' for e in recording['events']):
         raise ValueError('The agent demonstration must contain a completed real prediction')

@@ -78,5 +78,20 @@ class PublicAPIContracts(unittest.TestCase):
         self.assertEqual(shown['top20_predicted_peaks_by_intensity'], list(reversed(peaks[-20:])))
         self.assertEqual(len(result['result']['predicted_peaks']), 4000)
 
+    def test_agent_reads_assignment_alternatives_as_atom_indices(self):
+        import json
+        from online_api.serve import ROOT
+        case = json.loads((ROOT / 'website/assets/harness/quercetin-agent.json').read_text())
+        result = next(e['data']['result'] for e in case['events']
+                      if e['type'] == 'tool_end' and e['data']['name'] == 'spectra_predict')
+        raw = next(row for row in result['result']['assignments'] if row['observed_ppm'] == 115.0)
+        shown = json.loads(model_tool_message(result))['result']
+        peak = next(row for row in shown['assignments'] if row['observed_ppm'] == 115.0)
+        self.assertEqual(shown['observed_peaks'], 14)
+        self.assertEqual(raw['other_sites_within_tolerance'], [3, 8])
+        self.assertEqual(peak['alternative_atom_index_groups'],
+                         [result['result']['sites'][i]['atom_indices'] for i in (3, 8)])
+        self.assertNotIn('other_sites_within_tolerance', peak)
+
 
 if __name__ == '__main__': unittest.main()
