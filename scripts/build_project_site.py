@@ -138,10 +138,10 @@ def main():
     text=text.replace('__INTRO_COUNTS__',f'The cleaned H/C NMR collection contains {cleaned["molecular_identities"]:,} molecular identities. Explore {len(tasks)} tasks and {proof["executed_notebooks"]} tutorials covering prediction, structure elucidation, training and spectroscopy.')
     counts=json.loads((assets/'dataset-counts.json').read_text())['datasets']
     def totals(name):return counts[name]['spectra'],counts[name]['molecules']
-    rows=[('OpenDataLab · cleaned H/C NMR','Experimental · OpenMolSpec collection','Proton and carbon chemical shifts, molecular structures, formulas and experimental conditions; predefined train/validation/test files.',cleaned['counts']['h_spectra']+cleaned['counts']['c_spectra'],cleaned['molecular_identities'],DOCS+'data/nmr.html'),
+    rows=[('OpenDataLab · cleaned H/C NMR','Experimental · Intern-MindSpec collection','Proton and carbon chemical shifts, molecular structures, formulas and experimental conditions; predefined train/validation/test files.',cleaned['counts']['h_spectra']+cleaned['counts']['c_spectra'],cleaned['molecular_identities'],DOCS+'data/nmr.html'),
           ('NMRexp v2 · H/C view','Experimental · external','Literature-derived proton and carbon spectra paired with valid molecular structures.',*totals('nmrexp_hc'),'https://zenodo.org/records/17296666'),
           ('TransPeakNet · HSQC test set','Experimental · external','Expert-annotated 2D C–H cross-peaks. The authors provide training and validation spectra upon request.',479,478,'https://github.com/siriusxiao62/2dNMR/blob/2e93db82a9d627ac01109474e9b6e594065e3d56/data_annotation/HSQC_Annotation_TestData.zip'),
-          ('OpenMolSpec · computed test view','Computed · OpenMolSpec benchmark','IR/Raman spectra for 20,390 calculation records, with H/C shifts, structures and electronic properties.',*totals('openspec_test'),DOCS+'data/vibrational.html'),
+          ('Intern-MindSpec · computed test view','Computed · Intern-MindSpec benchmark','IR/Raman spectra for 20,390 calculation records, with H/C shifts, structures and electronic properties.',*totals('openspec_test'),DOCS+'data/vibrational.html'),
           ('MassSpecGym v1.5 · prediction view','Experimental · external','Tandem mass spectra paired with molecular structures and acquisition conditions for forward prediction.',*totals('massspecgym_1_5'),'https://huggingface.co/datasets/roman-bushuiev/MassSpecGym'),
           ('MassBank · MS2 view','Experimental · external','Numerical tandem mass spectra with parseable molecular structures and repository acquisition metadata.',*totals('massbank_ms2'),'https://github.com/MassBank/MassBank-data'),
           ('QMe14S · paired IR/Raman view','Computed · external','184,252 finite, nonconstant infrared/Raman pairs across 14 elements; each channel counts as one spectrum.',*totals('qme14s_paired'),'https://arxiv.org/abs/2501.18876')]
@@ -157,7 +157,7 @@ def main():
                 '31P':'Phosphorus chemical shifts in ppm with phosphorus-containing molecular structures.'}
             for modality,counts in report.get('views',{}).items():
                 count=counts['spectra']
-                if count: rows.insert(1,(f'OpenDataLab · {modality}','Experimental · OpenMolSpec collection',descriptions[modality],count,counts['molecules'],DOCS+'data/index.html'))
+                if count: rows.insert(1,(f'OpenDataLab · {modality}','Experimental · Intern-MindSpec collection',descriptions[modality],count,counts['molecules'],DOCS+'data/index.html'))
     text=text.replace('__DATA_ROWS__',''.join(f'<tr><td><a href="{url}">{escape(name)}</a></td><td>{escape(domain)}</td><td>{escape(description)}</td><td>{spectra:,}</td><td>{molecules:,}</td></tr>' for name,domain,description,spectra,molecules,url in rows))
     text=text.replace('__REFERENCES__',''.join(f'<li>{escape(reference)} <a href="{url}">Source ↗</a></li>' for reference,url in REFERENCES.values()))
     example_rows=[]
